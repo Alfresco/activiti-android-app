@@ -1,0 +1,473 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+  ~  Copyright (C) 2005-2015 Alfresco Software Limited.
+  ~
+  ~ This file is part of Alfresco Activiti Mobile for Android.
+  ~
+  ~ Alfresco Activiti Mobile for Android is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU Lesser General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ Alfresco Activiti Mobile for Android is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  ~ GNU Lesser General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU Lesser General Public License
+  ~ along with Alfresco. If not, see <http://www.gnu.org/licenses/>.
+  ~
+  -->
+
+<resources>
+
+    <!-- ################################################################################## -->
+    <!-- GENERAL -->
+    <!-- ################################################################################## -->
+    <!-- GENERAL -->
+    <string name="app_name">@string/general_main_title</string>
+    <string name="general_main_title">Activiti</string>
+    <string name="general_navigation_tasks">Tasks</string>
+    <string name="general_navigation_processes">Processes</string>
+    <string name="general_navigation_process_models">Process Definition Models</string>
+    <string name="general_navigation_applications">Applications</string>
+    <string name="general_navigation_groups">Groups</string>
+
+
+    <string name="general_login_title">Get started</string>
+    <string name="general_login_title_sign_in">Sign in</string>
+    <string name="general_login_server_title">Enter your Activiti server hostname</string>
+    <string name="general_login_server_hostname">Hostname</string>
+    <string name="general_login_server_next">Continue</string>
+    <string name="general_login_server_done">Done</string>
+    <string name="general_login_credentials_title">Enter your credentials</string>
+    <string name="general_login_credentials_username">Username</string>
+    <string name="general_login_credentials_password">Password</string>
+    <string name="general_login_credentials_show_password">Show password</string>
+    <string name="general_login_credentials_sign_in">activiti.alfresco.com</string>
+    <string name="general_login_credentials_or">or</string>
+    <string name="general_login_credentials_connect">Activiti onPremise</string>
+    <string name="general_login_account_added">Account added!</string>
+    <string name="general_login_account_name">Give this account a name (optional)</string>
+
+
+    <!-- ACTION -->
+    <string name="general_action_clear">Clear</string>
+    <string name="general_action_cancel">Cancel</string>
+    <string name="general_action_close">Cancel</string>
+    <string name="general_action_confirm">Confirm</string>
+    <string name="general_action_show_more">Show more</string>
+
+    <!-- APP -->
+    <string name="app_tasks_title">My tasks</string>
+    <string name="app_tasks_description">Access your full task list and work on any tasks assigned to you from any process app. Also, start new processes and tasks.</string>
+
+    <!-- ERROR -->
+    <string name="app_error_generic">Sorry, an error occured&#8230;</string>
+    <string name="app_error_unknown">Sorry, an error occured while performing the requested operation.</string>
+    <string name="app_error_bad_request">An error occured while performing the requested operation</string>
+    <string name="app_error_not_found">The resource you are trying to access does not exist</string>
+    <string name="app_error_unauthorized">You should sign in in order to perform the requested operation.</string>
+    <string name="app_error_forbidden">You are not allowed to perform the requested operation</string>
+    <string name="app_error_internal_server_error">Sorry, an unexpected error occured while performing the requested operation.</string>
+
+
+    <!-- ################################################################################## -->
+    <!-- LOGIN -->
+    <!-- ################################################################################## -->
+
+
+    <!-- ################################################################################## -->
+    <!-- WORKFLOW -->
+    <!-- ################################################################################## -->
+
+    <!-- TASKS -->
+    <!-- ################################################################################## -->
+    <!-- TASKS FILTERS -->
+    <string name="task_filter_text">Filter by</string>
+    <string name="task_filter_sort">Sort by</string>
+    <string name="task_filter_text_placeholder">Task name</string>
+    <string name="task_filter_text_placeholder_long">Search by task name</string>
+    <string name="task_filter_created_desc">Newest first</string>
+    <string name="task_filter_created_asc">Oldest first</string>
+    <string name="task_filter_due_desc">Due last</string>
+    <string name="task_filter_due_asc">Due first</string>
+    <string name="task_filter_reset">Reset filters</string>
+    <string name="task_filter_process_definition">Process Definition</string>
+    <string name="task_filter_process_definition_placeholder">Select process definition &#8230;</string>
+    <string name="task_filter_state">State</string>
+    <string name="task_filter_state_open">open</string>
+    <string name="task_filter_state_completed">completed</string>
+    <string name="task_filter_assignment">Assignment</string>
+    <string name="task_filter_assignment_involved">Tasks where I am involved</string>
+    <string name="task_filter_assignment_assignee">Tasks where I am the assignee</string>
+    <string name="task_filter_assignment_candidate">Tasks where I am one of the candidates</string>
+    <string name="task_filter_assignment_group">Tasks assigned to the group \"%s\""</string>
+
+    <!-- TASKS ALERT -->
+    <string name="task_alert_assigned">Task \"%1$s\" is now asigned to %2$s</string>
+    <string name="task_alert_completed">Task completed</string>
+    <string name="task_alert_saved">Task saved</string>
+    <string name="task_alert_created">Task \"%1$s\" was created</string>
+    <string name="task_alert_person_involved">\"%1$s\" is now involved in %2$s</string>
+    <string name="task_alert_person_no_longer_involved">Task \"%1$s\" is no longer involved in %2$s</string>
+    <string name="task_alert_related_content_added">\"%1$s\" has been added to the task"</string>
+    <string name="task_alert_related_content_added_loading">"\"%1$s\" has been added to the task. The content will be available once retrieved from the external source.</string>
+
+
+    <!-- TASKS ACTION -->
+    <string name="task_action_complete_task_with_form">Show form</string>
+    <string name="task_action_complete">Complete</string>
+    <string name="task_action_claim">Claim</string>
+    <string name="task_action_assign">Assign</string>
+    <string name="task_action_reassign">Reassign</string>
+    <string name="task_action_involve">Involve people</string>
+    <string name="task_action_add_comment">Add comment</string>
+    <string name="task_action_add_content">Add content</string>
+    <string name="task_action_create">Create Task</string>
+    <string name="task_action_share_link">Share link</string>
+    <string name="task_action_create_confirm">Create</string>
+    <string name="task_action_retrieve_info">Retrieve information&#8230;</string>
+
+    <string name="task_action_share_link_long">Sharing Link from Alfresco Activiti Mobile</string>
+    <string name="task_share_link_pattern">Sharing Link from Alfresco Activiti Mobile</string>
+
+
+    <!-- TASKS TITLE -->
+    <string name="task_title_details">Details</string>
+    <string name="task_create_new">New Task</string>
+
+    <!-- TASKS SECTION -->
+    <string name="task_section_people">People</string>
+    <string name="task_section_content">Content</string>
+    <string name="task_section_comments">Comments</string>
+
+    <!-- TASKS FIELD -->
+    <string name="task_field_name">Name</string>
+    <string name="task_field_description">Description</string>
+    <string name="task_field_assignee">Assignee</string>
+    <string name="task_field_due">Due</string>
+    <string name="task_field_process_instance">Part of process</string>
+    <string name="task_field_ended">Ended</string>
+    <string name="task_field_duration">Duration</string>
+
+    <!-- TASKS MESSAGES -->
+    <string name="task_message_due_on">Due %s</string>
+    <string name="task_message_created_on">Created %s</string>
+    <string name="task_message_ended_on">Completed %s</string>
+    <string name="task_message_no_description">This task has no description</string>
+    <string name="task_message_assignee">Assigned to %1$s</string>
+    <string name="task_message_no_name">Nameless task</string>
+    <string name="task_message_no_assignee">Assigned to nobody</string>
+    <string name="task_message_no_duedate">No due date</string>
+    <string name="task_message_no_related_content">This task has no related content yet&#8230;</string>
+    <string name="task_message_no_people_involved">This task has no people involved yet&#8230;</string>
+    <string name="task_message_no_comments">This task has no comments yet&#8230;</string>
+    <string name="task_message_no_task_help">Well, it looks like there are no tasks for you! </string>
+    <string name="task_message_comment_header">Added by %1$s</string>
+    <string name="task_message_new_comment_placeholder">Enter a comment&#8230;</string>
+
+    <!-- TASKS HELP -->
+    <string name="task_help_description">This task has no details yet.</string>
+    <string name="task_help_description_2">You can change that by choosing one of these actions:</string>
+    <string name="task_help_add_people">Involve someone else and start collaborating</string>
+    <string name="task_help_add_comment">Enlighten others by adding a comment</string>
+    <string name="task_help_add_content">Add a document and share the knowledge</string>
+
+    <!-- PROCESS -->
+    <!-- ################################################################################## -->
+    <!-- PROCESS FILTERS -->
+    <string name="process_filter_text">Filter By</string>
+    <string name="process_filter_sort">Sort By</string>
+    <string name="process_filter_reset">Reset filters</string>
+    <string name="process_filter_created_desc">Newest first</string>
+    <string name="process_filter_created_asc">Oldest first</string>
+    <string name="process_filter_state">Process State</string>
+    <string name="process_filter_state_running">running</string>
+    <string name="process_filter_state_completed">completed</string>
+    <string name="process_filter_state_all">all</string>
+
+    <!-- PROCESS ACTION -->
+    <string name="process_action_create">Start a process</string>
+    <string name="process_action_show_diagram">Show diagram</string>
+    <string name="process_action_cancel">Cancel process</string>
+    <string name="process_action_delete">Delete process</string>
+    <string name="process_action_add_comment">Add comment</string>
+    <string name="process_action_add_content">Add content</string>
+    <string name="process_action_share_link">Add comment</string>
+
+    <!-- PROCESS FIELD -->
+    <string name="process_field_started">Started</string>
+    <string name="process_field_started_by">Started By</string>
+    <string name="process_field_ended">Ended</string>
+    <string name="process_field_name">Process instance name</string>
+    <string name="process_field_process_definition">Process definition</string>
+
+    <!-- PROCESS SECTION -->
+    <string name="process_section_active_task">Active tasks</string>
+    <string name="process_section_completed_task">Completed tasks</string>
+    <string name="process_section_comments">Comments</string>
+    <string name="process_section_contents">Related Content</string>
+    <string name="process_section_fieldcontents">Field Content</string>
+
+
+    <!-- PROCESS MESSAGES -->
+    <string name="process_message_started">Started %s</string>
+    <string name="process_message_ended">Ended %s</string>
+    <string name="process_message_started_by">Started by %1$s</string>
+    <string name="process_message_no_tasks">No tasks are currently active&#8230;</string>
+    <string name="process_message_no_completed_tasks">No tasks have been completed yet&#8230;</string>
+    <string name="process_message_no_instances">No matching process instances found&#8230;</string>
+    <string name="process_message_no_instances_help">There are no processes that are running now.</string>
+    <string name="process_message_new_comment_placeholder">Enter a comment&#8230;</string>
+
+    <!-- PROCESS POPUP -->
+    <string name="process_popup_cancel_title">Cancel the process?</string>
+    <string name="process_popup_cancel_description">Are you sure you want to cancel process %s?</string>
+    <string name="process_popup_delete_title">Delete the process?</string>
+    <string name="process_popup_delete_description">Are you sure you want to delete process {{name}}? All tasks, content and comments related to this process will be deleted permanently.</string>
+
+    <!-- FORM -->
+    <!-- ################################################################################## -->
+    <string name="form_message_title">Form</string>
+    <string name="form_default_outcome_complete">Complete</string>
+    <string name="form_default_outcome_start_process">Start process</string>
+    <string name="form_message_empty">(empty)</string>
+    <string name="form_error_message_required">%s is required</string>
+    <string name="form_message_validation">Some fields are required.</string>
+    <string name="form_message_unsupported_field_summary">Rendition Unsupported</string>
+    <string name="form_message_unsupported_field">This type of entry field is not supported on mobile</string>
+    <string name="form_message_unsupported_title">Unsupported Form</string>
+    <string name="form_message_unsupported_description"><![CDATA[<p>This form contains one or more required fields that are not currently supported on mobile devices.</p> Please use the web app to action this step.]]></string>
+    <string name="form_message_link_error_title">Link unsupported</string>
+    <string name="form_message_link_error"><![CDATA[<p>This content is not from a supported source of content.</p> Please select another one.]]></string>
+
+    <!-- CONTENT -->
+    <!-- ################################################################################## -->
+    <string name="content_message_content_pending">Getting content&#8230;</string>
+    <string name="content_title_delete">Delete content</string>
+    <string name="content_message_delete_confirmation">Are you sure you want to delete %s?</string>
+    <string name="content_action_open_in_alfresco">Open in Alfresco</string>
+
+    <!-- APP DEFINITIONS -->
+    <!-- ################################################################################## -->
+    <string name="app_definition_message_not_found">No app definition found with the given id</string>
+
+
+    <!-- ################################################################################## -->
+    <!-- IDM -->
+    <!-- ################################################################################## -->
+    <string name="idm_navigation_profile">Personal</string>
+
+    <string name="idm_profile_mgmt_details">Details</string>
+    <string name="idm_profile_mgmt_first_name">First name</string>
+    <string name="idm_profile_mgmt_last_name">Last name</string>
+    <string name="idm_profile_mgmt_email">Email</string>
+    <string name="idm_profile_mgmt_company">Company</string>
+    <string name="idm_profile_mgmt_groups">Your groups</string>
+    <string name="idm_profile_mgmt_capabilites">Capabilities</string>
+    <string name="idm_profile_mgmt_nothing_set">Nothing set</string>
+
+
+    <!-- ################################################################################## -->
+    <!-- INVOLVE -->
+    <!-- ################################################################################## -->
+    <string name="involve_people_search_placeholder">Search user</string>
+    <string name="group_search_placeholder">Search group</string>
+    <string name="involve_people_use_email">Select someone using an email address</string>
+    <string name="involve_people_email_placeholder">Enter an email address</string>
+    <string name="involve_people_email_help">Tap contact icon or enter the email. This person will be notified by email or invited to sign up</string>
+
+
+    <!-- ################################################################################## -->
+    <!-- ################################################################################## -->
+    <!-- ################################################################################## -->
+    <!-- ################################################################################## -->
+    <string name="text_marketing_1">Access your task everywhere you go</string>
+    <string name="text_marketing_2">Start the conversation and collaborate with anyone</string>
+    <string name="text_marketing_3">Work together and get the job done</string>
+
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="action_settings">Settings</string>
+
+    <string name="empty_users">No User</string>
+    <string name="empty_task">No Task</string>
+    <string name="empty_comment">No Comments</string>
+    <string name="empty_content">No Contents</string>
+    <string name="empty_app">No Applications</string>
+
+
+    <!-- ################################################################################## -->
+    <!-- ################################################################################## -->
+    <string name="settings">Settings</string>
+    <string name="settings_accounts_title">Accounts</string>
+    <string name="settings_about_title">About</string>
+    <string name="settings_about_version">Version</string>
+    <string name="settings_google_play_title">Do you like Activiti?</string>
+    <string name="settings_google_play_summary">Show us your support on Google Play</string>
+    <string name="settings_about_help">Help</string>
+    <string name="settings_about_clu">Terms and Conditions</string>
+    <string name="settings_about_thirdparty">Third party notices</string>
+
+    <string name="settings_userinfo">Account</string>
+    <string name="settings_userinfo_account">Details</string>
+    <string name="settings_userinfo_account_summary">Edit user and server informations</string>
+    <string name="settings_userinfo_account_name">Name</string>
+    <string name="settings_userinfo_account_name_summary">Edit account name</string>
+
+    <string name="settings_account">Account Settings</string>
+    <string name="settings_account_integration">Alfresco Integration</string>
+
+    <string name="settings_account_integration_alfresco_action_remove">Remove Link</string>
+    <string name="settings_account_integration_alfresco_action_mobile">Link to Alfresco Mobile</string>
+    <string name="settings_account_integration_alfresco_action_browser">Link to Web Browser</string>
+
+    <string name="settings_account_integration_alfresco_mobile">Linked to Alfresco Mobile</string>
+    <string name="settings_account_integration_alfresco_browser">Linked to Web Browser</string>
+    <string name="settings_account_integration_alfresco_none">Account not configured</string>
+
+    <string name="settings_alfresco_update">Update Alfresco</string>
+    <string name="settings_alfresco_update_summary"><![CDATA[<p>Apparently your version of Alfresco Mobile requires an update.</p> In order to use this integration you need to update the application from the Google Play Store]]></string>
+    <string name="settings_alfresco_update_action">Go to Play Store</string>
+
+    <string name="settings_alfresco_install">Install Alfresco</string>
+    <string name="settings_alfresco_install_summary"><![CDATA[<p>Apparently you don\'t have Alfresco Mobile installed in your device.</p> In order to use this integration you need install the Alfresco Application from the Google Play Store]]></string>
+    <string name="settings_alfresco_install_action">Go to Play Store</string>
+
+    <string name="settings_alfresco_not_found">Alfresco account not found!</string>
+    <string name="settings_alfresco_not_found_summary"><![CDATA[<p>We are unable to detect the appropriate Alfresco account.</p> Please tap select to choose the correct one.]]></string>
+    <string name="settings_alfresco_not_found_action">Select or create Alfresco account</string>
+
+    <string name="settings_alfresco_account_found">Alfresco account found!</string>
+    <string name="settings_alfresco_account_found_summary"><![CDATA[<p>We have detected the following Alfresco account.</p> <b><p>%1$s<br/>%2$s</p></b>If it\'s the correct one tap validate or select another one.]]></string>
+    <string name="settings_alfresco_account_found_action">Select or create Alfresco account</string>
+
+
+    <string name="integration_alfresco_open">Open Alfresco</string>
+    <string name="integration_alfresco_open_summary"><![CDATA[<p>Apparently you don\'t have Alfresco Mobile installed in your device.</p> <p>In order to use this integration you can install the Alfresco Application from the Google Play Store</p> or access the document directly from a Web Browser.]]></string>
+    <string name="integration_alfresco_open_play">Go to Play Store</string>
+    <string name="integration_alfresco_open_web">Open Web Browser</string>
+
+    <!-- ################################################################################## -->
+    <!-- ################################################################################## -->
+    <string name="sync_adapter_process_model_title">Process Definition Models</string>
+    <string name="sync_adapter_apps_title">Applications</string>
+    <string name="sync_adapter_groups_title">Groups</string>
+    <string name="sync_adapter_content_transfer">Content Transfer</string>
+
+    <string name="error_general_no_connection">No connection available</string>
+    <string name="error_offline"><![CDATA[<p><b>Alfresco Mobile help can\'t be accessed because you\'re offline.</b><br/></p> Please try again when you\'re back online.]]></string>
+
+    <string name="account_manage">Manage Account</string>
+    <string name="account_add">Add Account</string>
+
+    <string name="optional">Optional</string>
+    <string name="ok">Ok</string>
+    <string name="account_remove">Do you want to sign out ?</string>
+    <string name="account_remove_progress">Log out in progress&#8230;</string>
+
+    <string name="dropdown_select">Select&#8230;</string>
+    <string name="clear">Clear</string>
+    <string name="refresh">Refresh</string>
+    <string name="retry">Retry</string>
+    <string name="see_all">See all</string>
+    <string name="add">Add</string>
+    <string name="delete">Delete</string>
+    <string name="action_share_link">Share Link</string>
+    <string name="action_send_file">Send File</string>
+
+    <string name="upload_as_text">Do you want to add a link to the Alfresco file or add a copy of the file?</string>
+    <string name="upload_as_link">Link</string>
+    <string name="upload_as_file">Copy</string>
+    <string name="upload_in_progress">Upload in progress</string>
+
+    <string name="form">Form</string>
+    <string name="save">Save</string>
+    <string name="download">Download</string>
+    <string name="document_saved">Document has been saved</string>
+    <string name="file_editor_error_open">There\'s no application to open this file.</string>
+    <string name="please_wait">Please wait</string>
+    <string name="account_associated">Account associated</string>
+    <string name="error_link_creation">Error during link preparation</string>
+    <string name="cleared">Cleared</string>
+
+    <string name="list">List</string>
+    <string name="grid">Grid</string>
+
+    <!-- Relative Date -->
+    <string name="relative_date_just_now">just now</string>
+    <string name="relative_date_less_than_a_minute_ago">less than a minute ago</string>
+    <plurals name="relative_date_minutes_ago">
+        <item quantity="one">%1$s minute ago</item>
+        <item quantity="other">%1$s minutes ago</item>
+    </plurals>
+    <plurals name="relative_date_hours_ago">
+        <item quantity="one">%1$s hour ago</item>
+        <item quantity="other">%1$s hours ago</item>
+    </plurals>
+    <plurals name="relative_date_days_ago">
+        <item quantity="one">%1$s day ago</item>
+        <item quantity="other">%1$s days ago</item>
+    </plurals>
+    <plurals name="relative_date_years_ago">
+        <item quantity="one">%1$s year ago</item>
+        <item quantity="other">%1$s years ago</item>
+    </plurals>
+
+    <!-- Relative Duration -->
+    <plurals name="duration_seconds">
+        <item quantity="one">%1$s second</item>
+        <item quantity="other">%1$s seconds</item>
+    </plurals>
+    <plurals name="duration_minutes">
+        <item quantity="one">%1$s minute</item>
+        <item quantity="other">%1$s minutes</item>
+    </plurals>
+    <plurals name="duration_hours">
+        <item quantity="one">%1$s hour</item>
+        <item quantity="other">%1$s hours</item>
+    </plurals>
+    <plurals name="duration_days">
+        <item quantity="one">%1$s day</item>
+        <item quantity="other">%1$s days</item>
+    </plurals>
+    <plurals name="duration_years">
+        <item quantity="one">%1$s year</item>
+        <item quantity="other">%1$s years</item>
+    </plurals>
+
+    <string name="buildnumber_version">Version: </string>
+    <string name="sdknumber_version">SDK</string>
+
+    <string name="picker_assign_person">{0,choice,0#Assign|1#Assign 1 person|1&lt;Assign {0} people}</string>
+    <string name="picker_assign_group">{0,choice,0#Assign|1#Assign 1 group|1&lt;Assign {0} group}</string>
+    <string name="file_editor_error_speech">Text To Speech is not available inside your device.</string>
+    <string name="task_reassign">Reassign</string>
+    <string name="task_reassign_long">Reassign this task to&#8230;</string>
+    <string name="search_form_hint">Enter your search term</string>
+    <string name="person_not_found">No users found</string>
+    <string name="group_not_found">No groups found</string>
+
+
+    <!-- SESSION ERROR -->
+    <string name="error_session_creation_title">Sign in</string>
+    <string name="error_session_creation"><![CDATA[<p>Sign in failed!<br/></p> Please check your sign in details and try again.]]></string>
+    <string name="error_session_hostname"><![CDATA[<p>Your <b>hostname</b> value seems to be wrong<br/></p> or you may need to <b>activate your VPN</b>.<br/> Please check your account settings.]]></string>
+    <string name="error_session_nodata"><![CDATA[<p><b>Your device has no data connection.</b><br/></p> Please check your device settings and enable a data connection.]]></string>
+    <string name="error_session_certificate">
+<![CDATA[<p><b>The server\'s security certificate is not trusted!</b><br/></p>
+		The third-party organization that issued your server destination\'s certificate is not one that your device recognizes.<br/>
+		In order for Alfresco Activiti to verify that you\'re connecting with the appropriate server, its certificate must be from a trusted organization.<br/>
+		If your server has a self-signed certificate please add it to your device to successfully connect.<br/> ]]>
+    </string>
+    <string name="error_session_certificate_expired">
+<![CDATA[<p><b>The server\'s security certificate has expired or is not yet valid!</b><br/></p>
+		Please check the date and time your device is set to.<br/> If the problem persists please contact your administrator. ]]>
+    </string>
+    <string name="error_session_ssl">
+<![CDATA[<p><b>An error occurred with the SSL protocol.</b><br/></p>
+        Please check your account settings and try again.<br/> If the problem persists please contact your administrator.]]>
+    </string>
+    <string name="bug_report_title">[Activiti Report] : </string>
+
+</resources>

@@ -1,0 +1,259 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~  Copyright (C) 2005-2015 Alfresco Software Limited.
+  ~
+  ~ This file is part of Alfresco Activiti Mobile for Android.
+  ~
+  ~ Alfresco Activiti Mobile for Android is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU Lesser General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ Alfresco Activiti Mobile for Android is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  ~ GNU Lesser General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU Lesser General Public License
+  ~ along with Alfresco. If not, see <http://www.gnu.org/licenses/>.
+  ~
+  -->
+
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/primary_background"
+    android:fillViewport="true">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:visibility="visible">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dip"
+            android:layout_weight="1"
+            android:orientation="vertical"
+            >
+
+            <TextView
+                style="@style/ActivitiTheme.Text.Primary.Drawer"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/task_filter_sort"
+                />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dip"
+                android:background="?android:attr/dividerVertical"/>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/secondary_background"
+                android:orientation="vertical"
+                >
+
+                <LinearLayout
+                    android:id="@+id/task_filter_sort"
+                    style="@style/ActivitiTheme.Button.BorderLess.Padding16"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="left|center_vertical"
+                    android:minHeight="@dimen/one_list_minHeight"
+                    android:orientation="vertical"
+                    >
+
+                    <TextView
+                        android:id="@+id/task_filter_sort_value"
+                        style="@style/ActivitiTheme.Text.List.Primary"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/task_filter_created_desc"
+                        tools:text="Text for Preview"/>
+                </LinearLayout>
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="2dip"
+                android:background="?android:attr/dividerVertical"/>
+
+            <TextView
+                style="@style/ActivitiTheme.Text.Primary.Drawer"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="@dimen/d_16"
+                android:text="@string/task_filter_text"
+                />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dip"
+                android:background="?android:attr/dividerVertical"/>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/secondary_background"
+                android:orientation="vertical"
+                >
+
+                <LinearLayout
+                    android:id="@+id/task_filter_keywords"
+                    style="@style/ActivitiTheme.Button.BorderLess.Padding16"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="left|center_vertical"
+                    android:minHeight="@dimen/two_list_minHeight"
+                    android:orientation="vertical">
+
+                    <TextView
+                        style="@style/ActivitiTheme.Text.List.Primary"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/task_filter_text_placeholder" />
+
+                    <TextView
+                        android:id="@+id/task_filter_keywords_value"
+                        style="@style/ActivitiTheme.Text.List.Secondary"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@null" />
+
+                </LinearLayout>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dip"
+                    android:layout_marginLeft="@dimen/d_8"
+                    android:layout_marginRight="@dimen/d_8"
+                    android:background="?android:attr/dividerVertical" />
+
+                <LinearLayout
+                    android:id="@+id/task_filter_state"
+                    style="@style/ActivitiTheme.Button.BorderLess.Padding16"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="left|center_vertical"
+                    android:minHeight="@dimen/two_list_minHeight"
+                    android:orientation="vertical"
+                    >
+
+                    <TextView
+                        style="@style/ActivitiTheme.Text.List.Primary"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/task_filter_state"/>
+
+                    <TextView
+                        android:id="@+id/task_filter_state_value"
+                        style="@style/ActivitiTheme.Text.List.Secondary"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/task_filter_state_open"/>
+
+                </LinearLayout>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dip"
+                    android:layout_marginLeft="@dimen/d_8"
+                    android:layout_marginRight="@dimen/d_8"
+                    android:background="?android:attr/dividerVertical"/>
+
+                <LinearLayout
+                    android:id="@+id/task_filter_process_definition"
+                    style="@style/ActivitiTheme.Button.BorderLess.Padding16"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="left|center_vertical"
+                    android:minHeight="@dimen/two_list_minHeight"
+                    android:orientation="vertical"
+                    >
+
+                    <TextView
+                        style="@style/ActivitiTheme.Text.List.Primary"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/task_filter_process_definition"/>
+
+                    <TextView
+                        android:id="@+id/task_filter_process_definition_value"
+                        style="@style/ActivitiTheme.Text.List.Secondary"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/task_filter_process_definition_placeholder"/>
+
+                </LinearLayout>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dip"
+                    android:layout_marginLeft="@dimen/d_8"
+                    android:layout_marginRight="@dimen/d_8"
+                    android:background="?android:attr/dividerVertical"/>
+
+                <LinearLayout
+                    android:id="@+id/task_filter_assignment"
+                    style="@style/ActivitiTheme.Button.BorderLess.Padding16"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="left|center_vertical"
+                    android:minHeight="@dimen/two_list_minHeight"
+                    android:orientation="vertical"
+                    >
+
+                    <TextView
+                        style="@style/ActivitiTheme.Text.List.Primary"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/task_filter_assignment"/>
+
+                    <TextView
+                        android:id="@+id/task_filter_assignment_value"
+                        style="@style/ActivitiTheme.Text.List.Secondary"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/task_filter_assignment_involved"/>
+
+                </LinearLayout>
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="2dip"
+                android:background="?android:attr/dividerVertical"
+                android:layout_marginBottom="@dimen/d_16" />
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dip"
+            android:background="?android:attr/dividerVertical"/>
+
+        <LinearLayout
+            style="?android:attr/buttonBarStyle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/secondary_background"
+            android:measureWithLargestChild="true"
+            android:orientation="horizontal"
+            >
+
+            <Button
+                android:id="@+id/action_reset"
+                style="@style/ActivitiTheme.Button.BorderLess"
+                android:layout_width="0dip"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/task_filter_reset"/>
+        </LinearLayout>
+
+    </LinearLayout>
+</ScrollView>

@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!--
+  ~  Copyright (C) 2005-2015 Alfresco Software Limited.
+  ~
+  ~ This file is part of Alfresco Activiti Mobile for Android.
+  ~
+  ~ Alfresco Activiti Mobile for Android is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU Lesser General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ Alfresco Activiti Mobile for Android is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  ~ GNU Lesser General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU Lesser General Public License
+  ~ along with Alfresco. If not, see <http://www.gnu.org/licenses/>.
+  ~
+  -->
+<resources>
+
+    <!-- MENU DOC/FOLDER -->
+    <item name="menu_refresh" type="id"/>
+
+    <item name="tag_content_id" type="id"/>
+    <item name="tag_content_link" type="id"/>
+    <item name="content_remove" type="id" />
+
+
+    <!-- HELP -->
+    <string name="help_user_guide_url" formatted="false">http://docs.alfresco.com/activiti/topics/welcome.html</string>
+    <string name="help_user_guide_default_url">http://docs.alfresco.com/activiti/topics/welcome.html</string>
+    <string name="docs_prefix"/>
+
+</resources>

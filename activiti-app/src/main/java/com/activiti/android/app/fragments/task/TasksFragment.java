@@ -1,0 +1,304 @@
+/*
+ *  Copyright (C) 2005-2015 Alfresco Software Limited.
+ *
+ * This file is part of Alfresco Activiti Mobile for Android.
+ *
+ * Alfresco Activiti Mobile for Android is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * Alfresco Activiti Mobile for Android is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with Alfresco. If not, see <http://www.gnu.org/licenses/>.
+ *
+ */
+
+package com.activiti.android.app.fragments.task;
+
+import java.util.Map;
+
+import android.os.Bundle;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentActivity;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
+import android.view.View;
+import android.widget.GridView;
+
+import com.activiti.android.app.R;
+import com.activiti.android.app.activity.MainActivity;
+import com.activiti.android.app.fragments.process.ProcessesFragment;
+import com.activiti.android.platform.event.CompleteTaskEvent;
+import com.activiti.android.platform.event.CreateTaskEvent;
+import com.activiti.android.ui.fragments.FragmentDisplayer;
+import com.activiti.android.ui.fragments.builder.ListingFragmentBuilder;
+import com.activiti.android.ui.fragments.task.TasksFoundationFragment;
+import com.activiti.android.ui.fragments.task.create.CreateStandaloneTaskDialogFragment;
+import com.activiti.android.ui.fragments.task.filter.TaskFiltersFragment;
+import com.activiti.client.api.constant.RequestConstant;
+import com.activiti.client.api.model.runtime.TaskRepresentation;
+import com.squareup.otto.Subscribe;
+
+public class TasksFragment extends TasksFoundationFragment
+{
+    public static final String TAG = TasksFragment.class.getName();
+
+    // ///////////////////////////////////////////////////////////////////////////
+    // CONSTRUCTORS & HELPERS
+    // ///////////////////////////////////////////////////////////////////////////
+    public TasksFragment()
+    {
+        super();
+        setHasOptionsMenu(true);
+        eventBusRequired = true;
+    }
+
+    public static TasksFragment newInstanceByTemplate(Bundle b)
+    {
+        TasksFragment cbf = new TasksFragment();
+        cbf.setArguments(b);
+        return cbf;
+    }
+
+    // ///////////////////////////////////////////////////////////////////////////
+    // LIFECYCLE
+    // ///////////////////////////////////////////////////////////////////////////
+    @Override
+    protected View.OnClickListener onPrepareFabClickListener()
+    {
+        return new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View v)
+            {
+                CreateStandaloneTaskDialogFragment.with(getActivity()).appId(Long.toString(appId)).displayAsDialog();
+            }
+        };
+    }
+
+    @Override
+    protected String onCreateTitle(String title)
+    {
+        if (appName == null)
+        {
+            return getString(R.string.app_tasks_title);
+        }
+        else
+        {
+            mSubTitle = getString(R.string.general_navigation_tasks);
+            return appName;
+        }
+    }
+
+    @Override
+    public void onStart()
+    {
+        Fragment fr = getFragmentManager().findFragmentById(R.id.right_drawer);
+        if (fr == null || (fr != null && !(fr instanceof TaskFiltersFragment)))
+        {
+            if (fr != null)
+            {
+                FragmentDisplayer.with(getActivity()).back(false).animate(null).remove(fr);
+            }
+            FragmentDisplayer
+                    .with(getActivity())
+                    .back(false)
+                    .animate(null)
+                    .replace(
+                            TaskFiltersFragment.newInstanceByTemplate(getArguments() != null ? getArguments()
+                                    : new Bundle())).into(R.id.right_drawer);
+        }
+        setLockRightMenu(false);
+
+        super.onStart();
+    }
+
+    @Override
+    public void onListItemClick(GridView l, View v, int position, long id)
+    {
+        resetRightMenu();
+        TaskRepresentation taskRepresentation = (TaskRepresentation) l.getItemAtPosition(position);
+        TaskDetailsFragment.with(getActivity()).task(taskRepresentation).bindFragmentTag(getTag()).display();
+    }
+
+    // ///////////////////////////////////////////////////////////////////////////
+    // FILTERING
+    // ///////////////////////////////////////////////////////////////////////////
+    public Bundle getBundle()
+    {
+        if (bundle != null) { return new Bundle(bundle); }
+        return null;
+    }
+
+    public void setFilterBundle(Bundle filterBundle)
+    {
+        bundle.putAll(filterBundle);
+        updateParameters(bundle);
+        refresh();
+    }
+
+    // ///////////////////////////////////////////////////////////////////////////
+    // MENU
+    // ///////////////////////////////////////////////////////////////////////////
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater)
+    {
+        super.onCreateOptionsMenu(menu, inflater);
+        menu.clear();
+        inflater.inflate(R.menu.tasks, menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item)
+    {
+        int id = item.getItemId();
+        switch (id)
+        {
+            case R.id.tasks_menu_filter:
+                if (getActivity() instanceof MainActivity)
+                {
+                    ((MainActivity) getActivity()).setRightMenuVisibility(!((MainActivity) getActivity())
+                            .isRightMenuVisible());
+                }
+                return true;
+            case R.id.tasks_menu_process:
+                ProcessesFragment.Builder builder = ProcessesFragment.with(getActivity()).appName(appName);
+                FragmentDisplayer.with(getActivity()).animate(FragmentDisplayer.SLIDE_DOWN).back(false)
+                        .replace(builder.createFragment()).into(FragmentDisplayer.PANEL_LEFT);
+                return true;
+            default:
+                break;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    // ///////////////////////////////////////////////////////////////////////////
+    // EVENTS
+    // ///////////////////////////////////////////////////////////////////////////
+    @Subscribe
+    public void onCompletedTaskEvent(CompleteTaskEvent event)
+    {
+        if (event.hasException) { return; }
+        try
+        {
+            Long eventAppId = Long.parseLong(event.appId);
+            if (eventAppId != null && eventAppId.longValue() == appId.longValue())
+            {
+                refresh();
+            }
+        }
+        catch (Exception e)
+        {
+
+        }
+    }
+
+    @Subscribe
+    public void onTaskCreated(CreateTaskEvent event)
+    {
+        if (event.hasException) { return; }
+        if (event.appId != null && event.appId.longValue() == appId.longValue())
+        {
+            refresh();
+        }
+    }
+
+    // ///////////////////////////////////////////////////////////////////////////
+    // BUILDER
+    // ///////////////////////////////////////////////////////////////////////////
+    public static Builder with(FragmentActivity activity)
+    {
+        return new Builder(activity);
+    }
+
+    public static class Builder extends ListingFragmentBuilder
+    {
+        // ///////////////////////////////////////////////////////////////////////////
+        // CONSTRUCTORS
+        // ///////////////////////////////////////////////////////////////////////////
+        public Builder(FragmentActivity activity)
+        {
+            super(activity);
+            this.extraConfiguration = new Bundle();
+        }
+
+        public Builder(FragmentActivity appActivity, Map<String, Object> configuration)
+        {
+            super(appActivity, configuration);
+        }
+
+        public Builder appId(Long appId)
+        {
+            extraConfiguration.putLong(RequestConstant.ARGUMENT_APPDEFINITION_ID, appId);
+            return this;
+        }
+
+        public Builder appName(String appName)
+        {
+            extraConfiguration.putSerializable(RequestConstant.ARGUMENT_APPDEFINITION, appName);
+            return this;
+        }
+
+        public Builder processId(String processId)
+        {
+            extraConfiguration.putString(RequestConstant.ARGUMENT_PROCESS_ID, processId);
+            return this;
+        }
+
+        public Builder processDefinitionId(String processDefinitionId)
+        {
+            extraConfiguration.putString(RequestConstant.ARGUMENT_PROCESSDEFINITION_ID, processDefinitionId);
+            return this;
+        }
+
+        public Builder keywords(String keywords)
+        {
+            extraConfiguration.putString(RequestConstant.ARGUMENT_TEXT, keywords);
+            return this;
+        }
+
+        public Builder assignee(Long assignee)
+        {
+            extraConfiguration.putLong(RequestConstant.ARGUMENT_ASSIGNEE, assignee);
+            return this;
+        }
+
+        public Builder assignment(String assignment)
+        {
+            extraConfiguration.putString(RequestConstant.ARGUMENT_ASSIGNMENT, assignment);
+            return this;
+        }
+
+        public Builder state(String state)
+        {
+            extraConfiguration.putString(RequestConstant.ARGUMENT_STATE, state);
+            return this;
+        }
+
+        public Builder sort(String sort)
+        {
+            extraConfiguration.putString(RequestConstant.ARGUMENT_SORT, sort);
+            return this;
+        }
+
+        public Builder page(int page)
+        {
+            extraConfiguration.putInt(RequestConstant.ARGUMENT_PAGE, page);
+            return this;
+        }
+
+        // ///////////////////////////////////////////////////////////////////////////
+        // CLICK
+        // ///////////////////////////////////////////////////////////////////////////
+        protected Fragment createFragment(Bundle b)
+        {
+            return newInstanceByTemplate(b);
+        };
+    }
+}

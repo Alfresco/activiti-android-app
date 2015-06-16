@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~  Copyright (C) 2005-2015 Alfresco Software Limited.
+  ~
+  ~ This file is part of Alfresco Activiti Mobile for Android.
+  ~
+  ~ Alfresco Activiti Mobile for Android is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU Lesser General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ Alfresco Activiti Mobile for Android is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  ~ GNU Lesser General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU Lesser General Public License
+  ~ along with Alfresco. If not, see <http://www.gnu.org/licenses/>.
+  ~
+  -->
+
+<!-- ######################################################################### -->
+<!-- ######################## HEADER                 ######################### -->
+<!-- ######################################################################### -->
+<android.support.v7.widget.CardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    >
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/secondary_background"
+        android:orientation="vertical"
+        >
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:minHeight="@dimen/two_list_minHeight">
+
+            <LinearLayout
+                android:id="@+id/textview_container"
+                style="@style/ActivitiTheme.Container.Relative"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_toLeftOf="@+id/choose"
+                android:layout_toRightOf="@+id/icon"
+                android:orientation="vertical"
+                >
+
+                <TextView
+                    android:id="@+id/toptext"
+                    style="two_list_text_top"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/task_help_description"
+                    android:textColor="@color/primary_text" />
+
+                <TextView
+                    android:id="@+id/bottomtext"
+                    style="two_list_text_bottom"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/task_help_description_2"/>
+
+            </LinearLayout>
+
+        </RelativeLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dip"
+            android:background="?android:attr/dividerVertical"/>
+
+        <!-- ######################################################################### -->
+        <LinearLayout
+            android:id="@+id/help_details_involve_container"
+            style="@style/ActivitiTheme.Button.BorderLess"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <include
+                android:id="@+id/help_details_involve"
+                layout="@layout/row_two_lines_inverse"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+
+        </LinearLayout>
+
+        <!-- ######################################################################### -->
+        <LinearLayout
+            android:id="@+id/help_details_add_content_container"
+            style="@style/ActivitiTheme.Button.BorderLess"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <include
+                android:id="@+id/help_details_add_content"
+                layout="@layout/row_two_lines_inverse"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+
+        </LinearLayout>
+
+
+        <!-- ######################################################################### -->
+        <LinearLayout
+            android:id="@+id/help_details_comment_container"
+            style="@style/ActivitiTheme.Button.BorderLess"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <include
+                android:id="@+id/help_details_comment"
+                layout="@layout/row_two_lines_inverse"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+        </LinearLayout>
+    </LinearLayout>
+</android.support.v7.widget.CardView>

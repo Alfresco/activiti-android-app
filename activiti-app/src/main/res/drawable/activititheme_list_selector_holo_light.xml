@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+  ~  Copyright (C) 2005-2015 Alfresco Software Limited.
+  ~
+  ~ This file is part of Alfresco Activiti Mobile for Android.
+  ~
+  ~ Alfresco Activiti Mobile for Android is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU Lesser General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ Alfresco Activiti Mobile for Android is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  ~ GNU Lesser General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU Lesser General Public License
+  ~ along with Alfresco. If not, see <http://www.gnu.org/licenses/>.
+  ~
+  -->
+
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item android:drawable="@android:color/transparent" android:state_window_focused="false" />
+
+    <!-- Even though these two point to the same resource, have two states so the drawable will invalidate itself when coming out of pressed state. -->
+    <item android:drawable="@drawable/activititheme_list_selector_disabled_holo_light" android:state_enabled="false" android:state_focused="true" android:state_pressed="true" />
+    <item android:drawable="@drawable/activititheme_list_selector_disabled_holo_light" android:state_enabled="false" android:state_focused="true" />
+    <item android:drawable="@drawable/activititheme_list_selector_background_transition_holo_light" android:state_focused="true" android:state_pressed="true" />
+    <item android:drawable="@drawable/activititheme_list_selector_background_transition_holo_light" android:state_focused="false" android:state_pressed="true" />
+    <item android:drawable="@drawable/activititheme_list_focused_holo" android:state_focused="true" />
+
+</selector>

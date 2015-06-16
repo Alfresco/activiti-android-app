@@ -1,0 +1,138 @@
+<!--
+  ~  Copyright (C) 2005-2015 Alfresco Software Limited.
+  ~
+  ~ This file is part of Alfresco Activiti Mobile for Android.
+  ~
+  ~ Alfresco Activiti Mobile for Android is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU Lesser General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ Alfresco Activiti Mobile for Android is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  ~ GNU Lesser General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU Lesser General Public License
+  ~ along with Alfresco. If not, see <http://www.gnu.org/licenses/>.
+  ~
+  -->
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="org.activiti.bpmn.android.app.activity.LoginActivity">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/welcome_title"
+            style="@style/ActivitiTheme.Text.Title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/d_16"
+            android:gravity="center"
+            android:text="@string/general_login_title"
+            android:visibility="gone" />
+
+
+        <android.support.v4.view.ViewPager
+            android:id="@+id/welcome_pager"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1" />
+
+        <me.relex.circleindicator.CircleIndicator
+            android:id="@+id/welcome_pager_indicator"
+            android:layout_width="fill_parent"
+            android:layout_height="25dp"
+            app:ci_drawable="@drawable/ic_crop_3_2_grey"
+            app:ci_drawable_unselected="@drawable/ic_crop_7_5_grey"
+            app:ci_height="10dp"
+            app:ci_width="10dp" />
+
+        <LinearLayout
+            android:id="@+id/welcome_page_actions_container"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <TextView
+                style="@style/ActivitiTheme.Text.Title"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/d_16"
+                android:gravity="center"
+                android:text="@string/general_login_title_sign_in" />
+
+            <LinearLayout
+                style="?android:attr/buttonBarStyle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom"
+                android:layout_margin="@dimen/d_16"
+                android:background="@color/accent"
+                android:gravity="bottom"
+                android:measureWithLargestChild="true"
+                android:orientation="vertical"
+                android:paddingLeft="2dip"
+                android:paddingRight="2dip"
+                android:paddingTop="0dip">
+
+                <Button
+                    android:id="@+id/welcome_sign_in"
+                    style="@style/ActivitiTheme.Text.Title"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/activititheme_item_background_holo_light"
+                    android:gravity="center"
+                    android:onClick="signInOnline"
+                    android:text="@string/general_login_credentials_sign_in"
+                    android:textColor="@color/secondary_background" />
+
+            </LinearLayout>
+
+
+            <TextView
+                style="@style/ActivitiTheme.Text.Title"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="@string/general_login_credentials_or" />
+
+            <LinearLayout
+                style="?android:attr/buttonBarStyle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom"
+                android:layout_margin="@dimen/d_16"
+                android:background="@color/accent"
+                android:gravity="bottom"
+                android:measureWithLargestChild="true"
+                android:orientation="vertical"
+                android:paddingLeft="2dip"
+                android:paddingRight="2dip"
+                android:paddingTop="0dip">
+
+                <Button
+                    android:id="@+id/welcome_onpremise"
+                    style="@style/ActivitiTheme.Text.Title"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/activititheme_item_background_holo_light"
+                    android:gravity="center"
+                    android:onClick="signIn"
+                    android:text="@string/general_login_credentials_connect"
+                    android:textColor="@color/secondary_background" />
+            </LinearLayout>
+        </LinearLayout>
+
+    </LinearLayout>
+</LinearLayout>

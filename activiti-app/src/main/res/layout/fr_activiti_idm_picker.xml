@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+  ~  Copyright (C) 2005-2015 Alfresco Software Limited.
+  ~
+  ~ This file is part of Alfresco Activiti Mobile for Android.
+  ~
+  ~ Alfresco Activiti Mobile for Android is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU Lesser General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ Alfresco Activiti Mobile for Android is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  ~ GNU Lesser General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU Lesser General Public License
+  ~ along with Alfresco. If not, see <http://www.gnu.org/licenses/>.
+  ~
+  -->
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/secondary_background"
+    android:orientation="vertical"
+    android:visibility="visible">
+
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:minWidth="275dip"
+        android:gravity="center_vertical"
+        android:paddingTop="@dimen/d_8"
+        android:paddingLeft="@dimen/d_16"
+        android:paddingRight="@dimen/d_16"
+        android:orientation="horizontal">
+
+        <com.rengwuxian.materialedittext.MaterialEditText xmlns:app="http://schemas.android.com/apk/res-auto"
+            android:id="@+id/search_query"
+            android:layout_width="0dip"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:textCursorDrawable="@drawable/accent_cursor"
+            android:hint="@string/involve_people_use_email"
+            android:singleLine="true"
+            android:lines="1"
+            android:maxLines="1"
+            app:met_floatingLabel="highlight"
+            app:met_primaryColor="@color/accent"
+            android:paddingBottom="@dimen/d_8" />
+
+        <ImageButton
+            android:id="@+id/search_contact"
+            style="@style/ActivitiTheme.Button.BorderLess.Padding16"
+            android:layout_width="@dimen/list_icon_size"
+            android:layout_height="match_parent"
+            android:src="@drawable/ic_quick_contacts_mail_grey" />
+
+    </LinearLayout>
+
+    <TextView
+        android:paddingTop="@dimen/d_8"
+        android:paddingLeft="@dimen/d_16"
+        android:paddingRight="@dimen/d_16"
+        android:paddingBottom="@dimen/d_16"
+        android:id="@+id/search_text"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/involve_people_email_help"
+        style="@style/ActivitiTheme.Text.Secondary"
+        android:maxLines="10" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dip"
+        android:background="?android:attr/dividerVertical" />
+
+</LinearLayout>

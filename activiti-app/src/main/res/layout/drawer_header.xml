@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+  ~  Copyright (C) 2005-2015 Alfresco Software Limited.
+  ~
+  ~ This file is part of Alfresco Activiti Mobile for Android.
+  ~
+  ~ Alfresco Activiti Mobile for Android is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU Lesser General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ Alfresco Activiti Mobile for Android is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  ~ GNU Lesser General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU Lesser General Public License
+  ~ along with Alfresco. If not, see <http://www.gnu.org/licenses/>.
+  ~
+  -->
+
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/primary"
+    android:orientation="horizontal">
+
+    <LinearLayout
+        android:id="@+id/drawer_account"
+        style="@style/ActivitiTheme.Button.BorderLess"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:clickable="true"
+        android:orientation="horizontal"
+        >
+
+        <com.makeramen.roundedimageview.RoundedImageView
+            android:id="@+id/drawer_account_icon"
+            android:layout_width="@dimen/rounded_icon_size"
+            android:layout_height="@dimen/rounded_icon_size"
+            android:layout_gravity="center"
+            android:src="@drawable/ic_action_inbox"
+            app:riv_border_color="@color/secondary_background"
+            app:riv_tile_mode="clamp"
+            app:riv_border_width="1dip"
+            app:riv_corner_radius="100dip"
+            app:riv_mutate_background="false"
+            app:riv_oval="true"
+            />
+
+        <LinearLayout
+            android:layout_width="0dip"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/drawer_account_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="8dp"
+                android:text="Jean Marie Pascal"
+                android:textColor="#ffffff"
+                android:textSize="14sp"
+                android:textStyle="bold"
+                />
+
+            <TextView
+                android:id="@+id/drawer_account_email"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="8dp"
+                android:layout_marginTop="5dp"
+                android:text="jeanmarie.pascal@alfresco.com"
+                android:textColor="#ffffff"
+                android:textSize="14sp"
+                android:textStyle="normal"
+                />
+        </LinearLayout>
+
+        <ImageView
+            android:id="@+id/account_switcher"
+            android:layout_width="24dip"
+            android:layout_height="24dip"
+            android:src="@drawable/ic_expand_more_white"/>
+
+    </LinearLayout>
+</LinearLayout>

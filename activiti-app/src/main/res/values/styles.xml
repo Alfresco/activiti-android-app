@@ -1,0 +1,224 @@
+<!--
+  ~  Copyright (C) 2005-2015 Alfresco Software Limited.
+  ~
+  ~ This file is part of Alfresco Activiti Mobile for Android.
+  ~
+  ~ Alfresco Activiti Mobile for Android is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU Lesser General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ Alfresco Activiti Mobile for Android is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  ~ GNU Lesser General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU Lesser General Public License
+  ~ along with Alfresco. If not, see <http://www.gnu.org/licenses/>.
+  ~
+  -->
+
+<resources>
+
+    <!-- =============================================================== -->
+    <!-- THEME -->
+    <!-- =============================================================== -->
+    <style name="__ActivitiTheme" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="android:listChoiceBackgroundIndicator">
+            @drawable/activititheme_list_selector_holo_light
+        </item>
+        <item name="android:activatedBackgroundIndicator">
+            @drawable/activititheme_activated_background_holo_light
+        </item>
+    </style>
+
+
+    <style name="_ActivitiTheme" parent="__ActivitiTheme">
+        <item name="colorPrimary">@color/primary</item>
+        <item name="colorPrimaryDark">@color/primary_dark</item>
+        <item name="colorAccent">@color/accent</item>
+        <item name="android:textColorPrimary">@color/primary_text</item>
+        <item name="android:textColorSecondary">@color/secondary_text</item>
+    </style>
+
+    <style name="ActivitiTheme" parent="@style/_ActivitiTheme">
+
+    </style>
+
+
+    <!-- =============================================================== -->
+    <!-- STYLE -->
+    <!-- =============================================================== -->
+    <style name="ActivitiTheme.Toolbar" parent="Base.ThemeOverlay.AppCompat.ActionBar">
+        <item name="android:textColorPrimary">@color/primary_text</item>
+        <item name="android:background">@color/background_material_light</item>
+    </style>
+
+    <!--BUTTON -->
+    <style name="ActivitiTheme.Button">
+        <item name="android:paddingLeft">4dip</item>
+        <item name="android:paddingRight">4dip</item>
+        <item name="android:minHeight">48dip</item>
+        <item name="android:minWidth">64dip</item>
+        <item name="android:textAppearance">@style/TextAppearance.AppCompat.Button</item>
+        <item name="android:focusable">true</item>
+        <item name="android:gravity">center_vertical|center_horizontal</item>
+        <item name="android:clickable">true</item>
+    </style>
+
+    <style name="ActivitiTheme.Button.BorderLess" parent="ActivitiTheme.Button">
+        <item name="android:textColor">@color/accent</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textAllCaps">true</item>
+        <item name="android:background">@drawable/activititheme_list_selector_holo_light</item>
+    </style>
+
+    <style name="ActivitiTheme.Button.BorderLess.Padding16" parent="ActivitiTheme.Button.BorderLess">
+        <item name="android:paddingLeft">@dimen/d_16</item>
+        <item name="android:paddingRight">@dimen/d_16</item>
+    </style>
+
+    <style name="ActivitiTheme.Button.BorderLess.NoCaps" parent="ActivitiTheme.Button.BorderLess">
+        <item name="android:textAllCaps">false</item>
+    </style>
+
+    <!-- CUSTOM STYLE : TO CLEAN -->
+    <style name="ActivitiTheme.Icon">
+        <item name="android:layout_centerVertical">true</item>
+        <item name="android:layout_marginTop">@dimen/d_16</item>
+        <item name="android:contentDescription">@null</item>
+    </style>
+
+    <style name="ActivitiTheme.Icon.Left" parent="ActivitiTheme.Icon">
+        <item name="android:layout_alignParentLeft">true</item>
+        <item name="android:layout_marginLeft">@dimen/d_16</item>
+    </style>
+
+    <style name="ActivitiTheme.Icon.Right" parent="ActivitiTheme.Icon">
+        <item name="android:layout_alignParentRight">true</item>
+        <item name="android:layout_marginLeft">@dimen/d_16</item>
+    </style>
+
+    <style name="ActivitiTheme.Text">
+        <item name="android:ellipsize">end</item>
+        <item name="android:maxLines">2</item>
+        <item name="android:gravity">center_vertical</item>
+    </style>
+
+    <!-- TEXT TITLE -->
+    <style name="ActivitiTheme.Text.Title" parent="ActivitiTheme.Text">
+        <item name="android:textAppearance">@style/TextAppearance.AppCompat.Title</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="ActivitiTheme.Text.Primary" parent="ActivitiTheme.Text">
+        <item name="android:textAppearance">@style/TextAppearance.AppCompat.Subhead</item>
+    </style>
+
+    <style name="ActivitiTheme.Text.Primary.Details" parent="ActivitiTheme.Text.Primary">
+        <item name="android:textColor">@color/secondary_text</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="ActivitiTheme.Text.Primary.Drawer" parent="ActivitiTheme.Text.Primary">
+        <item name="android:padding">@dimen/d_16</item>
+        <item name="android:textColor">@color/secondary_text</item>
+        <item name="android:textAllCaps">true</item>
+    </style>
+
+    <style name="ActivitiTheme.Text.Secondary" parent="ActivitiTheme.Text">
+        <item name="android:textAppearance">@style/TextAppearance.AppCompat.Body1</item>
+    </style>
+
+    <style name="ActivitiTheme.Text.Secondary.Details" parent="ActivitiTheme.Text.Secondary">
+        <item name="android:layout_alignWithParentIfMissing">true</item>
+        <item name="android:layout_marginLeft">@dimen/d_16</item>
+        <item name="android:layout_marginRight">@dimen/d_16</item>
+        <item name="android:paddingBottom">@dimen/d_16</item>
+        <item name="android:paddingTop">@dimen/d_16</item>
+    </style>
+
+    <!-- LIST ITEMS -->
+    <style name="ActivitiTheme.Text.List">
+        <item name="android:ellipsize">end</item>
+        <item name="android:maxLines">1</item>
+        <item name="android:singleLine">true</item>
+    </style>
+
+    <style name="ActivitiTheme.Text.List.Primary" parent="ActivitiTheme.Text.List">
+        <item name="android:textAppearance">@style/TextAppearance.AppCompat.Subhead</item>
+    </style>
+
+    <style name="ActivitiTheme.Text.List.Primary.Bold" parent="ActivitiTheme.Text.List.Primary">
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="ActivitiTheme.Text.List.Primary.Small" parent="ActivitiTheme.Text.List.Primary">
+        <item name="android:textAppearance">@style/TextAppearance.AppCompat.Body1</item>
+    </style>
+
+    <style name="ActivitiTheme.Text.List.Secondary" parent="ActivitiTheme.Text.List">
+        <item name="android:textAppearance">@style/TextAppearance.AppCompat.Body1</item>
+        <item name="android:textColor">@color/secondary_text</item>
+    </style>
+
+    <style name="ActivitiTheme.Text.List.Secondary.Caption" parent="ActivitiTheme.Text.List">
+        <item name="android:textAppearance">@style/TextAppearance.AppCompat.Caption</item>
+        <item name="android:textColor">@color/secondary_text</item>
+    </style>
+
+    <style name="ActivitiTheme.Text.List.Secondary.Bold" parent="ActivitiTheme.Text.List.Secondary">
+        <item name="android:textAppearance">@style/TextAppearance.AppCompat.Body2</item>
+    </style>
+
+    <style name="ActivitiTheme.Text.List.Caption" parent="ActivitiTheme.Text.List">
+        <item name="android:textAppearance">@style/TextAppearance.AppCompat.Caption</item>
+        <item name="android:textColor">@color/accent_text</item>
+    </style>
+
+
+    <!-- ACTION BAR -->
+    <style name="ActivitiTheme.Container">
+    </style>
+
+    <style name="ActivitiTheme.Container.Padding8">
+        <item name="android:paddingLeft">@dimen/d_8</item>
+        <item name="android:paddingRight">@dimen/d_8</item>
+    </style>
+
+    <style name="ActivitiTheme.Container.Padding16">
+        <item name="android:paddingLeft">@dimen/d_16</item>
+        <item name="android:paddingRight">@dimen/d_16</item>
+    </style>
+
+    <style name="ActivitiTheme.Container.Relative" parent="ActivitiTheme.Container">
+        <item name="android:layout_marginLeft">@dimen/d_16</item>
+        <item name="android:layout_marginRight">@dimen/d_16</item>
+        <item name="android:layout_alignWithParentIfMissing">true</item>
+        <item name="android:layout_centerVertical">true</item>
+        <item name="android:paddingBottom">@dimen/d_16</item>
+        <item name="android:paddingTop">@dimen/d_16</item>
+    </style>
+
+
+    <style name="one_list_progress" parent="Widget.AppCompat.ProgressBar">
+        <item name="android:layout_alignParentLeft">true</item>
+        <item name="android:layout_centerVertical">true</item>
+        <item name="android:layout_marginLeft">@dimen/d_16</item>
+        <item name="android:layout_marginTop">@dimen/d_16</item>
+    </style>
+
+    <!-- CUSTOM DIMENS : TO CLEAN -->
+    <dimen name="list_margin_top_middle">3dp</dimen>
+    <dimen name="one_list_minHeight">56dp</dimen>
+    <dimen name="two_list_minHeight">72dp</dimen>
+    <dimen name="three_list_minHeight">88dp</dimen>
+    <dimen name="list_icon_size">40dp</dimen>
+    <dimen name="rounded_icon_size">48dp</dimen>
+
+    <dimen name="d_16">16dp</dimen>
+    <dimen name="d_8">8dp</dimen>
+    <dimen name="d_4">4dp</dimen>
+
+
+</resources>
