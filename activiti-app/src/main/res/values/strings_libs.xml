@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~  Copyright (C) 2005-2015 Alfresco Software Limited.
+  ~
+  ~ This file is part of Alfresco Activiti Mobile for Android.
+  ~
+  ~ Alfresco Activiti Mobile for Android is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU Lesser General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ Alfresco Activiti Mobile for Android is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  ~ GNU Lesser General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU Lesser General Public License
+  ~ along with Alfresco. If not, see <http://www.gnu.org/licenses/>.
+  ~
+  -->
+
+<resources>
+
+    <!-- ################################################################################## -->
+    <!-- THIRD PARTY RESOURCES -->
+    <!-- ################################################################################## -->
+    <string name="aboutLibraries_description_showIcon">true</string>
+    <string name="aboutLibraries_description_showVersion">true</string>
+    <string name="aboutLibraries_description_text">Alfresco Activiti for Android Copyright (C) 2005-2015 Alfresco Software Limited.</string>
+
+    <string name="library_AboutLibraries_libraryDescription">AboutLibrariesis a library to offer you all the information you need of your libraries.</string>
+
+    <!-- Material Edit Text -->
+    <string name="define_int_materialedittext"></string>
+    <!-- Author section -->
+    <string name="library_materialedittext_author">Kai Zhu</string>
+    <string name="library_materialedittext_authorWebsite"></string>
+    <!-- Library section -->
+    <string name="library_materialedittext_libraryName">MaterialEdittext</string>
+    <string name="library_materialedittext_libraryDescription">MaterialEditText, the EditText in Material Design, with more features that Google Material Design Spec has introduced.</string>
+    <string name="library_materialedittext_libraryWebsite">https://github.com/rengwuxian/MaterialEditText</string>
+    <string name="library_materialedittext_libraryVersion">2.0.3</string>
+    <!-- OpenSource section -->
+    <string name="library_materialedittext_isOpenSource">true</string>
+    <string name="library_materialedittext_repositoryLink">https://github.com/rengwuxian/MaterialEditText</string>
+    <!-- ClassPath for autoDetect section -->
+    <string name="library_materialedittext_classPath">com.rengwuxian.materialedittext</string>
+    <!-- License section -->
+    <string name="library_materialedittext_licenseId">apache_2_0</string>
+    <!-- Custom variables section -->
+
+    <string name="define_int_materialdialogs"></string>
+    <!-- Author section -->
+    <string name="library_materialdialogs_author">Aidan Follestad</string>
+    <string name="library_materialdialogs_authorWebsite">http://aidanfollestad.com/</string>
+    <!-- Library section -->
+    <string name="library_materialdialogs_libraryName">MaterialDialogs</string>
+    <string name="library_materialdialogs_libraryDescription">A beautiful, easy-to-use, and customizable dialogs API, enabling you to use Material designed dialogs down to API 8</string>
+    <string name="library_materialdialogs_libraryWebsite"></string>
+    <string name="library_materialdialogs_libraryVersion">0.7.2.8</string>
+    <!-- OpenSource section -->
+    <string name="library_materialdialogs_isOpenSource">true</string>
+    <string name="library_materialdialogs_repositoryLink">https://github.com/afollestad/material-dialogs</string>
+    <!-- ClassPath for autoDetect section -->
+    <string name="library_materialdialogs_classPath">com.afollestad.materialdialogs</string>
+    <!-- License section -->
+    <string name="library_materialdialogs_licenseId">apache_2_0</string>
+    <!-- Custom variables section -->
+
+
+    <string name="define_int_androidswipelayout"></string>
+    <!-- Author section -->
+    <string name="library_androidswipelayout_author">daimajia</string>
+    <string name="library_androidswipelayout_authorWebsite">http://daimajia.com</string>
+    <!-- Library section -->
+    <string name="library_androidswipelayout_libraryName">AndroidSwipeLayout</string>
+    <string name="library_androidswipelayout_libraryDescription">The Most Powerful Swipe Layout!</string>
+    <string name="library_androidswipelayout_libraryWebsite"></string>
+    <string name="library_androidswipelayout_libraryVersion">1.2.0</string>
+    <!-- OpenSource section -->
+    <string name="library_androidswipelayout_isOpenSource">true</string>
+    <string name="library_androidswipelayout_repositoryLink">https://github.com/daimajia/AndroidSwipeLayout</string>
+    <!-- ClassPath for autoDetect section -->
+    <string name="library_androidswipelayout_classPath">com.daimajia.swipe</string>
+    <!-- License section -->
+    <string name="library_androidswipelayout_licenseId">mit</string>
+
+
+    <string name="define_int_circleindicator"></string>
+    <!-- Author section -->
+    <string name="library_circleindicator_author">ongakuer</string>
+    <string name="library_circleindicator_authorWebsite">http://relex.me/</string>
+    <!-- Library section -->
+    <string name="library_circleindicator_libraryName">CircleIndicator</string>
+    <string name="library_circleindicator_libraryDescription">A lightweight viewpager indicator like in nexus 5 launcher</string>
+    <string name="library_circleindicator_libraryWebsite"></string>
+    <string name="library_circleindicator_libraryVersion">1.3.0</string>
+    <!-- OpenSource section -->
+    <string name="library_circleindicator_isOpenSource">true</string>
+    <string name="library_circleindicator_repositoryLink">https://github.com/ongakuer/CircleIndicator</string>
+    <!-- ClassPath for autoDetect section -->
+    <string name="library_circleindicator_classPath">me.relex.circleindicator</string>
+    <!-- License section -->
+    <string name="library_circleindicator_licenseId">apache_2_0</string>
+
+</resources>

@@ -1,0 +1,42 @@
+<!--
+  ~  Copyright (C) 2005-2015 Alfresco Software Limited.
+  ~
+  ~ This file is part of Alfresco Activiti Mobile for Android.
+  ~
+  ~ Alfresco Activiti Mobile for Android is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU Lesser General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ Alfresco Activiti Mobile for Android is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  ~ GNU Lesser General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU Lesser General Public License
+  ~ along with Alfresco. If not, see <http://www.gnu.org/licenses/>.
+  ~
+  -->
+
+<resources>
+
+    <style name="ActivitiTheme" parent="@style/_ActivitiTheme">
+        <item name="android:navigationBarColor">@color/primary_dark</item>
+    </style>
+
+
+    <!-- TEXT TITLE -->
+    <style name="ActivitiTheme.Text.Title" parent="ActivitiTheme.Text">
+        <item name="android:textAppearance">@style/TextAppearance.AppCompat.Title</item>
+    </style>
+
+    <!--BUTTON -->
+    <style name="ActivitiTheme.Button.BorderLess">
+        <item name="android:textAllCaps">true</item>
+        <item name="android:paddingStart">4dip</item>
+        <item name="android:paddingEnd">4dip</item>
+        <item name="android:textColor">@color/accent</item>
+        <item name="android:background">?attr/selectableItemBackground</item>
+    </style>
+
+</resources>

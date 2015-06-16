@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+  ~  Copyright (C) 2005-2015 Alfresco Software Limited.
+  ~
+  ~ This file is part of Alfresco Activiti Mobile for Android.
+  ~
+  ~ Alfresco Activiti Mobile for Android is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU Lesser General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ Alfresco Activiti Mobile for Android is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  ~ GNU Lesser General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU Lesser General Public License
+  ~ along with Alfresco. If not, see <http://www.gnu.org/licenses/>.
+  ~
+  -->
+
+<merge xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <!-- ######################################################################### -->
+    <!-- ######################## HEADER                 ######################### -->
+    <!-- ######################################################################### -->
+
+    <LinearLayout
+        android:id="@+id/task_container_large"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/secondary_background"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:id="@+id/task_details_description_container"
+            style="@style/ActivitiTheme.Button.BorderLess"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <include
+                android:id="@+id/task_details_description"
+                layout="@layout/row_two_lines"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+        </LinearLayout>
+
+        <!-- ######################################################################### -->
+
+        <LinearLayout
+            style="@style/ActivitiTheme.Button.BorderLess"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <LinearLayout
+                android:id="@+id/task_details_assignee_container"
+                style="@style/ActivitiTheme.Button.BorderLess"
+                android:layout_width="0dip"
+                android:layout_height="wrap_content"
+                android:layout_weight="1">
+
+                <include
+                    android:id="@+id/task_details_assignee"
+                    layout="@layout/row_two_lines_inverse"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+
+            </LinearLayout>
+
+            <!-- ######################################################################### -->
+            <LinearLayout
+                android:id="@+id/task_details_due_container"
+                style="@style/ActivitiTheme.Button.BorderLess"
+                android:layout_width="0dip"
+                android:layout_height="wrap_content"
+                android:layout_weight="1">
+
+                <include
+                    android:id="@+id/task_details_due"
+                    layout="@layout/row_two_lines_inverse"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+
+            </LinearLayout>
+        </LinearLayout>
+
+        <!-- ######################################################################### -->
+        <LinearLayout
+            android:id="@+id/task_details_process_container"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="0dp" />
+
+        <LinearLayout
+            android:id="@+id/task_details_property_container"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:padding="0dp" />
+
+    </LinearLayout>
+</merge>
