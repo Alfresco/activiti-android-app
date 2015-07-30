@@ -125,6 +125,18 @@
                             android:text="@string/process_action_add_comment"
                             android:textColor="@color/primary" />
 
+                        <Button
+                            android:id="@+id/process_action_show_diagram"
+                            style="@style/ActivitiTheme.Button.BorderLess.NoCaps"
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
+                            android:drawableTop="@drawable/ic_process_diagram"
+                            android:padding="@dimen/d_16"
+                            android:text="@string/process_action_show_diagram"
+                            android:textColor="@color/primary"
+                            android:visibility="gone" />
+
                     </LinearLayout>
 
                     <!-- ######################################################################### -->
@@ -145,6 +157,7 @@
                         <Button
                             android:id="@+id/process_action_cancel"
                             style="@style/ActivitiTheme.Button.BorderLess"
+                            android:textColor="@android:color/holo_red_light"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_gravity="right|end"

@@ -51,6 +51,7 @@ import android.widget.TextView;
 import com.activiti.android.app.R;
 import com.activiti.android.app.activity.MainActivity;
 import com.activiti.android.app.fragments.comment.CommentsFragment;
+import com.activiti.android.app.fragments.process.ProcessDiagram;
 import com.activiti.android.app.fragments.process.ProcessesFragment;
 import com.activiti.android.app.fragments.task.TaskDetailsFragment;
 import com.activiti.android.platform.EventBusManager;
@@ -403,7 +404,37 @@ public class ProcessDetailsFoundationFragment extends AbstractDetailsFragment
         if (isEnded)
         {
             displayCompletedProperties(processInstanceRepresentation);
-            hide(R.id.process_action_cancel_container);
+            Button delete = (Button) viewById(R.id.process_action_cancel);
+            delete.setOnClickListener(new View.OnClickListener()
+            {
+                @Override
+                public void onClick(View v)
+                {
+                    MaterialDialog.Builder builder = new MaterialDialog.Builder(getActivity())
+                            .title(R.string.process_popup_delete_title)
+                            .cancelListener(new DialogInterface.OnCancelListener()
+                            {
+                                @Override
+                                public void onCancel(DialogInterface dialog)
+                                {
+                                    dismiss();
+                                }
+                            })
+                            .content(
+                                    String.format(getString(R.string.process_popup_delete_description),
+                                            processInstanceRepresentation.getName()))
+                            .positiveText(R.string.general_action_confirm).negativeText(R.string.general_action_cancel)
+                            .callback(new MaterialDialog.ButtonCallback()
+                            {
+                                @Override
+                                public void onPositive(MaterialDialog dialog)
+                                {
+                                    cancelProcess();
+                                }
+                            });
+                    builder.show();
+                }
+            });
         }
         else
         {
@@ -721,6 +752,16 @@ public class ProcessDetailsFoundationFragment extends AbstractDetailsFragment
             {
                 IntentUtils.actionShareLink(ProcessDetailsFoundationFragment.this,
                         processInstanceRepresentation.getName(), getAPI().getProcessService().getShareUrl(processId));
+            }
+        });
+
+        viewById(R.id.process_action_show_diagram).setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View v)
+            {
+                ProcessDiagram.with(getActivity())
+                        .processModelId(processInstanceRepresentation.getProcessDefinitionId()).display();
             }
         });
 

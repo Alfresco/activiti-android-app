@@ -25,6 +25,6 @@ import com.activiti.client.api.model.common.ResultListDataRepresentation;
 /**
  * Created by jpascal on 12/12/2014.
  */
-public class AppDefinitionsRepresentation extends ResultListDataRepresentation<AppDefinitionRepresentation>
+public class ModelsRepresentation extends ResultListDataRepresentation<ModelRepresentation>
 {
 }

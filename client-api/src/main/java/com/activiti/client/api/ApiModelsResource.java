@@ -21,10 +21,14 @@
 package com.activiti.client.api;
 
 import retrofit.Callback;
+import retrofit.client.Response;
 import retrofit.http.GET;
+import retrofit.http.Path;
 import retrofit.http.Query;
+import retrofit.http.Streaming;
 
-import com.activiti.client.api.model.editor.AppDefinitionsRepresentation;
+import com.activiti.client.api.model.editor.ModelRepresentation;
+import com.activiti.client.api.model.editor.ModelsRepresentation;
 
 public interface ApiModelsResource
 {
@@ -32,7 +36,7 @@ public interface ApiModelsResource
     // SYNC
     // ///////////////////////////////////////////////////////////////////
     @GET("/api/enterprise/models")
-    AppDefinitionsRepresentation getModels(@Query("filter") String filter, @Query("modelType") String modelType,
+    ModelsRepresentation getModels(@Query("filter") String filter, @Query("modelType") String modelType,
             @Query("sort") String sort);
 
     // ///////////////////////////////////////////////////////////////////
@@ -40,6 +44,17 @@ public interface ApiModelsResource
     // ///////////////////////////////////////////////////////////////////
     @GET("/api/enterprise/models")
     void getModels(@Query("filter") String filter, @Query("modelType") String modelType, @Query("sort") String sort,
-            Callback<AppDefinitionsRepresentation> callback);
+            Callback<ModelsRepresentation> callback);
+
+    // Since 1.3
+    @GET("/api/enterprise/models/{modelId}/thumbnail")
+    @Streaming
+    void getModelThumbnail(@Path("modelId") String modelId, Callback<Response> callback);
+
+    // Since 1.3
+    @GET("/api/enterprise/models/{modelId}")
+    @Streaming
+    void getModel(@Path("modelId") String processInstanceId, @Query("includePermissions") String includePermissions,
+            Callback<ModelRepresentation> callback);
 
 }

@@ -1,3 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+
 <!--
   ~  Copyright (C) 2005-2015 Alfresco Software Limited.
   ~
@@ -18,22 +20,26 @@
   ~
   -->
 
-<resources>
-    <!-- Default screen margins, per the Android Design guidelines. -->
-    <dimen name="activity_horizontal_margin">16dp</dimen>
-    <dimen name="activity_vertical_margin">16dp</dimen>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/primary_dark"
+    android:fillViewport="true"
+    tools:context=".MainActivity">
 
-    <!-- Per the design guidelines, navigation drawers should be between 240dp and 320dp:
-         https://developer.android.com/design/patterns/navigation-drawer.html -->
-    <dimen name="navigation_drawer_width">240dp</dimen>
-
-    <!-- PANELS -->
-    <item name="weight_left_panel" format="float" type="dimen">0.7</item>
-    <item name="weight_right_panel" format="float" type="dimen">0.3</item>
-
-    <!-- PROCESS DIAGRAM -->
-    <dimen name="process_diagram_width">400dp</dimen>
-    <dimen name="process_diagram_height">400dp</dimen>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:orientation="vertical">
 
 
-</resources>
+        <ImageView
+            android:id="@+id/process_diagram_view"
+            android:layout_width="@dimen/process_diagram_width"
+            android:layout_height="@dimen/process_diagram_height"
+            android:layout_gravity="center" />
+
+    </LinearLayout>
+</ScrollView>
