@@ -53,6 +53,7 @@
     <!-- ACTION -->
     <string name="general_action_clear">Clear</string>
     <string name="general_action_cancel">Cancel</string>
+    <string name="general_action_delete">Delete</string>
     <string name="general_action_close">Cancel</string>
     <string name="general_action_confirm">Confirm</string>
     <string name="general_action_show_more">Show more</string>
@@ -224,7 +225,7 @@
     <string name="process_popup_cancel_title">Cancel the process?</string>
     <string name="process_popup_cancel_description">Are you sure you want to cancel process %s?</string>
     <string name="process_popup_delete_title">Delete the process?</string>
-    <string name="process_popup_delete_description">Are you sure you want to delete process {{name}}? All tasks, content and comments related to this process will be deleted permanently.</string>
+    <string name="process_popup_delete_description">Are you sure you want to delete process %s? All tasks, content and comments related to this process will be deleted permanently.</string>
 
     <!-- FORM -->
     <!-- ################################################################################## -->

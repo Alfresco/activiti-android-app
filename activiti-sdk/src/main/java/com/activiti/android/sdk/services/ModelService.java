@@ -21,10 +21,11 @@
 package com.activiti.android.sdk.services;
 
 import retrofit.Callback;
+import retrofit.client.Response;
 
 import com.activiti.android.sdk.RestManager;
 import com.activiti.client.api.ApiModelsResource;
-import com.activiti.client.api.model.editor.AppDefinitionsRepresentation;
+import com.activiti.client.api.model.editor.ModelsRepresentation;
 
 /**
  * Created by jpascal on 12/12/2014.
@@ -39,13 +40,24 @@ public class ModelService extends ActivitiService
         api = manager.adapter.create(ApiModelsResource.class);
     }
 
-    public void getAppDefinitionModels(Callback<AppDefinitionsRepresentation> callback)
+    public void getAppDefinitionModels(Callback<ModelsRepresentation> callback)
     {
         api.getModels("myApps", "3", "modifiedDesc", callback);
     }
 
-    public AppDefinitionsRepresentation getAppDefinitionModels()
+    public ModelsRepresentation getAppDefinitionModels()
     {
         return api.getModels("myApps", "3", "modifiedDesc");
     }
+
+    public void getModelThumbnail(String modelId, Callback<Response> callback)
+    {
+        api.getModelThumbnail(modelId, callback);
+    }
+
+    public String getModelThumbnailUrl(String modelId)
+    {
+        return String.format(restManager.endpoint.concat("/api/enterprise/models/%s/thumbnail"), modelId);
+    }
+
 }

@@ -49,8 +49,9 @@ public interface ApiRelatedContentResource
     @Streaming
     Response getRawContent(@Path("contentId") String contentId);
 
+    // ?isRelatedContent has been added automatically to support 1.3 (mandatory)
     @Multipart
-    @POST("/api/enterprise/tasks/{taskId}/raw-content")
+    @POST("/api/enterprise/tasks/{taskId}/raw-content?isRelatedContent=true")
     RelatedContentRepresentation createRelatedContentOnTask(@Path("taskId") String taskId,
             @Part("file") TypedFile resource);
 
