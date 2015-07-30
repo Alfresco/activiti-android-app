@@ -30,7 +30,7 @@ android {
 
         minSdkVersion 19
         targetSdkVersion 22
-        versionCode 1
+        versionCode 10
         versionName VERSION_NAME
 
         manifestPlaceholders = [PROVIDER_AUTHORITY: PROVIDER_AUTHORITY]
@@ -141,11 +141,11 @@ dependencies {
     compile project(":activiti-sdk")
 
     //Support
-    compile 'com.android.support:design:22.2.0'
-    compile 'com.android.support:support-v4:22.2.0'
-    compile 'com.android.support:appcompat-v7:22.2.0'
-    compile 'com.android.support:cardview-v7:22.2.0'
-    compile 'com.android.support:recyclerview-v7:22.2.0'
+    compile 'com.android.support:design:22.2.1'
+    compile 'com.android.support:support-v4:22.2.1'
+    compile 'com.android.support:appcompat-v7:22.2.1'
+    compile 'com.android.support:cardview-v7:22.2.1'
+    compile 'com.android.support:recyclerview-v7:22.2.1'
 
     //Square
     compile 'com.squareup.retrofit:retrofit:1.9.0'
