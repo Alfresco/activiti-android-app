@@ -35,21 +35,29 @@ import android.support.v4.app.FragmentActivity;
 import android.view.View;
 
 import com.activiti.android.app.R;
+import com.activiti.android.platform.utils.BundleUtils;
 import com.activiti.android.ui.fragments.AlfrescoFragment;
 import com.activiti.android.ui.fragments.builder.AlfrescoFragmentBuilder;
 import com.activiti.android.ui.fragments.task.TaskDetailsFoundationFragment;
 import com.activiti.client.api.model.editor.ModelRepresentation;
 import com.activiti.client.api.model.editor.ModelsRepresentation;
-import com.activiti.client.api.model.runtime.request.AttachFormTaskRepresentation;
+import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
+import com.afollestad.materialdialogs.internal.MDButton;
 
 public class AttachFormTaskDialogFragment extends AlfrescoFragment
 {
     private static final String ARGUMENT_TASK_ID = "taskId";
 
+    private static final String ARGUMENT_FORM_ID = "formId";
+
     private FormDefinitionModelAdapter adapter;
 
     private String taskId;
+
+    private Long formId, selectedModelId = -1L;
+
+    private ModelRepresentation model;
 
     // ///////////////////////////////////////////////////////////////////////////
     // CONSTRUCTORS & HELPERS
@@ -72,33 +80,79 @@ public class AttachFormTaskDialogFragment extends AlfrescoFragment
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState)
     {
-        taskId = getArguments().getString(ARGUMENT_TASK_ID);
+        taskId = BundleUtils.getString(getArguments(), ARGUMENT_TASK_ID);
+        formId = BundleUtils.getLong(getArguments(), ARGUMENT_FORM_ID);
 
         retrieveFormModels();
 
-        adapter = new FormDefinitionModelAdapter(getActivity(), R.layout.row_single_line,
-                new ArrayList<ModelRepresentation>(0));
+        adapter = new FormDefinitionModelAdapter(getActivity(), R.layout.row_two_lines,
+                new ArrayList<ModelRepresentation>(0), formId, model);
 
-        return new MaterialDialog.Builder(getActivity()).title(R.string.form_default_outcome_start_process)
-                .cancelListener(new DialogInterface.OnCancelListener()
+        MaterialDialog.Builder builder = new MaterialDialog.Builder(getActivity())
+                .title(R.string.task_form_select_title).titleColor(getResources().getColor(R.color.accent))
+                .positiveText(R.string.general_action_cancel).positiveColor(getResources().getColor(R.color.accent))
+                .adapter(adapter, new MaterialDialog.ListCallback()
+                {
+                    @Override
+                    public void onSelection(MaterialDialog materialDialog, View view, int i, CharSequence charSequence)
+                    {
+                        model = ((ModelRepresentation) materialDialog.getListView().getAdapter().getItem(i));
+
+                        if (model.getId().equals(formId))
+                        {
+                            ((MDButton) materialDialog.getActionButton(DialogAction.POSITIVE))
+                                    .setText(R.string.general_action_reset);
+                        }
+                        else
+                        {
+                            ((MDButton) materialDialog.getActionButton(DialogAction.POSITIVE))
+                                    .setText(R.string.task_form_select_attach_form);
+                        }
+
+                        adapter.select(model);
+                        adapter.notifyDataSetChanged();
+                    }
+                }).cancelListener(new DialogInterface.OnCancelListener()
                 {
                     @Override
                     public void onCancel(DialogInterface dialog)
                     {
                         getDialog().dismiss();
                     }
-                }).titleColor(getResources().getColor(R.color.accent))
-                .adapter(adapter, new MaterialDialog.ListCallback()
+                });
+
+        if (formId != null)
+        {
+            builder.neutralText(R.string.task_form_select_remove_form);
+            builder.neutralColor(getResources().getColor(R.color.app_theme_4));
+            builder.callback(new MaterialDialog.ButtonCallback()
+            {
+                @Override
+                public void onPositive(MaterialDialog dialog)
                 {
-                    @Override
-                    public void onSelection(MaterialDialog materialDialog, View view, int i, CharSequence charSequence)
-                    {
-                        ModelRepresentation model = ((ModelRepresentation) materialDialog.getListView().getAdapter()
-                                .getItem(i));
-                        attachForm(model.getName(), new AttachFormTaskRepresentation(model.getId()));
-                        getDialog().dismiss();
-                    }
-                }).show();
+                    attachForm(model);
+                }
+
+                @Override
+                public void onNeutral(MaterialDialog dialog)
+                {
+                    removeForm();
+                }
+            });
+        }
+        else
+        {
+            builder.callback(new MaterialDialog.ButtonCallback()
+            {
+                @Override
+                public void onPositive(MaterialDialog dialog)
+                {
+                    attachForm(model);
+                }
+            });
+        }
+
+        return builder.show();
     }
 
     // ///////////////////////////////////////////////////////////////////////////
@@ -123,9 +177,15 @@ public class AttachFormTaskDialogFragment extends AlfrescoFragment
         });
     }
 
-    private void attachForm(String modelName, final AttachFormTaskRepresentation attach)
+    private void attachForm(ModelRepresentation formModel)
     {
-        ((TaskDetailsFoundationFragment) getAttachedFragment()).attachForm(modelName, attach);
+        if (model == null) { return; }
+        ((TaskDetailsFoundationFragment) getAttachedFragment()).attachForm(formModel);
+    }
+
+    private void removeForm()
+    {
+        ((TaskDetailsFoundationFragment) getAttachedFragment()).removeForm();
     }
 
     // ///////////////////////////////////////////////////////////////////////////
@@ -161,6 +221,15 @@ public class AttachFormTaskDialogFragment extends AlfrescoFragment
         public Builder taskId(String taskId)
         {
             extraConfiguration.putString(ARGUMENT_TASK_ID, taskId);
+            return this;
+        }
+
+        public Builder formKey(Long formKey)
+        {
+            if (formKey != null)
+            {
+                extraConfiguration.putLong(ARGUMENT_FORM_ID, formKey);
+            }
             return this;
         }
 

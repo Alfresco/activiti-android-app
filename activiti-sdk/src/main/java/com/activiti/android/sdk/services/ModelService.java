@@ -25,6 +25,7 @@ import retrofit.client.Response;
 
 import com.activiti.android.sdk.RestManager;
 import com.activiti.client.api.ApiModelsResource;
+import com.activiti.client.api.model.editor.ModelRepresentation;
 import com.activiti.client.api.model.editor.ModelsRepresentation;
 
 /**
@@ -65,6 +66,11 @@ public class ModelService extends ActivitiService
     // ///////////////////////////////////////////////////////////////////
     // ASYNC
     // ///////////////////////////////////////////////////////////////////
+    public void getById(String id, Callback<ModelRepresentation> callback)
+    {
+        api.getById(id, callback);
+    }
+
     public void getAppDefinitionModels(Callback<ModelsRepresentation> callback)
     {
         api.getModels("myApps", MODEL_APPS, "modifiedDesc", callback);

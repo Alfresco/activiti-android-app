@@ -96,7 +96,7 @@
 
     <style name="ActivitiTheme.Icon.Right" parent="ActivitiTheme.Icon">
         <item name="android:layout_alignParentRight">true</item>
-        <item name="android:layout_marginLeft">@dimen/d_16</item>
+        <item name="android:layout_marginRight">@dimen/d_16</item>
     </style>
 
     <style name="ActivitiTheme.Text">

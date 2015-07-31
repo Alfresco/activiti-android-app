@@ -25,36 +25,69 @@ import java.util.List;
 import android.app.Activity;
 import android.view.View;
 
+import com.activiti.android.app.R;
 import com.activiti.android.ui.fragments.base.BaseListAdapter;
-import com.activiti.android.ui.holder.SingleLineViewHolder;
+import com.activiti.android.ui.holder.TwoLinesViewHolder;
 import com.activiti.client.api.model.editor.ModelRepresentation;
 
 /**
  * @author Jean Marie Pascal
  */
-public class FormDefinitionModelAdapter extends BaseListAdapter<ModelRepresentation, SingleLineViewHolder>
+public class FormDefinitionModelAdapter extends BaseListAdapter<ModelRepresentation, TwoLinesViewHolder>
 {
-    public FormDefinitionModelAdapter(Activity context, int textViewResourceId, List<ModelRepresentation> listItems)
+    ModelRepresentation selectedModel;
+
+    Long originalModel;
+
+    public FormDefinitionModelAdapter(Activity context, int textViewResourceId, List<ModelRepresentation> listItems,
+            Long originalModel, ModelRepresentation selectedModel)
     {
         super(context, textViewResourceId, listItems);
+        this.originalModel = originalModel;
+        this.selectedModel = selectedModel;
+    }
+
+    public void select(ModelRepresentation model)
+    {
+        this.selectedModel = model;
     }
 
     @Override
-    protected void updateTopText(SingleLineViewHolder vh, ModelRepresentation item)
+    protected void updateTopText(TwoLinesViewHolder vh, ModelRepresentation item)
     {
-        vh.topText.setText(item.getName());
+        if (originalModel != null && item.getId().equals(originalModel))
+        {
+            vh.topText.setText(item.getName() + " (current)");
+        }
+        else
+        {
+            vh.topText.setText(item.getName());
+        }
         vh.topText.setMaxLines(2);
         vh.topText.setSingleLine(false);
     }
 
     @Override
-    protected void updateBottomText(SingleLineViewHolder vh, ModelRepresentation item)
+    protected void updateBottomText(TwoLinesViewHolder vh, ModelRepresentation item)
     {
+        vh.bottomText.setText(item.getDescription());
+        vh.bottomText.setMaxLines(3);
+        vh.bottomText.setSingleLine(false);
     }
 
     @Override
-    protected void updateIcon(SingleLineViewHolder vh, ModelRepresentation item)
+    protected void updateIcon(TwoLinesViewHolder vh, ModelRepresentation item)
     {
-        vh.icon.setVisibility(View.GONE);
+        vh.icon.setImageResource(R.drawable.ic_assignment_grey);
+        if (selectedModel != null && item.getId().equals(selectedModel.getId()))
+        {
+
+            vh.choose.setVisibility(View.VISIBLE);
+            vh.choose.setImageResource(R.drawable.ic_done_grey);
+        }
+        else
+        {
+            vh.choose.setVisibility(View.GONE);
+        }
     }
 }

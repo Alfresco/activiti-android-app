@@ -77,6 +77,8 @@ import com.activiti.android.ui.holder.TwoLinesViewHolder;
 import com.activiti.android.ui.utils.DisplayUtils;
 import com.activiti.android.ui.utils.Formatter;
 import com.activiti.android.ui.utils.UIUtils;
+import com.activiti.client.api.model.editor.ModelRepresentation;
+import com.activiti.client.api.model.editor.form.FormDefinitionRepresentation;
 import com.activiti.client.api.model.idm.LightUserRepresentation;
 import com.activiti.client.api.model.runtime.ProcessInstanceRepresentation;
 import com.activiti.client.api.model.runtime.RelatedContentsRepresentation;
@@ -104,6 +106,10 @@ public class TaskDetailsFoundationFragment extends AbstractDetailsFragment imple
 
     private static final int EDIT_DESCRIPTION = 1;
 
+    protected ModelRepresentation formDefinitionModel;
+
+    protected String formModelName;
+
     protected RenditionManager rendition;
 
     protected List<LightUserRepresentation> people = new ArrayList<>(0);
@@ -112,9 +118,12 @@ public class TaskDetailsFoundationFragment extends AbstractDetailsFragment imple
 
     protected View.OnClickListener onProcessListener;
 
-    protected TwoLinesViewHolder assigneeHolder, dueDateHolder, descriptionHolder;
+    protected TwoLinesViewHolder assigneeHolder, dueDateHolder, descriptionHolder, formHolder;
 
     protected Date dueAt;
+
+    /** real value of formkey (variable as change is possible) */
+    protected String formKey;
 
     protected String description;
 
@@ -283,6 +292,10 @@ public class TaskDetailsFoundationFragment extends AbstractDetailsFragment imple
             }
         }
 
+        // Retrieve FormModel Info
+        formKey = taskRepresentation.getFormKey();
+        retrieveForm();
+
         // Retrieve Contents
         getAPI().getTaskService().getAttachments(taskId, new Callback<RelatedContentsRepresentation>()
         {
@@ -392,55 +405,14 @@ public class TaskDetailsFoundationFragment extends AbstractDetailsFragment imple
         assignee = taskRepresentation.getAssignee();
         displayAssignee(assignee != null ? assignee.getFullname() : null);
 
+        // FORM
+        formHolder = new TwoLinesViewHolder(viewById(R.id.task_details_form));
+        formKey = taskRepresentation.getFormKey();
+
         // Display Action associated
         displayOutcome();
-        displayAttachForm(null);
         displayActionsSection();
 
-    }
-
-    private void displayAttachForm(Boolean hasForm)
-    {
-        // Available only since 1.3.0
-        // FIXME Remove after 1.3 release
-        /*
-         * if (getVersionNumber() < 130) { hide(R.id.task_action_attach_form);
-         * return; }
-         */
-
-        if (isEnded)
-        {
-            hide(R.id.task_action_attach_form);
-        }
-        else if ((hasForm == null && taskRepresentation.getFormKey() != null) || (hasForm != null && hasForm))
-        {
-            Button attach = (Button) viewById(R.id.task_action_attach_form);
-            show(R.id.task_action_attach_form);
-            attach.setText(R.string.task_form_select_remove_form);
-            attach.setOnClickListener(new View.OnClickListener()
-            {
-                @Override
-                public void onClick(View v)
-                {
-                    removeForm(taskRepresentation.getFormKey());
-                }
-            });
-        }
-        else if ((hasForm == null && taskRepresentation.getFormKey() == null) || (hasForm != null && !hasForm))
-        {
-            Button attach = (Button) viewById(R.id.task_action_attach_form);
-            show(R.id.task_action_attach_form);
-            attach.setText(R.string.task_form_select_attach_form);
-            attach.setOnClickListener(new View.OnClickListener()
-            {
-                @Override
-                public void onClick(View v)
-                {
-                    AttachFormTaskDialogFragment.with(getActivity()).bindFragmentTag(getTag())
-                            .taskId(taskRepresentation.getId()).displayAsDialog();
-                }
-            });
-        }
     }
 
     private void displayOutcome()
@@ -448,7 +420,7 @@ public class TaskDetailsFoundationFragment extends AbstractDetailsFragment imple
         if (isEnded)
         {
             displayCompletedProperties(taskRepresentation);
-            if (taskRepresentation.getFormKey() != null)
+            if (formKey != null)
             {
                 Button myTasks = (Button) viewById(R.id.task_action_complete);
                 myTasks.setText(R.string.task_action_complete_task_with_form);
@@ -483,7 +455,7 @@ public class TaskDetailsFoundationFragment extends AbstractDetailsFragment imple
                     }
                 });
             }
-            else if (taskRepresentation.getFormKey() != null)
+            else if (formKey != null)
             {
                 taskAction.setText(R.string.task_action_complete_task_with_form);
                 taskAction.setOnClickListener(new View.OnClickListener()
@@ -596,7 +568,7 @@ public class TaskDetailsFoundationFragment extends AbstractDetailsFragment imple
     private void displayDescription(final String description)
     {
         descriptionHolder.bottomText.setVisibility(View.GONE);
-        descriptionHolder.icon.setImageResource(R.drawable.ic_assignment_grey);
+        descriptionHolder.icon.setImageResource(R.drawable.ic_info_outline_grey);
         if (TextUtils.isEmpty(description))
         {
             descriptionHolder.topText.setText(R.string.task_message_no_description);
@@ -624,6 +596,63 @@ public class TaskDetailsFoundationFragment extends AbstractDetailsFragment imple
         {
             clearBackground(viewById(R.id.task_details_description_container));
         }
+    }
+
+    private void retrieveForm()
+    {
+        // Can't change if task in process
+        if (taskRepresentation.getProcessDefinitionId() != null)
+        {
+            hide(R.id.task_details_form_container);
+            return;
+        }
+
+        // Retrieve FormModel Info
+        displayFormField();
+        if (formKey != null)
+        {
+            getAPI().getTaskService().getTaskForm(taskRepresentation.getId(),
+                    new Callback<FormDefinitionRepresentation>()
+                    {
+                        @Override
+                        public void success(FormDefinitionRepresentation formDefinitionRepresentation, Response response)
+                        {
+                            formModelName = formDefinitionRepresentation.getName();
+                            formDefinitionModel = null;
+                            formKey = Long.toString(formDefinitionRepresentation.getId());
+                            displayFormField();
+                            displayOutcome();
+                        }
+
+                        @Override
+                        public void failure(RetrofitError error)
+                        {
+
+                        }
+                    });
+        }
+    }
+
+    private void displayFormField()
+    {
+        show(R.id.task_details_form_container);
+        HolderUtils.configure(formHolder, getString(R.string.task_field_form),
+                getString(R.string.task_action_retrieve_info), R.drawable.ic_assignment_grey);
+        View v = viewById(R.id.task_details_form_container);
+        v.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View v)
+            {
+                AttachFormTaskDialogFragment.with(getActivity()).bindFragmentTag(getTag())
+                        .taskId(taskRepresentation.getId()).formKey(formKey != null ? Long.parseLong(formKey) : null)
+                        .displayAsDialog();
+            }
+        });
+
+        ((TextView) viewById(R.id.task_details_form_container).findViewById(R.id.bottomtext))
+                .setText(formModelName != null ? formModelName : formDefinitionModel != null ? formDefinitionModel
+                        .getName() : getString(R.string.task_message_no_form));
     }
 
     private void displayCompletedProperties(TaskRepresentation taskRepresentation)
@@ -1080,17 +1109,23 @@ public class TaskDetailsFoundationFragment extends AbstractDetailsFragment imple
         });
     }
 
-    private void removeForm(final String formName)
+    public void removeForm()
     {
         getAPI().getTaskService().removeForm(taskId, new Callback<Void>()
         {
             @Override
             public void success(Void aVoid, Response response)
             {
-                displayAttachForm(false);
-                Snackbar.make(getActivity().findViewById(R.id.left_panel),
-                        String.format(getString(R.string.task_alert_form_removed), formName), Snackbar.LENGTH_SHORT)
-                        .show();
+                Snackbar.make(
+                        getActivity().findViewById(R.id.left_panel),
+                        String.format(getString(R.string.task_alert_form_removed),
+                                (formDefinitionModel != null) ? formDefinitionModel.getName() : formModelName),
+                        Snackbar.LENGTH_SHORT).show();
+                formKey = null;
+                formDefinitionModel = null;
+                formModelName = null;
+                displayFormField();
+                displayOutcome();
             }
 
             @Override
@@ -1102,17 +1137,23 @@ public class TaskDetailsFoundationFragment extends AbstractDetailsFragment imple
         });
     }
 
-    public void attachForm(final String formName, AttachFormTaskRepresentation request)
+    public void attachForm(final ModelRepresentation formModel)
     {
-        getAPI().getTaskService().attachForm(taskId, request, new Callback<Void>()
+        AttachFormTaskRepresentation rep = new AttachFormTaskRepresentation(formModel.getId());
+        getAPI().getTaskService().attachForm(taskId, rep, new Callback<Void>()
         {
             @Override
             public void success(Void nothing, Response response)
             {
-                displayAttachForm(true);
+                formDefinitionModel = formModel;
+                formModelName = null;
+                // awaits retrieve form to get real formkey
+                formKey = "-1";
+                retrieveForm();
+                displayFormField();
                 Snackbar.make(getActivity().findViewById(R.id.left_panel),
-                        String.format(getString(R.string.task_alert_form_attached), formName), Snackbar.LENGTH_SHORT)
-                        .show();
+                        String.format(getString(R.string.task_alert_form_attached), formModel.getName()),
+                        Snackbar.LENGTH_SHORT).show();
             }
 
             @Override

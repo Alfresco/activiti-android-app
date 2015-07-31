@@ -42,6 +42,9 @@ public interface ApiModelsResource
     // ///////////////////////////////////////////////////////////////////
     // ASYNC
     // ///////////////////////////////////////////////////////////////////
+    @GET("/api/enterprise/models/{modelId}")
+    void getById(@Path("modelId") String modelId, Callback<ModelRepresentation> callback);
+
     @GET("/api/enterprise/models")
     void getModels(@Query("filter") String filter, @Query("modelType") String modelType, @Query("sort") String sort,
             Callback<ModelsRepresentation> callback);

@@ -25,7 +25,7 @@ package com.activiti.client.api.model.runtime.request;
  */
 public class AttachFormTaskRepresentation
 {
-    final Long formId;
+    public final Long formId;
 
     public AttachFormTaskRepresentation(long formId)
     {
