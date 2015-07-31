@@ -29,6 +29,7 @@ import android.support.v4.app.FragmentActivity;
 import com.activiti.android.app.activity.MainActivity;
 import com.activiti.android.ui.fragments.builder.AlfrescoFragmentBuilder;
 import com.activiti.android.ui.fragments.process.ProcessDiagramFoundationFragment;
+import com.activiti.android.ui.utils.UIUtils;
 
 //TODO Use TouchableImage Library
 public class ProcessDiagram extends ProcessDiagramFoundationFragment
@@ -59,7 +60,7 @@ public class ProcessDiagram extends ProcessDiagramFoundationFragment
         super.onStart();
         if (getActivity() instanceof MainActivity)
         {
-            ((MainActivity) getActivity()).lockSlidingMenu();
+            UIUtils.displayActionBarBack((MainActivity) getActivity());
         }
     }
 
@@ -69,7 +70,7 @@ public class ProcessDiagram extends ProcessDiagramFoundationFragment
         super.onStop();
         if (getActivity() instanceof MainActivity)
         {
-            ((MainActivity) getActivity()).unlockSlidingMenu();
+            UIUtils.setActionBarDefault((MainActivity) getActivity());
         }
     }
 
@@ -97,9 +98,21 @@ public class ProcessDiagram extends ProcessDiagramFoundationFragment
             super(appActivity, configuration);
         }
 
-        public Builder processModelId(String processModelId)
+        public Builder processId(String processModelId)
         {
-            extraConfiguration.putString(ARGUMENT_PROCESS_MODEL_ID, processModelId);
+            extraConfiguration.putString(ARGUMENT_PROCESS_ID, processModelId);
+            return this;
+        }
+
+        public Builder tenantId(String tenantId)
+        {
+            extraConfiguration.putString(ARGUMENT_TENANT_ID, tenantId);
+            return this;
+        }
+
+        public Builder processName(String processName)
+        {
+            extraConfiguration.putString(ARGUMENT_PROCESS_NAME, processName);
             return this;
         }
 

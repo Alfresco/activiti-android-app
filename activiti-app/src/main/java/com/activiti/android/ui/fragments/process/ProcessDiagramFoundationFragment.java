@@ -31,14 +31,24 @@ import com.activiti.android.app.R;
 import com.activiti.android.app.activity.MainActivity;
 import com.activiti.android.platform.utils.BundleUtils;
 import com.activiti.android.ui.fragments.AlfrescoFragment;
+import com.activiti.android.ui.utils.UIUtils;
 
+import it.sephiroth.android.library.imagezoom.ImageViewTouch;
+import it.sephiroth.android.library.imagezoom.ImageViewTouchBase;
+
+//TODO Full screen in separate activity ?
+//TODO Test against 1.2 ?
 public class ProcessDiagramFoundationFragment extends AlfrescoFragment
 {
     public static final String TAG = ProcessDiagramFoundationFragment.class.getName();
 
-    public static final String ARGUMENT_PROCESS_MODEL_ID = "processModelId";
+    public static final String ARGUMENT_PROCESS_ID = "processId";
 
-    protected String modelId;
+    public static final String ARGUMENT_TENANT_ID = "tenantId";
+
+    public static final String ARGUMENT_PROCESS_NAME = "processName";
+
+    protected String processId, tenantId, processName;
 
     // ///////////////////////////////////////////////////////////////////////////
     // CONSTRUCTORS & HELPERS
@@ -62,8 +72,6 @@ public class ProcessDiagramFoundationFragment extends AlfrescoFragment
     {
         setRootView(inflater.inflate(R.layout.fr_process_diagram, container, false));
 
-        // Icon
-
         return getRootView();
     }
 
@@ -74,10 +82,19 @@ public class ProcessDiagramFoundationFragment extends AlfrescoFragment
 
         if (getArguments() != null)
         {
-            modelId = BundleUtils.getString(getArguments(), ARGUMENT_PROCESS_MODEL_ID);
+            processName = BundleUtils.getString(getArguments(), ARGUMENT_PROCESS_NAME);
+            processId = BundleUtils.getString(getArguments(), ARGUMENT_PROCESS_ID);
+            tenantId = BundleUtils.getString(getArguments(), ARGUMENT_TENANT_ID);
         }
 
         displayInfo();
+    }
+
+    @Override
+    public void onResume()
+    {
+        super.onResume();
+        UIUtils.setTitle(getActivity(), processName, getString(R.string.process_title_diagram));
     }
 
     // ///////////////////////////////////////////////////////////////////////////
@@ -85,9 +102,12 @@ public class ProcessDiagramFoundationFragment extends AlfrescoFragment
     // ///////////////////////////////////////////////////////////////////////////
     private void displayInfo()
     {
+        ((ImageViewTouch) viewById(R.id.process_diagram_view))
+                .setDisplayType(ImageViewTouchBase.DisplayType.FIT_TO_SCREEN);
+
         // Icon
         ((MainActivity) getActivity()).getPicasso()
-                .load(Uri.parse(getAPI().getModelService().getModelThumbnailUrl(modelId))).fit()
+                .load(Uri.parse(getAPI().getProcessService().getProcessDiagramUrl(processId, tenantId)))
                 .into((ImageView) viewById(R.id.process_diagram_view));
     }
 }

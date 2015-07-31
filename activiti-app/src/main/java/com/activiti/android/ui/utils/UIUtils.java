@@ -38,6 +38,7 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 
 import com.activiti.android.app.R;
+import com.activiti.android.app.activity.MainActivity;
 import com.activiti.android.platform.utils.AndroidVersion;
 
 /**
@@ -173,6 +174,22 @@ public class UIUtils
         actionBar.setDisplayShowCustomEnabled(false);
         actionBar.setTitle(title);
         actionBar.setSubtitle(subTitle);
+    }
+
+    public static void displayActionBarBack(MainActivity activity)
+    {
+        if (activity == null || activity.getmDrawerToggle() == null) { return; }
+        activity.lockSlidingMenu();
+        activity.getmDrawerToggle().setDrawerIndicatorEnabled(false);
+        activity.getmDrawerToggle().setHomeAsUpIndicator(R.drawable.ic_arrow_back_white);
+    }
+
+    public static void setActionBarDefault(MainActivity activity)
+    {
+        if (activity == null || activity.getmDrawerToggle() == null) { return; }
+        activity.unlockSlidingMenu();
+        activity.getmDrawerToggle().setDrawerIndicatorEnabled(true);
+        activity.getmDrawerToggle().setHomeAsUpIndicator(null);
     }
 
     public static View setActionBarCustomView(FragmentActivity activity, int layoutId, boolean fillParent)

@@ -32,6 +32,10 @@ import com.activiti.client.api.model.editor.ModelsRepresentation;
  */
 public class ModelService extends ActivitiService
 {
+    protected static final String MODEL_FORMS = "2";
+    protected static final String MODEL_APPS = "3";
+
+
     protected ApiModelsResource api;
 
     ModelService(RestManager manager)
@@ -40,14 +44,35 @@ public class ModelService extends ActivitiService
         api = manager.adapter.create(ApiModelsResource.class);
     }
 
-    public void getAppDefinitionModels(Callback<ModelsRepresentation> callback)
+    // ///////////////////////////////////////////////////////////////////
+    // SYNC
+    // ///////////////////////////////////////////////////////////////////
+    public String getModelThumbnailUrl(String modelId)
     {
-        api.getModels("myApps", "3", "modifiedDesc", callback);
+        return String.format(restManager.endpoint.concat("/api/enterprise/models/%s/thumbnail"), modelId);
     }
 
     public ModelsRepresentation getAppDefinitionModels()
     {
-        return api.getModels("myApps", "3", "modifiedDesc");
+        return api.getModels("myApps", MODEL_APPS, "modifiedDesc");
+    }
+
+    public ModelsRepresentation getFormModels()
+    {
+        return api.getModels(null, MODEL_FORMS, "modifiedDesc");
+    }
+
+    // ///////////////////////////////////////////////////////////////////
+    // ASYNC
+    // ///////////////////////////////////////////////////////////////////
+    public void getAppDefinitionModels(Callback<ModelsRepresentation> callback)
+    {
+        api.getModels("myApps", MODEL_APPS, "modifiedDesc", callback);
+    }
+
+    public void getFormModels(Callback<ModelsRepresentation> callback)
+    {
+        api.getModels(null, MODEL_FORMS, "modifiedDesc", callback);
     }
 
     public void getModelThumbnail(String modelId, Callback<Response> callback)
@@ -55,9 +80,6 @@ public class ModelService extends ActivitiService
         api.getModelThumbnail(modelId, callback);
     }
 
-    public String getModelThumbnailUrl(String modelId)
-    {
-        return String.format(restManager.endpoint.concat("/api/enterprise/models/%s/thumbnail"), modelId);
-    }
+
 
 }

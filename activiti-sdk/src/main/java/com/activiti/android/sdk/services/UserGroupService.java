@@ -21,8 +21,10 @@
 package com.activiti.android.sdk.services;
 
 import retrofit.Callback;
+import retrofit.client.Response;
 
 import com.activiti.android.sdk.RestManager;
+import com.activiti.client.api.ApiAdminResource;
 import com.activiti.client.api.ApiUserGroupResource;
 import com.activiti.client.api.model.idm.LightGroupsRepresentation;
 import com.activiti.client.api.model.idm.LightUsersRepresentation;
@@ -34,10 +36,13 @@ public class UserGroupService extends ActivitiService
 {
     protected ApiUserGroupResource api;
 
+    protected ApiAdminResource apiAdmin;
+
     UserGroupService(RestManager manager)
     {
         super(manager);
         api = manager.adapter.create(ApiUserGroupResource.class);
+
     }
 
     // ///////////////////////////////////////////////////////////////////
@@ -67,6 +72,15 @@ public class UserGroupService extends ActivitiService
     public void getUsersForGroup(String groupId, Callback<LightUsersRepresentation> callback)
     {
         api.getUsersForGroup(groupId, callback);
+    }
+
+    public void isAdmin(Callback<Response> callback)
+    {
+        if (apiAdmin == null)
+        {
+            apiAdmin = restManager.adapter.create(ApiAdminResource.class);
+        }
+        apiAdmin.isAdmin(callback);
     }
 
 }

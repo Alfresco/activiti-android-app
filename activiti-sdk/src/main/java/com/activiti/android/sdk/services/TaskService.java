@@ -41,6 +41,7 @@ import com.activiti.client.api.model.runtime.TaskRepresentation;
 import com.activiti.client.api.model.runtime.TasksRepresentation;
 import com.activiti.client.api.model.runtime.request.AddContentRelatedRepresentation;
 import com.activiti.client.api.model.runtime.request.AssignTaskRepresentation;
+import com.activiti.client.api.model.runtime.request.AttachFormTaskRepresentation;
 import com.activiti.client.api.model.runtime.request.CreateTaskRepresentation;
 import com.activiti.client.api.model.runtime.request.InvolveTaskRepresentation;
 import com.activiti.client.api.model.runtime.request.QueryTasksRepresentation;
@@ -164,6 +165,16 @@ public class TaskService extends ActivitiService
     public void claimTask(String taskId, Callback<Void> callback)
     {
         api.claimTask(taskId, new Object(), callback);
+    }
+
+    public void attachForm(String taskId, AttachFormTaskRepresentation request, Callback<Void> callback)
+    {
+        api.attachForm(taskId, request, callback);
+    }
+
+    public void removeForm(String taskId, Callback<Void> callback)
+    {
+        api.removeForm(taskId, callback);
     }
 
     // ///////////////////////////////////////////////////////////////////

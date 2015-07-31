@@ -24,6 +24,7 @@ import java.util.List;
 
 import retrofit.Callback;
 import retrofit.http.Body;
+import retrofit.http.DELETE;
 import retrofit.http.GET;
 import retrofit.http.Headers;
 import retrofit.http.POST;
@@ -37,6 +38,7 @@ import com.activiti.client.api.model.runtime.SaveFormRepresentation;
 import com.activiti.client.api.model.runtime.TaskRepresentation;
 import com.activiti.client.api.model.runtime.TasksRepresentation;
 import com.activiti.client.api.model.runtime.request.AssignTaskRepresentation;
+import com.activiti.client.api.model.runtime.request.AttachFormTaskRepresentation;
 import com.activiti.client.api.model.runtime.request.CreateTaskRepresentation;
 import com.activiti.client.api.model.runtime.request.InvolveTaskRepresentation;
 import com.activiti.client.api.model.runtime.request.QueryTasksRepresentation;
@@ -92,6 +94,13 @@ public interface ApiTaskResource
     @PUT("/api/enterprise/tasks/{taskId}/action/claim")
     void claimTask(@Path("taskId") String taskId, @Body Object request, Callback<Void> callback);
 
+    @PUT("/api/enterprise/tasks/{taskId}/action/attach-form")
+    void attachForm(@Path("taskId") String taskId, @Body AttachFormTaskRepresentation requestNode,
+            Callback<Void> callback);
+
+    @DELETE("/api/enterprise/tasks/{taskId}/action/remove-form")
+    void removeForm(@Path("taskId") String taskId, Callback<Void> callback);
+
     @GET("/api/enterprise/task-forms/{taskId}/form-values/{fieldId}")
     void getFormFieldValues(@Path("taskId") String taskId, @Path("fieldId") String fieldId,
             Callback<List<OptionRepresentation>> callback);
@@ -105,5 +114,4 @@ public interface ApiTaskResource
 
     @POST("/api/enterprise/task-forms/{taskId}/save-form")
     void saveTaskForm(@Path("taskId") String taskId, @Body SaveFormRepresentation request, Callback<Void> callback);
-
 }

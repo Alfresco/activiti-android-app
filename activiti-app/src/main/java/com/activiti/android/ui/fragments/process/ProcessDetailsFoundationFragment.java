@@ -740,15 +740,26 @@ public class ProcessDetailsFoundationFragment extends AbstractDetailsFragment
             }
         });
 
-        viewById(R.id.process_action_show_diagram).setOnClickListener(new View.OnClickListener()
+        // Admin feature
+        // Display Process diagram
+        if (getAccount().isAdmin() && !isEnded)
         {
-            @Override
-            public void onClick(View v)
+            show(R.id.process_action_show_diagram);
+            viewById(R.id.process_action_show_diagram).setOnClickListener(new View.OnClickListener()
             {
-                ProcessDiagram.with(getActivity())
-                        .processModelId(processInstanceRepresentation.getProcessDefinitionId()).display();
-            }
-        });
+                @Override
+                public void onClick(View v)
+                {
+                    ProcessDiagram.with(getActivity()).processId(processInstanceRepresentation.getId())
+                            .tenantId(processInstanceRepresentation.getTenantId())
+                            .processName(processInstanceRepresentation.getName()).display();
+                }
+            });
+        }
+        else
+        {
+            hide(R.id.process_action_show_diagram);
+        }
 
         if (isEnded)
         {

@@ -71,6 +71,7 @@ import com.activiti.android.ui.fragments.form.picker.ActivitiUserPickerFragment;
 import com.activiti.android.ui.fragments.form.picker.DatePickerFragment;
 import com.activiti.android.ui.fragments.form.picker.DatePickerFragment.onPickDateFragment;
 import com.activiti.android.ui.fragments.form.picker.UserPickerFragment;
+import com.activiti.android.ui.fragments.task.form.AttachFormTaskDialogFragment;
 import com.activiti.android.ui.holder.HolderUtils;
 import com.activiti.android.ui.holder.TwoLinesViewHolder;
 import com.activiti.android.ui.utils.DisplayUtils;
@@ -81,6 +82,7 @@ import com.activiti.client.api.model.runtime.ProcessInstanceRepresentation;
 import com.activiti.client.api.model.runtime.RelatedContentsRepresentation;
 import com.activiti.client.api.model.runtime.TaskRepresentation;
 import com.activiti.client.api.model.runtime.request.AssignTaskRepresentation;
+import com.activiti.client.api.model.runtime.request.AttachFormTaskRepresentation;
 import com.activiti.client.api.model.runtime.request.InvolveTaskRepresentation;
 import com.activiti.client.api.model.runtime.request.UpdateTaskRepresentation;
 import com.daimajia.swipe.SwipeLayout;
@@ -392,8 +394,53 @@ public class TaskDetailsFoundationFragment extends AbstractDetailsFragment imple
 
         // Display Action associated
         displayOutcome();
+        displayAttachForm(null);
         displayActionsSection();
 
+    }
+
+    private void displayAttachForm(Boolean hasForm)
+    {
+        // Available only since 1.3.0
+        // FIXME Remove after 1.3 release
+        /*
+         * if (getVersionNumber() < 130) { hide(R.id.task_action_attach_form);
+         * return; }
+         */
+
+        if (isEnded)
+        {
+            hide(R.id.task_action_attach_form);
+        }
+        else if ((hasForm == null && taskRepresentation.getFormKey() != null) || (hasForm != null && hasForm))
+        {
+            Button attach = (Button) viewById(R.id.task_action_attach_form);
+            show(R.id.task_action_attach_form);
+            attach.setText(R.string.task_form_select_remove_form);
+            attach.setOnClickListener(new View.OnClickListener()
+            {
+                @Override
+                public void onClick(View v)
+                {
+                    removeForm(taskRepresentation.getFormKey());
+                }
+            });
+        }
+        else if ((hasForm == null && taskRepresentation.getFormKey() == null) || (hasForm != null && !hasForm))
+        {
+            Button attach = (Button) viewById(R.id.task_action_attach_form);
+            show(R.id.task_action_attach_form);
+            attach.setText(R.string.task_form_select_attach_form);
+            attach.setOnClickListener(new View.OnClickListener()
+            {
+                @Override
+                public void onClick(View v)
+                {
+                    AttachFormTaskDialogFragment.with(getActivity()).bindFragmentTag(getTag())
+                            .taskId(taskRepresentation.getId()).displayAsDialog();
+                }
+            });
+        }
     }
 
     private void displayOutcome()
@@ -1029,6 +1076,50 @@ public class TaskDetailsFoundationFragment extends AbstractDetailsFragment imple
             public void failure(RetrofitError error)
             {
                 // SnackbarManager.show(Snackbar.with(getActivity()).text(error.getMessage()));
+            }
+        });
+    }
+
+    private void removeForm(final String formName)
+    {
+        getAPI().getTaskService().removeForm(taskId, new Callback<Void>()
+        {
+            @Override
+            public void success(Void aVoid, Response response)
+            {
+                displayAttachForm(false);
+                Snackbar.make(getActivity().findViewById(R.id.left_panel),
+                        String.format(getString(R.string.task_alert_form_removed), formName), Snackbar.LENGTH_SHORT)
+                        .show();
+            }
+
+            @Override
+            public void failure(RetrofitError error)
+            {
+                Snackbar.make(getActivity().findViewById(R.id.left_panel), error.getMessage(), Snackbar.LENGTH_SHORT)
+                        .show();
+            }
+        });
+    }
+
+    public void attachForm(final String formName, AttachFormTaskRepresentation request)
+    {
+        getAPI().getTaskService().attachForm(taskId, request, new Callback<Void>()
+        {
+            @Override
+            public void success(Void nothing, Response response)
+            {
+                displayAttachForm(true);
+                Snackbar.make(getActivity().findViewById(R.id.left_panel),
+                        String.format(getString(R.string.task_alert_form_attached), formName), Snackbar.LENGTH_SHORT)
+                        .show();
+            }
+
+            @Override
+            public void failure(RetrofitError error)
+            {
+                Snackbar.make(getActivity().findViewById(R.id.left_panel), error.getMessage(), Snackbar.LENGTH_SHORT)
+                        .show();
             }
         });
     }

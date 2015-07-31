@@ -40,6 +40,7 @@ import com.activiti.android.app.R;
 import com.activiti.android.app.fragments.HelpDialogFragment;
 import com.activiti.android.app.fragments.account.AccountsFragment;
 import com.activiti.android.app.fragments.app.AppInstancesFragment;
+import com.activiti.android.app.fragments.process.ProcessDiagram;
 import com.activiti.android.app.fragments.settings.GeneralSettingsFragment;
 import com.activiti.android.app.fragments.task.TasksFragment;
 import com.activiti.android.app.fragments.user.UserProfileFragment;
@@ -219,6 +220,11 @@ public class MainActivity extends AlfrescoActivity
                 {
                     return false;
                 }
+                if (isVisible(ProcessDiagram.TAG))
+                {
+                    onBackPressed();
+                    return false;
+                }
                 else if (mDrawerLayout.getDrawerLockMode(mLeftDrawer) == DrawerLayout.LOCK_MODE_LOCKED_CLOSED)
                 {
                     return false;
@@ -316,11 +322,9 @@ public class MainActivity extends AlfrescoActivity
                     .into(((ImageView) findViewById(R.id.drawer_account_icon)));
         }
 
-        findViewById(R.id.drawer_account).setOnClickListener(new View.OnClickListener()
-        {
+        findViewById(R.id.drawer_account).setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v)
-            {
+            public void onClick(View v) {
                 Fragment frag = getSupportFragmentManager().findFragmentById(R.id.left_drawer_content);
                 displayApplicationsMenu(frag instanceof AccountsFragment);
             }
@@ -426,5 +430,9 @@ public class MainActivity extends AlfrescoActivity
     public Picasso getPicasso()
     {
         return picasso;
+    }
+
+    public ActionBarDrawerToggle getmDrawerToggle(){
+        return mDrawerToggle;
     }
 }

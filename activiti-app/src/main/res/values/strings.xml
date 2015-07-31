@@ -56,6 +56,7 @@
     <string name="general_action_delete">Delete</string>
     <string name="general_action_close">Cancel</string>
     <string name="general_action_confirm">Confirm</string>
+    <string name="general_action_add_checklist">Add checklist</string>
     <string name="general_action_show_more">Show more</string>
 
     <!-- APP -->
@@ -113,6 +114,10 @@
     <string name="task_alert_person_no_longer_involved">Task \"%1$s\" is no longer involved in %2$s</string>
     <string name="task_alert_related_content_added">\"%1$s\" has been added to the task"</string>
     <string name="task_alert_related_content_added_loading">"\"%1$s\" has been added to the task. The content will be available once retrieved from the external source.</string>
+    <string name="task_alert_checklist_added">Task \"%1$s\" was added to checklist</string>
+    <string name="task_alert_checklist_removed">Task \"%1$s\\" was removed from checklist</string>
+    <string name="task_alert_form_attached">Attached form  \"%1$s\"</string>
+    <string name="task_alert_form_removed">Removed form \"%1$s\"</string>
 
 
     <!-- TASKS ACTION -->
@@ -128,6 +133,9 @@
     <string name="task_action_share_link">Share link</string>
     <string name="task_action_create_confirm">Create</string>
     <string name="task_action_retrieve_info">Retrieve information&#8230;</string>
+    <string name="task_action_add_checklist">Add task to checklist</string>
+    <string name="task_action_add_checklist_confirm">Add task to checklist</string>
+
 
     <string name="task_action_share_link_long">Sharing Link from Alfresco Activiti Mobile</string>
     <string name="task_share_link_pattern">Sharing Link from Alfresco Activiti Mobile</string>
@@ -141,6 +149,7 @@
     <string name="task_section_people">People</string>
     <string name="task_section_content">Content</string>
     <string name="task_section_comments">Comments</string>
+    <string name="task_section_checklists">Checklist</string>
 
     <!-- TASKS FIELD -->
     <string name="task_field_name">Name</string>
@@ -174,8 +183,22 @@
     <string name="task_help_add_comment">Enlighten others by adding a comment</string>
     <string name="task_help_add_content">Add a document and share the knowledge</string>
 
+    <!-- FORM-SELECT -->
+    <string name="task_form_select_title">Select form</string>
+    <string name="task_form_select_empty">No form selected</string>
+    <string name="task_form_select_forms_error">Error loading forms</string>
+    <string name="task_form_select_loading">Loading forms&#8230;</string>
+    <string name="task_form_select_no_forms">No forms found</string>
+    <string name="task_form_select_attach_form">Attach form</string>
+    <string name="task_form_select_remove_form">Remove form</string>
+    <string name="task_form_select_current_form">Select form</string>
+    <string name="task_form_select_form_load_error">Error loading form</string>
+
     <!-- PROCESS -->
     <!-- ################################################################################## -->
+    <!-- TITLE -->
+    <string name="process_title_diagram">Process Diagram</string>
+
     <!-- PROCESS FILTERS -->
     <string name="process_filter_text">Filter By</string>
     <string name="process_filter_sort">Sort By</string>

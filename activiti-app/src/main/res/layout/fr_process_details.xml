@@ -134,8 +134,7 @@
                             android:drawableTop="@drawable/ic_process_diagram"
                             android:padding="@dimen/d_16"
                             android:text="@string/process_action_show_diagram"
-                            android:textColor="@color/primary"
-                            android:visibility="gone" />
+                            android:textColor="@color/primary" />
 
                     </LinearLayout>
 

@@ -163,6 +163,7 @@ dependencies {
     compile 'com.makeramen:roundedimageview:2.1.0'
     compile 'me.relex:circleindicator:1.1.4@aar'
     compile "com.daimajia.swipelayout:library:1.2.0@aar"
+    compile 'it.sephiroth.android.library.imagezoom:imagezoom:1.0.5'
     compile('com.mikepenz:aboutlibraries:5.0.2@aar') {
         transitive = true
     }

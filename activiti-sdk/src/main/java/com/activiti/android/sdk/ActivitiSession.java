@@ -267,6 +267,7 @@ public class ActivitiSession
                     .registerTypeAdapter(mapStringObjectType, new RandomMapKeysAdapter()).create();
 
             RestAdapter.Builder builder = new RestAdapter.Builder().setEndpoint(endpoint)
+                    .setLogLevel(RestAdapter.LogLevel.FULL)
                     .setClient(new OkClient(okHttpClient)).setConverter(new GsonConverter(gson));
             RestAdapter restAdapter = builder.build();
 

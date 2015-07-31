@@ -24,21 +24,22 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/primary_dark"
+    android:background="@color/secondary_background"
     android:fillViewport="true"
     tools:context=".MainActivity">
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
+        android:layout_height="match_parent"
+        android:gravity="center"
         android:orientation="vertical">
 
 
-        <ImageView
+        <it.sephiroth.android.library.imagezoom.ImageViewTouch
             android:id="@+id/process_diagram_view"
-            android:layout_width="@dimen/process_diagram_width"
-            android:layout_height="@dimen/process_diagram_height"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scaleType="fitCenter"
             android:layout_gravity="center" />
 
     </LinearLayout>
