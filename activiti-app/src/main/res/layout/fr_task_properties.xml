@@ -93,7 +93,7 @@
         </LinearLayout>
         <!-- ######################################################################### -->
         <LinearLayout
-            android:id="@+id/task_details_process_container"
+            android:id="@+id/task_details_part_of_container"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"

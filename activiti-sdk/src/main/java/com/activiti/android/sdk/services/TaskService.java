@@ -32,6 +32,7 @@ import com.activiti.client.api.ApiTaskResource;
 import com.activiti.client.api.model.editor.form.FormDefinitionRepresentation;
 import com.activiti.client.api.model.editor.form.OptionRepresentation;
 import com.activiti.client.api.model.editor.form.request.CompleteFormRepresentation;
+import com.activiti.client.api.model.runtime.ChecklistOrderRepresentation;
 import com.activiti.client.api.model.runtime.CommentRepresentation;
 import com.activiti.client.api.model.runtime.CommentsRepresentation;
 import com.activiti.client.api.model.runtime.RelatedContentRepresentation;
@@ -42,7 +43,6 @@ import com.activiti.client.api.model.runtime.TasksRepresentation;
 import com.activiti.client.api.model.runtime.request.AddContentRelatedRepresentation;
 import com.activiti.client.api.model.runtime.request.AssignTaskRepresentation;
 import com.activiti.client.api.model.runtime.request.AttachFormTaskRepresentation;
-import com.activiti.client.api.model.runtime.request.CreateTaskRepresentation;
 import com.activiti.client.api.model.runtime.request.InvolveTaskRepresentation;
 import com.activiti.client.api.model.runtime.request.QueryTasksRepresentation;
 import com.activiti.client.api.model.runtime.request.UpdateTaskRepresentation;
@@ -92,7 +92,7 @@ public class TaskService extends ActivitiService
         api.getTask(taskId, callback);
     }
 
-    public void create(CreateTaskRepresentation task, Callback<TaskRepresentation> callback)
+    public void create(TaskRepresentation task, Callback<TaskRepresentation> callback)
     {
         api.createNewTask(task, callback);
     }
@@ -200,4 +200,21 @@ public class TaskService extends ActivitiService
         api.saveTaskForm(taskId, request, callback);
     }
 
+    // ///////////////////////////////////////////////////////////////////
+    // CHECKLIST
+    // ///////////////////////////////////////////////////////////////////
+    public void getChecklist(String taskId, Callback<TasksRepresentation> callback)
+    {
+        api.getChecklist(taskId, callback);
+    }
+
+    public void addSubtask(String taskId, TaskRepresentation request, Callback<TaskRepresentation> callback)
+    {
+        api.addSubtask(taskId, request, callback);
+    }
+
+    public void orderChecklist(String taskId, ChecklistOrderRepresentation request, Callback<Void> callback)
+    {
+        api.orderChecklist(taskId, request, callback);
+    }
 }

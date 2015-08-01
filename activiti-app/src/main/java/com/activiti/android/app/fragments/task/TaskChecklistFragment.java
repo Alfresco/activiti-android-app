@@ -29,40 +29,35 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.GridView;
 
 import com.activiti.android.app.R;
 import com.activiti.android.app.activity.MainActivity;
-import com.activiti.android.app.fragments.process.ProcessDetailsFragment;
+import com.activiti.android.platform.event.CompleteTaskEvent;
 import com.activiti.android.platform.event.CreateTaskEvent;
-import com.activiti.android.platform.intent.IntentUtils;
-import com.activiti.android.platform.provider.transfer.ContentTransferEvent;
-import com.activiti.android.sdk.model.runtime.ParcelTask;
-import com.activiti.android.ui.fragments.FragmentDisplayer;
-import com.activiti.android.ui.fragments.builder.AlfrescoFragmentBuilder;
-import com.activiti.android.ui.fragments.comment.FragmentWithComments;
-import com.activiti.android.ui.fragments.task.TaskDetailsFoundationFragment;
+import com.activiti.android.ui.fragments.builder.ListingFragmentBuilder;
+import com.activiti.android.ui.fragments.task.checklist.TaskCheklistFoundationFragment;
+import com.activiti.client.api.constant.RequestConstant;
 import com.activiti.client.api.model.runtime.TaskRepresentation;
 import com.squareup.otto.Subscribe;
 
-public class TaskDetailsFragment extends TaskDetailsFoundationFragment implements FragmentWithComments
+public class TaskChecklistFragment extends TaskCheklistFoundationFragment
 {
-    public static final String TAG = TaskDetailsFragment.class.getName();
-
-    protected Menu menu;
+    public static final String TAG = TaskChecklistFragment.class.getName();
 
     // ///////////////////////////////////////////////////////////////////////////
     // CONSTRUCTORS & HELPERS
     // ///////////////////////////////////////////////////////////////////////////
-    public TaskDetailsFragment()
+    public TaskChecklistFragment()
     {
         super();
-        eventBusRequired = true;
         setHasOptionsMenu(true);
+        eventBusRequired = true;
     }
 
-    public static TaskDetailsFragment newInstanceByTemplate(Bundle b)
+    public static TaskChecklistFragment newInstanceByTemplate(Bundle b)
     {
-        TaskDetailsFragment cbf = new TaskDetailsFragment();
+        TaskChecklistFragment cbf = new TaskChecklistFragment();
         cbf.setArguments(b);
         return cbf;
     }
@@ -71,43 +66,24 @@ public class TaskDetailsFragment extends TaskDetailsFoundationFragment implement
     // LIFECYCLE
     // ///////////////////////////////////////////////////////////////////////////
     @Override
-    public void onStart()
+    protected View.OnClickListener onPrepareFabClickListener()
     {
-        Fragment fr = getFragmentManager().findFragmentById(R.id.right_drawer);
-        if (fr == null || (fr != null && !(fr.equals(commentFragment))))
+        return new View.OnClickListener()
         {
-            if (fr != null)
+            @Override
+            public void onClick(View v)
             {
-                FragmentDisplayer.with(getActivity()).back(false).animate(null).remove(fr);
-            }
-        }
-        setLockRightMenu(false);
 
-        super.onStart();
+            }
+        };
     }
 
     @Override
-    public void onActivityCreated(Bundle savedInstanceState)
+    public void onListItemClick(GridView l, View v, int position, long id)
     {
-        super.onActivityCreated(savedInstanceState);
-
-        onParentTaskListener = new View.OnClickListener()
-        {
-            @Override
-            public void onClick(View v)
-            {
-                TaskDetailsFragment.with(getActivity()).taskId(taskRepresentation.getParentTaskId()).display();
-            }
-        };
-
-        onProcessListener = new View.OnClickListener()
-        {
-            @Override
-            public void onClick(View v)
-            {
-                ProcessDetailsFragment.with(getActivity()).processId(processInstanceRepresentation.getId()).display();
-            }
-        };
+        resetRightMenu();
+        TaskRepresentation taskRepresentation = (TaskRepresentation) l.getItemAtPosition(position);
+        TaskDetailsFragment.with(getActivity()).task(taskRepresentation).bindFragmentTag(getTag()).display();
     }
 
     // ///////////////////////////////////////////////////////////////////////////
@@ -117,12 +93,7 @@ public class TaskDetailsFragment extends TaskDetailsFoundationFragment implement
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater)
     {
         super.onCreateOptionsMenu(menu, inflater);
-        if (taskRepresentation != null)
-        {
-            menu.clear();
-            inflater.inflate(R.menu.task_details, menu);
-            this.menu = menu;
-        }
+        menu.clear();
     }
 
     @Override
@@ -131,11 +102,7 @@ public class TaskDetailsFragment extends TaskDetailsFoundationFragment implement
         int id = item.getItemId();
         switch (id)
         {
-            case R.id.task_action_share_link:
-                IntentUtils.actionShareLink(this, taskRepresentation.getName(),
-                        getAPI().getTaskService().getShareUrl(taskId));
-                return true;
-            case R.id.display_comments:
+            case R.id.tasks_menu_filter:
                 if (getActivity() instanceof MainActivity)
                 {
                     ((MainActivity) getActivity()).setRightMenuVisibility(!((MainActivity) getActivity())
@@ -149,34 +116,25 @@ public class TaskDetailsFragment extends TaskDetailsFoundationFragment implement
     }
 
     // ///////////////////////////////////////////////////////////////////////////
-    // INTERFACE
-    // ///////////////////////////////////////////////////////////////////////////
-    @Override
-    public void hasComment(boolean hascomment)
-    {
-        if (menu != null && hascomment)
-        {
-            menu.findItem(R.id.display_comments).setIcon(R.drawable.ic_comment);
-        }
-    }
-
-    // ///////////////////////////////////////////////////////////////////////////
     // EVENTS
     // ///////////////////////////////////////////////////////////////////////////
     @Subscribe
-    public void onContentTransfer(ContentTransferEvent event)
+    public void onCompletedTaskEvent(CompleteTaskEvent event)
     {
-        super.onContentTransfer(event);
+        if (event.hasException) { return; }
+        try
+        {
+        }
+        catch (Exception e)
+        {
+
+        }
     }
 
     @Subscribe
     public void onTaskCreated(CreateTaskEvent event)
     {
         if (event.hasException) { return; }
-        if (event.taskId != null && event.taskId.equals(taskRepresentation.getId()))
-        {
-            requestChecklist();
-        }
     }
 
     // ///////////////////////////////////////////////////////////////////////////
@@ -187,7 +145,7 @@ public class TaskDetailsFragment extends TaskDetailsFoundationFragment implement
         return new Builder(activity);
     }
 
-    public static class Builder extends AlfrescoFragmentBuilder
+    public static class Builder extends ListingFragmentBuilder
     {
         // ///////////////////////////////////////////////////////////////////////////
         // CONSTRUCTORS
@@ -205,19 +163,7 @@ public class TaskDetailsFragment extends TaskDetailsFoundationFragment implement
 
         public Builder taskId(String taskId)
         {
-            extraConfiguration.putString(ARGUMENT_TASK_ID, taskId);
-            return this;
-        }
-
-        public Builder task(TaskRepresentation task)
-        {
-            extraConfiguration.putParcelable(ARGUMENT_TASK, new ParcelTask(task));
-            return this;
-        }
-
-        public Builder bindFragmentTag(String fragmentListTag)
-        {
-            extraConfiguration.putString(ARGUMENT_BIND_FRAGMENT_TAG, fragmentListTag);
+            extraConfiguration.putString(RequestConstant.ARGUMENT_TASK_ID, taskId);
             return this;
         }
 

@@ -148,6 +148,7 @@ public class ActivitiAccountManager extends Manager
         long id = AccountsPreferences.getCurrentAccountId(appContext);
         ActivitiAccount acc = accountIndex.containsKey(id) ? accountIndex.get(id) : AccountsPreferences
                 .getDefaultAccount(appContext);
+        if (acc == null) { return null; }
         accountIndex.put(acc.getId(), acc);
         return acc;
     }

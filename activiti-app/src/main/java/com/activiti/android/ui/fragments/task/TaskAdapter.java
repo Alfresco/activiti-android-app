@@ -50,16 +50,7 @@ public class TaskAdapter extends BaseListAdapter<TaskRepresentation, ThreeLinesV
     protected void updateTopText(ThreeLinesViewHolder vh, TaskRepresentation item)
     {
         vh.topText.setText(item.getName());
-        if (item.getDueDate() != null)
-        {
-            vh.topTextRight.setText(String.format(context.getString(R.string.task_message_due_on),
-                    Formatter.formatToRelativeDate(getContext(), item.getDueDate())));
-        }
-        else if (item.getCreated() != null)
-        {
-            vh.topTextRight.setText(String.format(context.getString(R.string.task_message_created_on),
-                    Formatter.formatToRelativeDate(getContext(), item.getCreated())));
-        }
+        vh.topTextRight.setText(createRelativeDateInfo(getContext(), item));
     }
 
     @Override
@@ -76,8 +67,7 @@ public class TaskAdapter extends BaseListAdapter<TaskRepresentation, ThreeLinesV
 
         if (item.getAssignee() != null)
         {
-            vh.bottomText.setText(String.format(context.getString(R.string.task_message_assignee), item.getAssignee()
-                    .getFullname()));
+            vh.bottomText.setText(createAssigneeInfo(getContext(), item));
         }
     }
 
@@ -85,5 +75,24 @@ public class TaskAdapter extends BaseListAdapter<TaskRepresentation, ThreeLinesV
     protected void updateIcon(ThreeLinesViewHolder vh, TaskRepresentation item)
     {
         // vh.icon.setImageDrawable(getContext().getResources().getDrawable(R.drawable.ic_action_gear));
+    }
+
+    public static String createRelativeDateInfo(Context context, TaskRepresentation item)
+    {
+        if (item.getDueDate() != null)
+        {
+            return String.format(context.getString(R.string.task_message_due_on),
+                    Formatter.formatToRelativeDate(context, item.getDueDate()));
+        }
+        else if (item.getCreated() != null) { return String.format(context.getString(R.string.task_message_created_on),
+                Formatter.formatToRelativeDate(context, item.getCreated())); }
+        return "";
+    }
+
+    public static String createAssigneeInfo(Context context, TaskRepresentation item)
+    {
+        if (item.getAssignee() != null) { return String.format(context.getString(R.string.task_message_assignee), item
+                .getAssignee().getFullname()); }
+        return "";
     }
 }

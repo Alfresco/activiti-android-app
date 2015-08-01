@@ -63,6 +63,7 @@ import com.activiti.android.ui.fragments.builder.LeafFragmentBuilder;
 import com.activiti.android.ui.fragments.form.EditTextDialogFragment;
 import com.activiti.android.ui.holder.ThreeLinesViewHolder;
 import com.activiti.android.ui.holder.TwoLinesViewHolder;
+import com.activiti.android.ui.utils.UIUtils;
 import com.afollestad.materialdialogs.MaterialDialog;
 
 /**
@@ -159,10 +160,30 @@ public class AccountSettingsFragment extends AlfrescoFragment implements EditTex
     }
 
     @Override
+    public void onStart()
+    {
+        super.onStart();
+        if (getActivity() instanceof MainActivity)
+        {
+            UIUtils.displayActionBarBack((MainActivity) getActivity());
+        }
+    }
+
+    @Override
     public void onResume()
     {
         super.onResume();
         updateIntegrations();
+    }
+
+    @Override
+    public void onStop()
+    {
+        super.onStop();
+        if (getActivity() instanceof MainActivity)
+        {
+            UIUtils.setActionBarDefault((MainActivity) getActivity());
+        }
     }
 
     // ///////////////////////////////////////////////////////////////////////////
@@ -181,6 +202,9 @@ public class AccountSettingsFragment extends AlfrescoFragment implements EditTex
     {
         switch (item.getItemId())
         {
+            case android.R.id.home:
+                getActivity().onBackPressed();
+                return true;
             case R.id.account_action_remove:
                 MaterialDialog.Builder builder = new MaterialDialog.Builder(getActivity())
                         .cancelListener(new DialogInterface.OnCancelListener()

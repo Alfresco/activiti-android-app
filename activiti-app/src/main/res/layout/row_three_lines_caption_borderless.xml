@@ -19,42 +19,16 @@
   -->
 
 <LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/button_container"
+    style="@style/ActivitiTheme.Button.BorderLess"
+    xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
+    android:clickable="true"
     android:layout_height="wrap_content">
 
-    <com.daimajia.swipe.SwipeLayout
-        android:id="@+id/swipe_layout"
+    <include
+        layout="@layout/row_three_lines_caption"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-
-        <LinearLayout
-            android:id="@+id/bottom_wrapper"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:background="@color/primary"
-            android:orientation="horizontal"
-            android:weightSum="1">
-            <!--What you want to show-->
-
-        </LinearLayout>
-
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="#ffffff"
-            android:orientation="vertical">
-
-            <include
-                layout="@layout/row_two_lines"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
-
-        </LinearLayout>
-
-
-    </com.daimajia.swipe.SwipeLayout>
+        android:layout_height="wrap_content" />
 
 </LinearLayout>

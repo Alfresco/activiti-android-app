@@ -48,6 +48,7 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.activiti.android.app.ActivitiVersionNumber;
 import com.activiti.android.app.R;
 import com.activiti.android.app.activity.MainActivity;
 import com.activiti.android.app.fragments.comment.CommentsFragment;
@@ -90,8 +91,6 @@ import com.afollestad.materialdialogs.MaterialDialog;
  */
 public class ProcessDetailsFoundationFragment extends AbstractDetailsFragment
 {
-    protected static final int TASKS_MAX_ITEMS = 15;
-
     public static final String TAG = ProcessDetailsFoundationFragment.class.getName();
 
     public static final String ARGUMENT_PROCESS_ID = "processId";
@@ -266,7 +265,7 @@ public class ProcessDetailsFoundationFragment extends AbstractDetailsFragment
             }
         });
 
-        if (getVersionNumber() >= 122)
+        if (getVersionNumber() >= ActivitiVersionNumber.VERSION_1_2_2)
         {
             // Retrieve Field Contents
             getAPI().getProcessService().getFieldContents(processId, new Callback<ProcessContentsRepresentation>()
@@ -490,7 +489,7 @@ public class ProcessDetailsFoundationFragment extends AbstractDetailsFragment
     {
         show(R.id.details_fieldcontents_card);
         if (processContents == null || (processContents != null && processContents.isEmpty())
-                || getVersionNumber() < 122)
+                || getVersionNumber() < ActivitiVersionNumber.VERSION_1_2_2)
         {
             hide(R.id.details_fieldcontents_card);
             return;

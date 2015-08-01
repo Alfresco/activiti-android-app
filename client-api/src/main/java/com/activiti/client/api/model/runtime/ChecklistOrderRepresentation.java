@@ -17,25 +17,25 @@
  * along with Alfresco. If not, see <http://www.gnu.org/licenses/>.
  *
  */
+package com.activiti.client.api.model.runtime;
 
-package com.activiti.android.platform.event;
+import java.util.List;
 
-import com.activiti.client.api.model.runtime.TaskRepresentation;
-
-public class CreateTaskEvent extends AbstractOperationEvent<TaskRepresentation>
+/**
+ * @author Bassam Al-Sarori
+ */
+public class ChecklistOrderRepresentation
 {
-    public final Long appId;
 
-    public final String taskId;
+    protected List<String> order;
 
-    // ///////////////////////////////////////////////////////////////////////////
-    // CONSTRUCTORS
-    // ///////////////////////////////////////////////////////////////////////////
-    public CreateTaskEvent(String requestId, TaskRepresentation task, Long appId, String taskId)
+    public List<String> getOrder()
     {
-        super(requestId, task);
-        this.appId = appId;
-        this.taskId = taskId;
+        return order;
     }
 
+    public void setOrder(List<String> order)
+    {
+        this.order = order;
+    }
 }

@@ -18,24 +18,16 @@
  *
  */
 
-package com.activiti.android.platform.event;
+package com.activiti.android.app;
 
-import com.activiti.client.api.model.runtime.TaskRepresentation;
-
-public class CreateTaskEvent extends AbstractOperationEvent<TaskRepresentation>
+public interface ActivitiVersionNumber
 {
-    public final Long appId;
+    int VERSION_1_2_1 = 121;
 
-    public final String taskId;
+    int VERSION_1_2_2 = 122;
 
-    // ///////////////////////////////////////////////////////////////////////////
-    // CONSTRUCTORS
-    // ///////////////////////////////////////////////////////////////////////////
-    public CreateTaskEvent(String requestId, TaskRepresentation task, Long appId, String taskId)
-    {
-        super(requestId, task);
-        this.appId = appId;
-        this.taskId = taskId;
-    }
+    // FIXME Change to 130
+    int VERSION_1_3_0 = 122;
 
+    int LATEST_VERSION = VERSION_1_3_0;
 }

@@ -29,6 +29,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
@@ -42,6 +43,7 @@ import com.activiti.android.ui.fragments.AlfrescoFragment;
 import com.activiti.android.ui.fragments.builder.LeafFragmentBuilder;
 import com.activiti.android.ui.holder.HolderUtils;
 import com.activiti.android.ui.holder.TwoLinesViewHolder;
+import com.activiti.android.ui.utils.UIUtils;
 import com.mikepenz.aboutlibraries.Libs;
 import com.mikepenz.aboutlibraries.LibsBuilder;
 
@@ -54,6 +56,7 @@ public class GeneralSettingsFragment extends AlfrescoFragment
     // ///////////////////////////////////////////////////////////////////////////
     public GeneralSettingsFragment()
     {
+        setHasOptionsMenu(true);
     }
 
     protected static GeneralSettingsFragment newInstanceByTemplate(Bundle b)
@@ -171,7 +174,7 @@ public class GeneralSettingsFragment extends AlfrescoFragment
         super.onStart();
         if (getActivity() instanceof MainActivity)
         {
-            ((MainActivity) getActivity()).lockSlidingMenu();
+            UIUtils.displayActionBarBack((MainActivity) getActivity());
         }
     }
 
@@ -181,7 +184,7 @@ public class GeneralSettingsFragment extends AlfrescoFragment
         super.onStop();
         if (getActivity() instanceof MainActivity)
         {
-            ((MainActivity) getActivity()).unlockSlidingMenu();
+            UIUtils.setActionBarDefault((MainActivity) getActivity());
         }
     }
 
@@ -191,6 +194,18 @@ public class GeneralSettingsFragment extends AlfrescoFragment
     private void startPlayStore()
     {
         IntentUtils.startPlayStore(getActivity(), "com.activiti.android.app");
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item)
+    {
+        switch (item.getItemId())
+        {
+            case android.R.id.home:
+                getActivity().onBackPressed();
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     // ///////////////////////////////////////////////////////////////////////////

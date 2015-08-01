@@ -49,15 +49,16 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.activiti.android.app.ActivitiVersionNumber;
 import com.activiti.android.app.R;
 import com.activiti.android.app.activity.MainActivity;
 import com.activiti.android.app.fragments.comment.CommentsFragment;
+import com.activiti.android.app.fragments.task.TaskDetailsFragment;
 import com.activiti.android.app.fragments.task.TaskFormFragment;
 import com.activiti.android.app.fragments.task.TasksFragment;
 import com.activiti.android.platform.EventBusManager;
 import com.activiti.android.platform.account.ActivitiAccountManager;
 import com.activiti.android.platform.event.CompleteTaskEvent;
-import com.activiti.android.platform.intent.IntentUtils;
 import com.activiti.android.platform.provider.transfer.ContentTransferManager;
 import com.activiti.android.platform.rendition.RenditionManager;
 import com.activiti.android.platform.utils.BundleUtils;
@@ -71,6 +72,7 @@ import com.activiti.android.ui.fragments.form.picker.ActivitiUserPickerFragment;
 import com.activiti.android.ui.fragments.form.picker.DatePickerFragment;
 import com.activiti.android.ui.fragments.form.picker.DatePickerFragment.onPickDateFragment;
 import com.activiti.android.ui.fragments.form.picker.UserPickerFragment;
+import com.activiti.android.ui.fragments.task.create.CreateStandaloneTaskDialogFragment;
 import com.activiti.android.ui.fragments.task.form.AttachFormTaskDialogFragment;
 import com.activiti.android.ui.holder.HolderUtils;
 import com.activiti.android.ui.holder.TwoLinesViewHolder;
@@ -83,6 +85,7 @@ import com.activiti.client.api.model.idm.LightUserRepresentation;
 import com.activiti.client.api.model.runtime.ProcessInstanceRepresentation;
 import com.activiti.client.api.model.runtime.RelatedContentsRepresentation;
 import com.activiti.client.api.model.runtime.TaskRepresentation;
+import com.activiti.client.api.model.runtime.TasksRepresentation;
 import com.activiti.client.api.model.runtime.request.AssignTaskRepresentation;
 import com.activiti.client.api.model.runtime.request.AttachFormTaskRepresentation;
 import com.activiti.client.api.model.runtime.request.InvolveTaskRepresentation;
@@ -114,9 +117,9 @@ public class TaskDetailsFoundationFragment extends AbstractDetailsFragment imple
 
     protected List<LightUserRepresentation> people = new ArrayList<>(0);
 
-    protected boolean hasPeopleLoaded = false;
+    protected boolean hasPeopleLoaded = false, hasCheckList = false;
 
-    protected View.OnClickListener onProcessListener;
+    protected View.OnClickListener onProcessListener, onParentTaskListener;
 
     protected TwoLinesViewHolder assigneeHolder, dueDateHolder, descriptionHolder, formHolder;
 
@@ -130,6 +133,8 @@ public class TaskDetailsFoundationFragment extends AbstractDetailsFragment imple
     protected LightUserRepresentation assignee;
 
     protected ParcelTask task;
+
+    protected List<TaskRepresentation> checkListTasks = new ArrayList<>(0);
 
     // ///////////////////////////////////////////////////////////////////////////
     // CONSTRUCTORS & HELPERS
@@ -292,6 +297,11 @@ public class TaskDetailsFoundationFragment extends AbstractDetailsFragment imple
             }
         }
 
+        if (taskRepresentation.getParentTaskId() != null)
+        {
+            displayParentTaskProperty();
+        }
+
         // Retrieve FormModel Info
         formKey = taskRepresentation.getFormKey();
         retrieveForm();
@@ -311,6 +321,35 @@ public class TaskDetailsFoundationFragment extends AbstractDetailsFragment imple
             public void failure(RetrofitError error)
             {
                 displayContents(null);
+            }
+        });
+
+        // Retrieve CheckList
+        if (getVersionNumber() < ActivitiVersionNumber.VERSION_1_3_0)
+        {
+            hasCheckList = true;
+            return;
+        }
+        requestChecklist();
+
+    }
+
+    protected void requestChecklist()
+    {
+        getAPI().getTaskService().getChecklist(taskRepresentation.getId(), new Callback<TasksRepresentation>()
+        {
+            @Override
+            public void success(TasksRepresentation resp, Response response)
+            {
+                checkListTasks = resp.getData();
+                hasCheckList = true;
+                displayCards();
+            }
+
+            @Override
+            public void failure(RetrofitError error)
+            {
+                hasCheckList = true;
             }
         });
     }
@@ -343,6 +382,7 @@ public class TaskDetailsFoundationFragment extends AbstractDetailsFragment imple
         hide(R.id.empty);
         hide(R.id.task_details_people_card);
         hide(R.id.details_contents_card);
+        hide(R.id.task_details_checklist_card);
         if (isEnded)
         {
             hide(R.id.task_details_help_card);
@@ -363,14 +403,15 @@ public class TaskDetailsFoundationFragment extends AbstractDetailsFragment imple
 
     protected void displayCards()
     {
-        if (hasPeopleLoaded && hasContentLoaded)
+        if (hasPeopleLoaded && hasContentLoaded && hasCheckList)
         {
-            if (people.isEmpty() && relatedContentRepresentations.isEmpty())
+            if (people.isEmpty() && relatedContentRepresentations.isEmpty() && checkListTasks.isEmpty())
             {
                 displayHelp();
             }
             else
             {
+                displayCheckList(checkListTasks);
                 displayPeopleSection(people);
                 displayContents(relatedContentRepresentations);
                 displayData();
@@ -600,6 +641,13 @@ public class TaskDetailsFoundationFragment extends AbstractDetailsFragment imple
 
     private void retrieveForm()
     {
+        // Unsupported below 1.3.0
+        if (getVersionNumber() < ActivitiVersionNumber.VERSION_1_3_0)
+        {
+            hide(R.id.task_details_form_container);
+            return;
+        }
+
         // Can't change if task in process
         if (taskRepresentation.getProcessDefinitionId() != null)
         {
@@ -635,9 +683,16 @@ public class TaskDetailsFoundationFragment extends AbstractDetailsFragment imple
 
     private void displayFormField()
     {
+        if (isEnded)
+        {
+            hide(R.id.task_details_form_container);
+            return;
+        }
+
         show(R.id.task_details_form_container);
         HolderUtils.configure(formHolder, getString(R.string.task_field_form),
                 getString(R.string.task_action_retrieve_info), R.drawable.ic_assignment_grey);
+
         View v = viewById(R.id.task_details_form_container);
         v.setOnClickListener(new View.OnClickListener()
         {
@@ -682,37 +737,54 @@ public class TaskDetailsFoundationFragment extends AbstractDetailsFragment imple
     private void displayProcessProperty(ProcessInstanceRepresentation processInstanceRepresentation)
     {
         if (processInstanceRepresentation == null
-                || viewById(R.id.task_details_process_container).findViewById(R.id.bottomtext) == null)
+                || viewById(R.id.task_details_part_of_container).findViewById(R.id.bottomtext) == null)
         {
-            HolderUtils.configure((LinearLayout) viewById(R.id.task_details_process_container),
+            HolderUtils.configure((LinearLayout) viewById(R.id.task_details_part_of_container),
                     R.layout.row_two_lines_inverse_borderless, getString(R.string.task_field_process_instance),
                     getString(R.string.task_action_retrieve_info), R.drawable.ic_transform_grey, onProcessListener);
         }
 
         if (processInstanceRepresentation != null)
         {
-            ((TextView) viewById(R.id.task_details_process_container).findViewById(R.id.bottomtext))
+            ((TextView) viewById(R.id.task_details_part_of_container).findViewById(R.id.bottomtext))
                     .setText(processInstanceRepresentation.getName());
+        }
+    }
+
+    private void displayParentTaskProperty()
+    {
+        if (taskRepresentation.getParentTaskId() != null)
+        {
+            HolderUtils.configure((LinearLayout) viewById(R.id.task_details_part_of_container),
+                    R.layout.row_two_lines_inverse_borderless, getString(R.string.task_field_parent_task),
+                    taskRepresentation.getParentTaskName(), R.drawable.ic_transform_grey, onParentTaskListener);
         }
     }
 
     private void displayActionsSection()
     {
-        viewById(R.id.task_action_share_link).setOnClickListener(new View.OnClickListener()
+        if (getVersionNumber() < ActivitiVersionNumber.VERSION_1_3_0)
         {
-            @Override
-            public void onClick(View v)
+            hide(R.id.task_action_add_task_cheklist);
+        }
+        else
+        {
+            viewById(R.id.task_action_add_task_cheklist).setOnClickListener(new View.OnClickListener()
             {
-                IntentUtils.actionShareLink(TaskDetailsFoundationFragment.this, taskRepresentation.getName(), getAPI()
-                        .getTaskService().getShareUrl(taskId));
-            }
-        });
+                @Override
+                public void onClick(View v)
+                {
+                    CreateStandaloneTaskDialogFragment.with(getActivity()).taskId(taskRepresentation.getId())
+                            .displayAsDialog();
+                    // TaskChecklistFragment.with(getActivity()).taskId(taskRepresentation.getId()).display();
+                }
+            });
+        }
 
         if (isEnded)
         {
-            hide(R.id.task_action_involve);
-            hide(R.id.task_action_add_content);
-            hide(R.id.task_action_add_comment);
+            hide(R.id.task_actions_container_bar);
+            hide(R.id.task_actions_container);
         }
         else
         {
@@ -825,17 +897,67 @@ public class TaskDetailsFoundationFragment extends AbstractDetailsFragment imple
         }
     }
 
-    private void startInvolveAction()
+    // ///////////////////////////////////////////////////////////////////////////
+    // TASKS
+    // ///////////////////////////////////////////////////////////////////////////
+    protected void displayCheckList(List<TaskRepresentation> taskRepresentations)
     {
-        if (ActivitiSession.getInstance().isActivitiAlfresco() && getAccount().getTenantId() == null)
+        if (getVersionNumber() < ActivitiVersionNumber.VERSION_1_3_0)
         {
-            ActivitiUserPickerFragment.with(getActivity()).fragmentTag(getTag()).fieldId("involve").displayAsDialog();
+            hide(R.id.task_details_checklist_card);
+            return;
+        }
+
+        LayoutInflater inflater = (LayoutInflater) getActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+
+        // TASKS
+        LinearLayout activeTaskContainer = (LinearLayout) viewById(R.id.task_details_checklist_container);
+        activeTaskContainer.removeAllViews();
+        View v;
+        if (taskRepresentations == null || taskRepresentations.isEmpty())
+        {
+            v = inflater.inflate(R.layout.row_single_line, activeTaskContainer, false);
+            ((TextView) v.findViewById(R.id.toptext)).setText(R.string.task_help_add_first_checklist);
+            v.findViewById(R.id.icon).setVisibility(View.GONE);
+            activeTaskContainer.addView(v);
         }
         else
         {
-            UserPickerFragment.with(getActivity()).fragmentTag(getTag()).fieldId("involve")
-                    .taskId(taskRepresentation.getId()).singleChoice(true).mode(ListingModeFragment.MODE_PICK)
-                    .display();
+            TaskRepresentation taskCheckList;
+            TwoLinesViewHolder vh;
+            int max = (taskRepresentations.size() > TASKS_MAX_ITEMS) ? TASKS_MAX_ITEMS : taskRepresentations.size();
+            for (int i = 0; i < max; i++)
+            {
+                taskCheckList = taskRepresentations.get(i);
+                v = inflater.inflate(R.layout.row_three_lines_caption_borderless, activeTaskContainer, false);
+                v.setTag(taskCheckList);
+
+                vh = HolderUtils.configure(v, taskCheckList.getName(), null,
+                        TaskAdapter.createAssigneeInfo(getActivity(), taskCheckList),
+                        TaskAdapter.createRelativeDateInfo(getActivity(), taskCheckList),
+                        R.drawable.ic_account_circle_grey);
+
+                if (taskCheckList.getEndDate() != null)
+                {
+                    vh.choose.setImageResource(R.drawable.ic_done_grey);
+                }
+                else
+                {
+                    vh.choose.setImageResource(R.drawable.ic_more_grey);
+                }
+                vh.choose.setVisibility(View.VISIBLE);
+
+                activeTaskContainer.addView(v);
+
+                v.setOnClickListener(new View.OnClickListener()
+                {
+                    @Override
+                    public void onClick(View v)
+                    {
+                        TaskDetailsFragment.with(getActivity()).task((TaskRepresentation) v.getTag()).display();
+                    }
+                });
+            }
         }
     }
 
@@ -860,7 +982,6 @@ public class TaskDetailsFoundationFragment extends AbstractDetailsFragment imple
             @Override
             public void onClick(View v)
             {
-
                 // Special case activiti.alfresco.com & tenantid == null
                 // User must pick user via email only
                 startInvolveAction();
@@ -895,12 +1016,40 @@ public class TaskDetailsFoundationFragment extends AbstractDetailsFragment imple
             }
         });
 
+        // CHECKLIST
+        vh = HolderUtils.configure(v.findViewById(R.id.help_details_add_task_checklist),
+                getString(R.string.task_help_add_checklist), null, R.drawable.ic_add_circle_grey);
+        HolderUtils.makeMultiLine(vh.topText, 3);
+        v.findViewById(R.id.help_details_add_task_checklist_container).setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View v)
+            {
+                CreateStandaloneTaskDialogFragment.with(getActivity()).taskId(taskRepresentation.getId())
+                        .displayAsDialog();
+            }
+        });
+
         helpContainer.addView(v);
     }
 
     // ///////////////////////////////////////////////////////////////////////////
     // ACTIONS
     // ///////////////////////////////////////////////////////////////////////////
+    private void startInvolveAction()
+    {
+        if (ActivitiSession.getInstance().isActivitiAlfresco() && getAccount().getTenantId() == null)
+        {
+            ActivitiUserPickerFragment.with(getActivity()).fragmentTag(getTag()).fieldId("involve").displayAsDialog();
+        }
+        else
+        {
+            UserPickerFragment.with(getActivity()).fragmentTag(getTag()).fieldId("involve")
+                    .taskId(taskRepresentation.getId()).singleChoice(true).mode(ListingModeFragment.MODE_PICK)
+                    .display();
+        }
+    }
+
     private void completeTask()
     {
         getAPI().getTaskService().complete(taskId, new Callback<Void>()
@@ -1233,4 +1382,5 @@ public class TaskDetailsFoundationFragment extends AbstractDetailsFragment imple
         description = null;
         edit(new UpdateTaskRepresentation(taskRepresentation.getName(), null, dueAt));
     }
+
 }

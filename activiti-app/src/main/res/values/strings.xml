@@ -134,7 +134,9 @@
     <string name="task_action_share_link">Share link</string>
     <string name="task_action_create_confirm">Create</string>
     <string name="task_action_retrieve_info">Retrieve information&#8230;</string>
+    <string name="task_action_add_checklist_short">Add task</string>
     <string name="task_action_add_checklist">Add task to checklist</string>
+    <string name="task_action_remove_checklist">Remove task to checklist</string>
     <string name="task_action_add_checklist_confirm">Add task to checklist</string>
 
 
@@ -145,6 +147,7 @@
     <!-- TASKS TITLE -->
     <string name="task_title_details">Details</string>
     <string name="task_create_new">New Task</string>
+
 
     <!-- TASKS SECTION -->
     <string name="task_section_people">People</string>
@@ -158,6 +161,7 @@
     <string name="task_field_assignee">Assignee</string>
     <string name="task_field_due">Due</string>
     <string name="task_field_process_instance">Part of process</string>
+    <string name="task_field_parent_task">Part of</string>
     <string name="task_field_ended">Ended</string>
     <string name="task_field_duration">Duration</string>
     <string name="task_field_form">Form</string>
@@ -185,6 +189,8 @@
     <string name="task_help_add_people">Involve someone else and start collaborating</string>
     <string name="task_help_add_comment">Enlighten others by adding a comment</string>
     <string name="task_help_add_content">Add a document and share the knowledge</string>
+    <string name="task_help_add_checklist">Add a task to checklist</string>
+    <string name="task_help_add_first_checklist">Create your own checklist of items needed for this task. You can assign an item to someone else, give it a due date and attach a form from the library</string>
 
     <!-- FORM-SELECT -->
     <string name="task_form_select_title">Select form</string>
