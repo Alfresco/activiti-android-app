@@ -40,7 +40,6 @@ import com.activiti.android.app.R;
 import com.activiti.android.app.fragments.HelpDialogFragment;
 import com.activiti.android.app.fragments.account.AccountsFragment;
 import com.activiti.android.app.fragments.app.AppInstancesFragment;
-import com.activiti.android.app.fragments.process.ProcessDiagram;
 import com.activiti.android.app.fragments.settings.GeneralSettingsFragment;
 import com.activiti.android.app.fragments.task.TasksFragment;
 import com.activiti.android.app.fragments.user.UserProfileFragment;
@@ -53,6 +52,7 @@ import com.activiti.android.platform.rendition.RenditionManager;
 import com.activiti.android.ui.activity.AlfrescoActivity;
 import com.activiti.android.ui.fragments.FragmentDisplayer;
 import com.activiti.android.ui.fragments.form.picker.UserPickerFragment;
+import com.activiti.android.ui.fragments.task.filter.TaskFilterPropertiesFragment;
 import com.activiti.android.ui.utils.DisplayUtils;
 import com.activiti.client.api.model.idm.UserRepresentation;
 import com.squareup.otto.Subscribe;
@@ -131,7 +131,9 @@ public class MainActivity extends AlfrescoActivity
                     mDrawerToggle.syncState();
                 }
 
-                /** Called when a drawer has settled in a completely open state. */
+                /**
+                 * Called when a drawer has settled in a completely open state.
+                 */
                 public void onDrawerOpened(View drawerView)
                 {
                     if (drawerView.equals(mLeftDrawer))
@@ -182,7 +184,15 @@ public class MainActivity extends AlfrescoActivity
         }
         else if (isRightMenuVisible())
         {
-            setRightMenuVisibility(false);
+            if (getFragment(TaskFilterPropertiesFragment.TAG) != null
+                    && getFragment(TaskFilterPropertiesFragment.TAG).isVisible())
+            {
+                getSupportFragmentManager().popBackStack();
+            }
+            else
+            {
+                setRightMenuVisibility(false);
+            }
         }
         else
         {
@@ -218,11 +228,6 @@ public class MainActivity extends AlfrescoActivity
             case android.R.id.home:
                 if (isVisible(UserPickerFragment.TAG))
                 {
-                    return false;
-                }
-                if (isVisible(ProcessDiagram.TAG))
-                {
-                    onBackPressed();
                     return false;
                 }
                 else if (mDrawerLayout.getDrawerLockMode(mLeftDrawer) == DrawerLayout.LOCK_MODE_LOCKED_CLOSED)
@@ -322,9 +327,11 @@ public class MainActivity extends AlfrescoActivity
                     .into(((ImageView) findViewById(R.id.drawer_account_icon)));
         }
 
-        findViewById(R.id.drawer_account).setOnClickListener(new View.OnClickListener() {
+        findViewById(R.id.drawer_account).setOnClickListener(new View.OnClickListener()
+        {
             @Override
-            public void onClick(View v) {
+            public void onClick(View v)
+            {
                 Fragment frag = getSupportFragmentManager().findFragmentById(R.id.left_drawer_content);
                 displayApplicationsMenu(frag instanceof AccountsFragment);
             }
@@ -337,12 +344,9 @@ public class MainActivity extends AlfrescoActivity
         {
             ((ImageView) findViewById(R.id.account_switcher)).setImageResource(R.drawable.ic_expand_more_white);
             FragmentDisplayer
-                    .with(MainActivity.this)
-                    .animate(null)
-                    .back(false)
-                    .replace(
-                            AppInstancesFragment.with(MainActivity.this).drawer(R.id.left_drawer_content)
-                                    .createFragment()).into(R.id.left_drawer_content);
+                    .with(MainActivity.this).animate(null).back(false).replace(AppInstancesFragment
+                            .with(MainActivity.this).drawer(R.id.left_drawer_content).createFragment())
+                    .into(R.id.left_drawer_content);
         }
         else
         {
@@ -432,7 +436,8 @@ public class MainActivity extends AlfrescoActivity
         return picasso;
     }
 
-    public ActionBarDrawerToggle getmDrawerToggle(){
+    public ActionBarDrawerToggle getmDrawerToggle()
+    {
         return mDrawerToggle;
     }
 }

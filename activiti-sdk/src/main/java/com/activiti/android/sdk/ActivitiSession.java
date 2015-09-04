@@ -22,6 +22,7 @@ package com.activiti.android.sdk;
 
 import java.io.IOException;
 import java.lang.reflect.Type;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
@@ -53,6 +54,7 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
 import com.google.gson.reflect.TypeToken;
 import com.squareup.okhttp.OkHttpClient;
+import com.squareup.okhttp.Protocol;
 import com.squareup.okhttp.Request;
 import com.squareup.okhttp.Response;
 
@@ -193,6 +195,9 @@ public class ActivitiSession
             if (okHttpClient == null)
             {
                 okHttpClient = new OkHttpClient();
+                ArrayList<Protocol> protocols = new ArrayList<>(1);
+                protocols.add(Protocol.HTTP_1_1);
+                okHttpClient.setProtocols(protocols);
                 okHttpClient.setConnectTimeout(10, TimeUnit.SECONDS);
                 if (auth != null)
                 {

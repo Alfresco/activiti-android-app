@@ -47,6 +47,8 @@ public class ServiceRegistry
 
     protected ModelService modelService;
 
+    protected UserFiltersService userFiltersService;
+
     // ///////////////////////////////////////////////////////////////////////////
     // CONSTRUCTORS
     // ///////////////////////////////////////////////////////////////////////////
@@ -146,6 +148,15 @@ public class ServiceRegistry
             modelService = new ModelService(adapter);
         }
         return modelService;
+    }
+
+    public UserFiltersService getUserFiltersService()
+    {
+        if (userFiltersService == null)
+        {
+            userFiltersService = new UserFiltersService(adapter);
+        }
+        return userFiltersService;
     }
 
 }

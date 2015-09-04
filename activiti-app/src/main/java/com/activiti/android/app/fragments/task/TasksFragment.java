@@ -33,6 +33,7 @@ import android.widget.GridView;
 
 import com.activiti.android.app.R;
 import com.activiti.android.app.activity.MainActivity;
+import com.activiti.android.app.fragments.filters.UserFiltersFragment;
 import com.activiti.android.app.fragments.process.ProcessesFragment;
 import com.activiti.android.platform.event.CompleteTaskEvent;
 import com.activiti.android.platform.event.CreateTaskEvent;
@@ -40,7 +41,6 @@ import com.activiti.android.ui.fragments.FragmentDisplayer;
 import com.activiti.android.ui.fragments.builder.ListingFragmentBuilder;
 import com.activiti.android.ui.fragments.task.TasksFoundationFragment;
 import com.activiti.android.ui.fragments.task.create.CreateStandaloneTaskDialogFragment;
-import com.activiti.android.ui.fragments.task.filter.TaskFiltersFragment;
 import com.activiti.client.api.constant.RequestConstant;
 import com.activiti.client.api.model.runtime.TaskRepresentation;
 import com.squareup.otto.Subscribe;
@@ -57,6 +57,7 @@ public class TasksFragment extends TasksFoundationFragment
         super();
         setHasOptionsMenu(true);
         eventBusRequired = true;
+        retrieveDataOnCreation = false;
     }
 
     public static TasksFragment newInstanceByTemplate(Bundle b)
@@ -99,22 +100,33 @@ public class TasksFragment extends TasksFoundationFragment
     @Override
     public void onStart()
     {
-        Fragment fr = getFragmentManager().findFragmentById(R.id.right_drawer);
-        if (fr == null || (fr != null && !(fr instanceof TaskFiltersFragment)))
-        {
-            if (fr != null)
-            {
-                FragmentDisplayer.with(getActivity()).back(false).animate(null).remove(fr);
-            }
-            FragmentDisplayer
+        // Fragment fr =
+        // getFragmentManager().findFragmentById(R.id.right_drawer);
+        // if (fr == null || (fr != null && !(fr instanceof
+        // TaskFiltersFragment)))
+        // {
+        // if (fr != null)
+        // {
+        // FragmentDisplayer.with(getActivity()).back(false).animate(null).remove(fr);
+        // }
+        // FragmentDisplayer
+        // .with(getActivity())
+        // .back(false)
+        // .animate(null)
+        // .replace(
+        // TaskFiltersFragment.newInstanceByTemplate(getArguments() != null ?
+        // getArguments()
+        // : new Bundle())).into(R.id.right_drawer);
+        // }
+        setLockRightMenu(false);
+
+        FragmentDisplayer
                     .with(getActivity())
                     .back(false)
                     .animate(null)
                     .replace(
-                            TaskFiltersFragment.newInstanceByTemplate(getArguments() != null ? getArguments()
-                                    : new Bundle())).into(R.id.right_drawer);
-        }
-        setLockRightMenu(false);
+UserFiltersFragment.with(getActivity())
+                .appId(appId).typeId(UserFiltersFragment.TYPE_TASK).createFragment()).into(R.id.right_drawer);
 
         super.onStart();
     }

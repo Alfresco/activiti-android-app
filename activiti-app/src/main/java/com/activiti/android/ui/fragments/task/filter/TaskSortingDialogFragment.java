@@ -156,7 +156,7 @@ public class TaskSortingDialogFragment extends DialogFragment
             sort = getArguments().getString(ARGUMENT_SORT);
         }
 
-        final TaskFiltersFragment frag = (TaskFiltersFragment) getActivity().getSupportFragmentManager()
+        final CommonTaskFilterFragment frag = (CommonTaskFilterFragment) getActivity().getSupportFragmentManager()
                 .findFragmentById(R.id.right_drawer);
 
         return new MaterialDialog.Builder(getActivity()).title(R.string.task_filter_sort)

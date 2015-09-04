@@ -25,13 +25,13 @@ import java.util.Map;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
+import android.view.MenuItem;
 
 import com.activiti.android.app.activity.MainActivity;
 import com.activiti.android.ui.fragments.builder.AlfrescoFragmentBuilder;
 import com.activiti.android.ui.fragments.process.ProcessDiagramFoundationFragment;
 import com.activiti.android.ui.utils.UIUtils;
 
-//TODO Use TouchableImage Library
 public class ProcessDiagram extends ProcessDiagramFoundationFragment
 {
     public static final String TAG = ProcessDiagram.class.getName();
@@ -42,6 +42,7 @@ public class ProcessDiagram extends ProcessDiagramFoundationFragment
     public ProcessDiagram()
     {
         super();
+        setHasOptionsMenu(true);
     }
 
     public static ProcessDiagram newInstanceByTemplate(Bundle b)
@@ -72,6 +73,18 @@ public class ProcessDiagram extends ProcessDiagramFoundationFragment
         {
             UIUtils.setActionBarDefault((MainActivity) getActivity());
         }
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item)
+    {
+        switch (item.getItemId())
+        {
+            case android.R.id.home:
+                getActivity().onBackPressed();
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     // ///////////////////////////////////////////////////////////////////////////

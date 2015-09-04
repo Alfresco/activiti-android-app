@@ -117,7 +117,7 @@ public class TaskAssignmentDialogFragment extends AlfrescoFragment
             state = getArguments().getString(ARGUMENT_ASSIGNMENT);
         }
 
-        final TaskFiltersFragment frag = (TaskFiltersFragment) getActivity().getSupportFragmentManager()
+        final CommonTaskFilterFragment frag = (CommonTaskFilterFragment) getActivity().getSupportFragmentManager()
                 .findFragmentById(R.id.right_drawer);
 
         adapter = new TaskAssignmentAdapter(getActivity(), R.layout.row_single_line, getItems());

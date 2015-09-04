@@ -64,6 +64,8 @@ public class TasksFoundationFragment extends BasePagingGridFragment implements R
 
     protected String keywords;
 
+    protected Long filterId;
+
     protected Long page;
 
     protected Long size;
@@ -86,9 +88,15 @@ public class TasksFoundationFragment extends BasePagingGridFragment implements R
         {
             appId = getLastAppId();
         }
-        appName = (appId != null) ? RuntimeAppInstanceManager.getInstance(getActivity()).getById(appId,
-                getAccount().getId()) != null ? RuntimeAppInstanceManager.getInstance(getActivity())
-                .getById(appId, getAccount().getId()).getName() : null : null;
+        appName = (appId != null)
+                ? RuntimeAppInstanceManager.getInstance(getActivity()).getById(appId, getAccount().getId()) != null
+                        ? RuntimeAppInstanceManager.getInstance(getActivity()).getById(appId, getAccount().getId())
+                                .getName()
+                        : null
+                : null;
+
+        // if (getVersionNumber() <= ActivitiVersionNumber.VERSION_1_3_0)
+        // {
         processDefinitionId = BundleUtils.getString(bundle, ARGUMENT_PROCESSDEFINITION_ID);
         keywords = BundleUtils.getString(bundle, ARGUMENT_TEXT);
         processId = BundleUtils.getString(bundle, ARGUMENT_PROCESS_ID);
@@ -108,6 +116,7 @@ public class TasksFoundationFragment extends BasePagingGridFragment implements R
         {
             sort = SORT_CREATED_DESC;
         }
+        // }
         page = BundleUtils.getLong(bundle, ARGUMENT_PAGE);
         size = BundleUtils.getLong(bundle, ARGUMENT_SIZE);
     }
@@ -137,15 +146,13 @@ public class TasksFoundationFragment extends BasePagingGridFragment implements R
         }
         if (appId == -1)
         {
-            getAPI().getTaskService().list(
-                    new QueryTasksRepresentation(null, processDefinitionId, keywords, processId, assignee, state,
-                            assignment, sort, page, size), callBack);
+            getAPI().getTaskService().list(new QueryTasksRepresentation(null, processDefinitionId, keywords, processId,
+                    assignee, state, assignment, sort, page, size), callBack);
         }
         else
         {
-            getAPI().getTaskService().list(
-                    new QueryTasksRepresentation(appId, processDefinitionId, keywords, processId, assignee, state,
-                            assignment, sort, page, size), callBack);
+            getAPI().getTaskService().list(new QueryTasksRepresentation(appId, processDefinitionId, keywords, processId,
+                    assignee, state, assignment, sort, page, size), callBack);
         }
     }
 

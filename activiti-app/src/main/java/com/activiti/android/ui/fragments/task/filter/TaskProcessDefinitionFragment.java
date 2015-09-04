@@ -47,7 +47,7 @@ public class TaskProcessDefinitionFragment extends AlfrescoFragment
 
     private ProcessDefinitionModelAdapter adapter;
 
-    private TaskFiltersFragment frag;
+    private CommonTaskFilterFragment frag;
 
     private String processDefId;
 
@@ -86,7 +86,7 @@ public class TaskProcessDefinitionFragment extends AlfrescoFragment
             appId = getArguments().getLong(ARGUMENT_APP_ID);
         }
 
-        frag = (TaskFiltersFragment) getActivity().getSupportFragmentManager().findFragmentById(R.id.right_drawer);
+        frag = (CommonTaskFilterFragment) getActivity().getSupportFragmentManager().findFragmentById(R.id.right_drawer);
 
         Map<Long, ProcessDefinitionModel> models = ProcessDefinitionModelManager.getInstance(getActivity())
                 .getAllByAppId(getAccount().getId(), appId);

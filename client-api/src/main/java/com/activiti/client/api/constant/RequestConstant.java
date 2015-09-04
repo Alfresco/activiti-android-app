@@ -50,6 +50,8 @@ public interface RequestConstant
 
     String ARGUMENT_SIZE = "size";
 
+    String ARGUMENT_FILTER_ID = "filterId";
+
     // ///////////////////////////////////////////////
     // ASSIGNMENT
     // ///////////////////////////////////////////////

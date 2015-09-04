@@ -138,7 +138,7 @@ public class TaskStateDialogFragment extends DialogFragment
             state = getArguments().getString(ARGUMENT_STATE);
         }
 
-        final TaskFiltersFragment frag = (TaskFiltersFragment) getActivity().getSupportFragmentManager()
+        final CommonTaskFilterFragment frag = (CommonTaskFilterFragment) getActivity().getSupportFragmentManager()
                 .findFragmentById(R.id.right_drawer);
 
         return new MaterialDialog.Builder(getActivity()).title(R.string.task_filter_text)

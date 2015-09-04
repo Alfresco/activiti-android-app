@@ -63,6 +63,10 @@ public interface ApiTaskResource
     @POST("/api/enterprise/tasks/query")
     void listTasks(@Body QueryTasksRepresentation filter, Callback<TasksRepresentation> callback);
 
+    @Headers({ "Content-type: application/json" })
+    @POST("/api/enterprise/tasks/query")
+    void filterTasks(@Body QueryTasksRepresentation filter, Callback<TasksRepresentation> callback);
+
     @GET("/api/enterprise/tasks/{taskId}")
     void getTask(@Path("taskId") String taskId, Callback<TaskRepresentation> callback);
 

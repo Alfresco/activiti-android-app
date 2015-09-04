@@ -75,9 +75,19 @@
 
 
     <!-- ################################################################################## -->
-    <!-- LOGIN -->
+    <!-- COMMON -->
     <!-- ################################################################################## -->
-
+    <string name="common_filter_title">Filters</string>
+    <string name="common_filter_new_filter">New Filter</string>
+    <string name="common_filter_edit">Edit</string>
+    <string name="common_filter_reset">Reset</string>
+    <string name="common_filter_delete">Delete</string>
+    <string name="common_filter_delete_title">Delete Filters</string>
+    <string name="common_filter_new_filter_name">New Filter</string>
+    <string name="common_filter_icon_and_name">Filter Icon and name</string>
+    <string name="common_filter_save">Save</string>
+    <string name="common_filter_save_hint">Happy with your filter?<br /> Choose an icon and a name then click save.</string>
+    <string name="common_filter_search_results">Search results</string>
 
     <!-- ################################################################################## -->
     <!-- WORKFLOW -->
@@ -388,6 +398,7 @@
     <string name="sync_adapter_groups_title">Groups</string>
     <string name="sync_adapter_content_transfer">Content Transfer</string>
 
+    <string name="error_general">An error has occurred. Please try again.</string>
     <string name="error_general_no_connection">No connection available</string>
     <string name="error_offline"><![CDATA[<p><b>Alfresco Mobile help can\'t be accessed because you\'re offline.</b><br/></p> Please try again when you\'re back online.]]></string>
 

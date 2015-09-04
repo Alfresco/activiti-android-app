@@ -36,8 +36,6 @@ import com.activiti.android.ui.utils.UIUtils;
 import it.sephiroth.android.library.imagezoom.ImageViewTouch;
 import it.sephiroth.android.library.imagezoom.ImageViewTouchBase;
 
-//TODO Full screen in separate activity ?
-//TODO Test against 1.2 ?
 public class ProcessDiagramFoundationFragment extends AlfrescoFragment
 {
     public static final String TAG = ProcessDiagramFoundationFragment.class.getName();

@@ -31,14 +31,14 @@ import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.GridView;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.activiti.android.app.R;
 import com.activiti.android.ui.fragments.AlfrescoFragment;
 import com.activiti.android.ui.fragments.common.RefreshFragment;
 import com.activiti.android.ui.fragments.common.RefreshHelper;
-import com.melnykov.fab.FloatingActionButton;
-import com.melnykov.fab.ScrollDirectionListener;
+import com.github.clans.fab.FloatingActionButton;
 
 /**
  * Created by jpascal on 12/12/2014.
@@ -131,6 +131,11 @@ public abstract class BaseGridFragment extends AlfrescoFragment implements Refre
         // Perform the request on creation to populate gridView
         if (retrieveDataOnCreation && adapter == null && !requestRefresh)
         {
+            performRequest();
+        }
+        else if (requestRefresh)
+        {
+            requestRefresh = false;
             performRequest();
         }
         else if (retrieveDataOnCreation && adapter != null)
@@ -286,27 +291,12 @@ public abstract class BaseGridFragment extends AlfrescoFragment implements Refre
         if (onFabClickListener != null)
         {
             fab.setVisibility(View.VISIBLE);
-            fab.show();
+            gv.setOnScrollListener(listener);
             fab.setOnClickListener(onFabClickListener);
-            fab.attachToListView(gv, new ScrollDirectionListener()
-            {
-                @Override
-                public void onScrollDown()
-                {
-                    // Log.d("ListViewFragment", "onScrollDown()");
-                }
-
-                @Override
-                public void onScrollUp()
-                {
-                    // Log.d("ListViewFragment", "onScrollUp()");
-                }
-            }, listener);
         }
         else
         {
             fab.setVisibility(View.GONE);
-            fab.hide();
             gv.setOnScrollListener(listener);
         }
     }
@@ -375,6 +365,31 @@ public abstract class BaseGridFragment extends AlfrescoFragment implements Refre
             gv.setVisibility(View.GONE);
             pb.setVisibility(View.VISIBLE);
         }
+    }
+
+    protected void prepareEmptyView(View ev, ImageView emptyImageView, TextView firstEmptyMessage,
+            TextView secondEmptyMessage)
+    {
+
+    }
+
+    protected void prepareEmptyInitialView(View ev, ImageView emptyImageView, TextView firstEmptyMessage,
+            TextView secondEmptyMessage)
+    {
+        prepareEmptyView(ev, emptyImageView, firstEmptyMessage, secondEmptyMessage);
+    }
+
+    protected void displayEmptyView()
+    {
+        if (!isVisible()) { return; }
+        gv.setEmptyView(ev);
+        isFullLoad = Boolean.TRUE;
+        if (adapter != null)
+        {
+            gv.setAdapter(null);
+        }
+        prepareEmptyView(ev, (ImageView) ev.findViewById(R.id.empty_picture),
+                (TextView) ev.findViewById(R.id.empty_text), (TextView) ev.findViewById(R.id.empty_text_description));
     }
 
     protected void displayDataView()
