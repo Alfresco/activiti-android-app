@@ -19,38 +19,35 @@
   ~
   -->
 
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:background="@color/alfresco_lime_darker">
 
-    <LinearLayout
+    <FrameLayout
         android:id="@+id/double_panel"
         android:layout_width="match_parent"
-        android:layout_height="?android:attr/actionBarSize"
-        android:background="@color/primary"
-        android:gravity="center"
-        android:orientation="vertical">
+        android:layout_height="?android:attr/actionBarSize">
 
         <ImageView
-            android:layout_width="200dip"
+            android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:src="@drawable/alfresco_activiti"/>
+            android:background="@color/primary"
+            android:padding="@dimen/d_4"
+            android:src="@drawable/alfresco_activiti" />
 
-    </LinearLayout>
+    </FrameLayout>
 
     <View
         android:layout_width="match_parent"
         android:layout_height="2dip"
-        android:background="@color/divider"/>
+        android:background="@color/primary_dark" />
 
     <FrameLayout
         android:id="@+id/content_frame"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        >
+        android:layout_height="match_parent">
 
         <ImageView
             android:layout_width="wrap_content"
@@ -58,21 +55,19 @@
             android:scaleType="fitXY"
             android:layout_gravity="bottom"
             android:src="@drawable/login_banner"
-            android:adjustViewBounds="true"
-            />
+            android:adjustViewBounds="true" />
 
         <LinearLayout
-            android:layout_width="450dp"
+            android:layout_width="500dp"
             android:layout_height="match_parent"
-            android:layout_gravity="right"
-            android:background="@color/secondary_background_translucent"/>
+            android:layout_gravity="center"
+            android:background="@color/secondary_background_translucent" />
 
         <include
-            layout="@layout/panel_left"
-            android:layout_width="450dp"
-            android:layout_gravity="right"
-            android:layout_height="match_parent"
-            />
+            layout="@layout/activity_simple_panel_left"
+            android:layout_width="500dp"
+            android:layout_gravity="center"
+            android:layout_height="match_parent" />
 
     </FrameLayout>
 

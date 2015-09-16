@@ -39,6 +39,7 @@ import com.activiti.android.platform.provider.group.GroupInstanceManager;
 import com.activiti.android.sdk.model.TaskAssignment;
 import com.activiti.android.ui.fragments.AlfrescoFragment;
 import com.activiti.android.ui.fragments.builder.AlfrescoFragmentBuilder;
+import com.activiti.android.ui.utils.DisplayUtils;
 import com.activiti.client.api.constant.RequestConstant;
 import com.afollestad.materialdialogs.MaterialDialog;
 
@@ -117,8 +118,9 @@ public class TaskAssignmentDialogFragment extends AlfrescoFragment
             state = getArguments().getString(ARGUMENT_ASSIGNMENT);
         }
 
-        final TaskFiltersFragment frag = (TaskFiltersFragment) getActivity().getSupportFragmentManager()
-                .findFragmentById(R.id.right_drawer);
+        final CommonTaskFilterFragment frag = (CommonTaskFilterFragment) getActivity().getSupportFragmentManager()
+                .findFragmentById(
+                        DisplayUtils.hasCentralPane(getActivity()) ? R.id.central_left_drawer : R.id.right_drawer);
 
         adapter = new TaskAssignmentAdapter(getActivity(), R.layout.row_single_line, getItems());
 

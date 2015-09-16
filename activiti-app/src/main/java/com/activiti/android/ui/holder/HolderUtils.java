@@ -54,6 +54,14 @@ public class HolderUtils
     // ///////////////////////////////////////////////////////////////////////////
     // VIEW CREATION + HOLDER
     // ///////////////////////////////////////////////////////////////////////////
+    public static ThreeLinesViewHolder configure(View v, String topText, String captionText, String middleText,
+            String bottomText, int imageId)
+    {
+        ThreeLinesViewHolder vh = new ThreeLinesViewHolder(v);
+        HolderUtils.configure(vh, topText, captionText, middleText, bottomText, imageId);
+        return vh;
+    }
+
     public static TwoLinesViewHolder configure(ViewGroup viewRoot, int layoutId, String topText, String bottomText,
             int imageId)
     {
@@ -138,6 +146,20 @@ public class HolderUtils
         else
         {
             vh.topTextRight.setVisibility(View.GONE);
+        }
+    }
+
+    public static void configure(ThreeLinesViewHolder vh, String topText, String caption, String middleText,
+            String bottomText, int imageId)
+    {
+        configure(vh, topText, caption, bottomText, imageId);
+        if (middleText != null)
+        {
+            vh.middleText.setText(middleText);
+        }
+        else
+        {
+            vh.middleText.setVisibility(View.GONE);
         }
     }
 

@@ -41,6 +41,7 @@ import com.activiti.android.platform.provider.app.RuntimeAppInstanceManager;
 import com.activiti.android.platform.provider.group.GroupInstanceManager;
 import com.activiti.android.platform.provider.integration.IntegrationManager;
 import com.activiti.android.platform.provider.processdefinition.ProcessDefinitionModelManager;
+import com.activiti.android.ui.activity.AlfrescoActivity;
 import com.activiti.android.ui.fragments.apps.AppInstanceCursorAdapter;
 import com.activiti.android.ui.fragments.apps.AppInstancesFoundationFragment;
 import com.activiti.android.ui.fragments.builder.AlfrescoFragmentBuilder;
@@ -79,6 +80,10 @@ public class AppInstancesFragment extends AppInstancesFoundationFragment
     @Override
     public void refresh()
     {
+        if (getActivity() instanceof AlfrescoActivity)
+        {
+            ((AlfrescoActivity) getActivity()).checkIsAdmin();
+        }
         syncAdapters(getActivity());
     }
 

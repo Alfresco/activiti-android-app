@@ -25,6 +25,7 @@ import java.util.Map;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.FragmentManager;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -33,6 +34,7 @@ import android.widget.GridView;
 
 import com.activiti.android.app.R;
 import com.activiti.android.app.activity.MainActivity;
+import com.activiti.android.app.fragments.filters.UserFiltersFragment;
 import com.activiti.android.app.fragments.process.ProcessesFragment;
 import com.activiti.android.platform.event.CompleteTaskEvent;
 import com.activiti.android.platform.event.CreateTaskEvent;
@@ -40,7 +42,7 @@ import com.activiti.android.ui.fragments.FragmentDisplayer;
 import com.activiti.android.ui.fragments.builder.ListingFragmentBuilder;
 import com.activiti.android.ui.fragments.task.TasksFoundationFragment;
 import com.activiti.android.ui.fragments.task.create.CreateStandaloneTaskDialogFragment;
-import com.activiti.android.ui.fragments.task.filter.TaskFiltersFragment;
+import com.activiti.android.ui.utils.DisplayUtils;
 import com.activiti.client.api.constant.RequestConstant;
 import com.activiti.client.api.model.runtime.TaskRepresentation;
 import com.squareup.otto.Subscribe;
@@ -48,6 +50,8 @@ import com.squareup.otto.Subscribe;
 public class TasksFragment extends TasksFoundationFragment
 {
     public static final String TAG = TasksFragment.class.getName();
+
+    protected View selectedView;
 
     // ///////////////////////////////////////////////////////////////////////////
     // CONSTRUCTORS & HELPERS
@@ -57,6 +61,7 @@ public class TasksFragment extends TasksFoundationFragment
         super();
         setHasOptionsMenu(true);
         eventBusRequired = true;
+        retrieveDataOnCreation = false;
     }
 
     public static TasksFragment newInstanceByTemplate(Bundle b)
@@ -99,22 +104,12 @@ public class TasksFragment extends TasksFoundationFragment
     @Override
     public void onStart()
     {
-        Fragment fr = getFragmentManager().findFragmentById(R.id.right_drawer);
-        if (fr == null || (fr != null && !(fr instanceof TaskFiltersFragment)))
-        {
-            if (fr != null)
-            {
-                FragmentDisplayer.with(getActivity()).back(false).animate(null).remove(fr);
-            }
-            FragmentDisplayer
-                    .with(getActivity())
-                    .back(false)
-                    .animate(null)
-                    .replace(
-                            TaskFiltersFragment.newInstanceByTemplate(getArguments() != null ? getArguments()
-                                    : new Bundle())).into(R.id.right_drawer);
-        }
-        setLockRightMenu(false);
+        setLockRightMenu(DisplayUtils.hasCentralPane(getActivity()));
+
+        FragmentDisplayer.with(getActivity()).back(false).animate(null)
+                .replace(UserFiltersFragment.with(getActivity()).appId(appId).typeId(UserFiltersFragment.TYPE_TASK)
+                        .createFragment())
+                .into(DisplayUtils.hasCentralPane(getActivity()) ? R.id.central_left_drawer : R.id.right_drawer);
 
         super.onStart();
     }
@@ -122,9 +117,51 @@ public class TasksFragment extends TasksFoundationFragment
     @Override
     public void onListItemClick(GridView l, View v, int position, long id)
     {
-        resetRightMenu();
+        if (selectedView != null)
+        {
+            selectedView.setBackgroundColor(getResources().getColor(android.R.color.transparent));
+        }
+        selectedView = v;
+        if (!DisplayUtils.hasCentralPane(getActivity()))
+        {
+            resetRightMenu();
+        }
+        else
+        {
+            getActivity().getSupportFragmentManager().popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
+        }
         TaskRepresentation taskRepresentation = (TaskRepresentation) l.getItemAtPosition(position);
-        TaskDetailsFragment.with(getActivity()).task(taskRepresentation).bindFragmentTag(getTag()).display();
+        if (!selectedTask.contains(taskRepresentation))
+        {
+            TaskDetailsFragment.with(getActivity()).task(taskRepresentation).bindFragmentTag(getTag()).back(true)
+                    .display();
+            selectedTask.clear();
+            selectedTask.add(taskRepresentation);
+            v.setBackgroundColor(getResources().getColor(R.color.secondary_background));
+        }
+        else
+        {
+            selectedTask.clear();
+            selectedView = null;
+            setLockRightMenu(true);
+        }
+    }
+
+    public void setSelectedTask(TaskRepresentation taskRepresentation)
+    {
+        if (!selectedTask.contains(taskRepresentation))
+        {
+            TaskDetailsFragment.with(getActivity()).task(taskRepresentation).bindFragmentTag(getTag()).back(true)
+                    .display();
+            selectedTask.clear();
+            selectedTask.add(taskRepresentation);
+        }
+        else
+        {
+            selectedTask.clear();
+            selectedView = null;
+            setLockRightMenu(true);
+        }
     }
 
     // ///////////////////////////////////////////////////////////////////////////
@@ -136,11 +173,15 @@ public class TasksFragment extends TasksFoundationFragment
         return null;
     }
 
-    public void setFilterBundle(Bundle filterBundle)
+    public void setFilterBundle(Bundle filterBundle, boolean refresh)
     {
         bundle.putAll(filterBundle);
         updateParameters(bundle);
-        refresh();
+
+        if ((adapter == null || adapter.isEmpty()) || refresh)
+        {
+            refresh();
+        }
     }
 
     // ///////////////////////////////////////////////////////////////////////////
@@ -163,8 +204,17 @@ public class TasksFragment extends TasksFoundationFragment
             case R.id.tasks_menu_filter:
                 if (getActivity() instanceof MainActivity)
                 {
-                    ((MainActivity) getActivity()).setRightMenuVisibility(!((MainActivity) getActivity())
-                            .isRightMenuVisible());
+                    if (DisplayUtils.hasCentralPane(getActivity()))
+                    {
+                        ((MainActivity) getActivity())
+                                .setCentralLefttMenuVisibility(!((MainActivity) getActivity()).isCentralMenuVisible());
+                    }
+                    else
+                    {
+                        ((MainActivity) getActivity())
+                                .setRightMenuVisibility(!((MainActivity) getActivity()).isCentralMenuVisible());
+                    }
+
                 }
                 return true;
             case R.id.tasks_menu_process:

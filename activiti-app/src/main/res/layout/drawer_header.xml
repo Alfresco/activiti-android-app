@@ -62,7 +62,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="8dp"
                 android:text="Jean Marie Pascal"
-                android:textColor="#ffffff"
+                android:textColor="@color/secondary_background"
                 android:textSize="14sp"
                 android:textStyle="bold"
                 />
@@ -74,7 +74,7 @@
                 android:layout_marginLeft="8dp"
                 android:layout_marginTop="5dp"
                 android:text="jeanmarie.pascal@alfresco.com"
-                android:textColor="#ffffff"
+                android:textColor="@color/secondary_background"
                 android:textSize="14sp"
                 android:textStyle="normal"
                 />

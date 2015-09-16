@@ -119,6 +119,8 @@ public class ActivitiAccount implements Serializable
 
     private String tenantId;
 
+    private boolean isAdmin = false;
+
     // ///////////////////////////////////////////////////////////////////////////
     // CONSTRUCTORS
     // ///////////////////////////////////////////////////////////////////////////
@@ -141,6 +143,7 @@ public class ActivitiAccount implements Serializable
         this.serverUrl = serverUrl;
         this.serverType = serverType;
         this.serverEdition = serverEdition;
+        this.serverVersion = serverVersion;
         this.fullname = fullname;
         this.tenantId = tenantId;
     }
@@ -219,5 +222,15 @@ public class ActivitiAccount implements Serializable
     public String getTenantId()
     {
         return tenantId;
+    }
+
+    public boolean isAdmin()
+    {
+        return isAdmin;
+    }
+
+    public void setIsAdmin(boolean isAdmin)
+    {
+        this.isAdmin = isAdmin;
     }
 }

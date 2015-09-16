@@ -62,6 +62,12 @@ public class ProcessService extends ActivitiService
         return String.format(restManager.endpoint.concat("/workflow/#/process/%s"), processId);
     }
 
+    public String getProcessDiagramUrl(String processId, String tenantId)
+    {
+        return String.format(restManager.endpoint.concat("/api/runtime/process-instances/%1s/diagram?tenantId=%2s"),
+                processId, tenantId);
+    }
+
     // ///////////////////////////////////////////////////////////////////
     // START
     // ///////////////////////////////////////////////////////////////////

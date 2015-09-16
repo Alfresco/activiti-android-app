@@ -48,9 +48,11 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.activiti.android.app.ActivitiVersionNumber;
 import com.activiti.android.app.R;
 import com.activiti.android.app.activity.MainActivity;
 import com.activiti.android.app.fragments.comment.CommentsFragment;
+import com.activiti.android.app.fragments.process.ProcessDiagram;
 import com.activiti.android.app.fragments.process.ProcessesFragment;
 import com.activiti.android.app.fragments.task.TaskDetailsFragment;
 import com.activiti.android.platform.EventBusManager;
@@ -89,8 +91,6 @@ import com.afollestad.materialdialogs.MaterialDialog;
  */
 public class ProcessDetailsFoundationFragment extends AbstractDetailsFragment
 {
-    protected static final int TASKS_MAX_ITEMS = 15;
-
     public static final String TAG = ProcessDetailsFoundationFragment.class.getName();
 
     public static final String ARGUMENT_PROCESS_ID = "processId";
@@ -265,7 +265,7 @@ public class ProcessDetailsFoundationFragment extends AbstractDetailsFragment
             }
         });
 
-        if (getVersionNumber() >= 122)
+        if (getVersionNumber() >= ActivitiVersionNumber.VERSION_1_2_2)
         {
             // Retrieve Field Contents
             getAPI().getProcessService().getFieldContents(processId, new Callback<ProcessContentsRepresentation>()
@@ -403,7 +403,30 @@ public class ProcessDetailsFoundationFragment extends AbstractDetailsFragment
         if (isEnded)
         {
             displayCompletedProperties(processInstanceRepresentation);
-            hide(R.id.process_action_cancel_container);
+            Button delete = (Button) viewById(R.id.process_action_cancel);
+            delete.setText(R.string.process_action_delete);
+            delete.setOnClickListener(new View.OnClickListener()
+            {
+                @Override
+                public void onClick(View v)
+                {
+                    MaterialDialog.Builder builder = new MaterialDialog.Builder(getActivity())
+                            .title(R.string.process_popup_delete_title)
+                            .content(
+                                    String.format(getString(R.string.process_popup_delete_description),
+                                            processInstanceRepresentation.getName()))
+                            .positiveText(R.string.general_action_confirm).negativeText(R.string.general_action_cancel)
+                            .callback(new MaterialDialog.ButtonCallback()
+                            {
+                                @Override
+                                public void onPositive(MaterialDialog dialog)
+                                {
+                                    cancelProcess();
+                                }
+                            });
+                    builder.show();
+                }
+            });
         }
         else
         {
@@ -415,14 +438,6 @@ public class ProcessDetailsFoundationFragment extends AbstractDetailsFragment
                 {
                     MaterialDialog.Builder builder = new MaterialDialog.Builder(getActivity())
                             .title(R.string.process_popup_cancel_title)
-                            .cancelListener(new DialogInterface.OnCancelListener()
-                            {
-                                @Override
-                                public void onCancel(DialogInterface dialog)
-                                {
-                                    dismiss();
-                                }
-                            })
                             .content(
                                     String.format(getString(R.string.process_popup_cancel_description),
                                             processInstanceRepresentation.getName()))
@@ -474,7 +489,7 @@ public class ProcessDetailsFoundationFragment extends AbstractDetailsFragment
     {
         show(R.id.details_fieldcontents_card);
         if (processContents == null || (processContents != null && processContents.isEmpty())
-                || getVersionNumber() < 122)
+                || getVersionNumber() < ActivitiVersionNumber.VERSION_1_2_2)
         {
             hide(R.id.details_fieldcontents_card);
             return;
@@ -723,6 +738,27 @@ public class ProcessDetailsFoundationFragment extends AbstractDetailsFragment
                         processInstanceRepresentation.getName(), getAPI().getProcessService().getShareUrl(processId));
             }
         });
+
+        // Admin feature
+        // Display Process diagram
+        if (getAccount().isAdmin() && !isEnded)
+        {
+            show(R.id.process_action_show_diagram);
+            viewById(R.id.process_action_show_diagram).setOnClickListener(new View.OnClickListener()
+            {
+                @Override
+                public void onClick(View v)
+                {
+                    ProcessDiagram.with(getActivity()).processId(processInstanceRepresentation.getId())
+                            .tenantId(processInstanceRepresentation.getTenantId())
+                            .processName(processInstanceRepresentation.getName()).display();
+                }
+            });
+        }
+        else
+        {
+            hide(R.id.process_action_show_diagram);
+        }
 
         if (isEnded)
         {

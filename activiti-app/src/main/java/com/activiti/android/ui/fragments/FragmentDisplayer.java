@@ -35,14 +35,8 @@ import com.activiti.android.ui.utils.DisplayUtils;
 
 public final class FragmentDisplayer
 {
-    public static final int PANEL_LEFT = -100;
-
-    public static final int PANEL_CENTRAL = -200;
-
-    public static final int PANEL_DIALOG = -300;
-
     // ///////////////////////////////////////////////////////////////////////////
-    // BUILDER
+    // CONSTANTS
     // ///////////////////////////////////////////////////////////////////////////
     public static final int[] SLIDE = new int[] { R.anim.anim_slide_in_right, R.anim.anim_slide_out_left,
             R.anim.anim_slide_in_left, R.anim.anim_slide_out_right };
@@ -60,6 +54,12 @@ public final class FragmentDisplayer
     protected static final int ACTION_REMOVE = 2;
 
     protected static final int ACTION_CLEAN = 3;
+
+    public static final int PANEL_LEFT = -100;
+
+    public static final int PANEL_CENTRAL = -200;
+
+    public static final int PANEL_DIALOG = -300;
 
     // ///////////////////////////////////////////////////////////////////////////
     // CONSTANTS
@@ -110,6 +110,8 @@ public final class FragmentDisplayer
 
         private boolean backStack = true;
 
+        private int[] animation = SLIDE;
+
         private String tag;
 
         private boolean hasAnimation = true;
@@ -124,7 +126,7 @@ public final class FragmentDisplayer
         public Creator(AlfrescoFragmentBuilder builder)
         {
             this();
-            this.activity = new WeakReference<FragmentActivity>(builder.getActivity());
+            this.activity = new WeakReference<>(builder.getActivity());
             this.builder = builder;
             this.action = ACTION_REPLACE;
             this.backStack = builder.hasBackStack();
@@ -133,7 +135,7 @@ public final class FragmentDisplayer
         public Creator(FragmentActivity activity)
         {
             this();
-            this.activity = new WeakReference<FragmentActivity>(activity);
+            this.activity = new WeakReference<>(activity);
         }
 
         // ///////////////////////////////////////////////////////////////////////////
@@ -151,8 +153,6 @@ public final class FragmentDisplayer
             this.action = ACTION_ADD;
             return this;
         }
-
-        private int[] animation = SLIDE;
 
         public Creator replace(Fragment frag)
         {

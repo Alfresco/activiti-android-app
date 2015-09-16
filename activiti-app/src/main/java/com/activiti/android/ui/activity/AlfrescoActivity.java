@@ -20,6 +20,10 @@
 
 package com.activiti.android.ui.activity;
 
+import retrofit.Callback;
+import retrofit.RetrofitError;
+import retrofit.client.Response;
+
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
@@ -142,6 +146,31 @@ public abstract class AlfrescoActivity extends AppCompatActivity
 
         // Refresh Adapter
         AppInstancesFragment.syncAdapters(this);
+
+        // Do it for retrieving the account cached version
+        account = ActivitiAccountManager.getInstance(this).getCurrentAccount();
+        checkIsAdmin();
+    }
+
+    // ///////////////////////////////////////////////////////////////////////////
+    // USER
+    // ///////////////////////////////////////////////////////////////////////////
+    public void checkIsAdmin()
+    {
+        getAPI().getUserGroupService().isAdmin(new Callback<Response>()
+        {
+            @Override
+            public void success(Response response, Response response2)
+            {
+                account.setIsAdmin(true);
+            }
+
+            @Override
+            public void failure(RetrofitError error)
+            {
+                account.setIsAdmin(false);
+            }
+        });
     }
 
     // ////////////////////////////////////////////////////////

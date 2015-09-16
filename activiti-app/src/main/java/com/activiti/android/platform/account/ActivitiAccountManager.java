@@ -52,6 +52,8 @@ public class ActivitiAccountManager extends Manager
 
     protected Integer accountsSize;
 
+    protected Map<Long, ActivitiAccount> accountIndex = new HashMap<>(0);
+
     protected ActivitiAccountManager(Context context)
     {
         super(context);
@@ -85,7 +87,7 @@ public class ActivitiAccountManager extends Manager
         {
             AccountManager mAccountManager = AccountManager.get(context);
             Account[] accountMs = mAccountManager.getAccountsByType(ActivitiAccount.ACCOUNT_TYPE);
-            accounts = new ArrayList<ActivitiAccount>(accountMs.length);
+            accounts = new ArrayList<>(accountMs.length);
             for (Account account : accountMs)
             {
                 if (mAccountManager.getUserData(account, ActivitiAccount.ACCOUNT_ID) != null)
@@ -143,7 +145,12 @@ public class ActivitiAccountManager extends Manager
 
     public ActivitiAccount getCurrentAccount()
     {
-        return AccountsPreferences.getDefaultAccount(appContext);
+        long id = AccountsPreferences.getCurrentAccountId(appContext);
+        ActivitiAccount acc = accountIndex.containsKey(id) ? accountIndex.get(id) : AccountsPreferences
+                .getDefaultAccount(appContext);
+        if (acc == null) { return null; }
+        accountIndex.put(acc.getId(), acc);
+        return acc;
     }
 
     public LightUserRepresentation getUser()

@@ -45,7 +45,7 @@
 
 
         <include
-            layout="@layout/panel_left"
+            layout="@layout/activity_panel_left"
             android:layout_width="fill_parent"
             android:layout_height="fill_parent" />
 

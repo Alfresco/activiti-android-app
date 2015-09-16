@@ -72,6 +72,8 @@ public class AbstractDetailsFragment extends AlfrescoFragment
 {
     protected static final int SECTION_MAX_ITEMS = 3;
 
+    protected static final int TASKS_MAX_ITEMS = 15;
+
     protected ProcessInstanceRepresentation processInstanceRepresentation;
 
     protected TaskRepresentation taskRepresentation;

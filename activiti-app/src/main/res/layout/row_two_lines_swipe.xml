@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
   ~  Copyright (C) 2005-2015 Alfresco Software Limited.
   ~
   ~ This file is part of Alfresco Activiti Mobile for Android.
@@ -20,39 +19,38 @@
   -->
 
 <LinearLayout
-    android:id="@+id/button_container"
     xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/button_container"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
     <com.daimajia.swipe.SwipeLayout
         android:id="@+id/swipe_layout"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        >
+        android:layout_height="wrap_content">
 
         <LinearLayout
-            android:background="@color/primary"
             android:id="@+id/bottom_wrapper"
             android:layout_width="wrap_content"
-            android:weightSum="1"
             android:layout_height="match_parent"
-            android:orientation="horizontal">
+            android:background="@color/primary"
+            android:orientation="horizontal"
+            android:weightSum="1">
             <!--What you want to show-->
 
         </LinearLayout>
 
 
         <LinearLayout
-            android:background="#ffffff"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:background="#ffffff"
             android:orientation="vertical">
 
             <include
                 layout="@layout/row_two_lines"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"/>
+                android:layout_height="wrap_content" />
 
         </LinearLayout>
 

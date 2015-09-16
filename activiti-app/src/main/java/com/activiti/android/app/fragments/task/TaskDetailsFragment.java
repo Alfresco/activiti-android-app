@@ -25,6 +25,7 @@ import java.util.Map;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
+import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -33,12 +34,16 @@ import android.view.View;
 import com.activiti.android.app.R;
 import com.activiti.android.app.activity.MainActivity;
 import com.activiti.android.app.fragments.process.ProcessDetailsFragment;
+import com.activiti.android.platform.event.CreateTaskEvent;
+import com.activiti.android.platform.intent.IntentUtils;
 import com.activiti.android.platform.provider.transfer.ContentTransferEvent;
 import com.activiti.android.sdk.model.runtime.ParcelTask;
 import com.activiti.android.ui.fragments.FragmentDisplayer;
-import com.activiti.android.ui.fragments.builder.AlfrescoFragmentBuilder;
+import com.activiti.android.ui.fragments.builder.LeafFragmentBuilder;
 import com.activiti.android.ui.fragments.comment.FragmentWithComments;
 import com.activiti.android.ui.fragments.task.TaskDetailsFoundationFragment;
+import com.activiti.android.ui.utils.DisplayUtils;
+import com.activiti.android.ui.utils.UIUtils;
 import com.activiti.client.api.model.runtime.TaskRepresentation;
 import com.squareup.otto.Subscribe;
 
@@ -89,6 +94,16 @@ public class TaskDetailsFragment extends TaskDetailsFoundationFragment implement
     {
         super.onActivityCreated(savedInstanceState);
 
+        onParentTaskListener = new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View v)
+            {
+                TaskDetailsFragment.with(getActivity()).taskId(taskRepresentation.getParentTaskId()).back(true)
+                        .display();
+            }
+        };
+
         onProcessListener = new View.OnClickListener()
         {
             @Override
@@ -97,6 +112,14 @@ public class TaskDetailsFragment extends TaskDetailsFoundationFragment implement
                 ProcessDetailsFragment.with(getActivity()).processId(processInstanceRepresentation.getId()).display();
             }
         };
+    }
+
+    @Override
+    public void onStop()
+    {
+        super.onStop();
+        getToolbar().getMenu().clear();
+        UIUtils.setTitle(getActivity(), "", "", true);
     }
 
     // ///////////////////////////////////////////////////////////////////////////
@@ -108,8 +131,26 @@ public class TaskDetailsFragment extends TaskDetailsFoundationFragment implement
         super.onCreateOptionsMenu(menu, inflater);
         if (taskRepresentation != null)
         {
-            menu.clear();
-            inflater.inflate(R.menu.process_details, menu);
+            if (!DisplayUtils.hasCentralPane(getActivity()))
+            {
+                menu.clear();
+                inflater.inflate(R.menu.task_details, menu);
+            }
+            else
+            {
+                getToolbar().getMenu().clear();
+                getToolbar().inflateMenu(R.menu.task_details);
+                // Set an OnMenuItemClickListener to handle menu item clicks
+                getToolbar().setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener()
+                {
+                    @Override
+                    public boolean onMenuItemClick(MenuItem item)
+                    {
+                        return onOptionsItemSelected(item);
+                    }
+                });
+
+            }
             this.menu = menu;
         }
     }
@@ -120,11 +161,15 @@ public class TaskDetailsFragment extends TaskDetailsFoundationFragment implement
         int id = item.getItemId();
         switch (id)
         {
+            case R.id.task_action_share_link:
+                IntentUtils.actionShareLink(this, taskRepresentation.getName(),
+                        getAPI().getTaskService().getShareUrl(taskId));
+                return true;
             case R.id.display_comments:
                 if (getActivity() instanceof MainActivity)
                 {
-                    ((MainActivity) getActivity()).setRightMenuVisibility(!((MainActivity) getActivity())
-                            .isRightMenuVisible());
+                    ((MainActivity) getActivity())
+                            .setRightMenuVisibility(!((MainActivity) getActivity()).isRightMenuVisible());
                 }
                 return true;
             default:
@@ -154,6 +199,16 @@ public class TaskDetailsFragment extends TaskDetailsFoundationFragment implement
         super.onContentTransfer(event);
     }
 
+    @Subscribe
+    public void onTaskCreated(CreateTaskEvent event)
+    {
+        if (event.hasException) { return; }
+        if (event.taskId != null && event.taskId.equals(taskRepresentation.getId()))
+        {
+            requestChecklist();
+        }
+    }
+
     // ///////////////////////////////////////////////////////////////////////////
     // BUILDER
     // ///////////////////////////////////////////////////////////////////////////
@@ -162,7 +217,7 @@ public class TaskDetailsFragment extends TaskDetailsFoundationFragment implement
         return new Builder(activity);
     }
 
-    public static class Builder extends AlfrescoFragmentBuilder
+    public static class Builder extends LeafFragmentBuilder
     {
         // ///////////////////////////////////////////////////////////////////////////
         // CONSTRUCTORS

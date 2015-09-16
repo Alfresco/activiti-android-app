@@ -30,7 +30,7 @@ android {
 
         minSdkVersion 19
         targetSdkVersion 22
-        versionCode 1
+        versionCode 10
         versionName VERSION_NAME
 
         manifestPlaceholders = [PROVIDER_AUTHORITY: PROVIDER_AUTHORITY]
@@ -141,11 +141,11 @@ dependencies {
     compile project(":activiti-sdk")
 
     //Support
-    compile 'com.android.support:design:22.2.0'
-    compile 'com.android.support:support-v4:22.2.0'
-    compile 'com.android.support:appcompat-v7:22.2.0'
-    compile 'com.android.support:cardview-v7:22.2.0'
-    compile 'com.android.support:recyclerview-v7:22.2.0'
+    compile 'com.android.support:design:22.2.1'
+    compile 'com.android.support:support-v4:22.2.1'
+    compile 'com.android.support:appcompat-v7:22.2.1'
+    compile 'com.android.support:cardview-v7:22.2.1'
+    compile 'com.android.support:recyclerview-v7:22.2.1'
 
     //Square
     compile 'com.squareup.retrofit:retrofit:1.9.0'
@@ -156,13 +156,15 @@ dependencies {
     compile 'com.squareup.picasso:picasso:2.5.2'
 
     //3rd Party Lib
+    compile 'com.cocosw:bottomsheet:1.1.1@aar'
     compile 'com.mattprecious.telescope:telescope:1.4.0@aar'
     compile 'com.rengwuxian.materialedittext:library:2.1.4'
-    compile 'com.melnykov:floatingactionbutton:1.3.0'
+    compile 'com.github.clans:fab:1.5.5'
     compile 'com.afollestad:material-dialogs:0.7.5.5'
     compile 'com.makeramen:roundedimageview:2.1.0'
     compile 'me.relex:circleindicator:1.1.4@aar'
     compile "com.daimajia.swipelayout:library:1.2.0@aar"
+    compile 'it.sephiroth.android.library.imagezoom:imagezoom:1.0.5'
     compile('com.mikepenz:aboutlibraries:5.0.2@aar') {
         transitive = true
     }

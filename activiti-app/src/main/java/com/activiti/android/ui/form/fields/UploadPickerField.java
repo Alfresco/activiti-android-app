@@ -36,6 +36,7 @@ import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.activiti.android.app.ActivitiVersionNumber;
 import com.activiti.android.app.R;
 import com.activiti.android.platform.EventBusManager;
 import com.activiti.android.platform.integration.alfresco.AlfrescoIntegrator;
@@ -81,7 +82,7 @@ public class UploadPickerField extends BaseField implements MultiValueField
                     && Boolean.parseBoolean((String) data.getParams().get("multiple"));
             isLink = data.getParams().get("link") != null
                     && Boolean.parseBoolean((String) data.getParams().get("link"));
-            linkSupported = getFormManager().getVersionNumber() >= 122 && isLink;
+            linkSupported = getFormManager().getVersionNumber() >= ActivitiVersionNumber.VERSION_1_2_2 && isLink;
         }
     }
 
@@ -371,7 +372,7 @@ public class UploadPickerField extends BaseField implements MultiValueField
         tv.setError(null);
 
         // Link is unsupported until 1.2.2
-        if (isLink && getFormManager().getVersionNumber() < 122)
+        if (isLink && getFormManager().getVersionNumber() < ActivitiVersionNumber.VERSION_1_2_2)
         {
             tv.setIconRight((Drawable) null);
             enablePicker(false);

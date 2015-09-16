@@ -35,13 +35,13 @@ public abstract class LeafFragmentBuilder extends AlfrescoFragmentBuilder
     public LeafFragmentBuilder(FragmentActivity activity)
     {
         super(activity);
-        this.hasBackStack = DisplayUtils.hasCentralPane(activity) ? false : true;
+        this.hasBackStack = !DisplayUtils.hasCentralPane(activity);
     }
 
     public LeafFragmentBuilder(FragmentActivity activity, Map<String, Object> configuration)
     {
         super(activity, configuration);
-        this.hasBackStack = DisplayUtils.hasCentralPane(activity) ? false : true;
+        this.hasBackStack = !DisplayUtils.hasCentralPane(activity);
     }
 
     // ///////////////////////////////////////////////////////////////////////////
@@ -51,7 +51,7 @@ public abstract class LeafFragmentBuilder extends AlfrescoFragmentBuilder
     public void display()
     {
         // Clear Central Panel ?
-        FragmentDisplayer.clearCentralPane(getActivity());
+        // FragmentDisplayer.clearCentralPane(getActivity());
 
         // Display Fragment
         FragmentDisplayer.load(this).back(hasBackStack).into(FragmentDisplayer.PANEL_CENTRAL);

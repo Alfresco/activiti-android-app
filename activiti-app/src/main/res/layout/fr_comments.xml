@@ -29,10 +29,12 @@
     <TextView
         android:id="@+id/process_details_name"
         style="@style/ActivitiTheme.Text.Primary.Details"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:minHeight="@dimen/one_list_minHeight"
+        android:minHeight="?attr/actionBarSize"
+        android:background="@color/primary"
         android:padding="@dimen/d_8"
+        android:textColor="@color/secondary_background"
         android:text="Comments" />
 
     <View

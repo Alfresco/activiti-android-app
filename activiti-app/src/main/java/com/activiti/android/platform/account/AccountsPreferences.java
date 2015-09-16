@@ -39,6 +39,12 @@ public final class AccountsPreferences
     {
     }
 
+    public static long getCurrentAccountId(Context context)
+    {
+        SharedPreferences settings = context.getSharedPreferences(ACCOUNT_PREFS, 0);
+        return settings.getLong(ACCOUNT_DEFAULT, -1);
+    }
+
     public static ActivitiAccount getDefaultAccount(Context context)
     {
         // Default account to load
