@@ -241,7 +241,7 @@ public class TaskFiltersFragment extends CommonTaskFilterFragment
 
     private void sendInfoToTasks()
     {
-        frag.setFilterBundle(bundle);
+        frag.setFilterBundle(bundle, true);
     }
 
     // ///////////////////////////////////////////////////////////////////////////

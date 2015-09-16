@@ -83,7 +83,7 @@ public class TaskChecklistFragment extends TaskCheklistFoundationFragment
     {
         resetRightMenu();
         TaskRepresentation taskRepresentation = (TaskRepresentation) l.getItemAtPosition(position);
-        TaskDetailsFragment.with(getActivity()).task(taskRepresentation).bindFragmentTag(getTag()).display();
+        TaskDetailsFragment.with(getActivity()).task(taskRepresentation).bindFragmentTag(getTag()).back(true).display();
     }
 
     // ///////////////////////////////////////////////////////////////////////////

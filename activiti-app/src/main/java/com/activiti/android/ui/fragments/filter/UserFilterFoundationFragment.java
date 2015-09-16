@@ -41,6 +41,7 @@ import com.activiti.android.platform.utils.BundleUtils;
 import com.activiti.android.ui.fragments.FragmentDisplayer;
 import com.activiti.android.ui.fragments.base.BasePagingGridFragment;
 import com.activiti.android.ui.fragments.task.filter.TaskFilterPropertiesFragment;
+import com.activiti.android.ui.utils.DisplayUtils;
 import com.activiti.client.api.model.common.ResultListDataRepresentation;
 import com.activiti.client.api.model.runtime.UserTaskFilterRepresentation;
 import com.activiti.client.api.model.runtime.UserTaskFiltersRepresentation;
@@ -121,7 +122,9 @@ public class UserFilterFoundationFragment extends BasePagingGridFragment
                 FragmentDisplayer.with(getActivity())
                         .replace(TaskFilterPropertiesFragment
                                 .newInstanceByTemplate(getArguments() != null ? getArguments() : new Bundle()))
-                        .back(true).animate(null).into(R.id.right_drawer);
+                        .back(true).animate(null).into(DisplayUtils.hasCentralPane(getActivity())
+                                ? R.id.central_left_drawer : R.id.right_drawer);
+
             }
         });
 
@@ -196,7 +199,7 @@ public class UserFilterFoundationFragment extends BasePagingGridFragment
         return builder.toString();
     }
 
-    public void refreshTasks()
+    public void refreshTasks(boolean refresh)
     {
     }
 

@@ -21,6 +21,7 @@
 package com.activiti.android.ui.fragments.task;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import retrofit.Callback;
 import retrofit.RetrofitError;
@@ -69,6 +70,8 @@ public class TasksFoundationFragment extends BasePagingGridFragment implements R
     protected Long page;
 
     protected Long size;
+
+    protected List<TaskRepresentation> selectedTask = new ArrayList<>();
 
     // ///////////////////////////////////////////////////////////////////////////
     // CONSTRUCTORS & HELPERS
@@ -159,7 +162,8 @@ public class TasksFoundationFragment extends BasePagingGridFragment implements R
     @Override
     protected BaseAdapter onAdapterCreation()
     {
-        return new TaskAdapter(getActivity(), R.layout.row_three_lines_caption, new ArrayList<TaskRepresentation>(0));
+        return new TaskAdapter(getActivity(), R.layout.row_four_lines, new ArrayList<TaskRepresentation>(0),
+                selectedTask);
     }
 
     protected Callback<TasksRepresentation> callBack = new Callback<TasksRepresentation>()

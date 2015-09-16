@@ -64,7 +64,9 @@ public class MainActivity extends AlfrescoActivity
 
     protected DrawerLayout mDrawerLayout;
 
-    protected ViewGroup mLeftDrawer, mRightDrawer;
+    protected DrawerLayout mCentralDrawerLayout;
+
+    protected ViewGroup mLeftDrawer, mRightDrawer, mCentralLeftDrawer;
 
     protected Toolbar toolbar;
 
@@ -113,6 +115,7 @@ public class MainActivity extends AlfrescoActivity
     {
         super.onStart();
 
+        // Configure
         if (mDrawerLayout == null || mLeftDrawer == null || mDrawerToggle == null)
         {
             // Configure navigation drawer
@@ -150,6 +153,13 @@ public class MainActivity extends AlfrescoActivity
                 }
             };
             mDrawerLayout.setDrawerListener(mDrawerToggle);
+        }
+
+        if (DisplayUtils.hasCentralPane(this) && mCentralDrawerLayout == null)
+        {
+            mCentralDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout_central);
+            mCentralLeftDrawer = (ViewGroup) findViewById(R.id.central_left_drawer);
+            mCentralDrawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
         }
 
         if (!isLeftMenuVisible() && getSupportFragmentManager().getBackStackEntryCount() == 0)
@@ -254,6 +264,21 @@ public class MainActivity extends AlfrescoActivity
         mDrawerLayout.openDrawer(mLeftDrawer);
     }
 
+    public void setCentralLefttMenuVisibility(boolean visible)
+    {
+        if (DisplayUtils.hasCentralPane(this))
+        {
+            if (visible)
+            {
+                mCentralDrawerLayout.openDrawer(mCentralLeftDrawer);
+            }
+            else
+            {
+                mCentralDrawerLayout.closeDrawer(mCentralLeftDrawer);
+            }
+        }
+    }
+
     public void setRightMenuVisibility(boolean visible)
     {
         if (visible)
@@ -281,9 +306,20 @@ public class MainActivity extends AlfrescoActivity
         return mDrawerLayout.isDrawerOpen(mRightDrawer);
     }
 
+    public boolean isCentralMenuVisible()
+    {
+        if (DisplayUtils.hasCentralPane(this))
+        {
+            return mCentralDrawerLayout.isDrawerOpen(mCentralLeftDrawer);
+        }
+        else
+        {
+            return mDrawerLayout.isDrawerOpen(mRightDrawer);
+        }
+    }
+
     public void lockSlidingMenu()
     {
-        // getSupportActionBar().setDisplayHomeAsUpEnabled(false);
         getSupportActionBar().setHomeButtonEnabled(false);
         if (mDrawerLayout != null)
         {
@@ -306,7 +342,6 @@ public class MainActivity extends AlfrescoActivity
 
     public void unlockSlidingMenu()
     {
-        // getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setHomeButtonEnabled(true);
         mDrawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
     }

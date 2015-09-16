@@ -21,7 +21,6 @@
 package com.activiti.android.ui.fragments.base;
 
 import android.os.Bundle;
-import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
@@ -79,10 +78,6 @@ public abstract class BaseGridFragment extends AlfrescoFragment implements Refre
 
     protected FloatingActionButton fab;
 
-    protected DrawerLayout mDrawerLayout;
-
-    protected ViewGroup mRightDrawer;
-
     /** Indicator to retain if everything has been loaded */
     protected boolean isFullLoad = Boolean.FALSE;
 
@@ -139,6 +134,11 @@ public abstract class BaseGridFragment extends AlfrescoFragment implements Refre
             performRequest();
         }
         else if (retrieveDataOnCreation && adapter != null)
+        {
+            setListShown(true);
+            gv.setAdapter(adapter);
+        }
+        else if (!retrieveDataOnCreation && adapter != null)
         {
             setListShown(true);
             gv.setAdapter(adapter);

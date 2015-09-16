@@ -220,5 +220,7 @@
     <dimen name="d_8">8dp</dimen>
     <dimen name="d_4">4dp</dimen>
 
+    <dimen name="inline_list_icon_size">12sp</dimen>
+
 
 </resources>

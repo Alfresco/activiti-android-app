@@ -181,7 +181,7 @@ public class TaskFormFoundationFragment extends AlfrescoFragment implements Date
     public void onResume()
     {
         super.onResume();
-        UIUtils.setTitle(getActivity(), task.name, getString(R.string.form_message_title));
+        UIUtils.setTitle(getActivity(), task.name, getString(R.string.form_message_title), true);
     }
 
     @Override

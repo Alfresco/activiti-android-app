@@ -35,7 +35,7 @@ import com.activiti.android.ui.fragments.FragmentDisplayer;
 
 /**
  * Goal is to createNewTask a Fragment based on configuration provided.
- * 
+ *
  * @author jpascal
  */
 public abstract class AlfrescoFragmentBuilder
@@ -125,7 +125,7 @@ public abstract class AlfrescoFragmentBuilder
     public AlfrescoFragmentBuilder(FragmentActivity activity, Map<String, Object> configuration, Bundle b)
     {
         this.onClick = onDefaultClick;
-        this.activity = new WeakReference<FragmentActivity>(activity);
+        this.activity = new WeakReference<>(activity);
         this.configuration = configuration;
         this.extraConfiguration = b;
     }

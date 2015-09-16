@@ -24,45 +24,77 @@ import java.util.List;
 
 import android.app.Activity;
 import android.content.Context;
+import android.graphics.Typeface;
+import android.text.Html;
 import android.text.TextUtils;
+import android.view.View;
 
 import com.activiti.android.app.R;
 import com.activiti.android.ui.fragments.base.BaseListAdapter;
-import com.activiti.android.ui.holder.ThreeLinesViewHolder;
+import com.activiti.android.ui.holder.FourLinesViewHolder;
 import com.activiti.android.ui.utils.Formatter;
 import com.activiti.client.api.model.runtime.TaskRepresentation;
 
 /**
  * @author Jean Marie Pascal
  */
-public class TaskAdapter extends BaseListAdapter<TaskRepresentation, ThreeLinesViewHolder>
+public class TaskAdapter extends BaseListAdapter<TaskRepresentation, FourLinesViewHolder>
 {
     protected Context context;
 
-    public TaskAdapter(Activity context, int textViewResourceId, List<TaskRepresentation> listItems)
+    protected List<TaskRepresentation> selectedTask;
+
+    protected Typeface tf;
+
+    public TaskAdapter(Activity context, int textViewResourceId, List<TaskRepresentation> listItems,
+            List<TaskRepresentation> selectedTask)
     {
         super(context, textViewResourceId, listItems);
         this.context = context;
-        this.vhClassName = ThreeLinesViewHolder.class.getName();
+        this.vhClassName = FourLinesViewHolder.class.getName();
+        this.selectedTask = selectedTask;
+
+        try
+        {
+            String fontPath = "fonts/glyphicons-halflings-regular.ttf";
+            tf = Typeface.createFromAsset(context.getAssets(), fontPath);
+        }
+        catch (Exception e)
+        {
+            // No icons available
+        }
     }
 
     @Override
-    protected void updateTopText(ThreeLinesViewHolder vh, TaskRepresentation item)
+    protected void updateTopText(FourLinesViewHolder vh, TaskRepresentation item)
     {
         vh.topText.setText(item.getName());
-        vh.topTextRight.setText(createRelativeDateInfo(getContext(), item));
-    }
+        vh.middleText.setText(createRelativeDateInfo(getContext(), item));
 
-    @Override
-    protected void updateBottomText(ThreeLinesViewHolder vh, TaskRepresentation item)
-    {
-        if (TextUtils.isEmpty(item.getDescription()))
+        if (selectedTask != null && selectedTask.contains(item))
         {
-            vh.middleText.setText(R.string.task_message_no_description);
+            ((View) vh.choose.getParent())
+                    .setBackgroundColor(getContext().getResources().getColor(R.color.secondary_background));
         }
         else
         {
-            vh.middleText.setText(item.getDescription());
+            ((View) vh.choose.getParent())
+                    .setBackgroundColor(getContext().getResources().getColor(android.R.color.transparent));
+        }
+    }
+
+    @Override
+    protected void updateBottomText(FourLinesViewHolder vh, TaskRepresentation item)
+    {
+
+        if (TextUtils.isEmpty(item.getDescription()))
+        {
+            vh.topTextRight.setVisibility(View.GONE);
+        }
+        else
+        {
+            vh.topTextRight.setVisibility(View.VISIBLE);
+            vh.topTextRight.setText(item.getDescription());
         }
 
         if (item.getAssignee() != null)
@@ -72,9 +104,20 @@ public class TaskAdapter extends BaseListAdapter<TaskRepresentation, ThreeLinesV
     }
 
     @Override
-    protected void updateIcon(ThreeLinesViewHolder vh, TaskRepresentation item)
+    protected void updateIcon(FourLinesViewHolder vh, TaskRepresentation item)
     {
-        // vh.icon.setImageDrawable(getContext().getResources().getDrawable(R.drawable.ic_action_gear));
+        if (tf != null)
+        {
+            vh.middleTextIcon.setText(Html.fromHtml("&#xe109"));
+            vh.middleTextIcon.setTypeface(tf);
+            vh.bottomTextIcon.setText(Html.fromHtml("&#xe008"));
+            vh.bottomTextIcon.setTypeface(tf);
+        }
+        else
+        {
+            vh.middleTextIcon.setVisibility(View.GONE);
+            vh.bottomTextIcon.setVisibility(View.GONE);
+        }
     }
 
     public static String createRelativeDateInfo(Context context, TaskRepresentation item)
@@ -91,8 +134,7 @@ public class TaskAdapter extends BaseListAdapter<TaskRepresentation, ThreeLinesV
 
     public static String createAssigneeInfo(Context context, TaskRepresentation item)
     {
-        if (item.getAssignee() != null) { return String.format(context.getString(R.string.task_message_assignee), item
-                .getAssignee().getFullname()); }
+        if (item.getAssignee() != null) { return item.getAssignee().getFullname(); }
         return "";
     }
 }

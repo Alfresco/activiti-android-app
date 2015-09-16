@@ -70,7 +70,8 @@ public class TaskCheklistFoundationFragment extends BasePagingGridFragment imple
     @Override
     protected BaseAdapter onAdapterCreation()
     {
-        return new TaskAdapter(getActivity(), R.layout.row_three_lines_caption, new ArrayList<TaskRepresentation>(0));
+        return new TaskAdapter(getActivity(), R.layout.row_three_lines_caption, new ArrayList<TaskRepresentation>(0),
+                null);
     }
 
     protected Callback<TasksRepresentation> callBack = new Callback<TasksRepresentation>()

@@ -34,7 +34,7 @@ import com.activiti.android.app.R;
 import com.activiti.android.platform.provider.transfer.ContentTransferSyncAdapter;
 import com.activiti.android.platform.provider.transfer.DownloadTransferEvent;
 import com.activiti.android.sdk.model.runtime.ParcelTask;
-import com.activiti.android.ui.fragments.builder.AlfrescoFragmentBuilder;
+import com.activiti.android.ui.fragments.builder.LeafFragmentBuilder;
 import com.activiti.android.ui.fragments.task.form.TaskFormFoundationFragment;
 import com.activiti.client.api.model.runtime.TaskRepresentation;
 import com.squareup.otto.Subscribe;
@@ -108,7 +108,7 @@ public class TaskFormFragment extends TaskFormFoundationFragment
         return new Builder(activity);
     }
 
-    public static class Builder extends AlfrescoFragmentBuilder
+    public static class Builder extends LeafFragmentBuilder
     {
         // ///////////////////////////////////////////////////////////////////////////
         // CONSTRUCTORS

@@ -34,6 +34,7 @@ import android.view.View;
 import com.activiti.android.app.R;
 import com.activiti.android.sdk.model.TaskState;
 import com.activiti.android.ui.fragments.builder.AlfrescoFragmentBuilder;
+import com.activiti.android.ui.utils.DisplayUtils;
 import com.activiti.client.api.constant.RequestConstant;
 import com.afollestad.materialdialogs.MaterialDialog;
 
@@ -139,7 +140,8 @@ public class TaskStateDialogFragment extends DialogFragment
         }
 
         final CommonTaskFilterFragment frag = (CommonTaskFilterFragment) getActivity().getSupportFragmentManager()
-                .findFragmentById(R.id.right_drawer);
+                .findFragmentById(
+                        DisplayUtils.hasCentralPane(getActivity()) ? R.id.central_left_drawer : R.id.right_drawer);
 
         return new MaterialDialog.Builder(getActivity()).title(R.string.task_filter_text)
                 .items(R.array.task_filter_state).cancelListener(new DialogInterface.OnCancelListener()

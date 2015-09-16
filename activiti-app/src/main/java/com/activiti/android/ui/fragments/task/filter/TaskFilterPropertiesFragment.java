@@ -124,7 +124,10 @@ public class TaskFilterPropertiesFragment extends CommonTaskFilterFragment
             appId = getLastAppId();
         }
 
-        setRootView(inflater.inflate(R.layout.fr_task_filter_edit, container, false));
+        if (getRootView() == null)
+        {
+            setRootView(inflater.inflate(R.layout.fr_task_filter_edit, container, false));
+        }
 
         return getRootView();
     }
@@ -348,7 +351,7 @@ public class TaskFilterPropertiesFragment extends CommonTaskFilterFragment
 
     private void sendInfoToTasks()
     {
-        frag.setFilterBundle(bundle);
+        frag.setFilterBundle(bundle, true);
     }
 
     // ///////////////////////////////////////////////////////////////////////////

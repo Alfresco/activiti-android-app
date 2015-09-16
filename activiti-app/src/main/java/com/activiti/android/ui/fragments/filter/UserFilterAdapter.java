@@ -41,6 +41,7 @@ import com.activiti.android.ui.fragments.FragmentDisplayer;
 import com.activiti.android.ui.fragments.base.BaseListAdapter;
 import com.activiti.android.ui.fragments.task.filter.TaskFilterPropertiesFragment;
 import com.activiti.android.ui.holder.SingleIconLineViewHolder;
+import com.activiti.android.ui.utils.DisplayUtils;
 import com.activiti.android.ui.utils.UIUtils;
 import com.activiti.client.api.model.runtime.UserTaskFilterRepresentation;
 import com.afollestad.materialdialogs.MaterialDialog;
@@ -191,7 +192,9 @@ public class UserFilterAdapter extends BaseListAdapter<UserTaskFilterRepresentat
                                 FragmentDisplayer.with(frRef.get().getActivity())
                                         .replace(TaskFilterPropertiesFragment.with(frRef.get().getActivity())
                                                 .appId(appId).userFilter(filterEdit).createFragment())
-                                        .back(true).animate(null).into(R.id.right_drawer);
+                                        .back(true).animate(null)
+                                        .into(DisplayUtils.hasCentralPane(frRef.get().getActivity())
+                                                ? R.id.central_left_drawer : R.id.right_drawer);
 
                                 break;
                         }
@@ -218,7 +221,7 @@ public class UserFilterAdapter extends BaseListAdapter<UserTaskFilterRepresentat
                 {
                     selectedItems.clear();
                     selectedItems.add(item);
-                    frRef.get().refreshTasks();
+                    frRef.get().refreshTasks(false);
                 }
             }
         }

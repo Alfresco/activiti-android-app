@@ -58,7 +58,7 @@
             android:background="@color/secondary_background_translucent" />
 
         <include
-            layout="@layout/panel_left"
+            layout="@layout/activity_panel_left"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
 

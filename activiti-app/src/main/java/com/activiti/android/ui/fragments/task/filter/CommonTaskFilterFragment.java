@@ -100,7 +100,7 @@ public abstract class CommonTaskFilterFragment extends AlfrescoFragment
 
     private void sendInfoToTasks()
     {
-        frag.setFilterBundle(bundle);
+        frag.setFilterBundle(bundle, true);
     }
 
     // ///////////////////////////////////////////////////////////////////////////

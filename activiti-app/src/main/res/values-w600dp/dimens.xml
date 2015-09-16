@@ -1,4 +1,3 @@
-<?xml version="1.0" encoding="utf-8"?>
 <!--
   ~  Copyright (C) 2005-2015 Alfresco Software Limited.
   ~
@@ -19,22 +18,10 @@
   ~
   -->
 
-<LinearLayout
-    android:id="@+id/left_panel"
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:layout_gravity="center"
-    android:gravity="center"
-    android:orientation="vertical"
-    android:visibility="visible">
+<resources>
+    <!-- PANELS -->
+    <bool name="hasTabletLayout">true</bool>
+    <item name="weight_left_panel" format="float" type="dimen">0.65</item>
+    <item name="weight_right_panel" format="float" type="dimen">0.35</item>
 
-    <LinearLayout
-        android:id="@+id/left_pane_body"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:gravity="center"
-        android:orientation="vertical"
-        />
-
-</LinearLayout>
+</resources>

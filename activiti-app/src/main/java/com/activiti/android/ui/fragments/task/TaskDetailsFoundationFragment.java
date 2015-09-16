@@ -95,9 +95,9 @@ import com.daimajia.swipe.SwipeLayout;
 /**
  * Created by jpascal on 07/03/2015.
  */
-public class TaskDetailsFoundationFragment extends AbstractDetailsFragment implements onPickDateFragment,
-        UserPickerFragment.onPickAuthorityFragment, EditTextDialogFragment.onEditTextFragment,
-        ActivitiUserPickerFragment.UserEmailPickerCallback
+public class TaskDetailsFoundationFragment extends AbstractDetailsFragment
+        implements onPickDateFragment, UserPickerFragment.onPickAuthorityFragment,
+        EditTextDialogFragment.onEditTextFragment, ActivitiUserPickerFragment.UserEmailPickerCallback
 {
     public static final String TAG = TaskDetailsFoundationFragment.class.getName();
 
@@ -201,7 +201,8 @@ public class TaskDetailsFoundationFragment extends AbstractDetailsFragment imple
                 FragmentDisplayer.with(getActivity()).back(false).animate(null).replace(commentFragment)
                         .into(R.id.right_drawer);
 
-                UIUtils.setTitle(getActivity(), taskRepresentation.getName(), getString(R.string.task_title_details));
+                UIUtils.setTitle(getActivity(), taskRepresentation.getName(), getString(R.string.task_title_details),
+                        true);
             }
 
             @Override
@@ -218,7 +219,7 @@ public class TaskDetailsFoundationFragment extends AbstractDetailsFragment imple
     public void onResume()
     {
         super.onResume();
-        UIUtils.setTitle(getActivity(), task != null ? task.name : null, getString(R.string.task_title_details));
+        UIUtils.setTitle(getActivity(), task != null ? task.name : null, getString(R.string.task_title_details), true);
     }
 
     @Override
@@ -246,7 +247,8 @@ public class TaskDetailsFoundationFragment extends AbstractDetailsFragment imple
                 people = retrievedTaskRepresentation.getInvolvedPeople();
                 hasPeopleLoaded = true;
 
-                UIUtils.setTitle(getActivity(), taskRepresentation.getName(), getString(R.string.task_title_details));
+                UIUtils.setTitle(getActivity(), taskRepresentation.getName(), getString(R.string.task_title_details),
+                        true);
 
                 requestExtraInfo();
 
@@ -529,8 +531,9 @@ public class TaskDetailsFoundationFragment extends AbstractDetailsFragment imple
 
     private void displayAssignee(String assignee)
     {
-        HolderUtils.configure(assigneeHolder, getString(R.string.task_field_assignee), (assignee != null) ? assignee
-                : getString(R.string.task_message_no_assignee), R.drawable.ic_assignment_ind_grey);
+        HolderUtils.configure(assigneeHolder, getString(R.string.task_field_assignee),
+                (assignee != null) ? assignee : getString(R.string.task_message_no_assignee),
+                R.drawable.ic_assignment_ind_grey);
         if (TaskHelper.canReassign(taskRepresentation, getAccount().getUserId()))
         {
             View v = viewById(R.id.task_details_assignee_container);
@@ -663,7 +666,8 @@ public class TaskDetailsFoundationFragment extends AbstractDetailsFragment imple
                     new Callback<FormDefinitionRepresentation>()
                     {
                         @Override
-                        public void success(FormDefinitionRepresentation formDefinitionRepresentation, Response response)
+                        public void success(FormDefinitionRepresentation formDefinitionRepresentation,
+                                Response response)
                         {
                             formModelName = formDefinitionRepresentation.getName();
                             formDefinitionModel = null;
@@ -706,8 +710,9 @@ public class TaskDetailsFoundationFragment extends AbstractDetailsFragment imple
         });
 
         ((TextView) viewById(R.id.task_details_form_container).findViewById(R.id.bottomtext))
-                .setText(formModelName != null ? formModelName : formDefinitionModel != null ? formDefinitionModel
-                        .getName() : getString(R.string.task_message_no_form));
+                .setText(formModelName != null ? formModelName
+                        : formDefinitionModel != null ? formDefinitionModel.getName()
+                                : getString(R.string.task_message_no_form));
     }
 
     private void displayCompletedProperties(TaskRepresentation taskRepresentation)
@@ -811,8 +816,8 @@ public class TaskDetailsFoundationFragment extends AbstractDetailsFragment imple
                 @Override
                 public void onClick(View v)
                 {
-                    ((MainActivity) getActivity()).setRightMenuVisibility(!((MainActivity) getActivity())
-                            .isRightMenuVisible());
+                    ((MainActivity) getActivity())
+                            .setRightMenuVisibility(!((MainActivity) getActivity()).isRightMenuVisible());
                 }
             });
         }
@@ -868,8 +873,8 @@ public class TaskDetailsFoundationFragment extends AbstractDetailsFragment imple
                     @Override
                     public void onClick(View v)
                     {
-                        removeInvolved(((LightUserRepresentation) v.getTag()), new InvolveTaskRepresentation(
-                                ((LightUserRepresentation) v.getTag()).getId()));
+                        removeInvolved(((LightUserRepresentation) v.getTag()),
+                                new InvolveTaskRepresentation(((LightUserRepresentation) v.getTag()).getId()));
                     }
                 });
                 actions.addView(action);
@@ -954,7 +959,8 @@ public class TaskDetailsFoundationFragment extends AbstractDetailsFragment imple
                     @Override
                     public void onClick(View v)
                     {
-                        TaskDetailsFragment.with(getActivity()).task((TaskRepresentation) v.getTag()).display();
+                        TaskDetailsFragment.with(getActivity()).task((TaskRepresentation) v.getTag())
+                                .bindFragmentTag(getTag()).back(true).display();
                     }
                 });
             }
@@ -1003,16 +1009,16 @@ public class TaskDetailsFoundationFragment extends AbstractDetailsFragment imple
         });
 
         // COMMENT
-        vh = HolderUtils.configure(v.findViewById(R.id.help_details_comment),
-                getString(R.string.task_help_add_comment), null, R.drawable.ic_insert_comment_grey);
+        vh = HolderUtils.configure(v.findViewById(R.id.help_details_comment), getString(R.string.task_help_add_comment),
+                null, R.drawable.ic_insert_comment_grey);
         HolderUtils.makeMultiLine(vh.topText, 3);
         v.findViewById(R.id.help_details_comment_container).setOnClickListener(new View.OnClickListener()
         {
             @Override
             public void onClick(View v)
             {
-                ((MainActivity) getActivity()).setRightMenuVisibility(!((MainActivity) getActivity())
-                        .isRightMenuVisible());
+                ((MainActivity) getActivity())
+                        .setRightMenuVisibility(!((MainActivity) getActivity()).isRightMenuVisible());
             }
         });
 
@@ -1059,8 +1065,8 @@ public class TaskDetailsFoundationFragment extends AbstractDetailsFragment imple
             {
                 try
                 {
-                    EventBusManager.getInstance().post(
-                            new CompleteTaskEvent(null, taskId, taskRepresentation.getCategory()));
+                    EventBusManager.getInstance()
+                            .post(new CompleteTaskEvent(null, taskId, taskRepresentation.getCategory()));
                 }
                 catch (Exception e)
                 {
@@ -1070,12 +1076,16 @@ public class TaskDetailsFoundationFragment extends AbstractDetailsFragment imple
                 Snackbar.make(getActivity().findViewById(R.id.left_panel), R.string.task_alert_completed,
                         Snackbar.LENGTH_SHORT).show();
 
-                if (!DisplayUtils.hasCentralPane(getActivity()))
+                Fragment fr = getAttachedFragment();
+                if (fr != null && fr instanceof TasksFragment)
                 {
-                    Fragment fr = getAttachedFragment();
-                    if (fr != null && fr instanceof TasksFragment)
+                    if (DisplayUtils.hasCentralPane(getActivity()))
                     {
                         ((TasksFragment) fr).refreshOutside();
+                    }
+                    else
+                    {
+                        ((TasksFragment) fr).refresh();
                     }
                 }
 
@@ -1114,8 +1124,8 @@ public class TaskDetailsFoundationFragment extends AbstractDetailsFragment imple
 
     private void assign(LightUserRepresentation user)
     {
-        AssignTaskRepresentation body = (ActivitiSession.getInstance().isActivitiAlfresco()) ? new AssignTaskRepresentation(
-                user.getEmail()) : new AssignTaskRepresentation(user.getId());
+        AssignTaskRepresentation body = (ActivitiSession.getInstance().isActivitiAlfresco())
+                ? new AssignTaskRepresentation(user.getEmail()) : new AssignTaskRepresentation(user.getId());
 
         getAPI().getTaskService().assign(taskId, body, new Callback<TaskRepresentation>()
         {
@@ -1123,8 +1133,7 @@ public class TaskDetailsFoundationFragment extends AbstractDetailsFragment imple
             public void success(TaskRepresentation rep, Response response)
             {
                 displayAssignee(rep.getAssignee() != null ? rep.getAssignee().getFullname() : null);
-                Snackbar.make(
-                        getActivity().findViewById(R.id.left_panel),
+                Snackbar.make(getActivity().findViewById(R.id.left_panel),
                         String.format(getString(R.string.task_alert_assigned), task.name,
                                 rep.getAssignee() != null ? rep.getAssignee().getFullname() : ""),
                         Snackbar.LENGTH_SHORT).show();
@@ -1149,8 +1158,7 @@ public class TaskDetailsFoundationFragment extends AbstractDetailsFragment imple
             {
                 displayAssignee(rep.getAssignee() != null ? rep.getAssignee().getFullname() : null);
 
-                Snackbar.make(
-                        getActivity().findViewById(R.id.left_panel),
+                Snackbar.make(getActivity().findViewById(R.id.left_panel),
                         String.format(getString(R.string.task_alert_assigned), userEmail, taskRepresentation.getName()),
                         Snackbar.LENGTH_SHORT).show();
             }
@@ -1172,10 +1180,10 @@ public class TaskDetailsFoundationFragment extends AbstractDetailsFragment imple
             public void success(Void aVoid, Response response)
             {
                 displayPeopleSection(people);
-                Snackbar.make(
-                        getActivity().findViewById(R.id.left_panel),
+                Snackbar.make(getActivity().findViewById(R.id.left_panel),
                         String.format(getString(R.string.task_alert_person_involved), user.getFullname(),
-                                taskRepresentation.getName()), Snackbar.LENGTH_SHORT).show();
+                                taskRepresentation.getName()),
+                        Snackbar.LENGTH_SHORT).show();
             }
 
             @Override
@@ -1244,10 +1252,10 @@ public class TaskDetailsFoundationFragment extends AbstractDetailsFragment imple
                     displayPeopleSection(people);
                 }
 
-                Snackbar.make(
-                        getActivity().findViewById(R.id.left_panel),
+                Snackbar.make(getActivity().findViewById(R.id.left_panel),
                         String.format(getString(R.string.task_alert_person_no_longer_involved),
-                                userRemoved.getFullname(), taskRepresentation.getName()), Snackbar.LENGTH_SHORT).show();
+                                userRemoved.getFullname(), taskRepresentation.getName()),
+                        Snackbar.LENGTH_SHORT).show();
             }
 
             @Override
@@ -1265,8 +1273,7 @@ public class TaskDetailsFoundationFragment extends AbstractDetailsFragment imple
             @Override
             public void success(Void aVoid, Response response)
             {
-                Snackbar.make(
-                        getActivity().findViewById(R.id.left_panel),
+                Snackbar.make(getActivity().findViewById(R.id.left_panel),
                         String.format(getString(R.string.task_alert_form_removed),
                                 (formDefinitionModel != null) ? formDefinitionModel.getName() : formModelName),
                         Snackbar.LENGTH_SHORT).show();
