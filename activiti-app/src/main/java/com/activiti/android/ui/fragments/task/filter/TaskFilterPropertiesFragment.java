@@ -38,7 +38,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.activiti.android.app.R;
-import com.activiti.android.app.fragments.filters.UserFiltersFragment;
+import com.activiti.android.app.fragments.filters.FiltersFragment;
 import com.activiti.android.app.fragments.task.TasksFragment;
 import com.activiti.android.platform.provider.processdefinition.ProcessDefinitionModel;
 import com.activiti.android.ui.fragments.builder.AlfrescoFragmentBuilder;
@@ -67,7 +67,7 @@ public class TaskFilterPropertiesFragment extends CommonTaskFilterFragment
 
     protected TasksFragment frag;
 
-    protected UserFiltersFragment fragFilters;
+    protected FiltersFragment fragFilters;
 
     protected Bundle bundle;
 
@@ -138,8 +138,8 @@ public class TaskFilterPropertiesFragment extends CommonTaskFilterFragment
         super.onActivityCreated(savedInstanceState);
 
         frag = (TasksFragment) getActivity().getSupportFragmentManager().findFragmentByTag(TasksFragment.TAG);
-        fragFilters = (UserFiltersFragment) getActivity().getSupportFragmentManager()
-                .findFragmentByTag(UserFiltersFragment.TAG);
+        fragFilters = (FiltersFragment) getActivity().getSupportFragmentManager()
+                .findFragmentByTag(FiltersFragment.TAG);
 
         keywordsText = (TextView) viewById(R.id.task_filter_keywords_value);
         sortText = (TextView) viewById(R.id.task_filter_sort_value);
@@ -456,7 +456,7 @@ public class TaskFilterPropertiesFragment extends CommonTaskFilterFragment
                 extraConfiguration.putString(ARGUMENT_USERFILTER_NAME, filter.getName());
                 extraConfiguration.putString(ARGUMENT_USERFILTER_ICON, filter.getIcon());
                 extraConfiguration.putLong(ARGUMENT_USERFILTER_ID, filter.getId());
-                extraConfiguration.putAll(UserFiltersFragment.createBundle(filter.getFilter()));
+                extraConfiguration.putAll(FiltersFragment.createBundle(filter.getFilter()));
             }
             return this;
         }

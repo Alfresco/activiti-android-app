@@ -34,7 +34,7 @@ import android.widget.GridView;
 
 import com.activiti.android.app.R;
 import com.activiti.android.app.activity.MainActivity;
-import com.activiti.android.app.fragments.filters.UserFiltersFragment;
+import com.activiti.android.app.fragments.filters.FiltersFragment;
 import com.activiti.android.app.fragments.process.ProcessesFragment;
 import com.activiti.android.platform.event.CompleteTaskEvent;
 import com.activiti.android.platform.event.CreateTaskEvent;
@@ -107,7 +107,7 @@ public class TasksFragment extends TasksFoundationFragment
         setLockRightMenu(DisplayUtils.hasCentralPane(getActivity()));
 
         FragmentDisplayer.with(getActivity()).back(false).animate(null)
-                .replace(UserFiltersFragment.with(getActivity()).appId(appId).typeId(UserFiltersFragment.TYPE_TASK)
+                .replace(FiltersFragment.with(getActivity()).appId(appId).typeId(FiltersFragment.TYPE_TASK)
                         .createFragment())
                 .into(DisplayUtils.hasCentralPane(getActivity()) ? R.id.central_left_drawer : R.id.right_drawer);
 

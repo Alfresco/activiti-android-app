@@ -33,7 +33,7 @@ import android.widget.GridView;
 
 import com.activiti.android.app.R;
 import com.activiti.android.app.activity.MainActivity;
-import com.activiti.android.app.fragments.filters.UserFiltersFragment;
+import com.activiti.android.app.fragments.filters.FiltersFragment;
 import com.activiti.android.app.fragments.task.TasksFragment;
 import com.activiti.android.platform.event.CompleteProcessEvent;
 import com.activiti.android.platform.event.StartProcessEvent;
@@ -118,8 +118,9 @@ public class ProcessesFragment extends ProcessesFoundationFragment
         // : new Bundle())).into(R.id.right_drawer);
         // }
 
-        FragmentDisplayer.with(getActivity()).back(false).animate(null).replace(UserFiltersFragment.with(getActivity())
-                .appId(appId).typeId(UserFiltersFragment.TYPE_TASK).createFragment()).into(R.id.right_drawer);
+        FragmentDisplayer.with(getActivity()).back(false).animate(null).replace(
+                FiltersFragment.with(getActivity()).appId(appId).typeId(FiltersFragment.TYPE_TASK).createFragment())
+                .into(R.id.right_drawer);
 
         setLockRightMenu(false);
 

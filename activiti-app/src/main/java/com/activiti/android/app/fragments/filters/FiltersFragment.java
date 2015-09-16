@@ -35,24 +35,24 @@ import com.activiti.client.api.constant.RequestConstant;
 import com.activiti.client.api.model.runtime.TaskFilterRepresentation;
 import com.activiti.client.api.model.runtime.UserTaskFilterRepresentation;
 
-public class UserFiltersFragment extends UserFilterFoundationFragment implements RequestConstant
+public class FiltersFragment extends UserFilterFoundationFragment implements RequestConstant
 {
-    public static final String TAG = UserFiltersFragment.class.getName();
+    public static final String TAG = FiltersFragment.class.getName();
 
     protected TasksFragment frag;
 
     // ///////////////////////////////////////////////////////////////////////////
     // CONSTRUCTORS & HELPERS
     // ///////////////////////////////////////////////////////////////////////////
-    public UserFiltersFragment()
+    public FiltersFragment()
     {
         super();
         setRetainInstance(true);
     }
 
-    public static UserFiltersFragment newInstanceByTemplate(Bundle b)
+    public static FiltersFragment newInstanceByTemplate(Bundle b)
     {
-        UserFiltersFragment cbf = new UserFiltersFragment();
+        FiltersFragment cbf = new FiltersFragment();
         cbf.setArguments(b);
         return cbf;
     }
@@ -141,7 +141,6 @@ public class UserFiltersFragment extends UserFilterFoundationFragment implements
             extraConfiguration.putInt(ARGUMENT_TYPE, typeId);
             return this;
         }
-
 
         // ///////////////////////////////////////////////////////////////////////////
         // CLICK
