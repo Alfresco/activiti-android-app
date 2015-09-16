@@ -25,6 +25,7 @@ import java.lang.ref.WeakReference;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -40,6 +41,7 @@ import com.activiti.android.platform.utils.BundleUtils;
 import com.activiti.android.sdk.ActivitiSession;
 import com.activiti.android.sdk.model.runtime.AppVersion;
 import com.activiti.android.sdk.services.ServiceRegistry;
+import com.activiti.android.ui.utils.DisplayUtils;
 import com.afollestad.materialdialogs.MaterialDialog;
 
 /**
@@ -217,6 +219,18 @@ public abstract class AlfrescoFragment extends DialogFragment
             }
             ((ViewGroup) getActivity().findViewById(R.id.right_drawer)).removeAllViews();
             setLockRightMenu(true);
+        }
+    }
+
+    protected Toolbar getToolbar()
+    {
+        if (DisplayUtils.hasCentralPane(getActivity()))
+        {
+            return (Toolbar) getActivity().findViewById(R.id.toolbar_central);
+        }
+        else
+        {
+            return (Toolbar) getActivity().findViewById(R.id.toolbar);
         }
     }
 }

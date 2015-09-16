@@ -33,6 +33,7 @@ import android.widget.GridView;
 
 import com.activiti.android.app.R;
 import com.activiti.android.app.activity.MainActivity;
+import com.activiti.android.app.fragments.filters.UserFiltersFragment;
 import com.activiti.android.app.fragments.task.TasksFragment;
 import com.activiti.android.platform.event.CompleteProcessEvent;
 import com.activiti.android.platform.event.StartProcessEvent;
@@ -40,7 +41,6 @@ import com.activiti.android.ui.fragments.FragmentDisplayer;
 import com.activiti.android.ui.fragments.builder.ListingFragmentBuilder;
 import com.activiti.android.ui.fragments.process.ProcessesFoundationFragment;
 import com.activiti.android.ui.fragments.process.create.StartProcessDialogFragment;
-import com.activiti.android.ui.fragments.process.filter.ProcessFiltersFragment;
 import com.activiti.client.api.constant.RequestConstant;
 import com.activiti.client.api.model.runtime.ProcessInstanceRepresentation;
 import com.squareup.otto.Subscribe;
@@ -99,21 +99,28 @@ public class ProcessesFragment extends ProcessesFoundationFragment
     @Override
     public void onStart()
     {
-        Fragment fr = getFragmentManager().findFragmentById(R.id.right_drawer);
-        if (fr == null || (fr != null && !(fr instanceof ProcessFiltersFragment)))
-        {
-            if (fr != null)
-            {
-                FragmentDisplayer.with(getActivity()).back(false).animate(null).remove(fr);
-            }
-            FragmentDisplayer
-                    .with(getActivity())
-                    .back(false)
-                    .animate(null)
-                    .replace(
-                            ProcessFiltersFragment.newInstanceByTemplate(getArguments() != null ? getArguments()
-                                    : new Bundle())).into(R.id.right_drawer);
-        }
+        // Fragment fr =
+        // getFragmentManager().findFragmentById(R.id.right_drawer);
+        // if (fr == null || (fr != null && !(fr instanceof
+        // ProcessFiltersFragment)))
+        // {
+        // if (fr != null)
+        // {
+        // FragmentDisplayer.with(getActivity()).back(false).animate(null).remove(fr);
+        // }
+        // FragmentDisplayer
+        // .with(getActivity())
+        // .back(false)
+        // .animate(null)
+        // .replace(
+        // ProcessFiltersFragment.newInstanceByTemplate(getArguments() != null ?
+        // getArguments()
+        // : new Bundle())).into(R.id.right_drawer);
+        // }
+
+        FragmentDisplayer.with(getActivity()).back(false).animate(null).replace(UserFiltersFragment.with(getActivity())
+                .appId(appId).typeId(UserFiltersFragment.TYPE_TASK).createFragment()).into(R.id.right_drawer);
+
         setLockRightMenu(false);
 
         super.onStart();

@@ -30,6 +30,7 @@ import android.graphics.drawable.Drawable;
 import android.support.v4.app.FragmentActivity;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.util.TypedValue;
 import android.view.Display;
 import android.view.View;
@@ -38,6 +39,7 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 
 import com.activiti.android.app.R;
+import com.activiti.android.app.activity.MainActivity;
 import com.activiti.android.platform.utils.AndroidVersion;
 
 /**
@@ -54,8 +56,8 @@ public class UIUtils
 
     public static int getDPI(Context context, int sizeInDp)
     {
-        return (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, sizeInDp, context.getResources()
-                .getDisplayMetrics());
+        return (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, sizeInDp,
+                context.getResources().getDisplayMetrics());
     }
 
     /**
@@ -166,13 +168,43 @@ public class UIUtils
 
     public static void setTitle(FragmentActivity activity, String title, String subTitle)
     {
-        ActionBar actionBar = ((AppCompatActivity) activity).getSupportActionBar();
-        actionBar.setDisplayHomeAsUpEnabled(true);
-        actionBar.setDisplayShowHomeEnabled(true);
-        actionBar.setDisplayShowTitleEnabled(true);
-        actionBar.setDisplayShowCustomEnabled(false);
-        actionBar.setTitle(title);
-        actionBar.setSubtitle(subTitle);
+        setTitle(activity, title, subTitle, false);
+    }
+
+    public static void setTitle(FragmentActivity activity, String title, String subTitle, boolean isLeaf)
+    {
+        if (isLeaf && DisplayUtils.hasCentralPane(activity))
+        {
+            Toolbar toolbar = (Toolbar) activity.findViewById(R.id.toolbar_central);
+            toolbar.setTitle(title);
+            toolbar.setSubtitle(subTitle);
+        }
+        else
+        {
+            ActionBar actionBar = ((AppCompatActivity) activity).getSupportActionBar();
+            actionBar.setDisplayHomeAsUpEnabled(true);
+            actionBar.setDisplayShowHomeEnabled(true);
+            actionBar.setDisplayShowTitleEnabled(true);
+            actionBar.setDisplayShowCustomEnabled(false);
+            actionBar.setTitle(title);
+            actionBar.setSubtitle(subTitle);
+        }
+    }
+
+    public static void displayActionBarBack(MainActivity activity)
+    {
+        if (activity == null || activity.getmDrawerToggle() == null) { return; }
+        activity.lockSlidingMenu();
+        activity.getmDrawerToggle().setDrawerIndicatorEnabled(false);
+        activity.getmDrawerToggle().setHomeAsUpIndicator(R.drawable.ic_arrow_back_white);
+    }
+
+    public static void setActionBarDefault(MainActivity activity)
+    {
+        if (activity == null || activity.getmDrawerToggle() == null) { return; }
+        activity.unlockSlidingMenu();
+        activity.getmDrawerToggle().setDrawerIndicatorEnabled(true);
+        activity.getmDrawerToggle().setHomeAsUpIndicator(null);
     }
 
     public static View setActionBarCustomView(FragmentActivity activity, int layoutId, boolean fillParent)

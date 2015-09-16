@@ -68,6 +68,8 @@ public class ContentAdapter extends BaseListAdapter<RelatedContentRepresentation
 
     protected boolean isReadOnly;
 
+    private final int d16;
+
     public ContentAdapter(ContentsFoundationFragment fr, int textViewResourceId,
             List<RelatedContentRepresentation> listItems, boolean isReadOnly)
     {
@@ -86,6 +88,7 @@ public class ContentAdapter extends BaseListAdapter<RelatedContentRepresentation
                 imageWidth = UIUtils.getDPI(getContext(), 150);
             }
         }
+        d16 = getContext().getResources().getDimensionPixelSize(R.dimen.d_16);
     }
 
     @Override
@@ -140,11 +143,10 @@ public class ContentAdapter extends BaseListAdapter<RelatedContentRepresentation
 
         vh.choose.setVisibility(View.VISIBLE);
         vh.choose.setImageResource(R.drawable.ic_more_grey);
-        vh.choose.setVisibility(View.VISIBLE);
         vh.choose.setBackgroundResource(R.drawable.activititheme_list_selector_holo_light);
         vh.choose.setTag(item);
         vh.choose.setClickable(true);
-        vh.choose.setPadding(16, 16, 16, 16);
+        vh.choose.setPadding(d16, d16, d16, d16);
         vh.choose.setImageResource(R.drawable.ic_more_grey);
         vh.choose.setOnClickListener(new View.OnClickListener()
         {

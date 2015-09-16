@@ -26,13 +26,16 @@ public class CreateTaskEvent extends AbstractOperationEvent<TaskRepresentation>
 {
     public final Long appId;
 
+    public final String taskId;
+
     // ///////////////////////////////////////////////////////////////////////////
     // CONSTRUCTORS
     // ///////////////////////////////////////////////////////////////////////////
-    public CreateTaskEvent(String requestId, TaskRepresentation task, Long appId)
+    public CreateTaskEvent(String requestId, TaskRepresentation task, Long appId, String taskId)
     {
         super(requestId, task);
         this.appId = appId;
+        this.taskId = taskId;
     }
 
 }

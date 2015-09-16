@@ -96,7 +96,7 @@
 
     <style name="ActivitiTheme.Icon.Right" parent="ActivitiTheme.Icon">
         <item name="android:layout_alignParentRight">true</item>
-        <item name="android:layout_marginLeft">@dimen/d_16</item>
+        <item name="android:layout_marginRight">@dimen/d_16</item>
     </style>
 
     <style name="ActivitiTheme.Text">
@@ -219,6 +219,8 @@
     <dimen name="d_16">16dp</dimen>
     <dimen name="d_8">8dp</dimen>
     <dimen name="d_4">4dp</dimen>
+
+    <dimen name="inline_list_icon_size">12sp</dimen>
 
 
 </resources>

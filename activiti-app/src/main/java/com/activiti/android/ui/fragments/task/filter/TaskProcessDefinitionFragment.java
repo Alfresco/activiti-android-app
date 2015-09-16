@@ -36,6 +36,7 @@ import com.activiti.android.platform.provider.processdefinition.ProcessDefinitio
 import com.activiti.android.ui.fragments.AlfrescoFragment;
 import com.activiti.android.ui.fragments.builder.AlfrescoFragmentBuilder;
 import com.activiti.android.ui.fragments.processDefinition.ProcessDefinitionModelAdapter;
+import com.activiti.android.ui.utils.DisplayUtils;
 import com.activiti.client.api.constant.RequestConstant;
 import com.afollestad.materialdialogs.MaterialDialog;
 
@@ -47,7 +48,7 @@ public class TaskProcessDefinitionFragment extends AlfrescoFragment
 
     private ProcessDefinitionModelAdapter adapter;
 
-    private TaskFiltersFragment frag;
+    private CommonTaskFilterFragment frag;
 
     private String processDefId;
 
@@ -86,13 +87,14 @@ public class TaskProcessDefinitionFragment extends AlfrescoFragment
             appId = getArguments().getLong(ARGUMENT_APP_ID);
         }
 
-        frag = (TaskFiltersFragment) getActivity().getSupportFragmentManager().findFragmentById(R.id.right_drawer);
+        frag = (CommonTaskFilterFragment) getActivity().getSupportFragmentManager().findFragmentById(
+                DisplayUtils.hasCentralPane(getActivity()) ? R.id.central_left_drawer : R.id.right_drawer);
 
         Map<Long, ProcessDefinitionModel> models = ProcessDefinitionModelManager.getInstance(getActivity())
                 .getAllByAppId(getAccount().getId(), appId);
 
-        adapter = new ProcessDefinitionModelAdapter(getActivity(), R.layout.row_single_line, new ArrayList<>(
-                models.values()));
+        adapter = new ProcessDefinitionModelAdapter(getActivity(), R.layout.row_single_line,
+                new ArrayList<>(models.values()));
 
         return new MaterialDialog.Builder(getActivity()).title(R.string.task_filter_text)
                 .cancelListener(new DialogInterface.OnCancelListener()
@@ -107,8 +109,8 @@ public class TaskProcessDefinitionFragment extends AlfrescoFragment
                     @Override
                     public void onSelection(MaterialDialog materialDialog, View view, int i, CharSequence charSequence)
                     {
-                        frag.onProcessDefinitionSelection(((ProcessDefinitionModel) materialDialog.getListView()
-                                .getAdapter().getItem(i)));
+                        frag.onProcessDefinitionSelection(
+                                ((ProcessDefinitionModel) materialDialog.getListView().getAdapter().getItem(i)));
                         getDialog().dismiss();
                     }
                 }).show();

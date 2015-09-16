@@ -32,6 +32,8 @@ public class InternalAppPreferences
 
     public static final String PREF_LAST_APP_USED = "org.activiti.bpmn.android.preferences.internal.apps.latest";
 
+    public static final String PREF_LAST_FILTER_USED = "org.activiti.bpmn.android.preferences.internal.filter.latest";
+
     public static final String PREF_LAST_APP_NAME = "org.activiti.bpmn.android.preferences.internal.apps.latest.name";
 
     public static final String PREF_INTEGRATION_SYNCED = "org.activiti.bpmn.android.preferences.internal.apps.integration.synced";
@@ -48,7 +50,7 @@ public class InternalAppPreferences
                 INTERNAL_PREFERENCES.concat(Long.toString(accountId)), Context.MODE_PRIVATE);
         if (settings != null)
         {
-            settings.edit().putString(id, value).commit();
+            settings.edit().putString(id, value).apply();
         }
     }
 
@@ -58,7 +60,7 @@ public class InternalAppPreferences
                 INTERNAL_PREFERENCES.concat(Long.toString(accountId)), Context.MODE_PRIVATE);
         if (settings != null)
         {
-            settings.edit().putLong(id, value).commit();
+            settings.edit().putLong(id, value).apply();
         }
     }
 

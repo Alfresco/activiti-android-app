@@ -42,6 +42,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.activiti.android.app.ActivitiVersionNumber;
 import com.activiti.android.app.R;
 import com.activiti.android.app.fragments.task.TasksFragment;
 import com.activiti.android.platform.EventBusManager;
@@ -180,14 +181,14 @@ public class TaskFormFoundationFragment extends AlfrescoFragment implements Date
     public void onResume()
     {
         super.onResume();
-        UIUtils.setTitle(getActivity(), task.name, getString(R.string.form_message_title));
+        UIUtils.setTitle(getActivity(), task.name, getString(R.string.form_message_title), true);
     }
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater)
     {
         super.onCreateOptionsMenu(menu, inflater);
-        if (getVersionNumber() >= 122 && !isEnded)
+        if (getVersionNumber() >= ActivitiVersionNumber.VERSION_1_2_2 && !isEnded)
         {
             menu.clear();
             inflater.inflate(R.menu.task_form, menu);

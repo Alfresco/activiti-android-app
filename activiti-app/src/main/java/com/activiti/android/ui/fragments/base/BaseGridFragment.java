@@ -21,7 +21,6 @@
 package com.activiti.android.ui.fragments.base;
 
 import android.os.Bundle;
-import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
@@ -31,14 +30,14 @@ import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.GridView;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.activiti.android.app.R;
 import com.activiti.android.ui.fragments.AlfrescoFragment;
 import com.activiti.android.ui.fragments.common.RefreshFragment;
 import com.activiti.android.ui.fragments.common.RefreshHelper;
-import com.melnykov.fab.FloatingActionButton;
-import com.melnykov.fab.ScrollDirectionListener;
+import com.github.clans.fab.FloatingActionButton;
 
 /**
  * Created by jpascal on 12/12/2014.
@@ -78,10 +77,6 @@ public abstract class BaseGridFragment extends AlfrescoFragment implements Refre
     protected RefreshHelper refreshHelper;
 
     protected FloatingActionButton fab;
-
-    protected DrawerLayout mDrawerLayout;
-
-    protected ViewGroup mRightDrawer;
 
     /** Indicator to retain if everything has been loaded */
     protected boolean isFullLoad = Boolean.FALSE;
@@ -133,7 +128,17 @@ public abstract class BaseGridFragment extends AlfrescoFragment implements Refre
         {
             performRequest();
         }
+        else if (requestRefresh)
+        {
+            requestRefresh = false;
+            performRequest();
+        }
         else if (retrieveDataOnCreation && adapter != null)
+        {
+            setListShown(true);
+            gv.setAdapter(adapter);
+        }
+        else if (!retrieveDataOnCreation && adapter != null)
         {
             setListShown(true);
             gv.setAdapter(adapter);
@@ -286,27 +291,12 @@ public abstract class BaseGridFragment extends AlfrescoFragment implements Refre
         if (onFabClickListener != null)
         {
             fab.setVisibility(View.VISIBLE);
-            fab.show();
+            gv.setOnScrollListener(listener);
             fab.setOnClickListener(onFabClickListener);
-            fab.attachToListView(gv, new ScrollDirectionListener()
-            {
-                @Override
-                public void onScrollDown()
-                {
-                    // Log.d("ListViewFragment", "onScrollDown()");
-                }
-
-                @Override
-                public void onScrollUp()
-                {
-                    // Log.d("ListViewFragment", "onScrollUp()");
-                }
-            }, listener);
         }
         else
         {
             fab.setVisibility(View.GONE);
-            fab.hide();
             gv.setOnScrollListener(listener);
         }
     }
@@ -375,6 +365,31 @@ public abstract class BaseGridFragment extends AlfrescoFragment implements Refre
             gv.setVisibility(View.GONE);
             pb.setVisibility(View.VISIBLE);
         }
+    }
+
+    protected void prepareEmptyView(View ev, ImageView emptyImageView, TextView firstEmptyMessage,
+            TextView secondEmptyMessage)
+    {
+
+    }
+
+    protected void prepareEmptyInitialView(View ev, ImageView emptyImageView, TextView firstEmptyMessage,
+            TextView secondEmptyMessage)
+    {
+        prepareEmptyView(ev, emptyImageView, firstEmptyMessage, secondEmptyMessage);
+    }
+
+    protected void displayEmptyView()
+    {
+        if (!isVisible()) { return; }
+        gv.setEmptyView(ev);
+        isFullLoad = Boolean.TRUE;
+        if (adapter != null)
+        {
+            gv.setAdapter(null);
+        }
+        prepareEmptyView(ev, (ImageView) ev.findViewById(R.id.empty_picture),
+                (TextView) ev.findViewById(R.id.empty_text), (TextView) ev.findViewById(R.id.empty_text_description));
     }
 
     protected void displayDataView()

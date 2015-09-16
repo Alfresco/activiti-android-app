@@ -315,24 +315,29 @@ public class ContentsFoundationFragment extends BasePagingGridFragment implement
     @Override
     public boolean onOptionsItemSelected(MenuItem item)
     {
-        if (item.getItemId() == R.id.alfresco_action)
+        switch (item.getItemId())
         {
-            if (switchViewItem.getTitle().equals(getString(R.string.list)))
-            {
-                switchViewItem.setTitle(getString(R.string.grid));
-                switchViewItem.setIcon(R.drawable.ic_view_list_white);
-                displayAsList = false;
-            }
-            else
-            {
-                displayAsList = true;
-                switchViewItem.setTitle(getString(R.string.list));
-                switchViewItem.setIcon(R.drawable.ic_view_module_white);
-            }
-            refresh();
-            return true;
+            case android.R.id.home:
+                getActivity().onBackPressed();
+                return true;
+            case R.id.alfresco_action:
+                if (switchViewItem.getTitle().equals(getString(R.string.list)))
+                {
+                    switchViewItem.setTitle(getString(R.string.grid));
+                    switchViewItem.setIcon(R.drawable.ic_view_list_white);
+                    displayAsList = false;
+                }
+                else
+                {
+                    displayAsList = true;
+                    switchViewItem.setTitle(getString(R.string.list));
+                    switchViewItem.setIcon(R.drawable.ic_view_module_white);
+                }
+                refresh();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
         }
-        return super.onOptionsItemSelected(item);
     }
 
     public boolean isListView()

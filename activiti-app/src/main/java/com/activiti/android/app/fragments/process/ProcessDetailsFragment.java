@@ -40,7 +40,7 @@ import com.activiti.android.platform.provider.transfer.ContentTransferSyncAdapte
 import com.activiti.android.platform.provider.transfer.DownloadTransferEvent;
 import com.activiti.android.platform.provider.transfer.DownloadTransferUriEvent;
 import com.activiti.android.ui.fragments.FragmentDisplayer;
-import com.activiti.android.ui.fragments.builder.AlfrescoFragmentBuilder;
+import com.activiti.android.ui.fragments.builder.LeafFragmentBuilder;
 import com.activiti.android.ui.fragments.comment.FragmentWithComments;
 import com.activiti.android.ui.fragments.process.ProcessDetailsFoundationFragment;
 import com.squareup.otto.Subscribe;
@@ -202,7 +202,7 @@ public class ProcessDetailsFragment extends ProcessDetailsFoundationFragment imp
         return new Builder(activity);
     }
 
-    public static class Builder extends AlfrescoFragmentBuilder
+    public static class Builder extends LeafFragmentBuilder
     {
         // ///////////////////////////////////////////////////////////////////////////
         // CONSTRUCTORS

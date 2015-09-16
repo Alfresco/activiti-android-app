@@ -65,7 +65,7 @@ public class TaskRepresentation extends AbstractRepresentation
 
     protected String processDefinitionCategory;
 
-    protected int processDefinitionVersion;
+    protected Integer processDefinitionVersion;
 
     protected String processDefinitionDeploymentId;
 
@@ -73,11 +73,17 @@ public class TaskRepresentation extends AbstractRepresentation
 
     protected String processInstanceStartUserId;
 
-    protected boolean initiatorCanCompleteTask;
+    protected Boolean initiatorCanCompleteTask;
 
-    protected boolean isMemberOfCandidateGroup;
+    protected Boolean isMemberOfCandidateGroup;
 
-    protected boolean isMemberOfCandidateUsers;
+    protected Boolean isMemberOfCandidateUsers;
+
+    protected String parentTaskId;
+
+    protected String parentTaskName;
+
+    protected Boolean adhocTaskCanBeReassigned;
 
     protected List<LightUserRepresentation> involvedPeople;
 
@@ -235,12 +241,12 @@ public class TaskRepresentation extends AbstractRepresentation
         this.processDefinitionCategory = processDefinitionCategory;
     }
 
-    public int getProcessDefinitionVersion()
+    public Integer getProcessDefinitionVersion()
     {
         return processDefinitionVersion;
     }
 
-    public void setProcessDefinitionVersion(int processDefinitionVersion)
+    public void setProcessDefinitionVersion(Integer processDefinitionVersion)
     {
         this.processDefinitionVersion = processDefinitionVersion;
     }
@@ -275,32 +281,32 @@ public class TaskRepresentation extends AbstractRepresentation
         this.processInstanceStartUserId = processInstanceStartUserId;
     }
 
-    public boolean isInitiatorCanCompleteTask()
+    public Boolean isInitiatorCanCompleteTask()
     {
         return initiatorCanCompleteTask;
     }
 
-    public void setInitiatorCanCompleteTask(boolean initiatorCanCompleteTask)
+    public void setInitiatorCanCompleteTask(Boolean initiatorCanCompleteTask)
     {
         this.initiatorCanCompleteTask = initiatorCanCompleteTask;
     }
 
-    public boolean isMemberOfCandidateGroup()
+    public Boolean isMemberOfCandidateGroup()
     {
         return isMemberOfCandidateGroup;
     }
 
-    public void setMemberOfCandidateGroup(boolean isMemberOfCandidateGroup)
+    public void setMemberOfCandidateGroup(Boolean isMemberOfCandidateGroup)
     {
         this.isMemberOfCandidateGroup = isMemberOfCandidateGroup;
     }
 
-    public boolean isMemberOfCandidateUsers()
+    public Boolean isMemberOfCandidateUsers()
     {
         return isMemberOfCandidateUsers;
     }
 
-    public void setMemberOfCandidateUsers(boolean isMemberOfCandidateUsers)
+    public void setMemberOfCandidateUsers(Boolean isMemberOfCandidateUsers)
     {
         this.isMemberOfCandidateUsers = isMemberOfCandidateUsers;
     }
@@ -333,5 +339,35 @@ public class TaskRepresentation extends AbstractRepresentation
     public void setInvolvedPeople(List<LightUserRepresentation> involvedPeople)
     {
         this.involvedPeople = involvedPeople;
+    }
+
+    public String getParentTaskId()
+    {
+        return parentTaskId;
+    }
+
+    public void setParentTaskId(String parentTaskId)
+    {
+        this.parentTaskId = parentTaskId;
+    }
+
+    public String getParentTaskName()
+    {
+        return parentTaskName;
+    }
+
+    public void setParentTaskName(String parentTaskName)
+    {
+        this.parentTaskName = parentTaskName;
+    }
+
+    public boolean isAdhocTaskCanBeReassigned()
+    {
+        return adhocTaskCanBeReassigned;
+    }
+
+    public void setAdhocTaskCanBeReassigned(boolean adhocTaskCanBeReassigned)
+    {
+        this.adhocTaskCanBeReassigned = adhocTaskCanBeReassigned;
     }
 }

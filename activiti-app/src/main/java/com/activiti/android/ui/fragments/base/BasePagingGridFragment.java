@@ -190,6 +190,11 @@ public abstract class BasePagingGridFragment extends BaseGridFragment
         refresh();
     }
 
+    public void requestRefresh()
+    {
+        requestRefresh = true;
+    }
+
     @Override
     protected void performRequest(long skipCount)
     {

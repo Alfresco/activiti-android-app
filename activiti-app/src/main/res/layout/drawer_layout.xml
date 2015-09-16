@@ -24,7 +24,7 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="300dip"
     android:layout_height="fill_parent"
-    android:clickable="false"
+    android:clickable="true"
     android:focusable="false"
     android:orientation="vertical"
     >

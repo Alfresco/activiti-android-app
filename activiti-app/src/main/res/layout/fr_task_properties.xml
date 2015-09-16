@@ -78,7 +78,22 @@
 
         <!-- ######################################################################### -->
         <LinearLayout
-            android:id="@+id/task_details_process_container"
+            android:id="@+id/task_details_form_container"
+            style="@style/ActivitiTheme.Button.BorderLess"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:visibility="visible">
+
+            <include
+                android:id="@+id/task_details_form"
+                layout="@layout/row_two_lines_inverse"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+        </LinearLayout>
+        <!-- ######################################################################### -->
+        <LinearLayout
+            android:id="@+id/task_details_part_of_container"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"

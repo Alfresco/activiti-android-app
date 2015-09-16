@@ -33,18 +33,20 @@ import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.text.Editable;
+import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.widget.EditText;
 
 import com.activiti.android.app.R;
 import com.activiti.android.platform.EventBusManager;
+import com.activiti.android.platform.account.ActivitiAccountManager;
 import com.activiti.android.platform.event.CreateTaskEvent;
+import com.activiti.android.platform.utils.BundleUtils;
 import com.activiti.android.ui.fragments.AlfrescoFragment;
 import com.activiti.android.ui.fragments.builder.AlfrescoFragmentBuilder;
 import com.activiti.android.ui.fragments.task.TasksFoundationFragment;
 import com.activiti.android.ui.utils.UIUtils;
 import com.activiti.client.api.model.runtime.TaskRepresentation;
-import com.activiti.client.api.model.runtime.request.CreateTaskRepresentation;
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 
@@ -52,9 +54,13 @@ public class CreateStandaloneTaskDialogFragment extends AlfrescoFragment
 {
     private static final String ARGUMENT_APP_ID = "processDefinitionId";
 
+    private static final String ARGUMENT_TASK_ID = "taskId";
+
     protected Integer fieldId;
 
     protected String appId;
+
+    protected String taskId;
 
     protected EditText nameET, descriptionET;
 
@@ -87,8 +93,10 @@ public class CreateStandaloneTaskDialogFragment extends AlfrescoFragment
         {
             appId = null;
         }
+        taskId = BundleUtils.getString(getArguments(), ARGUMENT_TASK_ID);
 
-        MaterialDialog.Builder builder = new MaterialDialog.Builder(getActivity()).title(R.string.task_create_new)
+        MaterialDialog.Builder builder = new MaterialDialog.Builder(getActivity())
+                .title(taskId != null ? R.string.task_action_add_checklist : R.string.task_create_new)
                 .titleColor(getResources().getColor(R.color.accent)).customView(R.layout.fr_create_task, false)
                 .cancelListener(new DialogInterface.OnCancelListener()
                 {
@@ -102,8 +110,16 @@ public class CreateStandaloneTaskDialogFragment extends AlfrescoFragment
                     @Override
                     public void onPositive(MaterialDialog dialog)
                     {
-                        createTask(new CreateTaskRepresentation(nameET.getText().toString(), descriptionET.getText()
-                                .toString(), appId));
+                        // createTask(new
+                        // CreateTaskRepresentation(nameET.getText().toString(),
+                        // descriptionET.getText()
+                        // .toString(), appId));
+                        TaskRepresentation tr = new TaskRepresentation();
+                        tr.setName(nameET.getText().toString());
+                        tr.setDescription(descriptionET.getText().toString());
+                        tr.setCategory(appId);
+                        tr.setAssignee(ActivitiAccountManager.getInstance(getActivity()).getUser());
+                        createTask(tr);
                     }
                 });
         return builder.cancelable(false).autoDismiss(false).build();
@@ -159,28 +175,57 @@ public class CreateStandaloneTaskDialogFragment extends AlfrescoFragment
     // ///////////////////////////////////////////////////////////////////////////
     // BUILDER
     // ///////////////////////////////////////////////////////////////////////////
-    private void createTask(CreateTaskRepresentation rep)
+    private void createTask(TaskRepresentation rep)
     {
-        getAPI().getTaskService().create(rep, new Callback<TaskRepresentation>()
+        if (!TextUtils.isEmpty(taskId))
         {
-            @Override
-            public void success(TaskRepresentation taskRepresentation, Response response)
+            getAPI().getTaskService().addSubtask(taskId, rep, new Callback<TaskRepresentation>()
             {
-                EventBusManager.getInstance().post(new CreateTaskEvent(null, taskRepresentation, getLastAppId()));
-                Snackbar.make(getActivity().findViewById(R.id.left_panel),
-                        String.format(getString(R.string.task_alert_created), taskRepresentation.getName()),
-                        Snackbar.LENGTH_SHORT).show();
+                @Override
+                public void success(TaskRepresentation subTaskRespresentation, Response response)
+                {
+                    EventBusManager.getInstance().post(
+                            new CreateTaskEvent(null, subTaskRespresentation, getLastAppId(), taskId));
+                    Snackbar.make(
+                            getActivity().findViewById(R.id.left_panel),
+                            String.format(getString(R.string.task_alert_checklist_added),
+                                    subTaskRespresentation.getName()), Snackbar.LENGTH_SHORT).show();
 
-                dismiss();
-            }
+                    dismiss();
+                }
 
-            @Override
-            public void failure(RetrofitError error)
+                @Override
+                public void failure(RetrofitError error)
+                {
+                    Snackbar.make(getActivity().findViewById(R.id.left_panel), error.getMessage(),
+                            Snackbar.LENGTH_SHORT).show();
+                }
+            });
+        }
+        else
+        {
+            getAPI().getTaskService().create(rep, new Callback<TaskRepresentation>()
             {
-                Snackbar.make(getActivity().findViewById(R.id.left_panel), error.getMessage(), Snackbar.LENGTH_SHORT)
-                        .show();
-            }
-        });
+                @Override
+                public void success(TaskRepresentation taskRepresentation, Response response)
+                {
+                    EventBusManager.getInstance().post(
+                            new CreateTaskEvent(null, taskRepresentation, getLastAppId(), null));
+                    Snackbar.make(getActivity().findViewById(R.id.left_panel),
+                            String.format(getString(R.string.task_alert_created), taskRepresentation.getName()),
+                            Snackbar.LENGTH_SHORT).show();
+
+                    dismiss();
+                }
+
+                @Override
+                public void failure(RetrofitError error)
+                {
+                    Snackbar.make(getActivity().findViewById(R.id.left_panel), error.getMessage(),
+                            Snackbar.LENGTH_SHORT).show();
+                }
+            });
+        }
     }
 
     // ///////////////////////////////////////////////////////////////////////////
@@ -210,6 +255,12 @@ public class CreateStandaloneTaskDialogFragment extends AlfrescoFragment
         public Builder appId(String appId)
         {
             extraConfiguration.putString(ARGUMENT_APP_ID, appId);
+            return this;
+        }
+
+        public Builder taskId(String taskId)
+        {
+            extraConfiguration.putString(ARGUMENT_TASK_ID, taskId);
             return this;
         }
 

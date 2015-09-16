@@ -31,18 +31,15 @@ import android.widget.TextView;
 import com.activiti.android.app.R;
 import com.activiti.android.app.fragments.task.TasksFragment;
 import com.activiti.android.platform.provider.processdefinition.ProcessDefinitionModel;
-import com.activiti.android.ui.fragments.AlfrescoFragment;
 import com.activiti.android.ui.fragments.form.EditTextDialogFragment;
-import com.activiti.android.ui.fragments.processDefinition.ProcessDefinitionFoundationFragment;
 import com.activiti.client.api.constant.RequestConstant;
 
 /**
  * Created by jpascal on 07/03/2015.
  */
-public class TaskFiltersFragment extends AlfrescoFragment implements RequestConstant,
-        EditTextDialogFragment.onEditTextFragment
+public class TaskFiltersFragment extends CommonTaskFilterFragment
 {
-    public static final String TAG = ProcessDefinitionFoundationFragment.class.getName();
+    public static final String TAG = TaskFiltersFragment.class.getName();
 
     private static final int EDIT_NAME_ID = 0;
 
@@ -244,7 +241,7 @@ public class TaskFiltersFragment extends AlfrescoFragment implements RequestCons
 
     private void sendInfoToTasks()
     {
-        frag.setFilterBundle(bundle);
+        frag.setFilterBundle(bundle, true);
     }
 
     // ///////////////////////////////////////////////////////////////////////////
