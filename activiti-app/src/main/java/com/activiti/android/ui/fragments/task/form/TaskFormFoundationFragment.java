@@ -220,6 +220,9 @@ public class TaskFormFoundationFragment extends AlfrescoFragment implements Date
         int id = item.getItemId();
         switch (id)
         {
+            case android.R.id.home:
+                getActivity().onBackPressed();
+                return true;
             case R.id.task_form_save:
                 SaveFormRepresentation rep = new SaveFormRepresentation(formManager.getValues());
                 getAPI().getTaskService().saveTaskForm(task.id, rep, new Callback<Void>()

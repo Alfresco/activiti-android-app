@@ -391,11 +391,37 @@ public abstract class BaseField
         return isVisibility;
     }
 
+    public void evaluateVisibility(boolean isVisible)
+    {
+        // Time to set Visibility
+        if (isVisible)
+        {
+            if (isReadMode)
+            {
+                readView.setVisibility(View.VISIBLE);
+            }
+            else
+            {
+                editionView.setVisibility(View.VISIBLE);
+            }
+        }
+        else
+        {
+            if (isReadMode)
+            {
+                readView.setVisibility(View.GONE);
+            }
+            else
+            {
+                editionView.setVisibility(View.GONE);
+            }
+        }
+    }
+
     public void evaluateVisibility()
     {
         if (data.getVisibilityCondition() != null)
         {
-
             // There are multiple conditions, chained to each other,
             // hence while loop until all are found and evaluated
             ArrayList<Boolean> conditionResults = new ArrayList<>();

@@ -569,9 +569,19 @@ public class FormManager
 
     public void evaluateViews()
     {
+        FormEvaluateExpression formEvaluateExpression = new FormEvaluateExpression(getValues(), formFieldIndex);
+
         for (BaseField field : fieldsOrderIndex)
         {
-            field.evaluateVisibility();
+            if (field.getData().getVisibilityCondition() != null)
+            {
+                field.evaluateVisibility(
+                        formEvaluateExpression.evaluateExpression(field.getData().getVisibilityCondition()));
+            }
+            else
+            {
+                field.evaluateVisibility();
+            }
         }
 
         if (tabLayout == null) { return; }
@@ -588,7 +598,6 @@ public class FormManager
             if (tabField.getValue().getData().getVisibilityCondition() != null)
             {
                 TabField tabInfo = tabField.getValue();
-                FormEvaluateExpression formEvaluateExpression = new FormEvaluateExpression(getValues(), formFieldIndex);
                 boolean isVisible = formEvaluateExpression
                         .evaluateExpression(tabInfo.getData().getVisibilityCondition());
                 if (isVisible && !tabLaIndex.containsKey(tabInfo.getId()))
