@@ -24,9 +24,9 @@ import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.Map;
 
-import retrofit.Callback;
-import retrofit.RetrofitError;
-import retrofit.client.Response;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -206,7 +206,7 @@ public class TaskFormFoundationFragment extends AlfrescoFragment implements Date
                 getAPI().getTaskService().saveTaskForm(task.id, rep, new Callback<Void>()
                 {
                     @Override
-                    public void success(Void aVoid, Response response)
+                    public void onResponse(Call<Void> call, Response<Void> response)
                     {
                         try
                         {
@@ -233,7 +233,7 @@ public class TaskFormFoundationFragment extends AlfrescoFragment implements Date
                     }
 
                     @Override
-                    public void failure(RetrofitError error)
+                    public void onFailure(Call<Void> call, Throwable error)
                     {
                         Snackbar.make(getActivity().findViewById(R.id.left_panel), error.getMessage(),
                                 Snackbar.LENGTH_SHORT).show();
@@ -255,11 +255,12 @@ public class TaskFormFoundationFragment extends AlfrescoFragment implements Date
         getAPI().getTaskService().getTaskForm(task.id, new Callback<FormDefinitionRepresentation>()
         {
             @Override
-            public void success(FormDefinitionRepresentation formDefinitionRepresentation, Response response)
+            public void onResponse(Call<FormDefinitionRepresentation> call,
+                    Response<FormDefinitionRepresentation> response)
             {
                 AppVersion version = new AppVersion(getAccount().getServerVersion());
                 formManager = new FormManager(TaskFormFoundationFragment.this,
-                        (ViewGroup) viewById(R.id.form_container), formDefinitionRepresentation, version);
+                        (ViewGroup) viewById(R.id.form_container), response.body(), version);
 
                 isEnded = task.endDate != null;
 
@@ -294,7 +295,7 @@ public class TaskFormFoundationFragment extends AlfrescoFragment implements Date
             }
 
             @Override
-            public void failure(RetrofitError error)
+            public void onFailure(Call<FormDefinitionRepresentation> call, Throwable error)
             {
                 displayError(error);
                 Snackbar.make(getActivity().findViewById(R.id.left_panel), error.getMessage(), Snackbar.LENGTH_SHORT)
@@ -325,7 +326,7 @@ public class TaskFormFoundationFragment extends AlfrescoFragment implements Date
         getAPI().getTaskService().completeTaskForm(task.id, rep, new Callback<Void>()
         {
             @Override
-            public void success(Void aVoid, Response response)
+            public void onResponse(Call<Void> call, Response<Void> response)
             {
                 try
                 {
@@ -352,7 +353,7 @@ public class TaskFormFoundationFragment extends AlfrescoFragment implements Date
             }
 
             @Override
-            public void failure(RetrofitError error)
+            public void onFailure(Call<Void> call, Throwable error)
             {
                 Snackbar.make(getActivity().findViewById(R.id.left_panel), error.getMessage(), Snackbar.LENGTH_SHORT)
                         .show();
@@ -436,7 +437,7 @@ public class TaskFormFoundationFragment extends AlfrescoFragment implements Date
         hide(R.id.empty);
     }
 
-    protected void displayError(RetrofitError error)
+    protected void displayError(Throwable error)
     {
         hide(R.id.form_master);
         show(R.id.details_loading);

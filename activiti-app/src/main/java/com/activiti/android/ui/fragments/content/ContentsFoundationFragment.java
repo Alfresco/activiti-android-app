@@ -23,9 +23,9 @@ package com.activiti.android.ui.fragments.content;
 import java.io.File;
 import java.util.ArrayList;
 
-import retrofit.Callback;
-import retrofit.RetrofitError;
-import retrofit.client.Response;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 import android.app.Activity;
 import android.content.DialogInterface;
@@ -48,9 +48,8 @@ import com.activiti.android.ui.fragments.AlfrescoFragment;
 import com.activiti.android.ui.fragments.base.BasePagingGridFragment;
 import com.activiti.android.ui.utils.UIUtils;
 import com.activiti.client.api.constant.RequestConstant;
-import com.activiti.client.api.model.common.ResultListDataRepresentation;
+import com.activiti.client.api.model.common.ResultList;
 import com.activiti.client.api.model.runtime.RelatedContentRepresentation;
-import com.activiti.client.api.model.runtime.RelatedContentsRepresentation;
 import com.activiti.client.api.model.runtime.request.AddContentRelatedRepresentation;
 import com.afollestad.materialdialogs.MaterialDialog;
 
@@ -114,16 +113,17 @@ public class ContentsFoundationFragment extends BasePagingGridFragment implement
         }
     }
 
-    protected Callback<RelatedContentsRepresentation> callBack = new Callback<RelatedContentsRepresentation>()
+    protected Callback<ResultList<RelatedContentRepresentation>> callBack = new Callback<ResultList<RelatedContentRepresentation>>()
     {
         @Override
-        public void success(RelatedContentsRepresentation response, Response response2)
+        public void onResponse(Call<ResultList<RelatedContentRepresentation>> call,
+                Response<ResultList<RelatedContentRepresentation>> response)
         {
-            displayData(response);
+            displayData(response.body());
         }
 
         @Override
-        public void failure(RetrofitError error)
+        public void onFailure(Call<ResultList<RelatedContentRepresentation>> call, Throwable error)
         {
             displayError(error);
         }
@@ -186,7 +186,7 @@ public class ContentsFoundationFragment extends BasePagingGridFragment implement
     }
 
     @Override
-    protected void displayData(ResultListDataRepresentation<?> response)
+    protected void displayData(ResultList<?> response)
     {
         super.displayData(response);
 
@@ -212,13 +212,13 @@ public class ContentsFoundationFragment extends BasePagingGridFragment implement
         getAPI().getContentService().delete(contentId, new Callback<Void>()
         {
             @Override
-            public void success(Void aVoid, Response response)
+            public void onResponse(Call<Void> call, Response<Void> response)
             {
                 refresh();
             }
 
             @Override
-            public void failure(RetrofitError error)
+            public void onFailure(Call<Void> call, Throwable error)
             {
                 Snackbar.make(getActivity().findViewById(R.id.left_panel), error.getMessage(), Snackbar.LENGTH_SHORT)
                         .show();

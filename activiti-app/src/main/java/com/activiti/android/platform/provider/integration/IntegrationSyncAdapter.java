@@ -40,9 +40,9 @@ import com.activiti.android.platform.account.ActivitiAccount;
 import com.activiti.android.platform.integration.alfresco.AlfrescoIntegrator;
 import com.activiti.android.sdk.ActivitiSession;
 import com.activiti.android.sdk.services.ServiceRegistry;
-import com.activiti.client.api.constant.ISO8601Utils;
+import com.activiti.client.api.model.common.ResultList;
 import com.activiti.client.api.model.runtime.integration.dto.AlfrescoEndpointRepresentation;
-import com.activiti.client.api.model.runtime.integration.dto.AlfrescoEndpointsRepresentation;
+import com.alfresco.client.utils.ISO8601Utils;
 
 public class IntegrationSyncAdapter extends AbstractThreadedSyncAdapter
 {
@@ -86,8 +86,9 @@ public class IntegrationSyncAdapter extends AbstractThreadedSyncAdapter
             {
                 return;
             }
-            AlfrescoEndpointsRepresentation repositories = api.getProfileService().getAlfrescoRepositories();
-            List<AlfrescoEndpointRepresentation> alfrescoEndpoints = repositories.getData();
+            ResultList<AlfrescoEndpointRepresentation> repositories = api.getProfileService().getAlfrescoRepositories();
+            if (repositories == null) { return; }
+            List<AlfrescoEndpointRepresentation> alfrescoEndpoints = repositories.getList();
 
             // Retrieve Local Data
             Map<Long, Integration> localModelIds = integrationManager.getByAccountId(accountId);

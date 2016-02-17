@@ -23,9 +23,9 @@ package com.activiti.android.ui.fragments.process;
 import java.util.ArrayList;
 import java.util.List;
 
-import retrofit.Callback;
-import retrofit.RetrofitError;
-import retrofit.client.Response;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -39,9 +39,9 @@ import com.activiti.android.platform.provider.app.RuntimeAppInstanceManager;
 import com.activiti.android.platform.utils.BundleUtils;
 import com.activiti.android.ui.fragments.base.BasePagingGridFragment;
 import com.activiti.client.api.constant.RequestConstant;
+import com.activiti.client.api.model.common.ResultList;
 import com.activiti.client.api.model.runtime.ProcessDefinitionRepresentation;
 import com.activiti.client.api.model.runtime.ProcessInstanceRepresentation;
-import com.activiti.client.api.model.runtime.ProcessInstancesRepresentation;
 import com.activiti.client.api.model.runtime.ProcessesRequestRepresentation;
 
 public class ProcessesFoundationFragment extends BasePagingGridFragment implements RequestConstant
@@ -76,16 +76,17 @@ public class ProcessesFoundationFragment extends BasePagingGridFragment implemen
     // ///////////////////////////////////////////////////////////////////////////
     // LIFECYCLE
     // ///////////////////////////////////////////////////////////////////////////
-    protected Callback<ProcessInstancesRepresentation> callBack = new Callback<ProcessInstancesRepresentation>()
+    protected Callback<ResultList<ProcessInstanceRepresentation>> callBack = new Callback<ResultList<ProcessInstanceRepresentation>>()
     {
         @Override
-        public void success(ProcessInstancesRepresentation response, Response response2)
+        public void onResponse(Call<ResultList<ProcessInstanceRepresentation>> call,
+                Response<ResultList<ProcessInstanceRepresentation>> response)
         {
-            displayData(response);
+            displayData(response.body());
         }
 
         @Override
-        public void failure(RetrofitError error)
+        public void onFailure(Call<ResultList<ProcessInstanceRepresentation>> call, Throwable error)
         {
             displayError(error);
         }

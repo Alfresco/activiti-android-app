@@ -25,9 +25,9 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
-import retrofit.Callback;
-import retrofit.RetrofitError;
-import retrofit.client.Response;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 import android.content.Context;
 import android.text.Editable;
@@ -191,11 +191,12 @@ public class TypeAhead extends BaseField
                         new Callback<List<OptionRepresentation>>()
                         {
                             @Override
-                            public void success(List<OptionRepresentation> optionsRespresentation, Response response)
+                    public void onResponse(Call<List<OptionRepresentation>> call,
+                            Response<List<OptionRepresentation>> response)
                             {
-                                ArrayList<String> optionsValue = new ArrayList<String>(optionsRespresentation.size());
-                                optionsIndex = new LinkedHashMap<>(optionsRespresentation.size());
-                                for (OptionRepresentation item : optionsRespresentation)
+                        ArrayList<String> optionsValue = new ArrayList<String>(response.body().size());
+                        optionsIndex = new LinkedHashMap<>(response.body().size());
+                        for (OptionRepresentation item : response.body())
                                 {
                                     optionsValue.add(item.getName());
                                     optionsIndex.put(item.getName(), item);
@@ -208,7 +209,7 @@ public class TypeAhead extends BaseField
                             }
 
                             @Override
-                            public void failure(RetrofitError error)
+                    public void onFailure(Call<List<OptionRepresentation>> call, Throwable error)
                             {
                             }
                         });

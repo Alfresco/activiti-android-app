@@ -24,21 +24,18 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import retrofit.Callback;
-import retrofit.RetrofitError;
-import retrofit.client.Response;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 import android.accounts.Account;
 import android.accounts.AccountManager;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
-import android.content.DialogInterface;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
-import android.text.Html;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -53,7 +50,6 @@ import com.activiti.android.app.R;
 import com.activiti.android.platform.account.AccountsPreferences;
 import com.activiti.android.platform.account.ActivitiAccount;
 import com.activiti.android.platform.account.ActivitiAccountManager;
-import com.activiti.android.platform.exception.ExceptionMessageUtils;
 import com.activiti.android.platform.provider.app.RuntimeAppInstanceManager;
 import com.activiti.android.platform.provider.group.GroupInstanceManager;
 import com.activiti.android.platform.provider.integration.IntegrationManager;
@@ -64,10 +60,9 @@ import com.activiti.android.sdk.model.runtime.AppVersion;
 import com.activiti.android.ui.fragments.AlfrescoFragment;
 import com.activiti.android.ui.fragments.builder.AlfrescoFragmentBuilder;
 import com.activiti.android.ui.utils.UIUtils;
-import com.activiti.client.api.constant.Server;
+import com.activiti.client.api.constant.ActivitiAPI;
 import com.activiti.client.api.model.idm.UserRepresentation;
 import com.activiti.client.api.model.runtime.AppVersionRepresentation;
-import com.afollestad.materialdialogs.MaterialDialog;
 import com.rengwuxian.materialedittext.MaterialAutoCompleteTextView;
 import com.rengwuxian.materialedittext.MaterialEditText;
 import com.squareup.otto.Subscribe;
@@ -296,14 +291,14 @@ public class AccountEditFragment extends AlfrescoFragment
         int shortAnimTime = getResources().getInteger(android.R.integer.config_shortAnimTime);
         mProgressView.setVisibility(show ? View.VISIBLE : View.GONE);
         mProgressView.animate().setDuration(shortAnimTime).alpha(show ? 1 : 0)
-                .setListener(new AnimatorListenerAdapter()
-                {
-                    @Override
-                    public void onAnimationEnd(Animator animation)
-                    {
-                        mProgressView.setVisibility(show ? View.VISIBLE : View.GONE);
-                    }
-                });
+.setListener(new AnimatorListenerAdapter()
+        {
+            @Override
+            public void onAnimationEnd(Animator animation)
+            {
+                mProgressView.setVisibility(show ? View.VISIBLE : View.GONE);
+            }
+        });
         mFormView.setVisibility(show ? View.GONE : View.VISIBLE);
         mFormView.animate().setDuration(shortAnimTime).alpha(show ? 0 : 1).setListener(new AnimatorListenerAdapter()
         {
@@ -323,55 +318,61 @@ public class AccountEditFragment extends AlfrescoFragment
         session.getServiceRegistry().getProfileService().getProfile(new Callback<UserRepresentation>()
         {
             @Override
-            public void success(UserRepresentation userRepresentation, Response response)
+            public void onResponse(Call<UserRepresentation> call, Response<UserRepresentation> response)
             {
-                user = userRepresentation;
-                retrieveServerInfo();
+                if (response.isSuccess())
+                {
+                    user = response.body();
+                    retrieveServerInfo();
+                }
+                else
+                {
+                    View focusView = null;
+
+                    showProgress(false);
+                    if (!ActivitiAPI.SERVER_URL_ENDPOINT.equals(endpoint.toString()))
+                    {
+                        show(R.id.server_form);
+                    }
+
+                    if (response.code() == 401)
+                    {
+                        mPasswordView.setError(getString(R.string.error_incorrect_password));
+                        focusView = mPasswordView;
+                    }
+                    UIUtils.showKeyboard(getActivity(), focusView);
+
+                    if (focusView == null)
+                    {
+                        // TODO
+                        /*
+                         * int messageId =
+                         * ExceptionMessageUtils.getSignInMessageId(getActivity(
+                         * ), response.message()); if (messageId ==
+                         * R.string.error_session_creation) {
+                         * Snackbar.make(getActivity().findViewById(R.id.
+                         * left_panel), response.message(),
+                         * Snackbar.LENGTH_LONG); } else { // Revert to Alfresco
+                         * WebApp MaterialDialog.Builder builder = new
+                         * MaterialDialog.Builder(getActivity())
+                         * .cancelListener(new
+                         * DialogInterface.OnCancelListener() {
+                         * @Override public void onCancel(DialogInterface
+                         * dialog) { dismiss(); }
+                         * }).title(R.string.error_session_creation_title)
+                         * .content(Html.fromHtml(getString(messageId))).
+                         * positiveText(R.string.ok); builder.show(); }
+                         */
+                    }
+                }
+
             }
 
-            @Override
-            public void failure(RetrofitError error)
+            public void onFailure(Call<UserRepresentation> call, Throwable error)
             {
-                View focusView = null;
 
-                showProgress(false);
-                if (!Server.SERVER_URL_ENDPOINT.equals(endpoint.toString()))
-                {
-                    show(R.id.server_form);
-                }
-
-                if (error.getResponse() != null && error.getResponse().getStatus() == 401)
-                {
-                    mPasswordView.setError(getString(R.string.error_incorrect_password));
-                    focusView = mPasswordView;
-                }
-                UIUtils.showKeyboard(getActivity(), focusView);
-
-                if (focusView == null)
-                {
-                    int messageId = ExceptionMessageUtils.getSignInMessageId(getActivity(), error.getCause());
-                    if (messageId == R.string.error_session_creation)
-                    {
-                        Snackbar.make(getActivity().findViewById(R.id.left_panel), error.getMessage(),
-                                Snackbar.LENGTH_LONG);
-                    }
-                    else
-                    {
-                        // Revert to Alfresco WebApp
-                        MaterialDialog.Builder builder = new MaterialDialog.Builder(getActivity())
-                                .cancelListener(new DialogInterface.OnCancelListener()
-                                {
-                                    @Override
-                                    public void onCancel(DialogInterface dialog)
-                                    {
-                                        dismiss();
-                                    }
-                                }).title(R.string.error_session_creation_title)
-                                .content(Html.fromHtml(getString(messageId))).positiveText(R.string.ok);
-                        builder.show();
-                    }
-                }
             }
+
         });
     }
 
@@ -401,15 +402,24 @@ public class AccountEditFragment extends AlfrescoFragment
         session.getServiceRegistry().getInfoService().getInfo(new Callback<AppVersionRepresentation>()
         {
             @Override
-            public void success(AppVersionRepresentation info, Response response)
+            public void onResponse(Call<AppVersionRepresentation> call, Response<AppVersionRepresentation> response)
             {
-                // BPM Suite 1.2
-                version = new AppVersion(info);
-                updateAccount();
+                if (response.isSuccess())
+                {
+                    // BPM Suite 1.2
+                    version = new AppVersion(response.body());
+                    updateAccount();
+                }
+                else
+                {
+                    // BPM Suite 1.1
+                    version = null;
+                    updateAccount();
+                }
             }
 
             @Override
-            public void failure(RetrofitError error)
+            public void onFailure(Call<AppVersionRepresentation> call, Throwable error)
             {
                 // BPM Suite 1.1
                 version = null;

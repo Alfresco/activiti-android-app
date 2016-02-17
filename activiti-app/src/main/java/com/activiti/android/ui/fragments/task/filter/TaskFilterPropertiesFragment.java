@@ -22,9 +22,9 @@ package com.activiti.android.ui.fragments.task.filter;
 
 import java.util.Map;
 
-import retrofit.Callback;
-import retrofit.RetrofitError;
-import retrofit.client.Response;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
@@ -254,14 +254,15 @@ public class TaskFilterPropertiesFragment extends CommonTaskFilterFragment
                 new Callback<UserTaskFilterRepresentation>()
                 {
                     @Override
-                    public void success(UserTaskFilterRepresentation userTaskFilterRepresentation, Response response)
+                    public void onResponse(Call<UserTaskFilterRepresentation> call,
+                            Response<UserTaskFilterRepresentation> response)
                     {
                         fragFilters.requestRefresh();
                         getFragmentManager().popBackStack();
                     }
 
                     @Override
-                    public void failure(RetrofitError error)
+                    public void onFailure(Call<UserTaskFilterRepresentation> call, Throwable error)
                     {
                         Snackbar.make(getActivity().findViewById(R.id.left_panel), error.getMessage(),
                                 Snackbar.LENGTH_SHORT).show();
@@ -291,14 +292,15 @@ public class TaskFilterPropertiesFragment extends CommonTaskFilterFragment
         getAPI().getUserFiltersService().createUserTaskFilter(rep, new Callback<UserTaskFilterRepresentation>()
         {
             @Override
-            public void success(UserTaskFilterRepresentation userTaskFilterRepresentation, Response response)
+            public void onResponse(Call<UserTaskFilterRepresentation> call,
+                    Response<UserTaskFilterRepresentation> response)
             {
                 fragFilters.requestRefresh();
                 getFragmentManager().popBackStack();
             }
 
             @Override
-            public void failure(RetrofitError error)
+            public void onFailure(Call<UserTaskFilterRepresentation> call, Throwable error)
             {
                 Snackbar.make(getActivity().findViewById(R.id.left_panel), error.getMessage(), Snackbar.LENGTH_SHORT)
                         .show();

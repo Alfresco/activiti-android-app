@@ -22,9 +22,9 @@ package com.activiti.android.ui.fragments.comment;
 
 import java.util.ArrayList;
 
-import retrofit.Callback;
-import retrofit.RetrofitError;
-import retrofit.client.Response;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -48,8 +48,8 @@ import com.activiti.android.ui.fragments.base.BasePagingGridFragment;
 import com.activiti.android.ui.utils.DisplayUtils;
 import com.activiti.android.ui.utils.UIUtils;
 import com.activiti.client.api.constant.RequestConstant;
+import com.activiti.client.api.model.common.ResultList;
 import com.activiti.client.api.model.runtime.CommentRepresentation;
-import com.activiti.client.api.model.runtime.CommentsRepresentation;
 
 public class CommentsFoundationFragment extends BasePagingGridFragment
 {
@@ -100,18 +100,19 @@ public class CommentsFoundationFragment extends BasePagingGridFragment
         isReadOnly = BundleUtils.getBoolean(bundle, ARGUMENT_RO);
     }
 
-    protected Callback<CommentsRepresentation> callBack = new Callback<CommentsRepresentation>()
+    protected Callback<ResultList<CommentRepresentation>> callBack = new Callback<ResultList<CommentRepresentation>>()
     {
         @Override
-        public void success(CommentsRepresentation response, Response response2)
+        public void onResponse(Call<ResultList<CommentRepresentation>> call,
+                Response<ResultList<CommentRepresentation>> response)
         {
-            displayData(response);
-            gv.smoothScrollToPosition(response.getSize());
-            updateFragmentIcon(response.getSize() > 0);
+            displayData(response.body());
+            gv.smoothScrollToPosition(response.body().getSize());
+            updateFragmentIcon(response.body().getSize() > 0);
         }
 
         @Override
-        public void failure(RetrofitError error)
+        public void onFailure(Call<ResultList<CommentRepresentation>> call, Throwable error)
         {
             displayError(error);
         }
@@ -172,7 +173,7 @@ public class CommentsFoundationFragment extends BasePagingGridFragment
         });
 
         gv.setSelector(android.R.color.transparent);
-        gv.setCacheColorHint(android.R.color.transparent);
+        gv.setCacheColorHint(getResources().getColor(android.R.color.transparent));
 
         return getRootView();
     }
@@ -281,7 +282,7 @@ public class CommentsFoundationFragment extends BasePagingGridFragment
         Callback<CommentRepresentation> callback = new Callback<CommentRepresentation>()
         {
             @Override
-            public void success(CommentRepresentation commentResponse, Response response)
+            public void onResponse(Call<CommentRepresentation> call, Response<CommentRepresentation> response)
             {
                 commentText.setEnabled(true);
                 commentText.setText("");
@@ -290,7 +291,7 @@ public class CommentsFoundationFragment extends BasePagingGridFragment
             }
 
             @Override
-            public void failure(RetrofitError error)
+            public void onFailure(Call<CommentRepresentation> call, Throwable error)
             {
 
             }

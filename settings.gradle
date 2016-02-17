@@ -19,4 +19,4 @@
  */
 
 
-include ':activiti-app', ':activiti-sdk', ':client-api'
+include ':activiti-app'

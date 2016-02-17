@@ -25,9 +25,9 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-import retrofit.Callback;
-import retrofit.RetrofitError;
-import retrofit.client.Response;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -47,8 +47,8 @@ import com.activiti.android.ui.fragments.task.form.TaskFormFoundationFragment;
 import com.activiti.android.ui.fragments.user.LightUserAdapter;
 import com.activiti.android.ui.utils.DisplayUtils;
 import com.activiti.android.ui.utils.UIUtils;
+import com.activiti.client.api.model.common.ResultList;
 import com.activiti.client.api.model.idm.LightUserRepresentation;
-import com.activiti.client.api.model.idm.LightUsersRepresentation;
 
 /**
  * @author Jean Marie Pascal
@@ -152,16 +152,17 @@ public class UserPickerFragment extends IdmPickerFragment
     // //////////////////////////////////////////////////////////////////////
     // LOADERS
     // //////////////////////////////////////////////////////////////////////
-    protected Callback<LightUsersRepresentation> callBack = new Callback<LightUsersRepresentation>()
+    protected Callback<ResultList<LightUserRepresentation>> callBack = new Callback<ResultList<LightUserRepresentation>>()
     {
         @Override
-        public void success(LightUsersRepresentation response, Response response2)
+        public void onResponse(Call<ResultList<LightUserRepresentation>> call,
+                Response<ResultList<LightUserRepresentation>> response)
         {
-            displayData(response);
+            displayData(response.body());
         }
 
         @Override
-        public void failure(RetrofitError error)
+        public void onFailure(Call<ResultList<LightUserRepresentation>> call, Throwable error)
         {
             displayError(error);
         }

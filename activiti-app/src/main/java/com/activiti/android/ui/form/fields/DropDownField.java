@@ -25,9 +25,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import retrofit.Callback;
-import retrofit.RetrofitError;
-import retrofit.client.Response;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 import android.content.Context;
 import android.text.TextUtils;
@@ -187,22 +187,23 @@ public class DropDownField extends BaseField
                         new Callback<List<OptionRepresentation>>()
                         {
                             @Override
-                            public void success(List<OptionRepresentation> optionsRespresentation, Response response)
+                    public void onResponse(Call<List<OptionRepresentation>> call,
+                            Response<List<OptionRepresentation>> response)
                             {
                                 if (TextUtils.isEmpty(data.getPlaceholder()))
                                 {
-                                    optionsRespresentation.add(0, new OptionRepresentation("-1",
+                            response.body().add(0, new OptionRepresentation("-1",
                                             getString(R.string.dropdown_select)));
                                 }
                                 else
                                 {
-                                    optionsRespresentation.add(0, new OptionRepresentation("-1", data.getPlaceholder()));
+                            response.body().add(0, new OptionRepresentation("-1", data.getPlaceholder()));
                                 }
-                                refreshAdapter(optionsRespresentation);
+                        refreshAdapter(response.body());
                             }
 
                             @Override
-                            public void failure(RetrofitError error)
+                    public void onFailure(Call<List<OptionRepresentation>> call, Throwable error)
                             {
                             }
                         });

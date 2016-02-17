@@ -184,7 +184,7 @@ public class TaskDetailsFragment extends TaskDetailsFoundationFragment implement
     @Override
     public void hasComment(boolean hascomment)
     {
-        if (menu != null && hascomment)
+        if (menu != null && hascomment && menu.findItem(R.id.display_comments) != null)
         {
             menu.findItem(R.id.display_comments).setIcon(R.drawable.ic_comment);
         }

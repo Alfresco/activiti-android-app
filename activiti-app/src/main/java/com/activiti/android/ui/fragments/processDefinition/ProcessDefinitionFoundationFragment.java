@@ -23,17 +23,17 @@ package com.activiti.android.ui.fragments.processDefinition;
 import java.util.ArrayList;
 import java.util.List;
 
-import retrofit.Callback;
-import retrofit.RetrofitError;
-import retrofit.client.Response;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 import android.os.Bundle;
 import android.widget.BaseAdapter;
 
 import com.activiti.android.app.R;
 import com.activiti.android.ui.fragments.base.BasePagingGridFragment;
+import com.activiti.client.api.model.common.ResultList;
 import com.activiti.client.api.model.runtime.ProcessDefinitionRepresentation;
-import com.activiti.client.api.model.runtime.ProcessDefinitionsRepresentation;
 
 public class ProcessDefinitionFoundationFragment extends BasePagingGridFragment
 {
@@ -46,16 +46,17 @@ public class ProcessDefinitionFoundationFragment extends BasePagingGridFragment
     // ///////////////////////////////////////////////////////////////////////////
     // LIFECYCLE
     // ///////////////////////////////////////////////////////////////////////////
-    protected Callback<ProcessDefinitionsRepresentation> callBack = new Callback<ProcessDefinitionsRepresentation>()
+    protected Callback<ResultList<ProcessDefinitionRepresentation>> callBack = new Callback<ResultList<ProcessDefinitionRepresentation>>()
     {
         @Override
-        public void success(ProcessDefinitionsRepresentation response, Response response2)
+        public void onResponse(Call<ResultList<ProcessDefinitionRepresentation>> call,
+                Response<ResultList<ProcessDefinitionRepresentation>> response)
         {
-            displayData(response);
+            displayData(response.body());
         }
 
         @Override
-        public void failure(RetrofitError error)
+        public void onFailure(Call<ResultList<ProcessDefinitionRepresentation>> call, Throwable error)
         {
             displayError(error);
         }

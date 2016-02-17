@@ -38,9 +38,9 @@ import com.activiti.android.platform.account.ActivitiAccount;
 import com.activiti.android.sdk.ActivitiSession;
 import com.activiti.android.sdk.model.TaskState;
 import com.activiti.android.sdk.services.ServiceRegistry;
+import com.activiti.client.api.model.common.ResultList;
 import com.activiti.client.api.model.runtime.AppDefinitionRepresentation;
-import com.activiti.client.api.model.runtime.AppDefinitionsRepresentation;
-import com.activiti.client.api.model.runtime.TasksRepresentation;
+import com.activiti.client.api.model.runtime.TaskRepresentation;
 import com.activiti.client.api.model.runtime.request.QueryTasksRepresentation;
 
 public class RuntimeAppInstanceSyncAdapter extends AbstractThreadedSyncAdapter
@@ -113,7 +113,7 @@ public class RuntimeAppInstanceSyncAdapter extends AbstractThreadedSyncAdapter
         {
             QueryTasksRepresentation request = new QueryTasksRepresentation(null, null, null, null, null,
                     TaskState.OPEN.value(), null, null, null, 0L);
-            TasksRepresentation response = api.getTaskService().list(request);
+            ResultList<TaskRepresentation> response = api.getTaskService().list(request);
             runtimeAppInstanceManager.update(appInstance.getProviderId(), response.getTotal(), -1, -1);
             syncResult.stats.numUpdates++;
         }
@@ -128,7 +128,7 @@ public class RuntimeAppInstanceSyncAdapter extends AbstractThreadedSyncAdapter
         {
             QueryTasksRepresentation request = new QueryTasksRepresentation(appId, null, null, null, null,
                     TaskState.OPEN.value(), null, null, null, 0L);
-            TasksRepresentation response = api.getTaskService().list(request);
+            ResultList<TaskRepresentation> response = api.getTaskService().list(request);
             runtimeAppInstanceManager.update(appInstance.getProviderId(), response.getTotal(), -1, -1);
             syncResult.stats.numUpdates++;
         }
@@ -137,7 +137,7 @@ public class RuntimeAppInstanceSyncAdapter extends AbstractThreadedSyncAdapter
     protected void fullSync(long accountId, Bundle extras, String authority, ContentProviderClient provider,
             SyncResult syncResult)
     {
-        AppDefinitionsRepresentation appsFromServer = api.getApplicationService().getRuntimeAppDefinitions();
+        ResultList<AppDefinitionRepresentation> appsFromServer = api.getApplicationService().getRuntimeAppDefinitions();
 
         List<Long> localAppIds = runtimeAppInstanceManager.getIds(accountId);
         if (localAppIds == null)
@@ -145,7 +145,7 @@ public class RuntimeAppInstanceSyncAdapter extends AbstractThreadedSyncAdapter
             localAppIds = new ArrayList<>(0);
         }
 
-        for (AppDefinitionRepresentation app : appsFromServer.getData())
+        for (AppDefinitionRepresentation app : appsFromServer.getList())
         {
             // Ignore Default APP
             if (!TextUtils.isEmpty(app.getDefaultAppId()))
@@ -154,7 +154,7 @@ public class RuntimeAppInstanceSyncAdapter extends AbstractThreadedSyncAdapter
             }
             QueryTasksRepresentation request = new QueryTasksRepresentation(app.getId(), null, null, null, null,
                     TaskState.OPEN.value(), null, null, null, 0L);
-            TasksRepresentation response = api.getTaskService().list(request);
+            ResultList<TaskRepresentation> response = api.getTaskService().list(request);
             RuntimeAppInstance localApp = runtimeAppInstanceManager.getById(app.getId(), accountId);
 
             if (localApp == null)
@@ -180,7 +180,7 @@ public class RuntimeAppInstanceSyncAdapter extends AbstractThreadedSyncAdapter
         // Retrieve info for MyTasks
         QueryTasksRepresentation request = new QueryTasksRepresentation(null, null, null, null, null,
                 TaskState.OPEN.value(), "no value", null, null, 0L);
-        TasksRepresentation response = api.getTaskService().list(request);
+        ResultList<TaskRepresentation> response = api.getTaskService().list(request);
         RuntimeAppInstance localApp = runtimeAppInstanceManager.getById(-1L, accountId);
         ContentValues updateValues = new ContentValues();
         updateValues.put(RuntimeAppInstanceSchema.COLUMN_NUMBER_1, response.getTotal());

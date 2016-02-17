@@ -35,10 +35,9 @@ import android.util.Log;
 import com.activiti.android.platform.account.ActivitiAccount;
 import com.activiti.android.sdk.ActivitiSession;
 import com.activiti.android.sdk.services.ServiceRegistry;
+import com.activiti.client.api.model.common.ResultList;
 import com.activiti.client.api.model.runtime.AppDefinitionRepresentation;
-import com.activiti.client.api.model.runtime.AppDefinitionsRepresentation;
 import com.activiti.client.api.model.runtime.ProcessDefinitionRepresentation;
-import com.activiti.client.api.model.runtime.ProcessDefinitionsRepresentation;
 
 public class ProcessDefinitionModelSyncAdapter extends AbstractThreadedSyncAdapter
 {
@@ -83,13 +82,14 @@ public class ProcessDefinitionModelSyncAdapter extends AbstractThreadedSyncAdapt
                 return;
             }
 
-            AppDefinitionsRepresentation appsFromServer = api.getApplicationService().getRuntimeAppDefinitions();
+            ResultList<AppDefinitionRepresentation> appsFromServer = api.getApplicationService()
+                    .getRuntimeAppDefinitions();
 
             // Retrieve Local Data
             Map<Long, ProcessDefinitionModel> localModelIds = processDefinitionModelManager
                     .getAllByAccountId(accountId);
 
-            for (AppDefinitionRepresentation app : appsFromServer.getData())
+            for (AppDefinitionRepresentation app : appsFromServer.getList())
             {
                 // Ignore Default APP
                 if (!TextUtils.isEmpty(app.getDefaultAppId()))
@@ -97,9 +97,9 @@ public class ProcessDefinitionModelSyncAdapter extends AbstractThreadedSyncAdapt
                     continue;
                 }
 
-                ProcessDefinitionsRepresentation processes = api.getProcessDefinitionService().getProcessDefinitions(
-                        app.getId());
-                for (ProcessDefinitionRepresentation model : processes.getData())
+                ResultList<ProcessDefinitionRepresentation> processes = api.getProcessDefinitionService()
+                        .getProcessDefinitions(app.getId());
+                for (ProcessDefinitionRepresentation model : processes.getList())
                 {
                     ProcessDefinitionModel localModel = processDefinitionModelManager.getById(model.getId(), accountId,
                             app.getId());
