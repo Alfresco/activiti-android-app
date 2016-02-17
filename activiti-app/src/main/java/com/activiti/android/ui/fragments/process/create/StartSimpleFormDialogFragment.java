@@ -23,9 +23,9 @@ package com.activiti.android.ui.fragments.process.create;
 import java.util.Date;
 import java.util.Map;
 
-import retrofit.Callback;
-import retrofit.RetrofitError;
-import retrofit.client.Response;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 import android.app.Dialog;
 import android.content.DialogInterface;
@@ -149,9 +149,10 @@ public class StartSimpleFormDialogFragment extends AlfrescoFragment
         getAPI().getProcessService().startNewProcessInstance(rep, new Callback<ProcessInstanceRepresentation>()
         {
             @Override
-            public void success(ProcessInstanceRepresentation representation, Response response)
+            public void onResponse(Call<ProcessInstanceRepresentation> call,
+                    Response<ProcessInstanceRepresentation> response)
             {
-                ProcessDetailsFragment.with(getActivity()).processId(representation.getId()).display();
+                ProcessDetailsFragment.with(getActivity()).processId(response.body().getId()).display();
 
                 try
                 {
@@ -161,19 +162,19 @@ public class StartSimpleFormDialogFragment extends AlfrescoFragment
                             .findFragmentByTag(ProcessesFragment.TAG);
                     if (fr != null)
                     {
-                        fr.onStartedProcessEvent(new StartProcessEvent(null, representation, getLastAppId()));
+                        fr.onStartedProcessEvent(new StartProcessEvent(null, response.body(), getLastAppId()));
                     }
                 }
                 catch (Exception e)
                 {
-                    EventBusManager.getInstance().post(new StartProcessEvent(null, representation, null));
+                    EventBusManager.getInstance().post(new StartProcessEvent(null, response.body(), null));
                 }
 
                 dismiss();
             }
 
             @Override
-            public void failure(RetrofitError error)
+            public void onFailure(Call<ProcessInstanceRepresentation> call, Throwable error)
             {
                 Snackbar.make(getActivity().findViewById(R.id.left_panel), error.getMessage(), Snackbar.LENGTH_LONG)
                         .show();

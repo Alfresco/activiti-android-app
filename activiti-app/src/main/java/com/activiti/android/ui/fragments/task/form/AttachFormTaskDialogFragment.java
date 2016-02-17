@@ -23,9 +23,9 @@ package com.activiti.android.ui.fragments.task.form;
 import java.util.ArrayList;
 import java.util.Map;
 
-import retrofit.Callback;
-import retrofit.RetrofitError;
-import retrofit.client.Response;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 import android.app.Dialog;
 import android.content.DialogInterface;
@@ -39,8 +39,8 @@ import com.activiti.android.platform.utils.BundleUtils;
 import com.activiti.android.ui.fragments.AlfrescoFragment;
 import com.activiti.android.ui.fragments.builder.AlfrescoFragmentBuilder;
 import com.activiti.android.ui.fragments.task.TaskDetailsFoundationFragment;
+import com.activiti.client.api.model.common.ResultList;
 import com.activiti.client.api.model.editor.ModelRepresentation;
-import com.activiti.client.api.model.editor.ModelsRepresentation;
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.afollestad.materialdialogs.internal.MDButton;
@@ -160,17 +160,18 @@ public class AttachFormTaskDialogFragment extends AlfrescoFragment
     // ///////////////////////////////////////////////////////////////////////////
     private void retrieveFormModels()
     {
-        getAPI().getModelService().getFormModels(new Callback<ModelsRepresentation>()
+        getAPI().getModelService().getFormModels(new Callback<ResultList<ModelRepresentation>>()
         {
             @Override
-            public void success(ModelsRepresentation modelsRepresentation, Response response)
+            public void onResponse(Call<ResultList<ModelRepresentation>> call,
+                    Response<ResultList<ModelRepresentation>> response)
             {
-                adapter.addAll(modelsRepresentation.getData());
+                adapter.addAll(response.body().getList());
                 adapter.notifyDataSetChanged();
             }
 
             @Override
-            public void failure(RetrofitError error)
+            public void onFailure(Call<ResultList<ModelRepresentation>> call, Throwable error)
             {
 
             }

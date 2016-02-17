@@ -35,6 +35,7 @@ import com.activiti.android.app.fragments.task.TaskFormFragment;
 import com.activiti.android.platform.provider.processdefinition.ProcessDefinitionModel;
 import com.activiti.android.platform.provider.processdefinition.ProcessDefinitionModelManager;
 import com.activiti.android.ui.fragments.AlfrescoFragment;
+import com.activiti.android.ui.fragments.FragmentDisplayer;
 import com.activiti.android.ui.fragments.builder.AlfrescoFragmentBuilder;
 import com.activiti.android.ui.fragments.processDefinition.ProcessDefinitionModelAdapter;
 import com.afollestad.materialdialogs.MaterialDialog;
@@ -94,7 +95,7 @@ public class StartProcessDialogFragment extends AlfrescoFragment
                                 .getAdapter().getItem(i));
                         if (model.hasStartForm())
                         {
-                            TaskFormFragment.with(getActivity()).display();
+                            TaskFormFragment.with(getActivity()).back(true).display(FragmentDisplayer.PANEL_CENTRAL);
                         }
                         else
                         {

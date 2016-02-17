@@ -23,9 +23,9 @@ package com.activiti.android.platform.provider.transfer;
 import java.io.File;
 import java.util.List;
 
-import retrofit.Callback;
-import retrofit.RetrofitError;
-import retrofit.client.Response;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 import android.app.Activity;
 import android.content.ContentResolver;
@@ -313,15 +313,16 @@ public class ContentTransferManager extends Manager
                 fr.getAPI().getTaskService().linkAttachment(id, content, new Callback<RelatedContentRepresentation>()
                 {
                     @Override
-                    public void success(RelatedContentRepresentation relatedContentRepresentation, Response response)
+                    public void onResponse(Call<RelatedContentRepresentation> call,
+                            Response<RelatedContentRepresentation> response)
                     {
                         EventBusManager.getInstance().post(
                                 new ContentTransferEvent("-1", ContentTransferSyncAdapter.MODE_SAF_UPLOAD,
-                                        relatedContentRepresentation));
+ response.body()));
                     }
 
                     @Override
-                    public void failure(RetrofitError error)
+                    public void onFailure(Call<RelatedContentRepresentation> call, Throwable error)
                     {
                         if (fr != null)
                         {
@@ -336,16 +337,16 @@ public class ContentTransferManager extends Manager
                         .linkAttachment(id, content, new Callback<RelatedContentRepresentation>()
                         {
                             @Override
-                            public void success(RelatedContentRepresentation relatedContentRepresentation,
-                                    Response response)
+                    public void onResponse(Call<RelatedContentRepresentation> call,
+                            Response<RelatedContentRepresentation> response)
                             {
                                 EventBusManager.getInstance().post(
                                         new ContentTransferEvent("-1", ContentTransferSyncAdapter.MODE_SAF_UPLOAD,
-                                                relatedContentRepresentation));
+ response.body()));
                             }
 
                             @Override
-                            public void failure(RetrofitError error)
+                    public void onFailure(Call<RelatedContentRepresentation> call, Throwable error)
                             {
                                 if (fr != null)
                                 {
@@ -360,16 +361,16 @@ public class ContentTransferManager extends Manager
                         .createTemporaryRelatedContent(content, new Callback<RelatedContentRepresentation>()
                         {
                             @Override
-                            public void success(RelatedContentRepresentation relatedContentRepresentation,
-                                    Response response)
+                            public void onResponse(Call<RelatedContentRepresentation> call,
+                                    Response<RelatedContentRepresentation> response)
                             {
                                 EventBusManager.getInstance().post(
                                         new ContentTransferEvent("-1", ContentTransferSyncAdapter.MODE_SAF_UPLOAD,
-                                                relatedContentRepresentation));
+ response.body()));
                             }
 
                             @Override
-                            public void failure(RetrofitError error)
+                            public void onFailure(Call<RelatedContentRepresentation> call, Throwable error)
                             {
                                 if (fr != null)
                                 {
@@ -384,16 +385,16 @@ public class ContentTransferManager extends Manager
                         .createTemporaryRawRelatedContent(content, new Callback<RelatedContentRepresentation>()
                         {
                             @Override
-                            public void success(RelatedContentRepresentation relatedContentRepresentation,
-                                    Response response)
+                            public void onResponse(Call<RelatedContentRepresentation> call,
+                                    Response<RelatedContentRepresentation> response)
                             {
                                 EventBusManager.getInstance().post(
                                         new ContentTransferEvent("-1", ContentTransferSyncAdapter.MODE_SAF_UPLOAD,
-                                                relatedContentRepresentation));
+ response.body()));
                             }
 
                             @Override
-                            public void failure(RetrofitError error)
+                            public void onFailure(Call<RelatedContentRepresentation> call, Throwable error)
                             {
                                 EventBusManager.getInstance().post(
                                         new ContentTransferEvent("-1", new Exception(error.getMessage())));

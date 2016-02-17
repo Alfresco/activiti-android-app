@@ -20,8 +20,6 @@
 
 package com.activiti.android.ui.fragments.base;
 
-import retrofit.RetrofitError;
-
 import android.support.design.widget.Snackbar;
 import android.view.View;
 import android.widget.ArrayAdapter;
@@ -31,7 +29,7 @@ import android.widget.TextView;
 import com.activiti.android.app.R;
 import com.activiti.android.platform.exception.ExceptionMessageUtils;
 import com.activiti.android.ui.utils.UIUtils;
-import com.activiti.client.api.model.common.ResultListDataRepresentation;
+import com.activiti.client.api.model.common.ResultList;
 
 /**
  * Created by jpascal on 12/12/2014.
@@ -62,7 +60,7 @@ public abstract class BasePagingGridFragment extends BaseGridFragment
     // LOAD MORE
     // ////////////////////////////////////////////////////////////
     @SuppressWarnings("rawtypes")
-    protected void displayData(ResultListDataRepresentation<?> response)
+    protected void displayData(ResultList<?> response)
     {
         if (getActivity() == null) { return; }
 
@@ -76,12 +74,12 @@ public abstract class BasePagingGridFragment extends BaseGridFragment
             adapter = onAdapterCreation();
             ((BaseListAdapter) adapter).setFragmentSettings(getArguments());
         }
-        displayPagingData((ResultListDataRepresentation<?>) response);
+        displayPagingData((ResultList<?>) response);
         setListShown(true);
         onDataDisplayed();
     }
 
-    protected void displayPagingData(ResultListDataRepresentation<?> response)
+    protected void displayPagingData(ResultList<?> response)
     {
         // No Items
         if (response.getTotal() == 0)
@@ -103,7 +101,7 @@ public abstract class BasePagingGridFragment extends BaseGridFragment
         // All Items are presents
         if (response.getTotal() == response.getStart() + response.getSize())
         {
-            ((ArrayAdapter<Object>) adapter).addAll(response.getData());
+            ((ArrayAdapter<Object>) adapter).addAll(response.getList());
             gv.invalidateViews();
             gv.setAdapter(adapter);
             setListShown(true);
@@ -111,7 +109,7 @@ public abstract class BasePagingGridFragment extends BaseGridFragment
         }
         else
         {
-            ((ArrayAdapter<Object>) adapter).addAll(response.getData());
+            ((ArrayAdapter<Object>) adapter).addAll(response.getList());
             gv.invalidateViews();
             gv.setAdapter(adapter);
             setListShown(true);
@@ -127,7 +125,7 @@ public abstract class BasePagingGridFragment extends BaseGridFragment
         }
     }
 
-    protected void displayError(RetrofitError error)
+    protected void displayError(Throwable error)
     {
         refreshHelper.setRefreshComplete();
         refreshHelper.setEnabled(false);

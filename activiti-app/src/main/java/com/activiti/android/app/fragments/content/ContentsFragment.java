@@ -75,14 +75,15 @@ public class ContentsFragment extends ContentsFoundationFragment
     public void onStart()
     {
         super.onStart();
-        UIUtils.displayActionBarBack((MainActivity) getActivity());
+        getRootView().setBackgroundColor(getResources().getColor(R.color.primary_background));
+        UIUtils.displayActionBarBack((MainActivity) getActivity(), getToolbar());
     }
 
     @Override
     public void onStop()
     {
         super.onStop();
-        UIUtils.setActionBarDefault((MainActivity) getActivity());
+        UIUtils.setActionBarDefault((MainActivity) getActivity(), getToolbar());
     }
 
     @Override

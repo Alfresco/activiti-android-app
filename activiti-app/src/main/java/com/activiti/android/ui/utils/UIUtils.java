@@ -199,6 +199,40 @@ public class UIUtils
         activity.getmDrawerToggle().setHomeAsUpIndicator(R.drawable.ic_arrow_back_white);
     }
 
+    public static void displayActionBarBack(final MainActivity activity, Toolbar toolbar)
+    {
+        if (toolbar == null) { return; }
+        if (DisplayUtils.hasCentralPane(activity))
+        {
+            toolbar.setNavigationIcon(R.drawable.ic_arrow_back_white);
+            toolbar.setNavigationOnClickListener(new View.OnClickListener()
+            {
+                @Override
+                public void onClick(View v)
+                {
+                    activity.onBackPressed();
+                }
+            });
+        }
+        else
+        {
+            displayActionBarBack(activity);
+        }
+
+    }
+
+    public static void setActionBarDefault(MainActivity activity, Toolbar toolbar)
+    {
+        if (DisplayUtils.hasCentralPane(activity))
+        {
+            toolbar.setNavigationIcon(null);
+        }
+        else
+        {
+            setActionBarDefault(activity);
+        }
+    }
+
     public static void setActionBarDefault(MainActivity activity)
     {
         if (activity == null || activity.getmDrawerToggle() == null) { return; }

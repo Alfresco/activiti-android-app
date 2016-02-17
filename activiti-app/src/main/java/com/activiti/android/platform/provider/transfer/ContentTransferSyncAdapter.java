@@ -25,8 +25,11 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.InputStream;
 
-import retrofit.client.Response;
-import retrofit.mime.TypedFile;
+import okhttp3.MediaType;
+import okhttp3.MultipartBody;
+import okhttp3.RequestBody;
+import okhttp3.ResponseBody;
+import retrofit2.Response;
 
 import android.accounts.Account;
 import android.accounts.AccountManager;
@@ -137,29 +140,34 @@ public class ContentTransferSyncAdapter extends AbstractThreadedSyncAdapter
             }
 
             // Retrieve ActivitiAccount
-            long accountId = Long.parseLong(AccountManager.get(getContext()).getUserData(account,
-                    ActivitiAccount.ACCOUNT_ID));
+            long accountId = Long
+                    .parseLong(AccountManager.get(getContext()).getUserData(account, ActivitiAccount.ACCOUNT_ID));
 
             switch (mode)
             {
                 case MODE_SAVE_AS:
-                    Response dlResponse = api.getContentService().download(contentId);
+                    Response<ResponseBody> dlResponse = api.getContentService().download(contentId);
 
-                    ParcelFileDescriptor pfd = getContext().getContentResolver().openFileDescriptor(
-                            Uri.parse(contentUri), "w");
+                    ParcelFileDescriptor pfd = getContext().getContentResolver()
+                            .openFileDescriptor(Uri.parse(contentUri), "w");
                     FileOutputStream fileOutputStream = new FileOutputStream(pfd.getFileDescriptor());
-                    IOUtils.saveBytesToStream(IOUtils.getBytesFromStream(dlResponse.getBody().in()), fileOutputStream);
+                    IOUtils.saveBytesToStream(IOUtils.getBytesFromStream(dlResponse.body().byteStream()),
+                            fileOutputStream);
 
                     // SHARE IT
-                    EventBusManager.getInstance().post(
-                            new DownloadTransferUriEvent("-1", mode, Uri.parse(contentUri), mimetype));
+                    EventBusManager.getInstance()
+                            .post(new DownloadTransferUriEvent("-1", mode, Uri.parse(contentUri), mimetype));
 
                     break;
                 case MODE_SHARE:
                     File lFile = new File(filePath);
 
-                    Response response = api.getContentService().download(contentId);
-                    IOUtils.saveBytesToFile(IOUtils.getBytesFromStream(response.getBody().in()), lFile.getPath());
+                    Response<ResponseBody> response = api.getContentService().download(contentId);
+                    if (response.isSuccess())
+                    {
+                        IOUtils.saveBytesToFile(IOUtils.getBytesFromStream(response.body().byteStream()),
+                                lFile.getPath());
+                    }
 
                     // SHARE IT
                     EventBusManager.getInstance().post(new DownloadTransferEvent("-1", mode, lFile, mimetype));
@@ -167,8 +175,8 @@ public class ContentTransferSyncAdapter extends AbstractThreadedSyncAdapter
                 case MODE_OPEN_IN:
                     File dlFile = new File(storageManager.getTempFolder(accountId), filePath);
 
-                    Response resp = api.getContentService().download(contentId);
-                    IOUtils.saveBytesToFile(IOUtils.getBytesFromStream(resp.getBody().in()), dlFile.getPath());
+                    Response<ResponseBody> resp = api.getContentService().download(contentId);
+                    IOUtils.saveBytesToFile(IOUtils.getBytesFromStream(resp.body().byteStream()), dlFile.getPath());
 
                     // OPEN IT
                     EventBusManager.getInstance().post(new DownloadTransferEvent("-1", mode, dlFile, mimetype));
@@ -193,25 +201,35 @@ public class ContentTransferSyncAdapter extends AbstractThreadedSyncAdapter
                     RelatedContentRepresentation content = null;
                     if (!TextUtils.isEmpty(taskId))
                     {
-                        content = api.getContentService().createRelatedContentOnTask(taskId,
-                                new TypedFile(mimetype, tempFile));
+                        RequestBody requestBody = RequestBody.create(MediaType.parse(mimetype), tempFile);
+                        MultipartBody.Builder multipartBuilder = new MultipartBody.Builder();
+                        multipartBuilder.addFormDataPart("file", tempFile.getName(), requestBody);
+                        content = api.getContentService().createRelatedContentOnTask(taskId, multipartBuilder.build());
                         EventBusManager.getInstance().post(new ContentTransferEvent("-1", mode, content));
                     }
                     else if (!TextUtils.isEmpty(processId))
                     {
+                        RequestBody requestBody = RequestBody.create(MediaType.parse(mimetype), tempFile);
+                        MultipartBody.Builder multipartBuilder = new MultipartBody.Builder();
+                        multipartBuilder.addFormDataPart("file", tempFile.getName(), requestBody);
                         content = api.getContentService().createRelatedContentOnProcessInstance(processId,
-                                new TypedFile(mimetype, tempFile));
+                                multipartBuilder.build());
                         EventBusManager.getInstance().post(new ContentTransferEvent("-1", mode, content));
                     }
                     else if (!TextUtils.isEmpty(profileId))
                     {
-                        api.getProfileService().updateProfilePicture(new TypedFile(mimetype, tempFile));
+                        RequestBody requestBody = RequestBody.create(MediaType.parse(mimetype), tempFile);
+                        MultipartBody.Builder multipartBuilder = new MultipartBody.Builder();
+                        multipartBuilder.addFormDataPart("file", tempFile.getName(), requestBody);
+                        api.getProfileService().updateProfilePicture(multipartBuilder.build());
                         EventBusManager.getInstance().post(new ProfilePictureEvent());
                     }
                     else
                     {
-                        content = api.getContentService().createTemporaryRawRelatedContent(
-                                new TypedFile(mimetype, tempFile));
+                        RequestBody requestBody = RequestBody.create(MediaType.parse(mimetype), tempFile);
+                        MultipartBody.Builder multipartBuilder = new MultipartBody.Builder();
+                        multipartBuilder.addFormDataPart("file", tempFile.getName(), requestBody);
+                        content = api.getContentService().createTemporaryRawRelatedContent(multipartBuilder.build());
                         EventBusManager.getInstance().post(new ContentTransferEvent("-1", mode, content));
                     }
                     break;

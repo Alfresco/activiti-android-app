@@ -22,9 +22,9 @@ package com.activiti.android.ui.fragments.apps;
 
 import java.util.ArrayList;
 
-import retrofit.Callback;
-import retrofit.RetrofitError;
-import retrofit.client.Response;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 import android.os.Bundle;
 import android.widget.BaseAdapter;
@@ -32,8 +32,8 @@ import android.widget.BaseAdapter;
 import com.activiti.android.app.R;
 import com.activiti.android.platform.utils.BundleUtils;
 import com.activiti.android.ui.fragments.base.BasePagingGridFragment;
+import com.activiti.client.api.model.common.ResultList;
 import com.activiti.client.api.model.runtime.AppDefinitionRepresentation;
-import com.activiti.client.api.model.runtime.AppDefinitionsRepresentation;
 
 public class AppsFoundationFragment extends BasePagingGridFragment
 {
@@ -46,20 +46,21 @@ public class AppsFoundationFragment extends BasePagingGridFragment
     // ///////////////////////////////////////////////////////////////////////////
     // LIFECYCLE
     // ///////////////////////////////////////////////////////////////////////////
-    protected Callback<AppDefinitionsRepresentation> callBack = new Callback<AppDefinitionsRepresentation>()
+    protected Callback<ResultList<AppDefinitionRepresentation>> callBack = new Callback<ResultList<AppDefinitionRepresentation>>()
     {
         @Override
-        public void success(AppDefinitionsRepresentation response, Response response2)
+        public void onResponse(Call<ResultList<AppDefinitionRepresentation>> call,
+                Response<ResultList<AppDefinitionRepresentation>> response)
         {
             AppDefinitionRepresentation myTasks = new AppDefinitionRepresentation();
             myTasks.setName("My Tasks");
             myTasks.setId(-1L);
-            response.getData().add(0, myTasks);
-            displayData(response);
+            response.body().getList().add(0, myTasks);
+            displayData(response.body());
         }
 
         @Override
-        public void failure(RetrofitError error)
+        public void onFailure(Call<ResultList<AppDefinitionRepresentation>> call, Throwable error)
         {
             displayError(error);
         }

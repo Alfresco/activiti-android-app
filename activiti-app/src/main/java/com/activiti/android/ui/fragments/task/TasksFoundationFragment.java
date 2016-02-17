@@ -23,9 +23,9 @@ package com.activiti.android.ui.fragments.task;
 import java.util.ArrayList;
 import java.util.List;
 
-import retrofit.Callback;
-import retrofit.RetrofitError;
-import retrofit.client.Response;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -39,8 +39,8 @@ import com.activiti.android.platform.provider.app.RuntimeAppInstanceManager;
 import com.activiti.android.platform.utils.BundleUtils;
 import com.activiti.android.ui.fragments.base.BasePagingGridFragment;
 import com.activiti.client.api.constant.RequestConstant;
+import com.activiti.client.api.model.common.ResultList;
 import com.activiti.client.api.model.runtime.TaskRepresentation;
-import com.activiti.client.api.model.runtime.TasksRepresentation;
 import com.activiti.client.api.model.runtime.request.QueryTasksRepresentation;
 
 public class TasksFoundationFragment extends BasePagingGridFragment implements RequestConstant
@@ -166,16 +166,17 @@ public class TasksFoundationFragment extends BasePagingGridFragment implements R
                 selectedTask);
     }
 
-    protected Callback<TasksRepresentation> callBack = new Callback<TasksRepresentation>()
+    protected Callback<ResultList<TaskRepresentation>> callBack = new Callback<ResultList<TaskRepresentation>>()
     {
         @Override
-        public void success(TasksRepresentation response, Response response2)
+        public void onResponse(Call<ResultList<TaskRepresentation>> call,
+                Response<ResultList<TaskRepresentation>> response)
         {
-            displayData(response);
+            displayData(response.body());
         }
 
         @Override
-        public void failure(RetrofitError error)
+        public void onFailure(Call<ResultList<TaskRepresentation>> call, Throwable error)
         {
             displayError(error);
         }

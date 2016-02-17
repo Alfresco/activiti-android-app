@@ -24,9 +24,9 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import retrofit.Callback;
-import retrofit.RetrofitError;
-import retrofit.client.Response;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 import android.app.Activity;
 import android.content.ActivityNotFoundException;
@@ -76,13 +76,11 @@ import com.activiti.android.ui.holder.HolderUtils;
 import com.activiti.android.ui.holder.TwoLinesViewHolder;
 import com.activiti.android.ui.utils.Formatter;
 import com.activiti.android.ui.utils.UIUtils;
+import com.activiti.client.api.model.common.ResultList;
 import com.activiti.client.api.model.runtime.ProcessContentRepresentation;
-import com.activiti.client.api.model.runtime.ProcessContentsRepresentation;
 import com.activiti.client.api.model.runtime.ProcessInstanceRepresentation;
 import com.activiti.client.api.model.runtime.RelatedContentRepresentation;
-import com.activiti.client.api.model.runtime.RelatedContentsRepresentation;
 import com.activiti.client.api.model.runtime.TaskRepresentation;
-import com.activiti.client.api.model.runtime.TasksRepresentation;
 import com.activiti.client.api.model.runtime.request.QueryTasksRepresentation;
 import com.afollestad.materialdialogs.MaterialDialog;
 
@@ -155,11 +153,12 @@ public class ProcessDetailsFoundationFragment extends AbstractDetailsFragment
         getAPI().getProcessService().getById(processId, new Callback<ProcessInstanceRepresentation>()
         {
             @Override
-            public void success(ProcessInstanceRepresentation process, Response response)
+            public void onResponse(Call<ProcessInstanceRepresentation> call,
+                    Response<ProcessInstanceRepresentation> response)
             {
-                processInstanceRepresentation = process;
+                processInstanceRepresentation = response.body();
 
-                UIUtils.setTitle(getActivity(), process.getName(), getString(R.string.task_title_details));
+                UIUtils.setTitle(getActivity(), response.body().getName(), getString(R.string.task_title_details));
 
                 displayInfo();
                 requestExtraInfo();
@@ -172,7 +171,7 @@ public class ProcessDetailsFoundationFragment extends AbstractDetailsFragment
             }
 
             @Override
-            public void failure(RetrofitError error)
+            public void onFailure(Call<ProcessInstanceRepresentation> call, Throwable error)
             {
                 displayError(error);
             }
@@ -210,18 +209,19 @@ public class ProcessDetailsFoundationFragment extends AbstractDetailsFragment
         // Retrieve active tasks
         QueryTasksRepresentation request = new QueryTasksRepresentation(null, null, null, processId, null,
                 TaskState.OPEN.value(), null, null, null, 5L);
-        getAPI().getTaskService().list(request, new Callback<TasksRepresentation>()
+        getAPI().getTaskService().list(request, new Callback<ResultList<TaskRepresentation>>()
         {
             @Override
-            public void success(TasksRepresentation resp, Response response)
+            public void onResponse(Call<ResultList<TaskRepresentation>> call,
+                    Response<ResultList<TaskRepresentation>> response)
             {
-                activeTaskRepresentations = resp.getData();
+                activeTaskRepresentations = response.body().getList();
                 hasActiveTasks = true;
                 displayCards();
             }
 
             @Override
-            public void failure(RetrofitError error)
+            public void onFailure(Call<ResultList<TaskRepresentation>> call, Throwable error)
             {
                 hasActiveTasks = true;
             }
@@ -230,36 +230,38 @@ public class ProcessDetailsFoundationFragment extends AbstractDetailsFragment
         // Retrieve completed tasks
         request = new QueryTasksRepresentation(null, null, null, processId, null, TaskState.COMPLETED.value(), null,
                 null, null, 5L);
-        getAPI().getTaskService().list(request, new Callback<TasksRepresentation>()
+        getAPI().getTaskService().list(request, new Callback<ResultList<TaskRepresentation>>()
         {
             @Override
-            public void success(TasksRepresentation resp, Response response)
+            public void onResponse(Call<ResultList<TaskRepresentation>> call,
+                    Response<ResultList<TaskRepresentation>> response)
             {
-                completedTaskRepresentations = resp.getData();
+                completedTaskRepresentations = response.body().getList();
                 hasCompletedTasks = true;
                 displayCards();
             }
 
             @Override
-            public void failure(RetrofitError error)
+            public void onFailure(Call<ResultList<TaskRepresentation>> call, Throwable error)
             {
                 hasCompletedTasks = true;
             }
         });
 
         // Retrieve Contents
-        getAPI().getProcessService().getAttachments(processId, new Callback<RelatedContentsRepresentation>()
+        getAPI().getProcessService().getAttachments(processId, new Callback<ResultList<RelatedContentRepresentation>>()
         {
             @Override
-            public void success(RelatedContentsRepresentation resp, Response response)
+            public void onResponse(Call<ResultList<RelatedContentRepresentation>> call,
+                    Response<ResultList<RelatedContentRepresentation>> response)
             {
-                relatedContentRepresentations = resp.getData();
+                relatedContentRepresentations = response.body().getList();
                 hasContentLoaded = true;
                 displayCards();
             }
 
             @Override
-            public void failure(RetrofitError error)
+            public void onFailure(Call<ResultList<RelatedContentRepresentation>> call, Throwable error)
             {
                 hasContentLoaded = true;
             }
@@ -268,18 +270,20 @@ public class ProcessDetailsFoundationFragment extends AbstractDetailsFragment
         if (getVersionNumber() >= ActivitiVersionNumber.VERSION_1_2_2)
         {
             // Retrieve Field Contents
-            getAPI().getProcessService().getFieldContents(processId, new Callback<ProcessContentsRepresentation>()
+            getAPI().getProcessService().getFieldContents(processId,
+                    new Callback<ResultList<ProcessContentRepresentation>>()
             {
                 @Override
-                public void success(ProcessContentsRepresentation resp, Response response)
+                        public void onResponse(Call<ResultList<ProcessContentRepresentation>> call,
+                                Response<ResultList<ProcessContentRepresentation>> response)
                 {
-                    fieldContents = resp.getData();
+                            fieldContents = response.body().getList();
                     hasFieldContentLoaded = true;
                     displayCards();
                 }
 
                 @Override
-                public void failure(RetrofitError error)
+                        public void onFailure(Call<ResultList<ProcessContentRepresentation>> call, Throwable error)
                 {
                     hasContentLoaded = true;
                 }
@@ -328,7 +332,7 @@ public class ProcessDetailsFoundationFragment extends AbstractDetailsFragment
         }
     }
 
-    protected void displayError(RetrofitError error)
+    protected void displayError(Throwable error)
     {
         hide(R.id.details_container);
         show(R.id.details_loading);
@@ -796,7 +800,7 @@ public class ProcessDetailsFoundationFragment extends AbstractDetailsFragment
         getAPI().getProcessService().delete(processId, new Callback<Void>()
         {
             @Override
-            public void success(Void taskResponse, Response response)
+            public void onResponse(Call<Void> call, Response<Void> response)
             {
                 // Event
                 try
@@ -818,7 +822,7 @@ public class ProcessDetailsFoundationFragment extends AbstractDetailsFragment
             }
 
             @Override
-            public void failure(RetrofitError error)
+            public void onFailure(Call<Void> call, Throwable error)
             {
 
             }

@@ -20,9 +20,11 @@
 
 package com.activiti.android.ui.activity;
 
-import retrofit.Callback;
-import retrofit.RetrofitError;
-import retrofit.client.Response;
+import okhttp3.ResponseBody;
+import okhttp3.logging.HttpLoggingInterceptor;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -43,7 +45,7 @@ import com.mattprecious.telescope.TelescopeLayout;
 
 /**
  * Base class for all activities.
- * 
+ *
  * @author Jean Marie Pascal
  */
 public abstract class AlfrescoActivity extends AppCompatActivity
@@ -141,8 +143,9 @@ public abstract class AlfrescoActivity extends AppCompatActivity
         }
 
         if (account == null) { return; }
-        session = new ActivitiSession.Builder().connect(account.getServerUrl(), account.getUsername(),
-                account.getPassword()).build();
+        session = new ActivitiSession.Builder()
+                .connect(account.getServerUrl(), account.getUsername(), account.getPassword())
+                .httpLogging(HttpLoggingInterceptor.Level.HEADERS).build();
 
         // Refresh Adapter
         AppInstancesFragment.syncAdapters(this);
@@ -157,20 +160,21 @@ public abstract class AlfrescoActivity extends AppCompatActivity
     // ///////////////////////////////////////////////////////////////////////////
     public void checkIsAdmin()
     {
-        getAPI().getUserGroupService().isAdmin(new Callback<Response>()
+        getAPI().getUserGroupService().isAdmin(new Callback<ResponseBody>()
         {
             @Override
-            public void success(Response response, Response response2)
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response)
             {
                 account.setIsAdmin(true);
             }
 
             @Override
-            public void failure(RetrofitError error)
+            public void onFailure(Call<ResponseBody> call, Throwable t)
             {
                 account.setIsAdmin(false);
             }
         });
+
     }
 
     // ////////////////////////////////////////////////////////
@@ -182,9 +186,9 @@ public abstract class AlfrescoActivity extends AppCompatActivity
         {
             TelescopeLayout telescopeView = (TelescopeLayout) findViewById(telescopeId);
             telescopeView.setLens(new EmailDeviceInfoLens(this, getString(R.string.bug_report_title),
-                    getPackageManager().getPackageInfo(getPackageName(), 0).versionName, getPackageManager()
-                            .getPackageInfo(getPackageName(), 0).versionCode, getResources().getStringArray(
-                            R.array.bugreport_email)));
+                    getPackageManager().getPackageInfo(getPackageName(), 0).versionName,
+                    getPackageManager().getPackageInfo(getPackageName(), 0).versionCode,
+                    getResources().getStringArray(R.array.bugreport_email)));
         }
         catch (Exception e)
         {

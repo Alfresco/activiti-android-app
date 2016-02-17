@@ -22,9 +22,9 @@ package com.activiti.android.ui.fragments.filter;
 
 import java.util.ArrayList;
 
-import retrofit.Callback;
-import retrofit.RetrofitError;
-import retrofit.client.Response;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -42,9 +42,8 @@ import com.activiti.android.ui.fragments.FragmentDisplayer;
 import com.activiti.android.ui.fragments.base.BasePagingGridFragment;
 import com.activiti.android.ui.fragments.task.filter.TaskFilterPropertiesFragment;
 import com.activiti.android.ui.utils.DisplayUtils;
-import com.activiti.client.api.model.common.ResultListDataRepresentation;
+import com.activiti.client.api.model.common.ResultList;
 import com.activiti.client.api.model.runtime.UserTaskFilterRepresentation;
-import com.activiti.client.api.model.runtime.UserTaskFiltersRepresentation;
 
 public class UserFilterFoundationFragment extends BasePagingGridFragment
 {
@@ -78,17 +77,18 @@ public class UserFilterFoundationFragment extends BasePagingGridFragment
         enableTitle = false;
     }
 
-    protected Callback<UserTaskFiltersRepresentation> callBack = new Callback<UserTaskFiltersRepresentation>()
+    protected Callback<ResultList<UserTaskFilterRepresentation>> callBack = new Callback<ResultList<UserTaskFilterRepresentation>>()
     {
         @Override
-        public void success(UserTaskFiltersRepresentation response, Response response2)
+        public void onResponse(Call<ResultList<UserTaskFilterRepresentation>> call,
+                Response<ResultList<UserTaskFilterRepresentation>> response)
         {
-            displayData(response);
-            gv.smoothScrollToPosition(response.getSize());
+            displayData(response.body());
+            gv.smoothScrollToPosition(response.body().getSize());
         }
 
         @Override
-        public void failure(RetrofitError error)
+        public void onFailure(Call<ResultList<UserTaskFilterRepresentation>> call, Throwable error)
         {
             displayError(error);
         }
@@ -160,7 +160,7 @@ public class UserFilterFoundationFragment extends BasePagingGridFragment
     }
 
     @Override
-    protected void displayData(ResultListDataRepresentation<?> response)
+    protected void displayData(ResultList<?> response)
     {
         super.displayData(response);
     }

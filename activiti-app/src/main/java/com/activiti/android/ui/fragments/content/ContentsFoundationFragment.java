@@ -23,9 +23,9 @@ package com.activiti.android.ui.fragments.content;
 import java.io.File;
 import java.util.ArrayList;
 
-import retrofit.Callback;
-import retrofit.RetrofitError;
-import retrofit.client.Response;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 import android.app.Activity;
 import android.content.DialogInterface;
@@ -33,6 +33,7 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
+import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -46,11 +47,11 @@ import com.activiti.android.platform.storage.AlfrescoStorageManager;
 import com.activiti.android.platform.utils.BundleUtils;
 import com.activiti.android.ui.fragments.AlfrescoFragment;
 import com.activiti.android.ui.fragments.base.BasePagingGridFragment;
+import com.activiti.android.ui.utils.DisplayUtils;
 import com.activiti.android.ui.utils.UIUtils;
 import com.activiti.client.api.constant.RequestConstant;
-import com.activiti.client.api.model.common.ResultListDataRepresentation;
+import com.activiti.client.api.model.common.ResultList;
 import com.activiti.client.api.model.runtime.RelatedContentRepresentation;
-import com.activiti.client.api.model.runtime.RelatedContentsRepresentation;
 import com.activiti.client.api.model.runtime.request.AddContentRelatedRepresentation;
 import com.afollestad.materialdialogs.MaterialDialog;
 
@@ -114,16 +115,17 @@ public class ContentsFoundationFragment extends BasePagingGridFragment implement
         }
     }
 
-    protected Callback<RelatedContentsRepresentation> callBack = new Callback<RelatedContentsRepresentation>()
+    protected Callback<ResultList<RelatedContentRepresentation>> callBack = new Callback<ResultList<RelatedContentRepresentation>>()
     {
         @Override
-        public void success(RelatedContentsRepresentation response, Response response2)
+        public void onResponse(Call<ResultList<RelatedContentRepresentation>> call,
+                Response<ResultList<RelatedContentRepresentation>> response)
         {
-            displayData(response);
+            displayData(response.body());
         }
 
         @Override
-        public void failure(RetrofitError error)
+        public void onFailure(Call<ResultList<RelatedContentRepresentation>> call, Throwable error)
         {
             displayError(error);
         }
@@ -170,8 +172,8 @@ public class ContentsFoundationFragment extends BasePagingGridFragment implement
         {
             if (!TextUtils.isEmpty(processId))
             {
-                ContentTransferManager
-                        .prepareTransfer(resultData, this, taskId, ContentTransferManager.TYPE_PROCESS_ID);
+                ContentTransferManager.prepareTransfer(resultData, this, taskId,
+                        ContentTransferManager.TYPE_PROCESS_ID);
             }
             else if (!TextUtils.isEmpty(taskId))
             {
@@ -186,7 +188,7 @@ public class ContentsFoundationFragment extends BasePagingGridFragment implement
     }
 
     @Override
-    protected void displayData(ResultListDataRepresentation<?> response)
+    protected void displayData(ResultList<?> response)
     {
         super.displayData(response);
 
@@ -212,13 +214,13 @@ public class ContentsFoundationFragment extends BasePagingGridFragment implement
         getAPI().getContentService().delete(contentId, new Callback<Void>()
         {
             @Override
-            public void success(Void aVoid, Response response)
+            public void onResponse(Call<Void> call, Response<Void> response)
             {
                 refresh();
             }
 
             @Override
-            public void failure(RetrofitError error)
+            public void onFailure(Call<Void> call, Throwable error)
             {
                 Snackbar.make(getActivity().findViewById(R.id.left_panel), error.getMessage(), Snackbar.LENGTH_SHORT)
                         .show();
@@ -306,8 +308,28 @@ public class ContentsFoundationFragment extends BasePagingGridFragment implement
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater)
     {
         super.onCreateOptionsMenu(menu, inflater);
-        menu.clear();
-        switchViewItem = menu.add(0, R.id.alfresco_action, 0, R.string.list);
+
+        Menu tmpMenu = menu;
+        if (!DisplayUtils.hasCentralPane(getActivity()))
+        {
+            tmpMenu.clear();
+        }
+        else
+        {
+            tmpMenu = getToolbar().getMenu();
+            // Set an OnMenuItemClickListener to handle menu item clicks
+            getToolbar().setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener()
+            {
+                @Override
+                public boolean onMenuItemClick(MenuItem item)
+                {
+                    return onOptionsItemSelected(item);
+                }
+            });
+
+        }
+
+        switchViewItem = tmpMenu.add(0, R.id.alfresco_action, 0, R.string.list);
         switchViewItem.setIcon(R.drawable.ic_view_module_white);
         switchViewItem.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
     }

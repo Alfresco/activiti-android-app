@@ -27,9 +27,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import retrofit.Callback;
-import retrofit.RetrofitError;
-import retrofit.client.Response;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 import android.app.Activity;
 import android.content.Context;
@@ -79,13 +79,13 @@ import com.activiti.android.ui.holder.TwoLinesViewHolder;
 import com.activiti.android.ui.utils.DisplayUtils;
 import com.activiti.android.ui.utils.Formatter;
 import com.activiti.android.ui.utils.UIUtils;
+import com.activiti.client.api.model.common.ResultList;
 import com.activiti.client.api.model.editor.ModelRepresentation;
 import com.activiti.client.api.model.editor.form.FormDefinitionRepresentation;
 import com.activiti.client.api.model.idm.LightUserRepresentation;
 import com.activiti.client.api.model.runtime.ProcessInstanceRepresentation;
-import com.activiti.client.api.model.runtime.RelatedContentsRepresentation;
+import com.activiti.client.api.model.runtime.RelatedContentRepresentation;
 import com.activiti.client.api.model.runtime.TaskRepresentation;
-import com.activiti.client.api.model.runtime.TasksRepresentation;
 import com.activiti.client.api.model.runtime.request.AssignTaskRepresentation;
 import com.activiti.client.api.model.runtime.request.AttachFormTaskRepresentation;
 import com.activiti.client.api.model.runtime.request.InvolveTaskRepresentation;
@@ -185,11 +185,11 @@ public class TaskDetailsFoundationFragment extends AbstractDetailsFragment
         getAPI().getTaskService().getById(taskId, new Callback<TaskRepresentation>()
         {
             @Override
-            public void success(TaskRepresentation retrievedTaskRepresentation, Response response)
+            public void onResponse(Call<TaskRepresentation> call, Response<TaskRepresentation> response)
             {
-                taskRepresentation = retrievedTaskRepresentation;
+                taskRepresentation = response.body();
                 displayInfo();
-                people = retrievedTaskRepresentation.getInvolvedPeople();
+                people = response.body().getInvolvedPeople();
                 hasPeopleLoaded = true;
 
                 requestExtraInfo();
@@ -206,7 +206,7 @@ public class TaskDetailsFoundationFragment extends AbstractDetailsFragment
             }
 
             @Override
-            public void failure(RetrofitError error)
+            public void onFailure(Call<TaskRepresentation> call, Throwable error)
             {
                 displayError();
                 Snackbar.make(getActivity().findViewById(R.id.left_panel), error.getMessage(), Snackbar.LENGTH_SHORT)
@@ -240,11 +240,11 @@ public class TaskDetailsFoundationFragment extends AbstractDetailsFragment
         getAPI().getTaskService().getById(taskId, new Callback<TaskRepresentation>()
         {
             @Override
-            public void success(TaskRepresentation retrievedTaskRepresentation, Response response)
+            public void onResponse(Call<TaskRepresentation> call, Response<TaskRepresentation> response)
             {
-                taskRepresentation = retrievedTaskRepresentation;
+                taskRepresentation = response.body();
                 displayInfo();
-                people = retrievedTaskRepresentation.getInvolvedPeople();
+                people = response.body().getInvolvedPeople();
                 hasPeopleLoaded = true;
 
                 UIUtils.setTitle(getActivity(), taskRepresentation.getName(), getString(R.string.task_title_details),
@@ -256,7 +256,7 @@ public class TaskDetailsFoundationFragment extends AbstractDetailsFragment
             }
 
             @Override
-            public void failure(RetrofitError error)
+            public void onFailure(Call<TaskRepresentation> call, Throwable error)
             {
                 displayError();
                 Snackbar.make(getActivity().findViewById(R.id.left_panel), error.getMessage(), Snackbar.LENGTH_SHORT)
@@ -284,14 +284,15 @@ public class TaskDetailsFoundationFragment extends AbstractDetailsFragment
                         new Callback<ProcessInstanceRepresentation>()
                         {
                             @Override
-                            public void success(ProcessInstanceRepresentation resp, Response response)
+                            public void onResponse(Call<ProcessInstanceRepresentation> call,
+                                    Response<ProcessInstanceRepresentation> response)
                             {
-                                processInstanceRepresentation = resp;
-                                displayProcessProperty(resp);
+                                processInstanceRepresentation = response.body();
+                                displayProcessProperty(response.body());
                             }
 
                             @Override
-                            public void failure(RetrofitError error)
+                            public void onFailure(Call<ProcessInstanceRepresentation> call, Throwable error)
                             {
 
                             }
@@ -309,18 +310,19 @@ public class TaskDetailsFoundationFragment extends AbstractDetailsFragment
         retrieveForm();
 
         // Retrieve Contents
-        getAPI().getTaskService().getAttachments(taskId, new Callback<RelatedContentsRepresentation>()
+        getAPI().getTaskService().getAttachments(taskId, new Callback<ResultList<RelatedContentRepresentation>>()
         {
             @Override
-            public void success(RelatedContentsRepresentation resp, Response response)
+            public void onResponse(Call<ResultList<RelatedContentRepresentation>> call,
+                    Response<ResultList<RelatedContentRepresentation>> response)
             {
-                relatedContentRepresentations = resp.getData();
+                relatedContentRepresentations = response.body().getList();
                 hasContentLoaded = true;
                 displayCards();
             }
 
             @Override
-            public void failure(RetrofitError error)
+            public void onFailure(Call<ResultList<RelatedContentRepresentation>> call, Throwable error)
             {
                 displayContents(null);
             }
@@ -338,22 +340,24 @@ public class TaskDetailsFoundationFragment extends AbstractDetailsFragment
 
     protected void requestChecklist()
     {
-        getAPI().getTaskService().getChecklist(taskRepresentation.getId(), new Callback<TasksRepresentation>()
-        {
-            @Override
-            public void success(TasksRepresentation resp, Response response)
-            {
-                checkListTasks = resp.getData();
-                hasCheckList = true;
-                displayCards();
-            }
+        getAPI().getTaskService().getChecklist(taskRepresentation.getId(),
+                new Callback<ResultList<TaskRepresentation>>()
+                {
+                    @Override
+                    public void onResponse(Call<ResultList<TaskRepresentation>> call,
+                            Response<ResultList<TaskRepresentation>> response)
+                    {
+                        checkListTasks = response.body().getList();
+                        hasCheckList = true;
+                        displayCards();
+                    }
 
-            @Override
-            public void failure(RetrofitError error)
-            {
-                hasCheckList = true;
-            }
-        });
+                    @Override
+                    public void onFailure(Call<ResultList<TaskRepresentation>> call, Throwable error)
+                    {
+                        hasCheckList = true;
+                    }
+                });
     }
 
     // ///////////////////////////////////////////////////////////////////////////
@@ -472,7 +476,8 @@ public class TaskDetailsFoundationFragment extends AbstractDetailsFragment
                     @Override
                     public void onClick(View v)
                     {
-                        TaskFormFragment.with(getActivity()).task(taskRepresentation).display();
+                        TaskFormFragment.with(getActivity()).task(taskRepresentation).back(true)
+                                .display(FragmentDisplayer.PANEL_CENTRAL);
                     }
                 });
             }
@@ -508,7 +513,7 @@ public class TaskDetailsFoundationFragment extends AbstractDetailsFragment
                     {
                         TaskFormFragment.with(getActivity()).task(taskRepresentation)
                                 .bindFragmentTag(BundleUtils.getString(getArguments(), ARGUMENT_BIND_FRAGMENT_TAG))
-                                .display();
+                                .back(true).display();
                         v.setEnabled(false);
                     }
                 });
@@ -544,7 +549,7 @@ public class TaskDetailsFoundationFragment extends AbstractDetailsFragment
                 {
                     // Special case activiti.alfresco.com & tenantid == null
                     // User must pick user via email only
-                    if (ActivitiSession.getInstance().isActivitiAlfresco() && getAccount().getTenantId() == null)
+                    if (ActivitiSession.getInstance().isActivitiOnTheCloud() && getAccount().getTenantId() == null)
                     {
                         ActivitiUserPickerFragment.with(getActivity()).fragmentTag(getTag()).fieldId("assign")
                                 .displayAsDialog();
@@ -666,18 +671,21 @@ public class TaskDetailsFoundationFragment extends AbstractDetailsFragment
                     new Callback<FormDefinitionRepresentation>()
                     {
                         @Override
-                        public void success(FormDefinitionRepresentation formDefinitionRepresentation,
-                                Response response)
+                        public void onResponse(Call<FormDefinitionRepresentation> call,
+                                Response<FormDefinitionRepresentation> response)
                         {
-                            formModelName = formDefinitionRepresentation.getName();
+                            formModelName = response.body().getName();
                             formDefinitionModel = null;
-                            formKey = Long.toString(formDefinitionRepresentation.getId());
+                            formKey = Long.toString(response.body().getId());
                             displayFormField();
-                            displayOutcome();
+                            if (!isEnded)
+                            {
+                                displayOutcome();
+                            }
                         }
 
                         @Override
-                        public void failure(RetrofitError error)
+                        public void onFailure(Call<FormDefinitionRepresentation> call, Throwable error)
                         {
 
                         }
@@ -851,7 +859,9 @@ public class TaskDetailsFoundationFragment extends AbstractDetailsFragment
             {
                 v = inflater.inflate(R.layout.row_two_lines_swipe, userContainer, false);
                 v.setTag(user.getId());
-                vh = HolderUtils.configure(v, user.getFullname(), null, R.drawable.ic_account_circle_grey);
+                String fullName = user.getFullname();
+                vh = HolderUtils.configure(v, fullName != null && !fullName.isEmpty() ? fullName : user.getEmail(),
+                        null, R.drawable.ic_account_circle_grey);
                 if (picasso != null)
                 {
                     picasso.cancelRequest(vh.icon);
@@ -913,6 +923,13 @@ public class TaskDetailsFoundationFragment extends AbstractDetailsFragment
             return;
         }
 
+        show(R.id.task_details_checklist_card);
+        if (taskRepresentations == null || taskRepresentations.isEmpty() || isEnded)
+        {
+            hide(R.id.task_details_checklist_card);
+            return;
+        }
+
         LayoutInflater inflater = (LayoutInflater) getActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
         // TASKS
@@ -923,6 +940,7 @@ public class TaskDetailsFoundationFragment extends AbstractDetailsFragment
         {
             v = inflater.inflate(R.layout.row_single_line, activeTaskContainer, false);
             ((TextView) v.findViewById(R.id.toptext)).setText(R.string.task_help_add_first_checklist);
+            HolderUtils.makeMultiLine(((TextView) v.findViewById(R.id.toptext)), 4);
             v.findViewById(R.id.icon).setVisibility(View.GONE);
             activeTaskContainer.addView(v);
         }
@@ -1044,7 +1062,7 @@ public class TaskDetailsFoundationFragment extends AbstractDetailsFragment
     // ///////////////////////////////////////////////////////////////////////////
     private void startInvolveAction()
     {
-        if (ActivitiSession.getInstance().isActivitiAlfresco() && getAccount().getTenantId() == null)
+        if (ActivitiSession.getInstance().isActivitiOnTheCloud() && getAccount().getTenantId() == null)
         {
             ActivitiUserPickerFragment.with(getActivity()).fragmentTag(getTag()).fieldId("involve").displayAsDialog();
         }
@@ -1061,7 +1079,7 @@ public class TaskDetailsFoundationFragment extends AbstractDetailsFragment
         getAPI().getTaskService().complete(taskId, new Callback<Void>()
         {
             @Override
-            public void success(Void taskResponse, Response response)
+            public void onResponse(Call<Void> call, Response<Void> response)
             {
                 try
                 {
@@ -1093,7 +1111,7 @@ public class TaskDetailsFoundationFragment extends AbstractDetailsFragment
             }
 
             @Override
-            public void failure(RetrofitError error)
+            public void onFailure(Call<Void> call, Throwable error)
             {
                 Snackbar.make(getActivity().findViewById(R.id.left_panel), error.getMessage(), Snackbar.LENGTH_SHORT)
                         .show();
@@ -1106,7 +1124,7 @@ public class TaskDetailsFoundationFragment extends AbstractDetailsFragment
         getAPI().getTaskService().claimTask(taskId, new Callback<Void>()
         {
             @Override
-            public void success(Void nothing, Response response)
+            public void onResponse(Call<Void> call, Response<Void> response)
             {
                 assignee = ActivitiAccountManager.getInstance(getActivity()).getUser();
                 displayAssignee(assignee != null ? assignee.getFullname() : null);
@@ -1114,7 +1132,7 @@ public class TaskDetailsFoundationFragment extends AbstractDetailsFragment
             }
 
             @Override
-            public void failure(RetrofitError error)
+            public void onFailure(Call<Void> call, Throwable error)
             {
                 Snackbar.make(getActivity().findViewById(R.id.left_panel), error.getMessage(), Snackbar.LENGTH_SHORT)
                         .show();
@@ -1124,23 +1142,25 @@ public class TaskDetailsFoundationFragment extends AbstractDetailsFragment
 
     private void assign(LightUserRepresentation user)
     {
-        AssignTaskRepresentation body = (ActivitiSession.getInstance().isActivitiAlfresco())
+        AssignTaskRepresentation body = (ActivitiSession.getInstance().isActivitiOnTheCloud())
                 ? new AssignTaskRepresentation(user.getEmail()) : new AssignTaskRepresentation(user.getId());
 
         getAPI().getTaskService().assign(taskId, body, new Callback<TaskRepresentation>()
         {
             @Override
-            public void success(TaskRepresentation rep, Response response)
+            public void onResponse(Call<TaskRepresentation> call, Response<TaskRepresentation> response)
             {
-                displayAssignee(rep.getAssignee() != null ? rep.getAssignee().getFullname() : null);
+                displayAssignee(
+                        response.body().getAssignee() != null ? response.body().getAssignee().getFullname() : null);
                 Snackbar.make(getActivity().findViewById(R.id.left_panel),
-                        String.format(getString(R.string.task_alert_assigned), task.name,
-                                rep.getAssignee() != null ? rep.getAssignee().getFullname() : ""),
+                        String.format(getString(R.string.task_alert_assigned),
+                                task.name, response.body().getAssignee() != null
+                                        ? response.body().getAssignee().getFullname() : ""),
                         Snackbar.LENGTH_SHORT).show();
             }
 
             @Override
-            public void failure(RetrofitError error)
+            public void onFailure(Call<TaskRepresentation> call, Throwable error)
             {
                 Snackbar.make(getActivity().findViewById(R.id.left_panel), error.getMessage(), Snackbar.LENGTH_SHORT)
                         .show();
@@ -1154,9 +1174,10 @@ public class TaskDetailsFoundationFragment extends AbstractDetailsFragment
         getAPI().getTaskService().assign(taskId, body, new Callback<TaskRepresentation>()
         {
             @Override
-            public void success(TaskRepresentation rep, Response response)
+            public void onResponse(Call<TaskRepresentation> call, Response<TaskRepresentation> response)
             {
-                displayAssignee(rep.getAssignee() != null ? rep.getAssignee().getFullname() : null);
+                displayAssignee(
+                        response.body().getAssignee() != null ? response.body().getAssignee().getFullname() : null);
 
                 Snackbar.make(getActivity().findViewById(R.id.left_panel),
                         String.format(getString(R.string.task_alert_assigned), userEmail, taskRepresentation.getName()),
@@ -1164,7 +1185,7 @@ public class TaskDetailsFoundationFragment extends AbstractDetailsFragment
             }
 
             @Override
-            public void failure(RetrofitError error)
+            public void onFailure(Call<TaskRepresentation> call, Throwable error)
             {
                 Snackbar.make(getActivity().findViewById(R.id.left_panel), error.getMessage(), Snackbar.LENGTH_SHORT)
                         .show();
@@ -1177,7 +1198,7 @@ public class TaskDetailsFoundationFragment extends AbstractDetailsFragment
         getAPI().getTaskService().involve(taskId, new InvolveTaskRepresentation(user.getId()), new Callback<Void>()
         {
             @Override
-            public void success(Void aVoid, Response response)
+            public void onResponse(Call<Void> call, Response<Void> response)
             {
                 displayPeopleSection(people);
                 Snackbar.make(getActivity().findViewById(R.id.left_panel),
@@ -1187,7 +1208,7 @@ public class TaskDetailsFoundationFragment extends AbstractDetailsFragment
             }
 
             @Override
-            public void failure(RetrofitError error)
+            public void onFailure(Call<Void> call, Throwable error)
             {
                 Snackbar.make(getActivity().findViewById(R.id.left_panel), error.getMessage(), Snackbar.LENGTH_SHORT)
                         .show();
@@ -1200,13 +1221,13 @@ public class TaskDetailsFoundationFragment extends AbstractDetailsFragment
         getAPI().getTaskService().involve(taskId, new InvolveTaskRepresentation(userEmail), new Callback<Void>()
         {
             @Override
-            public void success(Void aVoid, Response response)
+            public void onResponse(Call<Void> call, Response<Void> response)
             {
                 refreshInfo();
             }
 
             @Override
-            public void failure(RetrofitError error)
+            public void onFailure(Call<Void> call, Throwable error)
             {
                 Snackbar.make(getActivity().findViewById(R.id.left_panel), error.getMessage(), Snackbar.LENGTH_SHORT)
                         .show();
@@ -1219,15 +1240,15 @@ public class TaskDetailsFoundationFragment extends AbstractDetailsFragment
         getAPI().getTaskService().edit(taskId, update, new Callback<TaskRepresentation>()
         {
             @Override
-            public void success(TaskRepresentation taskUpdated, Response response)
+            public void onResponse(Call<TaskRepresentation> call, Response<TaskRepresentation> response)
             {
-                taskRepresentation = taskUpdated;
+                taskRepresentation = response.body();
                 displayDescription(description);
                 displayDueDate(dueAt);
             }
 
             @Override
-            public void failure(RetrofitError error)
+            public void onFailure(Call<TaskRepresentation> call, Throwable error)
             {
                 Snackbar.make(getActivity().findViewById(R.id.left_panel), error.getMessage(), Snackbar.LENGTH_SHORT)
                         .show();
@@ -1240,7 +1261,7 @@ public class TaskDetailsFoundationFragment extends AbstractDetailsFragment
         getAPI().getTaskService().removeInvolved(taskId, involvement, new Callback<Void>()
         {
             @Override
-            public void success(Void aVoid, Response response)
+            public void onResponse(Call<Void> call, Response<Void> response)
             {
                 people.remove(userRemoved);
                 if (people.isEmpty())
@@ -1259,7 +1280,7 @@ public class TaskDetailsFoundationFragment extends AbstractDetailsFragment
             }
 
             @Override
-            public void failure(RetrofitError error)
+            public void onFailure(Call<Void> call, Throwable error)
             {
                 // SnackbarManager.show(Snackbar.with(getActivity()).text(error.getMessage()));
             }
@@ -1271,7 +1292,7 @@ public class TaskDetailsFoundationFragment extends AbstractDetailsFragment
         getAPI().getTaskService().removeForm(taskId, new Callback<Void>()
         {
             @Override
-            public void success(Void aVoid, Response response)
+            public void onResponse(Call<Void> call, Response<Void> response)
             {
                 Snackbar.make(getActivity().findViewById(R.id.left_panel),
                         String.format(getString(R.string.task_alert_form_removed),
@@ -1285,7 +1306,7 @@ public class TaskDetailsFoundationFragment extends AbstractDetailsFragment
             }
 
             @Override
-            public void failure(RetrofitError error)
+            public void onFailure(Call<Void> call, Throwable error)
             {
                 Snackbar.make(getActivity().findViewById(R.id.left_panel), error.getMessage(), Snackbar.LENGTH_SHORT)
                         .show();
@@ -1299,7 +1320,7 @@ public class TaskDetailsFoundationFragment extends AbstractDetailsFragment
         getAPI().getTaskService().attachForm(taskId, rep, new Callback<Void>()
         {
             @Override
-            public void success(Void nothing, Response response)
+            public void onResponse(Call<Void> call, Response<Void> response)
             {
                 formDefinitionModel = formModel;
                 formModelName = null;
@@ -1313,7 +1334,7 @@ public class TaskDetailsFoundationFragment extends AbstractDetailsFragment
             }
 
             @Override
-            public void failure(RetrofitError error)
+            public void onFailure(Call<Void> call, Throwable error)
             {
                 Snackbar.make(getActivity().findViewById(R.id.left_panel), error.getMessage(), Snackbar.LENGTH_SHORT)
                         .show();

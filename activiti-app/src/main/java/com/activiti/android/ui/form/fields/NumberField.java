@@ -54,7 +54,18 @@ public class NumberField extends BaseField
         if (editionView instanceof MaterialEditText)
         {
             String value = ((MaterialEditText) editionView).getText().toString();
-            return (TextUtils.isEmpty(value)) ? null : Double.parseDouble(value);
+            if (TextUtils.isEmpty(value))
+            {
+                return null;
+            }
+            else if ("-".equals(value))
+            {
+                return null;
+            }
+            else
+            {
+                return Double.parseDouble(value);
+            }
         }
         return null;
     }

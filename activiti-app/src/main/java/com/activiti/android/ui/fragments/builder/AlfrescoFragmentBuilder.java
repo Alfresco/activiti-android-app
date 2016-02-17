@@ -28,7 +28,6 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.widget.Button;
 
 import com.activiti.android.platform.utils.BundleUtils;
 import com.activiti.android.ui.fragments.FragmentDisplayer;
@@ -170,14 +169,6 @@ public abstract class AlfrescoFragmentBuilder
     // MENU CONFIGURATION
     // Responsible to display the fragment after selection
     // ///////////////////////////////////////////////////////////////////////////
-    public void createMenuItem(Button v)
-    {
-        v.setCompoundDrawablesWithIntrinsicBounds(menuIconId, 0, 0, 0);
-        v.setText(menuTitleId);
-        v.setTag(this);
-        v.setOnClickListener(onClick);
-    }
-
     public Bundle createArguments()
     {
         return prepareArguments(configuration, extraConfiguration);

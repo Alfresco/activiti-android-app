@@ -22,9 +22,9 @@ package com.activiti.android.ui.fragments.task.create;
 
 import java.util.Map;
 
-import retrofit.Callback;
-import retrofit.RetrofitError;
-import retrofit.client.Response;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 import android.app.Dialog;
 import android.content.DialogInterface;
@@ -182,20 +182,21 @@ public class CreateStandaloneTaskDialogFragment extends AlfrescoFragment
             getAPI().getTaskService().addSubtask(taskId, rep, new Callback<TaskRepresentation>()
             {
                 @Override
-                public void success(TaskRepresentation subTaskRespresentation, Response response)
+                public void onResponse(Call<TaskRepresentation> call, Response<TaskRepresentation> response)
                 {
                     EventBusManager.getInstance().post(
-                            new CreateTaskEvent(null, subTaskRespresentation, getLastAppId(), taskId));
+new CreateTaskEvent(null, response.body(), getLastAppId(), taskId));
                     Snackbar.make(
                             getActivity().findViewById(R.id.left_panel),
                             String.format(getString(R.string.task_alert_checklist_added),
-                                    subTaskRespresentation.getName()), Snackbar.LENGTH_SHORT).show();
+ response.body().getName()),
+                            Snackbar.LENGTH_SHORT).show();
 
                     dismiss();
                 }
 
                 @Override
-                public void failure(RetrofitError error)
+                public void onFailure(Call<TaskRepresentation> call, Throwable error)
                 {
                     Snackbar.make(getActivity().findViewById(R.id.left_panel), error.getMessage(),
                             Snackbar.LENGTH_SHORT).show();
@@ -207,19 +208,19 @@ public class CreateStandaloneTaskDialogFragment extends AlfrescoFragment
             getAPI().getTaskService().create(rep, new Callback<TaskRepresentation>()
             {
                 @Override
-                public void success(TaskRepresentation taskRepresentation, Response response)
+                public void onResponse(Call<TaskRepresentation> call, Response<TaskRepresentation> response)
                 {
                     EventBusManager.getInstance().post(
-                            new CreateTaskEvent(null, taskRepresentation, getLastAppId(), null));
+new CreateTaskEvent(null, response.body(), getLastAppId(), null));
                     Snackbar.make(getActivity().findViewById(R.id.left_panel),
-                            String.format(getString(R.string.task_alert_created), taskRepresentation.getName()),
+                            String.format(getString(R.string.task_alert_created), response.body().getName()),
                             Snackbar.LENGTH_SHORT).show();
 
                     dismiss();
                 }
 
                 @Override
-                public void failure(RetrofitError error)
+                public void onFailure(Call<TaskRepresentation> call, Throwable error)
                 {
                     Snackbar.make(getActivity().findViewById(R.id.left_panel), error.getMessage(),
                             Snackbar.LENGTH_SHORT).show();

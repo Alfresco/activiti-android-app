@@ -24,9 +24,9 @@ import java.lang.ref.WeakReference;
 import java.util.Collection;
 import java.util.List;
 
-import retrofit.Callback;
-import retrofit.RetrofitError;
-import retrofit.client.Response;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 import android.content.DialogInterface;
 import android.graphics.Typeface;
@@ -172,13 +172,13 @@ public class UserFilterAdapter extends BaseListAdapter<UserTaskFilterRepresentat
                                                 new Callback<Void>()
                                         {
                                             @Override
-                                            public void success(Void aVoid, Response response)
+                                            public void onResponse(Call<Void> call, Response<Void> response)
                                             {
                                                 frRef.get().refresh();
                                             }
 
                                             @Override
-                                            public void failure(RetrofitError error)
+                                            public void onFailure(Call<Void> call, Throwable error)
                                             {
 
                                             }

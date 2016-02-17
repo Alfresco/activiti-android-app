@@ -135,15 +135,21 @@ public class TasksFragment extends TasksFoundationFragment
         {
             TaskDetailsFragment.with(getActivity()).task(taskRepresentation).bindFragmentTag(getTag()).back(true)
                     .display();
-            selectedTask.clear();
-            selectedTask.add(taskRepresentation);
-            v.setBackgroundColor(getResources().getColor(R.color.secondary_background));
+            if (DisplayUtils.hasCentralPane(getActivity()))
+            {
+                selectedTask.clear();
+                selectedTask.add(taskRepresentation);
+                v.setBackgroundColor(getResources().getColor(R.color.secondary_background));
+            }
         }
         else
         {
-            selectedTask.clear();
-            selectedView = null;
-            setLockRightMenu(true);
+            if (DisplayUtils.hasCentralPane(getActivity()))
+            {
+                selectedTask.clear();
+                selectedView = null;
+                setLockRightMenu(true);
+            }
         }
     }
 

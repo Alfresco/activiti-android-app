@@ -23,15 +23,16 @@ package com.activiti.android.ui.fragments.user;
 import java.util.ArrayList;
 import java.util.List;
 
-import retrofit.Callback;
-import retrofit.RetrofitError;
-import retrofit.client.Response;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 import android.widget.BaseAdapter;
 
 import com.activiti.android.app.R;
 import com.activiti.android.ui.fragments.base.BasePagingGridFragment;
-import com.activiti.client.api.model.idm.LightUsersRepresentation;
+import com.activiti.client.api.model.common.ResultList;
+import com.activiti.client.api.model.idm.LightUserRepresentation;
 import com.activiti.client.api.model.idm.UserRepresentation;
 
 public class UsersFoundationFragment extends BasePagingGridFragment
@@ -43,16 +44,17 @@ public class UsersFoundationFragment extends BasePagingGridFragment
     // ///////////////////////////////////////////////////////////////////////////
     // LIFECYCLE
     // ///////////////////////////////////////////////////////////////////////////
-    protected Callback<LightUsersRepresentation> callBack = new Callback<LightUsersRepresentation>()
+    protected Callback<ResultList<LightUserRepresentation>> callBack = new Callback<ResultList<LightUserRepresentation>>()
     {
         @Override
-        public void success(LightUsersRepresentation response, Response response2)
+        public void onResponse(Call<ResultList<LightUserRepresentation>> call,
+                Response<ResultList<LightUserRepresentation>> response)
         {
-            displayData(response);
+            displayData(response.body());
         }
 
         @Override
-        public void failure(RetrofitError error)
+        public void onFailure(Call<ResultList<LightUserRepresentation>> call, Throwable error)
         {
             displayError(error);
         }

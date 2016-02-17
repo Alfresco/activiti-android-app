@@ -94,7 +94,7 @@ public class FiltersFragment extends UserFilterFoundationFragment implements Req
     @Override
     public void refreshTasks(boolean refresh)
     {
-        if (!selectedFilter.isEmpty())
+        if (frag != null && !selectedFilter.isEmpty())
         {
             frag.setFilterBundle(createBundle(selectedFilter.get(0).getFilter()), refresh);
         }

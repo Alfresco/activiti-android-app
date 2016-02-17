@@ -1,3 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+
 <!--
   ~  Copyright (C) 2005-2015 Alfresco Software Limited.
   ~
@@ -18,37 +20,17 @@
   ~
   -->
 
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:gravity="center_horizontal"
-    android:orientation="vertical"
-    android:background="@color/secondary_background"
-    tools:context="com.activiti.android.ui.activity.AlfrescoActivity">
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
 
-    <ScrollView
-        android:id="@+id/form_master"
+    <LinearLayout
+        android:id="@+id/tab_group_container"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:fillViewport="true"
-        >
-
-        <LinearLayout
-            android:id="@+id/form_container"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
-        </LinearLayout>
-    </ScrollView>
-
-    <include
-        layout="@layout/app_progress_emtpy"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
+        android:layout_height="wrap_content"
+        style="@style/ActivitiTheme.Container.Padding16"
+        android:background="@color/secondary_background"
+        android:orientation="vertical" />
 
 </LinearLayout>
-
-
-
