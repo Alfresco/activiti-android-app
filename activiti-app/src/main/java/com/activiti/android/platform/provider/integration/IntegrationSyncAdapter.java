@@ -74,8 +74,8 @@ public class IntegrationSyncAdapter extends AbstractThreadedSyncAdapter
         try
         {
             // Retrieve ActivitiAccount
-            long accountId = Long.parseLong(AccountManager.get(getContext()).getUserData(account,
-                    ActivitiAccount.ACCOUNT_ID));
+            long accountId = Long
+                    .parseLong(AccountManager.get(getContext()).getUserData(account, ActivitiAccount.ACCOUNT_ID));
 
             // Retrieve Applications from Server
             if (ActivitiSession.getInstance() != null)
@@ -87,7 +87,11 @@ public class IntegrationSyncAdapter extends AbstractThreadedSyncAdapter
                 return;
             }
             ResultList<AlfrescoEndpointRepresentation> repositories = api.getProfileService().getAlfrescoRepositories();
-            if (repositories == null) { return; }
+            if (repositories == null)
+            {
+                EventBusManager.getInstance().post(new IntegrationSyncEvent("10"));
+                return;
+            }
             List<AlfrescoEndpointRepresentation> alfrescoEndpoints = repositories.getList();
 
             // Retrieve Local Data
@@ -104,8 +108,8 @@ public class IntegrationSyncAdapter extends AbstractThreadedSyncAdapter
                 {
                     // Let's find if Alfresco account
                     Account selectedAccount = null;
-                    Account[] accounts = AccountManager.get(getContext()).getAccountsByType(
-                            AlfrescoIntegrator.ALFRESCO_ACCOUNT_TYPE);
+                    Account[] accounts = AccountManager.get(getContext())
+                            .getAccountsByType(AlfrescoIntegrator.ALFRESCO_ACCOUNT_TYPE);
                     String alfrescoUsername = null, alfrescoAccountName = null;
                     int integration = Integration.OPEN_UNDEFINED;
                     Long alfrescoId = -1L;

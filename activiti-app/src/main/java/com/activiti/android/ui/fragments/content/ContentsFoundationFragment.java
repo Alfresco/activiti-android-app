@@ -33,6 +33,7 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
+import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -46,6 +47,7 @@ import com.activiti.android.platform.storage.AlfrescoStorageManager;
 import com.activiti.android.platform.utils.BundleUtils;
 import com.activiti.android.ui.fragments.AlfrescoFragment;
 import com.activiti.android.ui.fragments.base.BasePagingGridFragment;
+import com.activiti.android.ui.utils.DisplayUtils;
 import com.activiti.android.ui.utils.UIUtils;
 import com.activiti.client.api.constant.RequestConstant;
 import com.activiti.client.api.model.common.ResultList;
@@ -170,8 +172,8 @@ public class ContentsFoundationFragment extends BasePagingGridFragment implement
         {
             if (!TextUtils.isEmpty(processId))
             {
-                ContentTransferManager
-                        .prepareTransfer(resultData, this, taskId, ContentTransferManager.TYPE_PROCESS_ID);
+                ContentTransferManager.prepareTransfer(resultData, this, taskId,
+                        ContentTransferManager.TYPE_PROCESS_ID);
             }
             else if (!TextUtils.isEmpty(taskId))
             {
@@ -306,8 +308,28 @@ public class ContentsFoundationFragment extends BasePagingGridFragment implement
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater)
     {
         super.onCreateOptionsMenu(menu, inflater);
-        menu.clear();
-        switchViewItem = menu.add(0, R.id.alfresco_action, 0, R.string.list);
+
+        Menu tmpMenu = menu;
+        if (!DisplayUtils.hasCentralPane(getActivity()))
+        {
+            tmpMenu.clear();
+        }
+        else
+        {
+            tmpMenu = getToolbar().getMenu();
+            // Set an OnMenuItemClickListener to handle menu item clicks
+            getToolbar().setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener()
+            {
+                @Override
+                public boolean onMenuItemClick(MenuItem item)
+                {
+                    return onOptionsItemSelected(item);
+                }
+            });
+
+        }
+
+        switchViewItem = tmpMenu.add(0, R.id.alfresco_action, 0, R.string.list);
         switchViewItem.setIcon(R.drawable.ic_view_module_white);
         switchViewItem.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
     }

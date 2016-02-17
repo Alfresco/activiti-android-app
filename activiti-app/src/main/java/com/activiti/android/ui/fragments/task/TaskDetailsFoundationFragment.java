@@ -342,22 +342,22 @@ public class TaskDetailsFoundationFragment extends AbstractDetailsFragment
     {
         getAPI().getTaskService().getChecklist(taskRepresentation.getId(),
                 new Callback<ResultList<TaskRepresentation>>()
-        {
-            @Override
+                {
+                    @Override
                     public void onResponse(Call<ResultList<TaskRepresentation>> call,
                             Response<ResultList<TaskRepresentation>> response)
-            {
+                    {
                         checkListTasks = response.body().getList();
-                hasCheckList = true;
-                displayCards();
-            }
+                        hasCheckList = true;
+                        displayCards();
+                    }
 
-            @Override
+                    @Override
                     public void onFailure(Call<ResultList<TaskRepresentation>> call, Throwable error)
-            {
-                hasCheckList = true;
-            }
-        });
+                    {
+                        hasCheckList = true;
+                    }
+                });
     }
 
     // ///////////////////////////////////////////////////////////////////////////
@@ -476,7 +476,8 @@ public class TaskDetailsFoundationFragment extends AbstractDetailsFragment
                     @Override
                     public void onClick(View v)
                     {
-                        TaskFormFragment.with(getActivity()).task(taskRepresentation).display();
+                        TaskFormFragment.with(getActivity()).task(taskRepresentation).back(true)
+                                .display(FragmentDisplayer.PANEL_CENTRAL);
                     }
                 });
             }
@@ -512,7 +513,7 @@ public class TaskDetailsFoundationFragment extends AbstractDetailsFragment
                     {
                         TaskFormFragment.with(getActivity()).task(taskRepresentation)
                                 .bindFragmentTag(BundleUtils.getString(getArguments(), ARGUMENT_BIND_FRAGMENT_TAG))
-                                .display();
+                                .back(true).display();
                         v.setEnabled(false);
                     }
                 });
@@ -677,7 +678,10 @@ public class TaskDetailsFoundationFragment extends AbstractDetailsFragment
                             formDefinitionModel = null;
                             formKey = Long.toString(response.body().getId());
                             displayFormField();
-                            displayOutcome();
+                            if (!isEnded)
+                            {
+                                displayOutcome();
+                            }
                         }
 
                         @Override
@@ -855,7 +859,9 @@ public class TaskDetailsFoundationFragment extends AbstractDetailsFragment
             {
                 v = inflater.inflate(R.layout.row_two_lines_swipe, userContainer, false);
                 v.setTag(user.getId());
-                vh = HolderUtils.configure(v, user.getFullname(), null, R.drawable.ic_account_circle_grey);
+                String fullName = user.getFullname();
+                vh = HolderUtils.configure(v, fullName != null && !fullName.isEmpty() ? fullName : user.getEmail(),
+                        null, R.drawable.ic_account_circle_grey);
                 if (picasso != null)
                 {
                     picasso.cancelRequest(vh.icon);
@@ -917,6 +923,13 @@ public class TaskDetailsFoundationFragment extends AbstractDetailsFragment
             return;
         }
 
+        show(R.id.task_details_checklist_card);
+        if (taskRepresentations == null || taskRepresentations.isEmpty() || isEnded)
+        {
+            hide(R.id.task_details_checklist_card);
+            return;
+        }
+
         LayoutInflater inflater = (LayoutInflater) getActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
         // TASKS
@@ -927,6 +940,7 @@ public class TaskDetailsFoundationFragment extends AbstractDetailsFragment
         {
             v = inflater.inflate(R.layout.row_single_line, activeTaskContainer, false);
             ((TextView) v.findViewById(R.id.toptext)).setText(R.string.task_help_add_first_checklist);
+            HolderUtils.makeMultiLine(((TextView) v.findViewById(R.id.toptext)), 4);
             v.findViewById(R.id.icon).setVisibility(View.GONE);
             activeTaskContainer.addView(v);
         }
@@ -1139,8 +1153,8 @@ public class TaskDetailsFoundationFragment extends AbstractDetailsFragment
                 displayAssignee(
                         response.body().getAssignee() != null ? response.body().getAssignee().getFullname() : null);
                 Snackbar.make(getActivity().findViewById(R.id.left_panel),
-                        String.format(getString(R.string.task_alert_assigned), task.name,
- response.body().getAssignee() != null
+                        String.format(getString(R.string.task_alert_assigned),
+                                task.name, response.body().getAssignee() != null
                                         ? response.body().getAssignee().getFullname() : ""),
                         Snackbar.LENGTH_SHORT).show();
             }

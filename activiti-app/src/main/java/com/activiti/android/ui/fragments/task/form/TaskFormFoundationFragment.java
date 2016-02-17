@@ -33,6 +33,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -190,8 +191,26 @@ public class TaskFormFoundationFragment extends AlfrescoFragment implements Date
         super.onCreateOptionsMenu(menu, inflater);
         if (getVersionNumber() >= ActivitiVersionNumber.VERSION_1_2_2 && !isEnded)
         {
-            menu.clear();
-            inflater.inflate(R.menu.task_form, menu);
+            if (!DisplayUtils.hasCentralPane(getActivity()))
+            {
+                menu.clear();
+                inflater.inflate(R.menu.task_form, menu);
+            }
+            else
+            {
+                getToolbar().getMenu().clear();
+                getToolbar().inflateMenu(R.menu.task_form);
+                // Set an OnMenuItemClickListener to handle menu item clicks
+                getToolbar().setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener()
+                {
+                    @Override
+                    public boolean onMenuItemClick(MenuItem item)
+                    {
+                        return onOptionsItemSelected(item);
+                    }
+                });
+
+            }
         }
     }
 

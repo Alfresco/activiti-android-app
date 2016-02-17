@@ -43,9 +43,9 @@
     <string name="general_login_credentials_username">Username</string>
     <string name="general_login_credentials_password">Password</string>
     <string name="general_login_credentials_show_password">Show password</string>
-    <string name="general_login_credentials_sign_in">activiti.alfresco.com</string>
+    <string name="general_login_credentials_sign_in">Alfresco Activiti in the Cloud</string>
     <string name="general_login_credentials_or">or</string>
-    <string name="general_login_credentials_connect">Activiti onPremise</string>
+    <string name="general_login_credentials_connect">Alfresco Activiti</string>
     <string name="general_login_account_added">Account added!</string>
     <string name="general_login_account_name">Give this account a name (optional)</string>
 
@@ -177,7 +177,7 @@
     <string name="task_field_form">Form</string>
 
     <!-- TASKS MESSAGES -->
-    <string name="task_message_due_on">Due %s</string>
+    <string name="task_message_due_on">%s</string>
     <string name="task_message_created_on">Created %s</string>
     <string name="task_message_ended_on">Completed %s</string>
     <string name="task_message_no_description">This task has no description</string>

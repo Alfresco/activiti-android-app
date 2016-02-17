@@ -51,6 +51,7 @@ import com.activiti.android.platform.provider.transfer.ContentTransferEvent;
 import com.activiti.android.platform.provider.transfer.ContentTransferManager;
 import com.activiti.android.platform.rendition.RenditionManager;
 import com.activiti.android.ui.fragments.AlfrescoFragment;
+import com.activiti.android.ui.fragments.FragmentDisplayer;
 import com.activiti.android.ui.holder.HolderUtils;
 import com.activiti.android.ui.holder.TwoLinesViewHolder;
 import com.activiti.android.ui.utils.UIUtils;
@@ -235,13 +236,14 @@ public class AbstractDetailsFragment extends AlfrescoFragment
                     {
                         resetRightMenu();
                         ContentsFragment.with(getActivity()).readOnly(isEnded).taskId(taskId)
-                                .title(taskRepresentation.getName()).display();
+                                .title(taskRepresentation.getName()).display(FragmentDisplayer.PANEL_CENTRAL);
                     }
                     else if (!TextUtils.isEmpty(processId))
                     {
                         resetRightMenu();
                         ContentsFragment.with(getActivity()).processId(processId).readOnly(isEnded)
-                                .title(processInstanceRepresentation.getName()).display();
+                                .title(processInstanceRepresentation.getName())
+                                .display(FragmentDisplayer.PANEL_CENTRAL);
                     }
                 }
             });

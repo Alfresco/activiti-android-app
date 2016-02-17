@@ -21,6 +21,7 @@
 package com.activiti.android.ui.activity;
 
 import okhttp3.ResponseBody;
+import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -143,7 +144,8 @@ public abstract class AlfrescoActivity extends AppCompatActivity
 
         if (account == null) { return; }
         session = new ActivitiSession.Builder()
-                .connect(account.getServerUrl(), account.getUsername(), account.getPassword()).build();
+                .connect(account.getServerUrl(), account.getUsername(), account.getPassword())
+                .httpLogging(HttpLoggingInterceptor.Level.HEADERS).build();
 
         // Refresh Adapter
         AppInstancesFragment.syncAdapters(this);
