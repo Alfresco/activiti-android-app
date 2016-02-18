@@ -152,6 +152,12 @@ public class StartSimpleFormDialogFragment extends AlfrescoFragment
             public void onResponse(Call<ProcessInstanceRepresentation> call,
                     Response<ProcessInstanceRepresentation> response)
             {
+                if (!response.isSuccess())
+                {
+                    onFailure(call, new Exception(response.message()));
+                    return;
+                }
+
                 ProcessDetailsFragment.with(getActivity()).processId(response.body().getId()).display();
 
                 try

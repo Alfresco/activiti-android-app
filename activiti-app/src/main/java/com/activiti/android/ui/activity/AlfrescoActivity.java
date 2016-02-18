@@ -145,7 +145,7 @@ public abstract class AlfrescoActivity extends AppCompatActivity
         if (account == null) { return; }
         session = new ActivitiSession.Builder()
                 .connect(account.getServerUrl(), account.getUsername(), account.getPassword())
-                .httpLogging(HttpLoggingInterceptor.Level.HEADERS).build();
+                .httpLogging(HttpLoggingInterceptor.Level.BODY).build();
 
         // Refresh Adapter
         AppInstancesFragment.syncAdapters(this);
@@ -165,7 +165,7 @@ public abstract class AlfrescoActivity extends AppCompatActivity
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response)
             {
-                account.setIsAdmin(true);
+                account.setIsAdmin(response.isSuccess());
             }
 
             @Override

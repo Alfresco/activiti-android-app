@@ -150,6 +150,11 @@ public class UserGroupPickerFragment extends IdmPickerFragment
         public void onResponse(Call<ResultList<LightGroupRepresentation>> call,
                 Response<ResultList<LightGroupRepresentation>> response)
         {
+            if (!response.isSuccess())
+            {
+                onFailure(call, new Exception(response.message()));
+                return;
+            }
             displayData(response.body());
         }
 

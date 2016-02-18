@@ -95,8 +95,8 @@ public class DropDownField extends BaseField
         {
             if (editionValue instanceof OptionRepresentation)
             {
-                ((Spinner) editionView.findViewById(R.id.spinner)).setSelection(optionsIndex
-                        .get(((OptionRepresentation) editionValue).getName()));
+                ((Spinner) editionView.findViewById(R.id.spinner))
+                        .setSelection(optionsIndex.get(((OptionRepresentation) editionValue).getName()));
             }
         }
     }
@@ -177,36 +177,39 @@ public class DropDownField extends BaseField
     @Override
     public void setFragment(AlfrescoFragment fr)
     {
-        if (data instanceof RestFieldRepresentation && ((RestFieldRepresentation) data).getEndpoint() == null) { return; }
+        if (data instanceof RestFieldRepresentation
+                && ((RestFieldRepresentation) data).getEndpoint() == null) { return; }
 
         super.setFragment(fr);
-        getFragment()
-                .getAPI()
-                .getTaskService()
-                .getFormFieldValues(getFormManager().getTaskId(), data.getId(),
-                        new Callback<List<OptionRepresentation>>()
-                        {
-                            @Override
+        getFragment().getAPI().getTaskService().getFormFieldValues(getFormManager().getTaskId(), data.getId(),
+                new Callback<List<OptionRepresentation>>()
+                {
+                    @Override
                     public void onResponse(Call<List<OptionRepresentation>> call,
                             Response<List<OptionRepresentation>> response)
-                            {
-                                if (TextUtils.isEmpty(data.getPlaceholder()))
-                                {
-                            response.body().add(0, new OptionRepresentation("-1",
-                                            getString(R.string.dropdown_select)));
-                                }
-                                else
-                                {
-                            response.body().add(0, new OptionRepresentation("-1", data.getPlaceholder()));
-                                }
-                        refreshAdapter(response.body());
-                            }
+                    {
+                        if (!response.isSuccess())
+                        {
+                            onFailure(call, new Exception(response.message()));
+                            return;
+                        }
 
-                            @Override
+                        if (TextUtils.isEmpty(data.getPlaceholder()))
+                        {
+                            response.body().add(0, new OptionRepresentation("-1", getString(R.string.dropdown_select)));
+                        }
+                        else
+                        {
+                            response.body().add(0, new OptionRepresentation("-1", data.getPlaceholder()));
+                        }
+                        refreshAdapter(response.body());
+                    }
+
+                    @Override
                     public void onFailure(Call<List<OptionRepresentation>> call, Throwable error)
-                            {
-                            }
-                        });
+                    {
+                    }
+                });
     }
 
     // ///////////////////////////////////////////////////////////////////////////

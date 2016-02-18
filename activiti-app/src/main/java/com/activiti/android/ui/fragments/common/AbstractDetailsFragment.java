@@ -308,6 +308,11 @@ public class AbstractDetailsFragment extends AlfrescoFragment
             public void onResponse(Call<RelatedContentRepresentation> call,
                     Response<RelatedContentRepresentation> response)
             {
+                if (!response.isSuccess())
+                {
+                    onFailure(call, new Exception(response.message()));
+                    return;
+                }
                 relatedContentRepresentations.add(response.body());
                 displayContents(relatedContentRepresentations);
             }

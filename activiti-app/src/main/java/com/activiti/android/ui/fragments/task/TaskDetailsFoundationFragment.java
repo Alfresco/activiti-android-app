@@ -187,6 +187,15 @@ public class TaskDetailsFoundationFragment extends AbstractDetailsFragment
             @Override
             public void onResponse(Call<TaskRepresentation> call, Response<TaskRepresentation> response)
             {
+                if (!response.isSuccess())
+                {
+                    onFailure(call, new Exception(response.message()));
+                    return;
+                }
+                if (!response.isSuccess())
+                {
+                    onFailure(call, new Exception(response.message()));
+                }
                 taskRepresentation = response.body();
                 displayInfo();
                 people = response.body().getInvolvedPeople();
@@ -242,6 +251,11 @@ public class TaskDetailsFoundationFragment extends AbstractDetailsFragment
             @Override
             public void onResponse(Call<TaskRepresentation> call, Response<TaskRepresentation> response)
             {
+                if (!response.isSuccess())
+                {
+                    onFailure(call, new Exception(response.message()));
+                    return;
+                }
                 taskRepresentation = response.body();
                 displayInfo();
                 people = response.body().getInvolvedPeople();
@@ -287,6 +301,11 @@ public class TaskDetailsFoundationFragment extends AbstractDetailsFragment
                             public void onResponse(Call<ProcessInstanceRepresentation> call,
                                     Response<ProcessInstanceRepresentation> response)
                             {
+                                if (!response.isSuccess())
+                                {
+                                    onFailure(call, new Exception(response.message()));
+                                    return;
+                                }
                                 processInstanceRepresentation = response.body();
                                 displayProcessProperty(response.body());
                             }
@@ -316,6 +335,11 @@ public class TaskDetailsFoundationFragment extends AbstractDetailsFragment
             public void onResponse(Call<ResultList<RelatedContentRepresentation>> call,
                     Response<ResultList<RelatedContentRepresentation>> response)
             {
+                if (!response.isSuccess())
+                {
+                    onFailure(call, new Exception(response.message()));
+                    return;
+                }
                 relatedContentRepresentations = response.body().getList();
                 hasContentLoaded = true;
                 displayCards();
@@ -347,6 +371,11 @@ public class TaskDetailsFoundationFragment extends AbstractDetailsFragment
                     public void onResponse(Call<ResultList<TaskRepresentation>> call,
                             Response<ResultList<TaskRepresentation>> response)
                     {
+                        if (!response.isSuccess())
+                        {
+                            onFailure(call, new Exception(response.message()));
+                            return;
+                        }
                         checkListTasks = response.body().getList();
                         hasCheckList = true;
                         displayCards();
@@ -431,6 +460,8 @@ public class TaskDetailsFoundationFragment extends AbstractDetailsFragment
 
     protected void displayInfo()
     {
+        if (taskRepresentation == null) { return; }
+
         // What's the status ?
         isEnded = (taskRepresentation.getEndDate() != null);
 
@@ -674,6 +705,11 @@ public class TaskDetailsFoundationFragment extends AbstractDetailsFragment
                         public void onResponse(Call<FormDefinitionRepresentation> call,
                                 Response<FormDefinitionRepresentation> response)
                         {
+                            if (!response.isSuccess())
+                            {
+                                onFailure(call, new Exception(response.message()));
+                                return;
+                            }
                             formModelName = response.body().getName();
                             formDefinitionModel = null;
                             formKey = Long.toString(response.body().getId());
@@ -1081,6 +1117,11 @@ public class TaskDetailsFoundationFragment extends AbstractDetailsFragment
             @Override
             public void onResponse(Call<Void> call, Response<Void> response)
             {
+                if (!response.isSuccess())
+                {
+                    onFailure(call, new Exception(response.message()));
+                    return;
+                }
                 try
                 {
                     EventBusManager.getInstance()
@@ -1126,6 +1167,11 @@ public class TaskDetailsFoundationFragment extends AbstractDetailsFragment
             @Override
             public void onResponse(Call<Void> call, Response<Void> response)
             {
+                if (!response.isSuccess())
+                {
+                    onFailure(call, new Exception(response.message()));
+                    return;
+                }
                 assignee = ActivitiAccountManager.getInstance(getActivity()).getUser();
                 displayAssignee(assignee != null ? assignee.getFullname() : null);
                 displayOutcome();
@@ -1150,6 +1196,11 @@ public class TaskDetailsFoundationFragment extends AbstractDetailsFragment
             @Override
             public void onResponse(Call<TaskRepresentation> call, Response<TaskRepresentation> response)
             {
+                if (!response.isSuccess())
+                {
+                    onFailure(call, new Exception(response.message()));
+                    return;
+                }
                 displayAssignee(
                         response.body().getAssignee() != null ? response.body().getAssignee().getFullname() : null);
                 Snackbar.make(getActivity().findViewById(R.id.left_panel),
@@ -1176,6 +1227,11 @@ public class TaskDetailsFoundationFragment extends AbstractDetailsFragment
             @Override
             public void onResponse(Call<TaskRepresentation> call, Response<TaskRepresentation> response)
             {
+                if (!response.isSuccess())
+                {
+                    onFailure(call, new Exception(response.message()));
+                    return;
+                }
                 displayAssignee(
                         response.body().getAssignee() != null ? response.body().getAssignee().getFullname() : null);
 
@@ -1200,6 +1256,11 @@ public class TaskDetailsFoundationFragment extends AbstractDetailsFragment
             @Override
             public void onResponse(Call<Void> call, Response<Void> response)
             {
+                if (!response.isSuccess())
+                {
+                    onFailure(call, new Exception(response.message()));
+                    return;
+                }
                 displayPeopleSection(people);
                 Snackbar.make(getActivity().findViewById(R.id.left_panel),
                         String.format(getString(R.string.task_alert_person_involved), user.getFullname(),
@@ -1223,6 +1284,12 @@ public class TaskDetailsFoundationFragment extends AbstractDetailsFragment
             @Override
             public void onResponse(Call<Void> call, Response<Void> response)
             {
+
+                if (!response.isSuccess())
+                {
+                    onFailure(call, new Exception(response.message()));
+                    return;
+                }
                 refreshInfo();
             }
 
@@ -1242,6 +1309,11 @@ public class TaskDetailsFoundationFragment extends AbstractDetailsFragment
             @Override
             public void onResponse(Call<TaskRepresentation> call, Response<TaskRepresentation> response)
             {
+                if (!response.isSuccess())
+                {
+                    onFailure(call, new Exception(response.message()));
+                    return;
+                }
                 taskRepresentation = response.body();
                 displayDescription(description);
                 displayDueDate(dueAt);
@@ -1263,6 +1335,11 @@ public class TaskDetailsFoundationFragment extends AbstractDetailsFragment
             @Override
             public void onResponse(Call<Void> call, Response<Void> response)
             {
+                if (!response.isSuccess())
+                {
+                    onFailure(call, new Exception(response.message()));
+                    return;
+                }
                 people.remove(userRemoved);
                 if (people.isEmpty())
                 {
@@ -1294,6 +1371,11 @@ public class TaskDetailsFoundationFragment extends AbstractDetailsFragment
             @Override
             public void onResponse(Call<Void> call, Response<Void> response)
             {
+                if (!response.isSuccess())
+                {
+                    onFailure(call, new Exception(response.message()));
+                    return;
+                }
                 Snackbar.make(getActivity().findViewById(R.id.left_panel),
                         String.format(getString(R.string.task_alert_form_removed),
                                 (formDefinitionModel != null) ? formDefinitionModel.getName() : formModelName),
@@ -1322,6 +1404,11 @@ public class TaskDetailsFoundationFragment extends AbstractDetailsFragment
             @Override
             public void onResponse(Call<Void> call, Response<Void> response)
             {
+                if (!response.isSuccess())
+                {
+                    onFailure(call, new Exception(response.message()));
+                    return;
+                }
                 formDefinitionModel = formModel;
                 formModelName = null;
                 // awaits retrieve form to get real formkey

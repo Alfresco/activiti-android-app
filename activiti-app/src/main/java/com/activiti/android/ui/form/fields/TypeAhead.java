@@ -171,8 +171,8 @@ public class TypeAhead extends BaseField
     public void showError()
     {
         if (isValid()) { return; }
-        ((MaterialMultiAutoCompleteTextView) editionView).setError(String.format(
-                getString(R.string.form_error_message_required), data.getName()));
+        ((MaterialMultiAutoCompleteTextView) editionView)
+                .setError(String.format(getString(R.string.form_error_message_required), data.getName()));
     }
 
     // ///////////////////////////////////////////////////////////////////////////
@@ -181,38 +181,42 @@ public class TypeAhead extends BaseField
     @Override
     public void setFragment(AlfrescoFragment fr)
     {
-        if (data instanceof RestFieldRepresentation && ((RestFieldRepresentation) data).getEndpoint() == null) { return; }
+        if (data instanceof RestFieldRepresentation
+                && ((RestFieldRepresentation) data).getEndpoint() == null) { return; }
 
         super.setFragment(fr);
-        getFragment()
-                .getAPI()
-                .getTaskService()
-                .getFormFieldValues(getFormManager().getTaskId(), data.getId(),
-                        new Callback<List<OptionRepresentation>>()
-                        {
-                            @Override
+        getFragment().getAPI().getTaskService().getFormFieldValues(getFormManager().getTaskId(), data.getId(),
+                new Callback<List<OptionRepresentation>>()
+                {
+                    @Override
                     public void onResponse(Call<List<OptionRepresentation>> call,
                             Response<List<OptionRepresentation>> response)
-                            {
+                    {
+                        if (!response.isSuccess())
+                        {
+                            onFailure(call, new Exception(response.message()));
+                            return;
+                        }
+
                         ArrayList<String> optionsValue = new ArrayList<String>(response.body().size());
                         optionsIndex = new LinkedHashMap<>(response.body().size());
                         for (OptionRepresentation item : response.body())
-                                {
-                                    optionsValue.add(item.getName());
-                                    optionsIndex.put(item.getName(), item);
-                                }
+                        {
+                            optionsValue.add(item.getName());
+                            optionsIndex.put(item.getName(), item);
+                        }
 
-                                ArrayAdapter adapter = new TypeAheadAdapter(getFragment().getActivity(),
-                                        R.layout.row_single_line, optionsValue);
-                                ((MaterialMultiAutoCompleteTextView) editionView).setAdapter(adapter);
-                                ((MaterialMultiAutoCompleteTextView) editionView).setTokenizer(new SpaceTokenizer());
-                            }
+                        ArrayAdapter adapter = new TypeAheadAdapter(getFragment().getActivity(),
+                                R.layout.row_single_line, optionsValue);
+                        ((MaterialMultiAutoCompleteTextView) editionView).setAdapter(adapter);
+                        ((MaterialMultiAutoCompleteTextView) editionView).setTokenizer(new SpaceTokenizer());
+                    }
 
-                            @Override
+                    @Override
                     public void onFailure(Call<List<OptionRepresentation>> call, Throwable error)
-                            {
-                            }
-                        });
+                    {
+                    }
+                });
     }
 
     public class SpaceTokenizer implements MultiAutoCompleteTextView.Tokenizer

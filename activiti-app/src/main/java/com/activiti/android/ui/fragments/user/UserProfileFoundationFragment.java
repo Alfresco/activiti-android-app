@@ -129,6 +129,12 @@ public class UserProfileFoundationFragment extends AlfrescoFragment implements
             @Override
             public void onResponse(Call<UserRepresentation> call, Response<UserRepresentation> response)
             {
+                if (!response.isSuccess())
+                {
+                    onFailure(call, new Exception(response.message()));
+                    return;
+                }
+
                 userRepresentation = response.body();
                 if (memberOfGroups == null && userRepresentation.getGroups() != null
                         && !userRepresentation.getGroups().isEmpty())
@@ -345,6 +351,12 @@ public class UserProfileFoundationFragment extends AlfrescoFragment implements
             @Override
             public void onResponse(Call<UserRepresentation> call, Response<UserRepresentation> response)
             {
+                if (!response.isSuccess())
+                {
+                    onFailure(call, new Exception(response.message()));
+                    return;
+                }
+
                 userRepresentation = response.body();
                 displayInfo();
 

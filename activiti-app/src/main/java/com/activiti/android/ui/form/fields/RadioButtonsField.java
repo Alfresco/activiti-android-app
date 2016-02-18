@@ -188,8 +188,12 @@ public class RadioButtonsField extends BaseField
                     public void onResponse(Call<List<OptionRepresentation>> call,
                             Response<List<OptionRepresentation>> response)
                     {
+                        if (!response.isSuccess())
+                        {
+                            onFailure(call, new Exception(response.message()));
+                            return;
+                        }
                         refreshRadioButtons(response.body());
-
                     }
 
                     @Override
