@@ -174,6 +174,11 @@ public class UserFilterAdapter extends BaseListAdapter<UserTaskFilterRepresentat
                                             @Override
                                             public void onResponse(Call<Void> call, Response<Void> response)
                                             {
+                                                if (!response.isSuccess())
+                                                {
+                                                    onFailure(call, new Exception(response.message()));
+                                                    return;
+                                                }
                                                 frRef.get().refresh();
                                             }
 

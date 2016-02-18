@@ -172,6 +172,11 @@ public class TasksFoundationFragment extends BasePagingGridFragment implements R
         public void onResponse(Call<ResultList<TaskRepresentation>> call,
                 Response<ResultList<TaskRepresentation>> response)
         {
+            if (!response.isSuccess())
+            {
+                onFailure(call, new Exception(response.message()));
+                return;
+            }
             displayData(response.body());
         }
 

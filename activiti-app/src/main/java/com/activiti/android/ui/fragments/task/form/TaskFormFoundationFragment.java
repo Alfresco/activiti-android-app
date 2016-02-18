@@ -230,6 +230,12 @@ public class TaskFormFoundationFragment extends AlfrescoFragment implements Date
                     @Override
                     public void onResponse(Call<Void> call, Response<Void> response)
                     {
+                        if (!response.isSuccess())
+                        {
+                            onFailure(call, new Exception(response.message()));
+                            return;
+                        }
+
                         try
                         {
                             EventBusManager.getInstance().post(new SaveTaskEvent(null, task.id, task.category));
@@ -280,6 +286,11 @@ public class TaskFormFoundationFragment extends AlfrescoFragment implements Date
             public void onResponse(Call<FormDefinitionRepresentation> call,
                     Response<FormDefinitionRepresentation> response)
             {
+                if (!response.isSuccess())
+                {
+                    onFailure(call, new Exception(response.message()));
+                    return;
+                }
                 AppVersion version = new AppVersion(getAccount().getServerVersion());
                 formManager = new FormManager(TaskFormFoundationFragment.this,
                         (ViewGroup) viewById(R.id.form_container), response.body(), version);
@@ -350,6 +361,11 @@ public class TaskFormFoundationFragment extends AlfrescoFragment implements Date
             @Override
             public void onResponse(Call<Void> call, Response<Void> response)
             {
+                if (!response.isSuccess())
+                {
+                    onFailure(call, new Exception(response.message()));
+                    return;
+                }
                 try
                 {
                     EventBusManager.getInstance().post(new CompleteTaskEvent(null, task.id, task.category));

@@ -48,6 +48,7 @@ public class CheckBoxField extends BaseField
     @Override
     public Object getEditionValue()
     {
+        if (editionView == null) { return editionValue; }
         return ((CheckBox) editionView).isChecked();
     }
 

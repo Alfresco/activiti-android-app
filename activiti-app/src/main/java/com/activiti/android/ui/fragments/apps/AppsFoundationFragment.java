@@ -52,6 +52,11 @@ public class AppsFoundationFragment extends BasePagingGridFragment
         public void onResponse(Call<ResultList<AppDefinitionRepresentation>> call,
                 Response<ResultList<AppDefinitionRepresentation>> response)
         {
+            if (!response.isSuccess())
+            {
+                onFailure(call, new Exception(response.message()));
+                return;
+            }
             AppDefinitionRepresentation myTasks = new AppDefinitionRepresentation();
             myTasks.setName("My Tasks");
             myTasks.setId(-1L);

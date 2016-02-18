@@ -83,6 +83,11 @@ public class UserFilterFoundationFragment extends BasePagingGridFragment
         public void onResponse(Call<ResultList<UserTaskFilterRepresentation>> call,
                 Response<ResultList<UserTaskFilterRepresentation>> response)
         {
+            if (!response.isSuccess())
+            {
+                onFailure(call, new Exception(response.message()));
+                return;
+            }
             displayData(response.body());
             gv.smoothScrollToPosition(response.body().getSize());
         }

@@ -106,6 +106,11 @@ public class CommentsFoundationFragment extends BasePagingGridFragment
         public void onResponse(Call<ResultList<CommentRepresentation>> call,
                 Response<ResultList<CommentRepresentation>> response)
         {
+            if (!response.isSuccess())
+            {
+                onFailure(call, new Exception(response.message()));
+                return;
+            }
             displayData(response.body());
             gv.smoothScrollToPosition(response.body().getSize());
             updateFragmentIcon(response.body().getSize() > 0);
@@ -284,6 +289,11 @@ public class CommentsFoundationFragment extends BasePagingGridFragment
             @Override
             public void onResponse(Call<CommentRepresentation> call, Response<CommentRepresentation> response)
             {
+                if (!response.isSuccess())
+                {
+                    onFailure(call, new Exception(response.message()));
+                    return;
+                }
                 commentText.setEnabled(true);
                 commentText.setText("");
                 bAdd.setEnabled(false);

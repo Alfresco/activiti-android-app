@@ -50,6 +50,12 @@ public class UsersFoundationFragment extends BasePagingGridFragment
         public void onResponse(Call<ResultList<LightUserRepresentation>> call,
                 Response<ResultList<LightUserRepresentation>> response)
         {
+            if (!response.isSuccess())
+            {
+                onFailure(call, new Exception(response.message()));
+                return;
+            }
+
             displayData(response.body());
         }
 

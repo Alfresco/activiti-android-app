@@ -257,6 +257,11 @@ public class TaskFilterPropertiesFragment extends CommonTaskFilterFragment
                     public void onResponse(Call<UserTaskFilterRepresentation> call,
                             Response<UserTaskFilterRepresentation> response)
                     {
+                        if (!response.isSuccess())
+                        {
+                            onFailure(call, new Exception(response.message()));
+                            return;
+                        }
                         fragFilters.requestRefresh();
                         getFragmentManager().popBackStack();
                     }
@@ -295,6 +300,11 @@ public class TaskFilterPropertiesFragment extends CommonTaskFilterFragment
             public void onResponse(Call<UserTaskFilterRepresentation> call,
                     Response<UserTaskFilterRepresentation> response)
             {
+                if (!response.isSuccess())
+                {
+                    onFailure(call, new Exception(response.message()));
+                    return;
+                }
                 fragFilters.requestRefresh();
                 getFragmentManager().popBackStack();
             }

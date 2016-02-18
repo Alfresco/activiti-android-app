@@ -166,6 +166,11 @@ public class AttachFormTaskDialogFragment extends AlfrescoFragment
             public void onResponse(Call<ResultList<ModelRepresentation>> call,
                     Response<ResultList<ModelRepresentation>> response)
             {
+                if (!response.isSuccess())
+                {
+                    onFailure(call, new Exception(response.message()));
+                    return;
+                }
                 adapter.addAll(response.body().getList());
                 adapter.notifyDataSetChanged();
             }

@@ -32,6 +32,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.GridView;
 
+import com.activiti.android.app.ActivitiVersionNumber;
 import com.activiti.android.app.R;
 import com.activiti.android.app.activity.MainActivity;
 import com.activiti.android.app.fragments.filters.FiltersFragment;
@@ -42,6 +43,7 @@ import com.activiti.android.ui.fragments.FragmentDisplayer;
 import com.activiti.android.ui.fragments.builder.ListingFragmentBuilder;
 import com.activiti.android.ui.fragments.task.TasksFoundationFragment;
 import com.activiti.android.ui.fragments.task.create.CreateStandaloneTaskDialogFragment;
+import com.activiti.android.ui.fragments.task.filter.TaskFiltersFragment;
 import com.activiti.android.ui.utils.DisplayUtils;
 import com.activiti.client.api.constant.RequestConstant;
 import com.activiti.client.api.model.runtime.TaskRepresentation;
@@ -61,7 +63,8 @@ public class TasksFragment extends TasksFoundationFragment
         super();
         setHasOptionsMenu(true);
         eventBusRequired = true;
-        retrieveDataOnCreation = false;
+        retrieveDataOnCreation = !(getVersionNumber() >= ActivitiVersionNumber.VERSION_1_3_0);
+        ;
     }
 
     public static TasksFragment newInstanceByTemplate(Bundle b)
@@ -106,10 +109,28 @@ public class TasksFragment extends TasksFoundationFragment
     {
         setLockRightMenu(DisplayUtils.hasCentralPane(getActivity()));
 
-        FragmentDisplayer.with(getActivity()).back(false).animate(null)
-                .replace(FiltersFragment.with(getActivity()).appId(appId).typeId(FiltersFragment.TYPE_TASK)
-                        .createFragment())
-                .into(DisplayUtils.hasCentralPane(getActivity()) ? R.id.central_left_drawer : R.id.right_drawer);
+        if (getVersionNumber() >= ActivitiVersionNumber.VERSION_1_3_0)
+        {
+            FragmentDisplayer.with(getActivity()).back(false).animate(null)
+                    .replace(FiltersFragment.with(getActivity()).appId(appId).typeId(FiltersFragment.TYPE_TASK)
+                            .createFragment())
+                    .into(DisplayUtils.hasCentralPane(getActivity()) ? R.id.central_left_drawer : R.id.right_drawer);
+        }
+        else
+        {
+            Fragment fr = getFragmentManager().findFragmentById(R.id.right_drawer);
+            if (fr == null || (fr != null && !(fr instanceof TaskFiltersFragment)))
+            {
+                if (fr != null)
+                {
+                    FragmentDisplayer.with(getActivity()).back(false).animate(null).remove(fr);
+                }
+                FragmentDisplayer.with(getActivity()).back(false).animate(null)
+                        .replace(TaskFiltersFragment
+                                .newInstanceByTemplate(getArguments() != null ? getArguments() : new Bundle()))
+                        .into(R.id.right_drawer);
+            }
+        }
 
         super.onStart();
     }

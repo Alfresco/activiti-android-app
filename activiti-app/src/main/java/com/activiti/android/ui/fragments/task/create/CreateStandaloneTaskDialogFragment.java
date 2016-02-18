@@ -131,8 +131,8 @@ public class CreateStandaloneTaskDialogFragment extends AlfrescoFragment
         super.onStart();
         if (getDialog() != null)
         {
-            descriptionET = ((EditText) ((MaterialDialog) getDialog()).getCustomView().findViewById(
-                    R.id.create_task_description));
+            descriptionET = ((EditText) ((MaterialDialog) getDialog()).getCustomView()
+                    .findViewById(R.id.create_task_description));
             nameET = ((EditText) ((MaterialDialog) getDialog()).getCustomView().findViewById(R.id.create_task_name));
             nameET.setSelection(nameET.getText().length());
             ((MaterialDialog) getDialog()).getActionButton(DialogAction.POSITIVE).setEnabled(false);
@@ -184,12 +184,15 @@ public class CreateStandaloneTaskDialogFragment extends AlfrescoFragment
                 @Override
                 public void onResponse(Call<TaskRepresentation> call, Response<TaskRepresentation> response)
                 {
-                    EventBusManager.getInstance().post(
-new CreateTaskEvent(null, response.body(), getLastAppId(), taskId));
-                    Snackbar.make(
-                            getActivity().findViewById(R.id.left_panel),
-                            String.format(getString(R.string.task_alert_checklist_added),
- response.body().getName()),
+                    if (!response.isSuccess())
+                    {
+                        onFailure(call, new Exception(response.message()));
+                        return;
+                    }
+                    EventBusManager.getInstance()
+                            .post(new CreateTaskEvent(null, response.body(), getLastAppId(), taskId));
+                    Snackbar.make(getActivity().findViewById(R.id.left_panel),
+                            String.format(getString(R.string.task_alert_checklist_added), response.body().getName()),
                             Snackbar.LENGTH_SHORT).show();
 
                     dismiss();
@@ -210,8 +213,8 @@ new CreateTaskEvent(null, response.body(), getLastAppId(), taskId));
                 @Override
                 public void onResponse(Call<TaskRepresentation> call, Response<TaskRepresentation> response)
                 {
-                    EventBusManager.getInstance().post(
-new CreateTaskEvent(null, response.body(), getLastAppId(), null));
+                    EventBusManager.getInstance()
+                            .post(new CreateTaskEvent(null, response.body(), getLastAppId(), null));
                     Snackbar.make(getActivity().findViewById(R.id.left_panel),
                             String.format(getString(R.string.task_alert_created), response.body().getName()),
                             Snackbar.LENGTH_SHORT).show();

@@ -82,6 +82,11 @@ public class ProcessesFoundationFragment extends BasePagingGridFragment implemen
         public void onResponse(Call<ResultList<ProcessInstanceRepresentation>> call,
                 Response<ResultList<ProcessInstanceRepresentation>> response)
         {
+            if (!response.isSuccess())
+            {
+                onFailure(call, new Exception(response.message()));
+                return;
+            }
             displayData(response.body());
         }
 
