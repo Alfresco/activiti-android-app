@@ -124,7 +124,6 @@ android {
         store {
             dependencies {
                 //Alfresco Private
-                storeCompile 'com.google.android.gms:play-services-analytics:8.3.0'
                 storeCompile "com.activiti.android.app:private-icons:0.1.0@aar"
             }
             repositories {
@@ -184,6 +183,8 @@ dependencies {
     compile('com.mikepenz:aboutlibraries:5.0.2@aar') {
         transitive = true
     }
+
+    compile 'com.google.android.gms:play-services-analytics:8.3.0'
 
     //Debug
     debugCompile 'net.hockeyapp.android:HockeySDK:3.5.0'
