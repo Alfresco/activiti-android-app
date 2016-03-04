@@ -42,7 +42,7 @@ public class GAnalyticsManagerImpl extends AnalyticsManager
 
     private boolean hasOptOut = false;
 
-    private boolean dispatchManually = true;
+    private boolean dispatchManually = false;
 
     protected SharedPreferences.Editor editor;
 

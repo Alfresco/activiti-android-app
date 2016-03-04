@@ -44,8 +44,6 @@ public abstract class AnalyticsManager extends Manager
 
     public static final String CATEGORY_SETTINGS = "Settings";
 
-    public static final String CATEGORY_USER = "User";
-
     public static final String CATEGORY_FILTERS = "User Filters";
 
     ///////////////////////////////////////////////////////////
@@ -146,10 +144,6 @@ public abstract class AnalyticsManager extends Manager
     // Beware to have the same index as defined in GAnalytics
     public static final int INDEX_SERVER_TYPE = 1;
 
-    public static final String SERVER_TYPE_ONPREMISE = "OnPremise";
-
-    public static final String SERVER_TYPE_CLOUD = "Cloud";
-
     public static final int INDEX_SERVER_VERSION = 2;
 
     public static final int INDEX_SERVER_EDITION = 3;
@@ -171,11 +165,8 @@ public abstract class AnalyticsManager extends Manager
     ///////////////////////////////////////////////////////////
     // SCREEN NAME
     ///////////////////////////////////////////////////////////
-    public static final String ROOT_APPLICATION = "Application";
 
-    public static final String PREFIX_ACCOUNT = "Account - ";
-
-    public static final String SCREEN_ACCOUNT_EDIT = PREFIX_ACCOUNT + "Edit";
+    // TODO
 
     // ////////////////////////////////////////////////////
     // SETTINGS
