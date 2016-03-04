@@ -1,21 +1,20 @@
 /*
- *  Copyright (C) 2005-2015 Alfresco Software Limited.
+ *  Copyright (C) 2005-2016 Alfresco Software Limited.
  *
- * This file is part of Alfresco Activiti Mobile for Android.
+ *  This file is part of Alfresco Activiti Mobile for Android.
  *
- * Alfresco Activiti Mobile for Android is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Lesser General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
+ *  Alfresco Activiti Mobile for Android is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU Lesser General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
  *
- * Alfresco Activiti Mobile for Android is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU Lesser General Public License for more details.
+ *  Alfresco Activiti Mobile for Android is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU Lesser General Public License for more details.
  *
- * You should have received a copy of the GNU Lesser General Public License
- * along with Alfresco. If not, see <http://www.gnu.org/licenses/>.
- *
+ *  You should have received a copy of the GNU Lesser General Public License
+ *  along with Alfresco. If not, see <http://www.gnu.org/licenses/>.
  */
 
 package com.activiti.android.ui.holder;
@@ -161,6 +160,28 @@ public class HolderUtils
         {
             vh.middleText.setVisibility(View.GONE);
         }
+    }
+
+    public static TwoLinesCheckboxViewHolder configure(View v, String topText, String bottomText, boolean checked)
+    {
+        TwoLinesCheckboxViewHolder vh = new TwoLinesCheckboxViewHolder(v);
+        configure(vh, topText, bottomText, -1, checked);
+        return vh;
+    }
+
+    public static void configure(TwoLinesCheckboxViewHolder vh, String topText, String bottomText, int imageId,
+            boolean checked)
+    {
+        configure(vh, topText, imageId);
+        if (bottomText != null)
+        {
+            vh.bottomText.setText(bottomText);
+        }
+        else
+        {
+            vh.bottomText.setVisibility(View.GONE);
+        }
+        vh.choose.setChecked(checked);
     }
 
     // ///////////////////////////////////////////////////////////////////////////

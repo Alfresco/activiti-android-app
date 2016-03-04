@@ -17,15 +17,29 @@
  *  along with Alfresco. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.activiti.android.app;
+package com.activiti.android.ui.holder;
 
-public interface VersionNumber
+import android.view.View;
+import android.widget.CheckBox;
+import android.widget.TextView;
+
+import com.activiti.android.app.R;
+
+/**
+ * Default class for listing item viewholder.
+ * 
+ * @author Jean Marie Pascal
+ */
+public class TwoLinesCheckboxViewHolder extends SingleLineViewHolder
 {
-    /** Released Q2 2015. */
-    int VERSION_1_0_0 = 1;
+    public TextView bottomText;
 
-    /** Released Q1 2016. */
-    int VERSION_1_1_0 = VERSION_1_0_0;
+    public CheckBox choose;
 
-    int LATEST_VERSION = VERSION_1_1_0;
+    public TwoLinesCheckboxViewHolder(View v)
+    {
+        super(v);
+        bottomText = (TextView) v.findViewById(R.id.bottomtext);
+        choose = (CheckBox) v.findViewById(R.id.checkbox);
+    }
 }

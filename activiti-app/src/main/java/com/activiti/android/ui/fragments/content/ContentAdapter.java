@@ -1,21 +1,20 @@
 /*
- *  Copyright (C) 2005-2015 Alfresco Software Limited.
+ *  Copyright (C) 2005-2016 Alfresco Software Limited.
  *
- * This file is part of Alfresco Activiti Mobile for Android.
+ *  This file is part of Alfresco Activiti Mobile for Android.
  *
- * Alfresco Activiti Mobile for Android is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Lesser General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
+ *  Alfresco Activiti Mobile for Android is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU Lesser General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
  *
- * Alfresco Activiti Mobile for Android is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU Lesser General Public License for more details.
+ *  Alfresco Activiti Mobile for Android is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU Lesser General Public License for more details.
  *
- * You should have received a copy of the GNU Lesser General Public License
- * along with Alfresco. If not, see <http://www.gnu.org/licenses/>.
- *
+ *  You should have received a copy of the GNU Lesser General Public License
+ *  along with Alfresco. If not, see <http://www.gnu.org/licenses/>.
  */
 
 package com.activiti.android.ui.fragments.content;
@@ -38,6 +37,8 @@ import com.activiti.android.app.activity.MainActivity;
 import com.activiti.android.platform.account.ActivitiAccountManager;
 import com.activiti.android.platform.integration.alfresco.AlfrescoIntegrator;
 import com.activiti.android.platform.integration.alfresco.NodeRefUtils;
+import com.activiti.android.platform.integration.analytics.AnalyticsHelper;
+import com.activiti.android.platform.integration.analytics.AnalyticsManager;
 import com.activiti.android.platform.intent.IntentUtils;
 import com.activiti.android.platform.provider.integration.Integration;
 import com.activiti.android.platform.provider.integration.IntegrationManager;
@@ -134,9 +135,9 @@ public class ContentAdapter extends BaseListAdapter<RelatedContentRepresentation
         if (hasThumbnail && textViewResourceId == R.layout.row_tile_single_line)
         {
             picasso.cancelRequest(vh.icon);
-            String url = (MimeType.TYPE_IMAGE.equals(mime.getType())) ? frRef.get().getAPI().getContentService()
-                    .getDownloadUrl(item.getId()) : frRef.get().getAPI().getContentService()
-                    .getThumbnailUrl(item.getId());
+            String url = (MimeType.TYPE_IMAGE.equals(mime.getType()))
+                    ? frRef.get().getAPI().getContentService().getDownloadUrl(item.getId())
+                    : frRef.get().getAPI().getContentService().getThumbnailUrl(item.getId());
             picasso.load(url).placeholder(mime.getLargeIconId(getContext())).resize(imageWidth, imageWidth)
                     .centerInside().into(vh.icon);
         }
@@ -186,28 +187,31 @@ public class ContentAdapter extends BaseListAdapter<RelatedContentRepresentation
                                 MaterialDialog.Builder builder = new MaterialDialog.Builder(getContext())
                                         .title(R.string.content_title_delete)
                                         .cancelListener(new DialogInterface.OnCancelListener()
-                                        {
-                                            @Override
-                                            public void onCancel(DialogInterface dialog)
-                                            {
-                                                dialog.dismiss();
-                                            }
-                                        })
-                                        .content(
-                                                String.format(
-                                                        getContext().getString(
-                                                                R.string.content_message_delete_confirmation),
-                                                        ((RelatedContentRepresentation) v.getTag()).getName()))
+                                {
+                                    @Override
+                                    public void onCancel(DialogInterface dialog)
+                                    {
+                                        dialog.dismiss();
+                                    }
+                                }).content(String.format(
+                                        getContext().getString(R.string.content_message_delete_confirmation),
+                                        ((RelatedContentRepresentation) v.getTag()).getName()))
                                         .positiveText(R.string.general_action_confirm)
                                         .negativeText(R.string.general_action_cancel)
                                         .callback(new MaterialDialog.ButtonCallback()
-                                        {
-                                            @Override
-                                            public void onPositive(MaterialDialog dialog)
-                                            {
-                                                frRef.get().delete(((RelatedContentRepresentation) v.getTag()).getId());
-                                            }
-                                        });
+                                {
+                                    @Override
+                                    public void onPositive(MaterialDialog dialog)
+                                    {
+                                        // Analytics
+                                        AnalyticsHelper.reportOperationEvent(frRef.get().getContext(),
+                                                AnalyticsManager.CATEGORY_DOCUMENT_MANAGEMENT,
+                                                AnalyticsManager.ACTION_DELETE,
+                                                ((RelatedContentRepresentation) v.getTag()).getMimeType(), 1, false);
+
+                                        frRef.get().delete(((RelatedContentRepresentation) v.getTag()).getId());
+                                    }
+                                });
                                 builder.show();
                                 break;
                             case R.id.content_send_file:
@@ -223,11 +227,12 @@ public class ContentAdapter extends BaseListAdapter<RelatedContentRepresentation
                                 break;
 
                             case R.id.content_open_alfresco:
-                                final RelatedContentRepresentation content = ((RelatedContentRepresentation) v.getTag());
+                                final RelatedContentRepresentation content = ((RelatedContentRepresentation) v
+                                        .getTag());
                                 try
                                 {
-                                    if (TextUtils.isEmpty(content.getSource())
-                                            || !content.getSource().contains("alfresco")) { throw new ActivityNotFoundException(); }
+                                    if (TextUtils.isEmpty(content.getSource()) || !content.getSource()
+                                            .contains("alfresco")) { throw new ActivityNotFoundException(); }
 
                                     // Retrieve Integration
                                     Integration integration = IntegrationManager.getInstance(getContext()).getById(
@@ -240,10 +245,22 @@ public class ContentAdapter extends BaseListAdapter<RelatedContentRepresentation
                                     }
                                     else if (integration.getOpenType() == Integration.OPEN_BROWSER)
                                     {
+                                        // Analytics
+                                        AnalyticsHelper.reportOperationEvent(frRef.get().getContext(),
+                                                AnalyticsManager.CATEGORY_DOCUMENT_MANAGEMENT,
+                                                AnalyticsManager.ACTION_OPEN_BROWSER,
+                                                ((RelatedContentRepresentation) v.getTag()).getMimeType(), 1, false);
+
                                         IntentUtils.startWebBrowser(getContext(), content.getLinkUrl());
                                     }
                                     else if (integration.getOpenType() == Integration.OPEN_NATIVE_APP)
                                     {
+                                        // Analytics
+                                        AnalyticsHelper.reportOperationEvent(frRef.get().getContext(),
+                                                AnalyticsManager.CATEGORY_DOCUMENT_MANAGEMENT,
+                                                AnalyticsManager.ACTION_OPEN_APP,
+                                                ((RelatedContentRepresentation) v.getTag()).getMimeType(), 1, false);
+
                                         String nodeRef = Uri.parse(content.getLinkUrl()).getQueryParameter("nodeRef");
                                         Intent i = AlfrescoIntegrator.viewDocument(integration.getAlfrescoAccountId(),
                                                 NodeRefUtils.getCleanIdentifier(nodeRef));
@@ -257,33 +274,31 @@ public class ContentAdapter extends BaseListAdapter<RelatedContentRepresentation
                                     MaterialDialog.Builder builder2 = new MaterialDialog.Builder(getContext())
                                             .title(R.string.integration_alfresco_open)
                                             .cancelListener(new DialogInterface.OnCancelListener()
-                                            {
-                                                @Override
-                                                public void onCancel(DialogInterface dialog)
-                                                {
-                                                    dialog.dismiss();
-                                                }
-                                            })
-                                            .content(
-                                                    Html.fromHtml(getContext().getString(
-                                                            R.string.integration_alfresco_open_summary)))
+                                    {
+                                        @Override
+                                        public void onCancel(DialogInterface dialog)
+                                        {
+                                            dialog.dismiss();
+                                        }
+                                    }).content(Html.fromHtml(
+                                            getContext().getString(R.string.integration_alfresco_open_summary)))
                                             .positiveText(R.string.integration_alfresco_open_play)
                                             .negativeText(R.string.integration_alfresco_open_web)
                                             .callback(new MaterialDialog.ButtonCallback()
-                                            {
-                                                @Override
-                                                public void onPositive(MaterialDialog dialog)
-                                                {
-                                                    IntentUtils.startPlayStore(getContext(),
-                                                            AlfrescoIntegrator.ALFRESCO_APP_PACKAGE);
-                                                }
+                                    {
+                                        @Override
+                                        public void onPositive(MaterialDialog dialog)
+                                        {
+                                            IntentUtils.startPlayStore(getContext(),
+                                                    AlfrescoIntegrator.ALFRESCO_APP_PACKAGE);
+                                        }
 
-                                                @Override
-                                                public void onNegative(MaterialDialog dialog)
-                                                {
-                                                    IntentUtils.startWebBrowser(getContext(), content.getLinkUrl());
-                                                }
-                                            });
+                                        @Override
+                                        public void onNegative(MaterialDialog dialog)
+                                        {
+                                            IntentUtils.startWebBrowser(getContext(), content.getLinkUrl());
+                                        }
+                                    });
                                     builder2.show();
                                 }
                                 break;

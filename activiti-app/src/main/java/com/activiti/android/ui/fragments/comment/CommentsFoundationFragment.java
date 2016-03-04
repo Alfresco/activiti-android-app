@@ -1,21 +1,20 @@
 /*
- *  Copyright (C) 2005-2015 Alfresco Software Limited.
+ *  Copyright (C) 2005-2016 Alfresco Software Limited.
  *
- * This file is part of Alfresco Activiti Mobile for Android.
+ *  This file is part of Alfresco Activiti Mobile for Android.
  *
- * Alfresco Activiti Mobile for Android is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Lesser General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
+ *  Alfresco Activiti Mobile for Android is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU Lesser General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
  *
- * Alfresco Activiti Mobile for Android is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU Lesser General Public License for more details.
+ *  Alfresco Activiti Mobile for Android is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU Lesser General Public License for more details.
  *
- * You should have received a copy of the GNU Lesser General Public License
- * along with Alfresco. If not, see <http://www.gnu.org/licenses/>.
- *
+ *  You should have received a copy of the GNU Lesser General Public License
+ *  along with Alfresco. If not, see <http://www.gnu.org/licenses/>.
  */
 
 package com.activiti.android.ui.fragments.comment;
@@ -42,6 +41,8 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 
 import com.activiti.android.app.R;
+import com.activiti.android.platform.integration.analytics.AnalyticsHelper;
+import com.activiti.android.platform.integration.analytics.AnalyticsManager;
 import com.activiti.android.platform.utils.BundleUtils;
 import com.activiti.android.sdk.model.runtime.ParcelTask;
 import com.activiti.android.ui.fragments.base.BasePagingGridFragment;
@@ -247,8 +248,8 @@ public class CommentsFoundationFragment extends BasePagingGridFragment
     private void updateFragmentIcon(boolean hasComment)
     {
         if (getActivity() == null) { return; }
-        Fragment fr = getActivity().getSupportFragmentManager().findFragmentById(
-                DisplayUtils.getLeftFragmentId(getActivity()));
+        Fragment fr = getActivity().getSupportFragmentManager()
+                .findFragmentById(DisplayUtils.getLeftFragmentId(getActivity()));
         if (fr != null && fr instanceof FragmentWithComments)
         {
             ((FragmentWithComments) fr).hasComment(hasComment);
@@ -289,6 +290,10 @@ public class CommentsFoundationFragment extends BasePagingGridFragment
             @Override
             public void onResponse(Call<CommentRepresentation> call, Response<CommentRepresentation> response)
             {
+                // Analytics
+                AnalyticsHelper.reportOperationEvent(getActivity(), AnalyticsManager.CATEGORY_TASK,
+                        AnalyticsManager.ACTION_COMMENT, AnalyticsManager.LABEL_TASK, 1, !response.isSuccess());
+
                 if (!response.isSuccess())
                 {
                     onFailure(call, new Exception(response.message()));
