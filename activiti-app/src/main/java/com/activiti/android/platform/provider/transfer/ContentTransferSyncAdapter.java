@@ -1,21 +1,20 @@
 /*
- *  Copyright (C) 2005-2015 Alfresco Software Limited.
+ *  Copyright (C) 2005-2016 Alfresco Software Limited.
  *
- * This file is part of Alfresco Activiti Mobile for Android.
+ *  This file is part of Alfresco Activiti Mobile for Android.
  *
- * Alfresco Activiti Mobile for Android is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Lesser General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
+ *  Alfresco Activiti Mobile for Android is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU Lesser General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
  *
- * Alfresco Activiti Mobile for Android is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU Lesser General Public License for more details.
+ *  Alfresco Activiti Mobile for Android is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU Lesser General Public License for more details.
  *
- * You should have received a copy of the GNU Lesser General Public License
- * along with Alfresco. If not, see <http://www.gnu.org/licenses/>.
- *
+ *  You should have received a copy of the GNU Lesser General Public License
+ *  along with Alfresco. If not, see <http://www.gnu.org/licenses/>.
  */
 
 package com.activiti.android.platform.provider.transfer;
@@ -46,6 +45,8 @@ import android.util.Log;
 import com.activiti.android.platform.EventBusManager;
 import com.activiti.android.platform.account.ActivitiAccount;
 import com.activiti.android.platform.event.ProfilePictureEvent;
+import com.activiti.android.platform.integration.analytics.AnalyticsHelper;
+import com.activiti.android.platform.integration.analytics.AnalyticsManager;
 import com.activiti.android.platform.storage.AlfrescoStorageManager;
 import com.activiti.android.platform.storage.IOUtils;
 import com.activiti.android.platform.utils.BundleUtils;
@@ -154,6 +155,10 @@ public class ContentTransferSyncAdapter extends AbstractThreadedSyncAdapter
                     IOUtils.saveBytesToStream(IOUtils.getBytesFromStream(dlResponse.body().byteStream()),
                             fileOutputStream);
 
+                    // Analytics
+                    AnalyticsHelper.reportOperationEvent(getContext(), AnalyticsManager.CATEGORY_DOCUMENT_MANAGEMENT,
+                            AnalyticsManager.ACTION_DOWNLOAD, mimetype, 1, false);
+
                     // SHARE IT
                     EventBusManager.getInstance()
                             .post(new DownloadTransferUriEvent("-1", mode, Uri.parse(contentUri), mimetype));
@@ -169,6 +174,10 @@ public class ContentTransferSyncAdapter extends AbstractThreadedSyncAdapter
                                 lFile.getPath());
                     }
 
+                    // Analytics
+                    AnalyticsHelper.reportOperationEvent(getContext(), AnalyticsManager.CATEGORY_DOCUMENT_MANAGEMENT,
+                            AnalyticsManager.ACTION_SHARE, mimetype, 1, false);
+
                     // SHARE IT
                     EventBusManager.getInstance().post(new DownloadTransferEvent("-1", mode, lFile, mimetype));
                     break;
@@ -177,6 +186,10 @@ public class ContentTransferSyncAdapter extends AbstractThreadedSyncAdapter
 
                     Response<ResponseBody> resp = api.getContentService().download(contentId);
                     IOUtils.saveBytesToFile(IOUtils.getBytesFromStream(resp.body().byteStream()), dlFile.getPath());
+
+                    // Analytics
+                    AnalyticsHelper.reportOperationEvent(getContext(), AnalyticsManager.CATEGORY_DOCUMENT_MANAGEMENT,
+                            AnalyticsManager.ACTION_OPEN, mimetype, 1, false);
 
                     // OPEN IT
                     EventBusManager.getInstance().post(new DownloadTransferEvent("-1", mode, dlFile, mimetype));
@@ -205,6 +218,12 @@ public class ContentTransferSyncAdapter extends AbstractThreadedSyncAdapter
                         MultipartBody.Builder multipartBuilder = new MultipartBody.Builder();
                         multipartBuilder.addFormDataPart("file", tempFile.getName(), requestBody);
                         content = api.getContentService().createRelatedContentOnTask(taskId, multipartBuilder.build());
+
+                        // Analytics
+                        AnalyticsHelper.reportOperationEvent(getContext(),
+                                AnalyticsManager.CATEGORY_DOCUMENT_MANAGEMENT, AnalyticsManager.ACTION_ADD_CONTENT,
+                                content != null ? content.getMimeType() : "", 1, content == null);
+
                         EventBusManager.getInstance().post(new ContentTransferEvent("-1", mode, content));
                     }
                     else if (!TextUtils.isEmpty(processId))
@@ -214,6 +233,12 @@ public class ContentTransferSyncAdapter extends AbstractThreadedSyncAdapter
                         multipartBuilder.addFormDataPart("file", tempFile.getName(), requestBody);
                         content = api.getContentService().createRelatedContentOnProcessInstance(processId,
                                 multipartBuilder.build());
+
+                        // Analytics
+                        AnalyticsHelper.reportOperationEvent(getContext(),
+                                AnalyticsManager.CATEGORY_DOCUMENT_MANAGEMENT, AnalyticsManager.ACTION_ADD_CONTENT,
+                                content != null ? content.getMimeType() : "", 1, content == null);
+
                         EventBusManager.getInstance().post(new ContentTransferEvent("-1", mode, content));
                     }
                     else if (!TextUtils.isEmpty(profileId))

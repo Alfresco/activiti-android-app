@@ -1,21 +1,20 @@
 /*
- *  Copyright (C) 2005-2015 Alfresco Software Limited.
+ *  Copyright (C) 2005-2016 Alfresco Software Limited.
  *
- * This file is part of Alfresco Activiti Mobile for Android.
+ *  This file is part of Alfresco Activiti Mobile for Android.
  *
- * Alfresco Activiti Mobile for Android is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Lesser General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
+ *  Alfresco Activiti Mobile for Android is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU Lesser General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
  *
- * Alfresco Activiti Mobile for Android is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU Lesser General Public License for more details.
+ *  Alfresco Activiti Mobile for Android is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU Lesser General Public License for more details.
  *
- * You should have received a copy of the GNU Lesser General Public License
- * along with Alfresco. If not, see <http://www.gnu.org/licenses/>.
- *
+ *  You should have received a copy of the GNU Lesser General Public License
+ *  along with Alfresco. If not, see <http://www.gnu.org/licenses/>.
  */
 
 package com.activiti.android.app.fragments.settings;
@@ -38,10 +37,13 @@ import com.activiti.android.app.R;
 import com.activiti.android.app.activity.MainActivity;
 import com.activiti.android.platform.account.ActivitiAccount;
 import com.activiti.android.platform.account.ActivitiAccountManager;
+import com.activiti.android.platform.integration.analytics.AnalyticsHelper;
+import com.activiti.android.platform.integration.analytics.AnalyticsManager;
 import com.activiti.android.platform.intent.IntentUtils;
 import com.activiti.android.ui.fragments.AlfrescoFragment;
 import com.activiti.android.ui.fragments.builder.LeafFragmentBuilder;
 import com.activiti.android.ui.holder.HolderUtils;
+import com.activiti.android.ui.holder.TwoLinesCheckboxViewHolder;
 import com.activiti.android.ui.holder.TwoLinesViewHolder;
 import com.activiti.android.ui.utils.UIUtils;
 import com.mikepenz.aboutlibraries.Libs;
@@ -50,6 +52,8 @@ import com.mikepenz.aboutlibraries.LibsBuilder;
 public class GeneralSettingsFragment extends AlfrescoFragment
 {
     public static final String TAG = GeneralSettingsFragment.class.getName();
+
+    private TwoLinesCheckboxViewHolder diagnosticVH;
 
     // ///////////////////////////////////////////////////////////////////////////
     // CONSTRUCTORS
@@ -116,8 +120,8 @@ public class GeneralSettingsFragment extends AlfrescoFragment
         String versionNumber;
         try
         {
-            StringBuilder sb = new StringBuilder()
-                    .append(getActivity().getPackageManager().getPackageInfo(getActivity().getPackageName(), 0).versionName)
+            StringBuilder sb = new StringBuilder().append(
+                    getActivity().getPackageManager().getPackageInfo(getActivity().getPackageName(), 0).versionName)
                     .append(".").append(getText(R.string.bamboo_buildnumber));
             versionNumber = sb.toString();
         }
@@ -147,14 +151,28 @@ public class GeneralSettingsFragment extends AlfrescoFragment
             @Override
             public void onClick(View v)
             {
-                new LibsBuilder()
-                        .withActivityTitle(getString(R.string.settings_about_thirdparty))
+                new LibsBuilder().withActivityTitle(getString(R.string.settings_about_thirdparty))
                         .withLibraries("MaterialEdittext", "MaterialDialogs", "AndroidSwipeLayout", "CircleIndicator",
-                                "Otto", "AppCompat Library").withLicenseDialog(true).withVersionShown(false)
-                        .withAnimations(false).withLicenseShown(true).withFields(R.string.class.getFields())
-                        .withActivityStyle(Libs.ActivityStyle.LIGHT_DARK_TOOLBAR).start(getActivity());
+                                "Otto", "AppCompat Library")
+                        .withLicenseDialog(true).withVersionShown(false).withAnimations(false).withLicenseShown(true)
+                        .withFields(R.string.class.getFields()).withActivityStyle(Libs.ActivityStyle.LIGHT_DARK_TOOLBAR)
+                        .start(getActivity());
             }
         });
+
+        // Feedback - Email
+        vh = HolderUtils.configure(viewById(R.id.settings_feedback_email_container),
+                getString(R.string.settings_feedback_email), null, -1);
+        viewById(R.id.settings_feedback_email_container).setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View v)
+            {
+                IntentUtils.actionSendFeedbackEmail(GeneralSettingsFragment.this);
+            }
+        });
+
+        recreate();
 
         return getRootView();
     }
@@ -163,6 +181,43 @@ public class GeneralSettingsFragment extends AlfrescoFragment
     {
         setRetainInstance(true);
         super.onCreate(savedInstanceState);
+    }
+
+    private void recreate()
+    {
+        // Feedback - Analytics
+        if (AnalyticsManager.getInstance(getActivity()) == null)
+        {
+            diagnosticVH = HolderUtils.configure(viewById(R.id.settings_diagnostic),
+                    getString(R.string.settings_feedback_diagnostic), "Disable", false);
+            HolderUtils.makeMultiLine(diagnosticVH.bottomText, 3);
+            diagnosticVH.choose.setVisibility(View.GONE);
+            diagnosticVH.choose.setEnabled(false);
+        }
+        else
+        {
+            boolean isEnable = AnalyticsManager.getInstance(getActivity()).isEnable();
+
+            diagnosticVH = HolderUtils.configure(viewById(R.id.settings_diagnostic),
+                    getString(R.string.settings_feedback_diagnostic),
+                    getString(R.string.settings_feedback_diagnostic_summary), isEnable);
+            HolderUtils.makeMultiLine(diagnosticVH.bottomText, 4);
+            diagnosticVH.choose.setOnClickListener(new View.OnClickListener()
+            {
+                @Override
+                public void onClick(View v)
+                {
+                    if (diagnosticVH.choose.isChecked())
+                    {
+                        AnalyticsHelper.optIn(getActivity(), getAccount());
+                    }
+                    else
+                    {
+                        AnalyticsHelper.optOut(getActivity(), getAccount());
+                    }
+                }
+            });
+        }
     }
 
     // ///////////////////////////////////////////////////////////////////////////

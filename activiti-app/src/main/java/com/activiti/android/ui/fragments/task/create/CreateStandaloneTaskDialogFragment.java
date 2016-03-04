@@ -1,21 +1,20 @@
 /*
- *  Copyright (C) 2005-2015 Alfresco Software Limited.
+ *  Copyright (C) 2005-2016 Alfresco Software Limited.
  *
- * This file is part of Alfresco Activiti Mobile for Android.
+ *  This file is part of Alfresco Activiti Mobile for Android.
  *
- * Alfresco Activiti Mobile for Android is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Lesser General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
+ *  Alfresco Activiti Mobile for Android is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU Lesser General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
  *
- * Alfresco Activiti Mobile for Android is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU Lesser General Public License for more details.
+ *  Alfresco Activiti Mobile for Android is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU Lesser General Public License for more details.
  *
- * You should have received a copy of the GNU Lesser General Public License
- * along with Alfresco. If not, see <http://www.gnu.org/licenses/>.
- *
+ *  You should have received a copy of the GNU Lesser General Public License
+ *  along with Alfresco. If not, see <http://www.gnu.org/licenses/>.
  */
 
 package com.activiti.android.ui.fragments.task.create;
@@ -41,6 +40,8 @@ import com.activiti.android.app.R;
 import com.activiti.android.platform.EventBusManager;
 import com.activiti.android.platform.account.ActivitiAccountManager;
 import com.activiti.android.platform.event.CreateTaskEvent;
+import com.activiti.android.platform.integration.analytics.AnalyticsHelper;
+import com.activiti.android.platform.integration.analytics.AnalyticsManager;
 import com.activiti.android.platform.utils.BundleUtils;
 import com.activiti.android.ui.fragments.AlfrescoFragment;
 import com.activiti.android.ui.fragments.builder.AlfrescoFragmentBuilder;
@@ -110,10 +111,6 @@ public class CreateStandaloneTaskDialogFragment extends AlfrescoFragment
                     @Override
                     public void onPositive(MaterialDialog dialog)
                     {
-                        // createTask(new
-                        // CreateTaskRepresentation(nameET.getText().toString(),
-                        // descriptionET.getText()
-                        // .toString(), appId));
                         TaskRepresentation tr = new TaskRepresentation();
                         tr.setName(nameET.getText().toString());
                         tr.setDescription(descriptionET.getText().toString());
@@ -184,11 +181,16 @@ public class CreateStandaloneTaskDialogFragment extends AlfrescoFragment
                 @Override
                 public void onResponse(Call<TaskRepresentation> call, Response<TaskRepresentation> response)
                 {
+                    // Analytics
+                    AnalyticsHelper.reportOperationEvent(getActivity(), AnalyticsManager.CATEGORY_TASK,
+                            AnalyticsManager.ACTION_CREATE, AnalyticsManager.LABEL_SUBTASK, 1, !response.isSuccess());
+
                     if (!response.isSuccess())
                     {
                         onFailure(call, new Exception(response.message()));
                         return;
                     }
+
                     EventBusManager.getInstance()
                             .post(new CreateTaskEvent(null, response.body(), getLastAppId(), taskId));
                     Snackbar.make(getActivity().findViewById(R.id.left_panel),
@@ -213,6 +215,16 @@ public class CreateStandaloneTaskDialogFragment extends AlfrescoFragment
                 @Override
                 public void onResponse(Call<TaskRepresentation> call, Response<TaskRepresentation> response)
                 {
+                    // Analytics
+                    AnalyticsHelper.reportOperationEvent(getActivity(), AnalyticsManager.CATEGORY_TASK,
+                            AnalyticsManager.ACTION_CREATE, AnalyticsManager.LABEL_TASK, 1, !response.isSuccess());
+
+                    if (!response.isSuccess())
+                    {
+                        onFailure(call, new Exception(response.message()));
+                        return;
+                    }
+
                     EventBusManager.getInstance()
                             .post(new CreateTaskEvent(null, response.body(), getLastAppId(), null));
                     Snackbar.make(getActivity().findViewById(R.id.left_panel),

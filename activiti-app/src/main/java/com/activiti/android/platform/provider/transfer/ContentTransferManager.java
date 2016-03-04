@@ -1,21 +1,20 @@
 /*
- *  Copyright (C) 2005-2015 Alfresco Software Limited.
+ *  Copyright (C) 2005-2016 Alfresco Software Limited.
  *
- * This file is part of Alfresco Activiti Mobile for Android.
+ *  This file is part of Alfresco Activiti Mobile for Android.
  *
- * Alfresco Activiti Mobile for Android is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Lesser General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
+ *  Alfresco Activiti Mobile for Android is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU Lesser General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
  *
- * Alfresco Activiti Mobile for Android is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU Lesser General Public License for more details.
+ *  Alfresco Activiti Mobile for Android is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU Lesser General Public License for more details.
  *
- * You should have received a copy of the GNU Lesser General Public License
- * along with Alfresco. If not, see <http://www.gnu.org/licenses/>.
- *
+ *  You should have received a copy of the GNU Lesser General Public License
+ *  along with Alfresco. If not, see <http://www.gnu.org/licenses/>.
  */
 
 package com.activiti.android.platform.provider.transfer;
@@ -49,6 +48,8 @@ import com.activiti.android.platform.Manager;
 import com.activiti.android.platform.account.ActivitiAccount;
 import com.activiti.android.platform.account.ActivitiAccountManager;
 import com.activiti.android.platform.integration.alfresco.AlfrescoIntegrator;
+import com.activiti.android.platform.integration.analytics.AnalyticsHelper;
+import com.activiti.android.platform.integration.analytics.AnalyticsManager;
 import com.activiti.android.platform.provider.CursorUtils;
 import com.activiti.android.platform.provider.integration.Integration;
 import com.activiti.android.platform.provider.integration.IntegrationManager;
@@ -316,9 +317,13 @@ public class ContentTransferManager extends Manager
                     public void onResponse(Call<RelatedContentRepresentation> call,
                             Response<RelatedContentRepresentation> response)
                     {
-                        EventBusManager.getInstance().post(
-                                new ContentTransferEvent("-1", ContentTransferSyncAdapter.MODE_SAF_UPLOAD,
- response.body()));
+                        // Analytics
+                        AnalyticsHelper.reportOperationEvent(fr.getActivity(),
+                                AnalyticsManager.CATEGORY_DOCUMENT_MANAGEMENT, AnalyticsManager.ACTION_LINK_CONTENT,
+                                response.isSuccess() ? response.body().getMimeType() : "", 1, !response.isSuccess());
+
+                        EventBusManager.getInstance().post(new ContentTransferEvent("-1",
+                                ContentTransferSyncAdapter.MODE_SAF_UPLOAD, response.body()));
                     }
 
                     @Override
@@ -333,40 +338,42 @@ public class ContentTransferManager extends Manager
                 });
                 break;
             case TYPE_PROCESS_ID:
-                fr.getAPI().getProcessService()
-                        .linkAttachment(id, content, new Callback<RelatedContentRepresentation>()
-                        {
-                            @Override
+                fr.getAPI().getProcessService().linkAttachment(id, content, new Callback<RelatedContentRepresentation>()
+                {
+                    @Override
                     public void onResponse(Call<RelatedContentRepresentation> call,
                             Response<RelatedContentRepresentation> response)
-                            {
-                                EventBusManager.getInstance().post(
-                                        new ContentTransferEvent("-1", ContentTransferSyncAdapter.MODE_SAF_UPLOAD,
- response.body()));
-                            }
+                    {
+                        // Analytics
+                        AnalyticsHelper.reportOperationEvent(fr.getActivity(),
+                                AnalyticsManager.CATEGORY_DOCUMENT_MANAGEMENT, AnalyticsManager.ACTION_LINK_CONTENT,
+                                response.isSuccess() ? response.body().getMimeType() : "", 1, !response.isSuccess());
 
-                            @Override
+                        EventBusManager.getInstance().post(new ContentTransferEvent("-1",
+                                ContentTransferSyncAdapter.MODE_SAF_UPLOAD, response.body()));
+                    }
+
+                    @Override
                     public void onFailure(Call<RelatedContentRepresentation> call, Throwable error)
-                            {
-                                if (fr != null)
-                                {
-                                    Snackbar.make(fr.getActivity().findViewById(R.id.left_panel), error.getMessage(),
-                                            Snackbar.LENGTH_SHORT).show();
-                                }
-                            }
-                        });
+                    {
+                        if (fr != null)
+                        {
+                            Snackbar.make(fr.getActivity().findViewById(R.id.left_panel), error.getMessage(),
+                                    Snackbar.LENGTH_SHORT).show();
+                        }
+                    }
+                });
                 break;
             case TYPE_LINK_ID:
-                fr.getAPI().getContentService()
-                        .createTemporaryRelatedContent(content, new Callback<RelatedContentRepresentation>()
+                fr.getAPI().getContentService().createTemporaryRelatedContent(content,
+                        new Callback<RelatedContentRepresentation>()
                         {
                             @Override
                             public void onResponse(Call<RelatedContentRepresentation> call,
                                     Response<RelatedContentRepresentation> response)
                             {
-                                EventBusManager.getInstance().post(
-                                        new ContentTransferEvent("-1", ContentTransferSyncAdapter.MODE_SAF_UPLOAD,
- response.body()));
+                                EventBusManager.getInstance().post(new ContentTransferEvent("-1",
+                                        ContentTransferSyncAdapter.MODE_SAF_UPLOAD, response.body()));
                             }
 
                             @Override
@@ -381,23 +388,22 @@ public class ContentTransferManager extends Manager
                         });
                 break;
             default:
-                fr.getAPI().getContentService()
-                        .createTemporaryRawRelatedContent(content, new Callback<RelatedContentRepresentation>()
+                fr.getAPI().getContentService().createTemporaryRawRelatedContent(content,
+                        new Callback<RelatedContentRepresentation>()
                         {
                             @Override
                             public void onResponse(Call<RelatedContentRepresentation> call,
                                     Response<RelatedContentRepresentation> response)
                             {
-                                EventBusManager.getInstance().post(
-                                        new ContentTransferEvent("-1", ContentTransferSyncAdapter.MODE_SAF_UPLOAD,
- response.body()));
+                                EventBusManager.getInstance().post(new ContentTransferEvent("-1",
+                                        ContentTransferSyncAdapter.MODE_SAF_UPLOAD, response.body()));
                             }
 
                             @Override
                             public void onFailure(Call<RelatedContentRepresentation> call, Throwable error)
                             {
-                                EventBusManager.getInstance().post(
-                                        new ContentTransferEvent("-1", new Exception(error.getMessage())));
+                                EventBusManager.getInstance()
+                                        .post(new ContentTransferEvent("-1", new Exception(error.getMessage())));
                                 Log.d("ContentTransferManager", Log.getStackTraceString(error.getCause()));
                             }
                         });
@@ -461,8 +467,7 @@ public class ContentTransferManager extends Manager
                 settingsBundle.putString(ContentTransferSyncAdapter.ARGUMENT_PROFILE_ID, objectId);
             }
             settingsBundle.putString(ContentTransferSyncAdapter.ARGUMENT_MIMETYPE, mimetype);
-            ContentResolver.requestSync(
-                    ActivitiAccountManager.getInstance(fr.getActivity()).getCurrentAndroidAccount(),
+            ContentResolver.requestSync(ActivitiAccountManager.getInstance(fr.getActivity()).getCurrentAndroidAccount(),
                     ContentTransferProvider.AUTHORITY, settingsBundle);
         }
         catch (Exception e)
@@ -498,8 +503,8 @@ public class ContentTransferManager extends Manager
             }
 
             ActivitiAccount acc = ActivitiAccountManager.getInstance(fr.getActivity()).getCurrentAccount();
-            Integration integration = IntegrationManager.getInstance(fr.getActivity()).getByAlfrescoId(
-                    Long.parseLong(alfAccountId), acc.getId());
+            Integration integration = IntegrationManager.getInstance(fr.getActivity())
+                    .getByAlfrescoId(Long.parseLong(alfAccountId), acc.getId());
 
             // Retrieve NodeId
             String pathSegment = uri.getLastPathSegment();

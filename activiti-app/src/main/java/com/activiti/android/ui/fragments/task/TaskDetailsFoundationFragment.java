@@ -1,21 +1,20 @@
 /*
- *  Copyright (C) 2005-2015 Alfresco Software Limited.
+ *  Copyright (C) 2005-2016 Alfresco Software Limited.
  *
- * This file is part of Alfresco Activiti Mobile for Android.
+ *  This file is part of Alfresco Activiti Mobile for Android.
  *
- * Alfresco Activiti Mobile for Android is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Lesser General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
+ *  Alfresco Activiti Mobile for Android is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU Lesser General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
  *
- * Alfresco Activiti Mobile for Android is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU Lesser General Public License for more details.
+ *  Alfresco Activiti Mobile for Android is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU Lesser General Public License for more details.
  *
- * You should have received a copy of the GNU Lesser General Public License
- * along with Alfresco. If not, see <http://www.gnu.org/licenses/>.
- *
+ *  You should have received a copy of the GNU Lesser General Public License
+ *  along with Alfresco. If not, see <http://www.gnu.org/licenses/>.
  */
 
 package com.activiti.android.ui.fragments.task;
@@ -59,6 +58,8 @@ import com.activiti.android.app.fragments.task.TasksFragment;
 import com.activiti.android.platform.EventBusManager;
 import com.activiti.android.platform.account.ActivitiAccountManager;
 import com.activiti.android.platform.event.CompleteTaskEvent;
+import com.activiti.android.platform.integration.analytics.AnalyticsHelper;
+import com.activiti.android.platform.integration.analytics.AnalyticsManager;
 import com.activiti.android.platform.provider.transfer.ContentTransferManager;
 import com.activiti.android.platform.rendition.RenditionManager;
 import com.activiti.android.platform.utils.BundleUtils;
@@ -1117,6 +1118,11 @@ public class TaskDetailsFoundationFragment extends AbstractDetailsFragment
             @Override
             public void onResponse(Call<Void> call, Response<Void> response)
             {
+                // Analytics
+                AnalyticsHelper.reportOperationEvent(getActivity(), AnalyticsManager.CATEGORY_TASK,
+                        AnalyticsManager.ACTION_COMPLETE_TASK, AnalyticsManager.LABEL_WITHOUT_FORM, 1,
+                        !response.isSuccess());
+
                 if (!response.isSuccess())
                 {
                     onFailure(call, new Exception(response.message()));
@@ -1167,6 +1173,10 @@ public class TaskDetailsFoundationFragment extends AbstractDetailsFragment
             @Override
             public void onResponse(Call<Void> call, Response<Void> response)
             {
+                // Analytics
+                AnalyticsHelper.reportOperationEvent(getActivity(), AnalyticsManager.CATEGORY_TASK,
+                        AnalyticsManager.ACTION_CLAIM, AnalyticsManager.LABEL_TASK, 1, !response.isSuccess());
+
                 if (!response.isSuccess())
                 {
                     onFailure(call, new Exception(response.message()));
@@ -1196,6 +1206,10 @@ public class TaskDetailsFoundationFragment extends AbstractDetailsFragment
             @Override
             public void onResponse(Call<TaskRepresentation> call, Response<TaskRepresentation> response)
             {
+                // Analytics
+                AnalyticsHelper.reportOperationEvent(getActivity(), AnalyticsManager.CATEGORY_TASK,
+                        AnalyticsManager.ACTION_REASSIGN, AnalyticsManager.LABEL_USER, 1, !response.isSuccess());
+
                 if (!response.isSuccess())
                 {
                     onFailure(call, new Exception(response.message()));
@@ -1227,6 +1241,10 @@ public class TaskDetailsFoundationFragment extends AbstractDetailsFragment
             @Override
             public void onResponse(Call<TaskRepresentation> call, Response<TaskRepresentation> response)
             {
+                // Analytics
+                AnalyticsHelper.reportOperationEvent(getActivity(), AnalyticsManager.CATEGORY_TASK,
+                        AnalyticsManager.ACTION_REASSIGN, AnalyticsManager.LABEL_USER, 1, !response.isSuccess());
+
                 if (!response.isSuccess())
                 {
                     onFailure(call, new Exception(response.message()));
@@ -1256,6 +1274,11 @@ public class TaskDetailsFoundationFragment extends AbstractDetailsFragment
             @Override
             public void onResponse(Call<Void> call, Response<Void> response)
             {
+
+                // Analytics
+                AnalyticsHelper.reportOperationEvent(getActivity(), AnalyticsManager.CATEGORY_TASK,
+                        AnalyticsManager.ACTION_USER_INVOLVED, AnalyticsManager.ACTION_ADD, 1, !response.isSuccess());
+
                 if (!response.isSuccess())
                 {
                     onFailure(call, new Exception(response.message()));
@@ -1284,6 +1307,9 @@ public class TaskDetailsFoundationFragment extends AbstractDetailsFragment
             @Override
             public void onResponse(Call<Void> call, Response<Void> response)
             {
+                // Analytics
+                AnalyticsHelper.reportOperationEvent(getActivity(), AnalyticsManager.CATEGORY_TASK,
+                        AnalyticsManager.ACTION_USER_INVOLVED, AnalyticsManager.ACTION_ADD, 1, !response.isSuccess());
 
                 if (!response.isSuccess())
                 {
@@ -1309,6 +1335,10 @@ public class TaskDetailsFoundationFragment extends AbstractDetailsFragment
             @Override
             public void onResponse(Call<TaskRepresentation> call, Response<TaskRepresentation> response)
             {
+                // Analytics
+                AnalyticsHelper.reportOperationEvent(getActivity(), AnalyticsManager.CATEGORY_TASK,
+                        AnalyticsManager.ACTION_EDIT, AnalyticsManager.LABEL_TASK, 1, !response.isSuccess());
+
                 if (!response.isSuccess())
                 {
                     onFailure(call, new Exception(response.message()));
@@ -1335,6 +1365,11 @@ public class TaskDetailsFoundationFragment extends AbstractDetailsFragment
             @Override
             public void onResponse(Call<Void> call, Response<Void> response)
             {
+                // Analytics
+                AnalyticsHelper.reportOperationEvent(getActivity(), AnalyticsManager.CATEGORY_TASK,
+                        AnalyticsManager.ACTION_USER_INVOLVED, AnalyticsManager.ACTION_REMOVE, 1,
+                        !response.isSuccess());
+
                 if (!response.isSuccess())
                 {
                     onFailure(call, new Exception(response.message()));
@@ -1371,6 +1406,10 @@ public class TaskDetailsFoundationFragment extends AbstractDetailsFragment
             @Override
             public void onResponse(Call<Void> call, Response<Void> response)
             {
+                // Analytics
+                AnalyticsHelper.reportOperationEvent(getActivity(), AnalyticsManager.CATEGORY_TASK,
+                        AnalyticsManager.ACTION_FORM, AnalyticsManager.ACTION_REMOVE, 1, !response.isSuccess());
+
                 if (!response.isSuccess())
                 {
                     onFailure(call, new Exception(response.message()));
@@ -1404,6 +1443,10 @@ public class TaskDetailsFoundationFragment extends AbstractDetailsFragment
             @Override
             public void onResponse(Call<Void> call, Response<Void> response)
             {
+                // Analytics
+                AnalyticsHelper.reportOperationEvent(getActivity(), AnalyticsManager.CATEGORY_TASK,
+                        AnalyticsManager.ACTION_FORM, AnalyticsManager.ACTION_ADD, 1, !response.isSuccess());
+
                 if (!response.isSuccess())
                 {
                     onFailure(call, new Exception(response.message()));
