@@ -168,7 +168,7 @@ public class ContentTransferSyncAdapter extends AbstractThreadedSyncAdapter
                     File lFile = new File(filePath);
 
                     Response<ResponseBody> response = api.getContentService().download(contentId);
-                    if (response.isSuccess())
+                    if (response.isSuccessful())
                     {
                         IOUtils.saveBytesToFile(IOUtils.getBytesFromStream(response.body().byteStream()),
                                 lFile.getPath());

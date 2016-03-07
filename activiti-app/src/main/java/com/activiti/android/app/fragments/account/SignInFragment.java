@@ -302,7 +302,7 @@ public class SignInFragment extends AlfrescoFragment
             @Override
             public void onResponse(Call<UserRepresentation> call, Response<UserRepresentation> response)
             {
-                if (response.isSuccess())
+                if (response.isSuccessful())
                 {
                     user = response.body();
                     retrieveServerInfo();
@@ -405,7 +405,7 @@ public class SignInFragment extends AlfrescoFragment
             @Override
             public void onResponse(Call<AppVersionRepresentation> call, Response<AppVersionRepresentation> response)
             {
-                if (response.isSuccess())
+                if (response.isSuccessful())
                 {
                     // BPM Suite 1.2
                     version = new AppVersion(response.body());

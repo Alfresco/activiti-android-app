@@ -183,9 +183,10 @@ public class CreateStandaloneTaskDialogFragment extends AlfrescoFragment
                 {
                     // Analytics
                     AnalyticsHelper.reportOperationEvent(getActivity(), AnalyticsManager.CATEGORY_TASK,
-                            AnalyticsManager.ACTION_CREATE, AnalyticsManager.LABEL_SUBTASK, 1, !response.isSuccess());
+                            AnalyticsManager.ACTION_CREATE, AnalyticsManager.LABEL_SUBTASK, 1,
+                            !response.isSuccessful());
 
-                    if (!response.isSuccess())
+                    if (!response.isSuccessful())
                     {
                         onFailure(call, new Exception(response.message()));
                         return;
@@ -217,9 +218,9 @@ public class CreateStandaloneTaskDialogFragment extends AlfrescoFragment
                 {
                     // Analytics
                     AnalyticsHelper.reportOperationEvent(getActivity(), AnalyticsManager.CATEGORY_TASK,
-                            AnalyticsManager.ACTION_CREATE, AnalyticsManager.LABEL_TASK, 1, !response.isSuccess());
+                            AnalyticsManager.ACTION_CREATE, AnalyticsManager.LABEL_TASK, 1, !response.isSuccessful());
 
-                    if (!response.isSuccess())
+                    if (!response.isSuccessful())
                     {
                         onFailure(call, new Exception(response.message()));
                         return;

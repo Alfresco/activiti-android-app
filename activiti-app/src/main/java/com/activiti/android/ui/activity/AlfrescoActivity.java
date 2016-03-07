@@ -168,7 +168,7 @@ public abstract class AlfrescoActivity extends AppCompatActivity
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response)
             {
-                account.setIsAdmin(response.isSuccess());
+                account.setIsAdmin(response.isSuccessful());
             }
 
             @Override

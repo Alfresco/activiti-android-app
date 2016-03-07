@@ -157,7 +157,7 @@ public class ProcessDetailsFoundationFragment extends AbstractDetailsFragment
             public void onResponse(Call<ProcessInstanceRepresentation> call,
                     Response<ProcessInstanceRepresentation> response)
             {
-                if (!response.isSuccess())
+                if (!response.isSuccessful())
                 {
                     onFailure(call, new Exception(response.message()));
                     return;
@@ -222,7 +222,7 @@ public class ProcessDetailsFoundationFragment extends AbstractDetailsFragment
             public void onResponse(Call<ResultList<TaskRepresentation>> call,
                     Response<ResultList<TaskRepresentation>> response)
             {
-                if (!response.isSuccess())
+                if (!response.isSuccessful())
                 {
                     onFailure(call, new Exception(response.message()));
                     return;
@@ -248,7 +248,7 @@ public class ProcessDetailsFoundationFragment extends AbstractDetailsFragment
             public void onResponse(Call<ResultList<TaskRepresentation>> call,
                     Response<ResultList<TaskRepresentation>> response)
             {
-                if (!response.isSuccess())
+                if (!response.isSuccessful())
                 {
                     onFailure(call, new Exception(response.message()));
                     return;
@@ -272,7 +272,7 @@ public class ProcessDetailsFoundationFragment extends AbstractDetailsFragment
             public void onResponse(Call<ResultList<RelatedContentRepresentation>> call,
                     Response<ResultList<RelatedContentRepresentation>> response)
             {
-                if (!response.isSuccess())
+                if (!response.isSuccessful())
                 {
                     onFailure(call, new Exception(response.message()));
                     return;
@@ -299,7 +299,7 @@ public class ProcessDetailsFoundationFragment extends AbstractDetailsFragment
                         public void onResponse(Call<ResultList<ProcessContentRepresentation>> call,
                                 Response<ResultList<ProcessContentRepresentation>> response)
                         {
-                            if (!response.isSuccess())
+                            if (!response.isSuccessful())
                             {
                                 onFailure(call, new Exception(response.message()));
                                 return;
@@ -830,9 +830,9 @@ public class ProcessDetailsFoundationFragment extends AbstractDetailsFragment
             {
                 // Analytics
                 AnalyticsHelper.reportOperationEvent(getActivity(), AnalyticsManager.CATEGORY_PROCESS,
-                        AnalyticsManager.ACTION_REMOVE, AnalyticsManager.LABEL_PROCESS, 1, !response.isSuccess());
+                        AnalyticsManager.ACTION_REMOVE, AnalyticsManager.LABEL_PROCESS, 1, !response.isSuccessful());
 
-                if (!response.isSuccess())
+                if (!response.isSuccessful())
                 {
                     onFailure(call, new Exception(response.message()));
                     return;

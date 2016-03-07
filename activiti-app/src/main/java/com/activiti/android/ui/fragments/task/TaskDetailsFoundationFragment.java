@@ -188,12 +188,12 @@ public class TaskDetailsFoundationFragment extends AbstractDetailsFragment
             @Override
             public void onResponse(Call<TaskRepresentation> call, Response<TaskRepresentation> response)
             {
-                if (!response.isSuccess())
+                if (!response.isSuccessful())
                 {
                     onFailure(call, new Exception(response.message()));
                     return;
                 }
-                if (!response.isSuccess())
+                if (!response.isSuccessful())
                 {
                     onFailure(call, new Exception(response.message()));
                 }
@@ -252,7 +252,7 @@ public class TaskDetailsFoundationFragment extends AbstractDetailsFragment
             @Override
             public void onResponse(Call<TaskRepresentation> call, Response<TaskRepresentation> response)
             {
-                if (!response.isSuccess())
+                if (!response.isSuccessful())
                 {
                     onFailure(call, new Exception(response.message()));
                     return;
@@ -302,7 +302,7 @@ public class TaskDetailsFoundationFragment extends AbstractDetailsFragment
                             public void onResponse(Call<ProcessInstanceRepresentation> call,
                                     Response<ProcessInstanceRepresentation> response)
                             {
-                                if (!response.isSuccess())
+                                if (!response.isSuccessful())
                                 {
                                     onFailure(call, new Exception(response.message()));
                                     return;
@@ -336,7 +336,7 @@ public class TaskDetailsFoundationFragment extends AbstractDetailsFragment
             public void onResponse(Call<ResultList<RelatedContentRepresentation>> call,
                     Response<ResultList<RelatedContentRepresentation>> response)
             {
-                if (!response.isSuccess())
+                if (!response.isSuccessful())
                 {
                     onFailure(call, new Exception(response.message()));
                     return;
@@ -372,7 +372,7 @@ public class TaskDetailsFoundationFragment extends AbstractDetailsFragment
                     public void onResponse(Call<ResultList<TaskRepresentation>> call,
                             Response<ResultList<TaskRepresentation>> response)
                     {
-                        if (!response.isSuccess())
+                        if (!response.isSuccessful())
                         {
                             onFailure(call, new Exception(response.message()));
                             return;
@@ -706,7 +706,7 @@ public class TaskDetailsFoundationFragment extends AbstractDetailsFragment
                         public void onResponse(Call<FormDefinitionRepresentation> call,
                                 Response<FormDefinitionRepresentation> response)
                         {
-                            if (!response.isSuccess())
+                            if (!response.isSuccessful())
                             {
                                 onFailure(call, new Exception(response.message()));
                                 return;
@@ -1121,9 +1121,9 @@ public class TaskDetailsFoundationFragment extends AbstractDetailsFragment
                 // Analytics
                 AnalyticsHelper.reportOperationEvent(getActivity(), AnalyticsManager.CATEGORY_TASK,
                         AnalyticsManager.ACTION_COMPLETE_TASK, AnalyticsManager.LABEL_WITHOUT_FORM, 1,
-                        !response.isSuccess());
+                        !response.isSuccessful());
 
-                if (!response.isSuccess())
+                if (!response.isSuccessful())
                 {
                     onFailure(call, new Exception(response.message()));
                     return;
@@ -1175,9 +1175,9 @@ public class TaskDetailsFoundationFragment extends AbstractDetailsFragment
             {
                 // Analytics
                 AnalyticsHelper.reportOperationEvent(getActivity(), AnalyticsManager.CATEGORY_TASK,
-                        AnalyticsManager.ACTION_CLAIM, AnalyticsManager.LABEL_TASK, 1, !response.isSuccess());
+                        AnalyticsManager.ACTION_CLAIM, AnalyticsManager.LABEL_TASK, 1, !response.isSuccessful());
 
-                if (!response.isSuccess())
+                if (!response.isSuccessful())
                 {
                     onFailure(call, new Exception(response.message()));
                     return;
@@ -1208,9 +1208,9 @@ public class TaskDetailsFoundationFragment extends AbstractDetailsFragment
             {
                 // Analytics
                 AnalyticsHelper.reportOperationEvent(getActivity(), AnalyticsManager.CATEGORY_TASK,
-                        AnalyticsManager.ACTION_REASSIGN, AnalyticsManager.LABEL_USER, 1, !response.isSuccess());
+                        AnalyticsManager.ACTION_REASSIGN, AnalyticsManager.LABEL_USER, 1, !response.isSuccessful());
 
-                if (!response.isSuccess())
+                if (!response.isSuccessful())
                 {
                     onFailure(call, new Exception(response.message()));
                     return;
@@ -1243,9 +1243,9 @@ public class TaskDetailsFoundationFragment extends AbstractDetailsFragment
             {
                 // Analytics
                 AnalyticsHelper.reportOperationEvent(getActivity(), AnalyticsManager.CATEGORY_TASK,
-                        AnalyticsManager.ACTION_REASSIGN, AnalyticsManager.LABEL_USER, 1, !response.isSuccess());
+                        AnalyticsManager.ACTION_REASSIGN, AnalyticsManager.LABEL_USER, 1, !response.isSuccessful());
 
-                if (!response.isSuccess())
+                if (!response.isSuccessful())
                 {
                     onFailure(call, new Exception(response.message()));
                     return;
@@ -1277,9 +1277,10 @@ public class TaskDetailsFoundationFragment extends AbstractDetailsFragment
 
                 // Analytics
                 AnalyticsHelper.reportOperationEvent(getActivity(), AnalyticsManager.CATEGORY_TASK,
-                        AnalyticsManager.ACTION_USER_INVOLVED, AnalyticsManager.ACTION_ADD, 1, !response.isSuccess());
+                        AnalyticsManager.ACTION_USER_INVOLVED, AnalyticsManager.ACTION_ADD, 1,
+                        !response.isSuccessful());
 
-                if (!response.isSuccess())
+                if (!response.isSuccessful())
                 {
                     onFailure(call, new Exception(response.message()));
                     return;
@@ -1309,9 +1310,10 @@ public class TaskDetailsFoundationFragment extends AbstractDetailsFragment
             {
                 // Analytics
                 AnalyticsHelper.reportOperationEvent(getActivity(), AnalyticsManager.CATEGORY_TASK,
-                        AnalyticsManager.ACTION_USER_INVOLVED, AnalyticsManager.ACTION_ADD, 1, !response.isSuccess());
+                        AnalyticsManager.ACTION_USER_INVOLVED, AnalyticsManager.ACTION_ADD, 1,
+                        !response.isSuccessful());
 
-                if (!response.isSuccess())
+                if (!response.isSuccessful())
                 {
                     onFailure(call, new Exception(response.message()));
                     return;
@@ -1337,9 +1339,9 @@ public class TaskDetailsFoundationFragment extends AbstractDetailsFragment
             {
                 // Analytics
                 AnalyticsHelper.reportOperationEvent(getActivity(), AnalyticsManager.CATEGORY_TASK,
-                        AnalyticsManager.ACTION_EDIT, AnalyticsManager.LABEL_TASK, 1, !response.isSuccess());
+                        AnalyticsManager.ACTION_EDIT, AnalyticsManager.LABEL_TASK, 1, !response.isSuccessful());
 
-                if (!response.isSuccess())
+                if (!response.isSuccessful())
                 {
                     onFailure(call, new Exception(response.message()));
                     return;
@@ -1368,9 +1370,9 @@ public class TaskDetailsFoundationFragment extends AbstractDetailsFragment
                 // Analytics
                 AnalyticsHelper.reportOperationEvent(getActivity(), AnalyticsManager.CATEGORY_TASK,
                         AnalyticsManager.ACTION_USER_INVOLVED, AnalyticsManager.ACTION_REMOVE, 1,
-                        !response.isSuccess());
+                        !response.isSuccessful());
 
-                if (!response.isSuccess())
+                if (!response.isSuccessful())
                 {
                     onFailure(call, new Exception(response.message()));
                     return;
@@ -1408,9 +1410,9 @@ public class TaskDetailsFoundationFragment extends AbstractDetailsFragment
             {
                 // Analytics
                 AnalyticsHelper.reportOperationEvent(getActivity(), AnalyticsManager.CATEGORY_TASK,
-                        AnalyticsManager.ACTION_FORM, AnalyticsManager.ACTION_REMOVE, 1, !response.isSuccess());
+                        AnalyticsManager.ACTION_FORM, AnalyticsManager.ACTION_REMOVE, 1, !response.isSuccessful());
 
-                if (!response.isSuccess())
+                if (!response.isSuccessful())
                 {
                     onFailure(call, new Exception(response.message()));
                     return;
@@ -1445,9 +1447,9 @@ public class TaskDetailsFoundationFragment extends AbstractDetailsFragment
             {
                 // Analytics
                 AnalyticsHelper.reportOperationEvent(getActivity(), AnalyticsManager.CATEGORY_TASK,
-                        AnalyticsManager.ACTION_FORM, AnalyticsManager.ACTION_ADD, 1, !response.isSuccess());
+                        AnalyticsManager.ACTION_FORM, AnalyticsManager.ACTION_ADD, 1, !response.isSuccessful());
 
-                if (!response.isSuccess())
+                if (!response.isSuccessful())
                 {
                     onFailure(call, new Exception(response.message()));
                     return;
