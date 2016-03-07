@@ -122,7 +122,7 @@ public class ContentsFoundationFragment extends BasePagingGridFragment implement
         public void onResponse(Call<ResultList<RelatedContentRepresentation>> call,
                 Response<ResultList<RelatedContentRepresentation>> response)
         {
-            if (!response.isSuccess())
+            if (!response.isSuccessful())
             {
                 onFailure(call, new Exception(response.message()));
                 return;
@@ -222,7 +222,7 @@ public class ContentsFoundationFragment extends BasePagingGridFragment implement
             @Override
             public void onResponse(Call<Void> call, Response<Void> response)
             {
-                if (!response.isSuccess())
+                if (!response.isSuccessful())
                 {
                     onFailure(call, new Exception(response.message()));
                     return;

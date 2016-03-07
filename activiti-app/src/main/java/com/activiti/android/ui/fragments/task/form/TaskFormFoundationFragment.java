@@ -233,9 +233,9 @@ public class TaskFormFoundationFragment extends AlfrescoFragment implements Date
                     {
                         // Analytics
                         AnalyticsHelper.reportOperationEvent(getActivity(), AnalyticsManager.CATEGORY_TASK,
-                                AnalyticsManager.ACTION_FORM, AnalyticsManager.LABEL_SAVE, 1, !response.isSuccess());
+                                AnalyticsManager.ACTION_FORM, AnalyticsManager.LABEL_SAVE, 1, !response.isSuccessful());
 
-                        if (!response.isSuccess())
+                        if (!response.isSuccessful())
                         {
                             onFailure(call, new Exception(response.message()));
                             return;
@@ -291,7 +291,7 @@ public class TaskFormFoundationFragment extends AlfrescoFragment implements Date
             public void onResponse(Call<FormDefinitionRepresentation> call,
                     Response<FormDefinitionRepresentation> response)
             {
-                if (!response.isSuccess())
+                if (!response.isSuccessful())
                 {
                     onFailure(call, new Exception(response.message()));
                     return;
@@ -369,9 +369,9 @@ public class TaskFormFoundationFragment extends AlfrescoFragment implements Date
                 // Analytics
                 AnalyticsHelper.reportOperationEvent(getActivity(), AnalyticsManager.CATEGORY_TASK,
                         AnalyticsManager.ACTION_COMPLETE_TASK, AnalyticsManager.LABEL_WITH_FORM, 1,
-                        !response.isSuccess());
+                        !response.isSuccessful());
 
-                if (!response.isSuccess())
+                if (!response.isSuccessful())
                 {
                     onFailure(call, new Exception(response.message()));
                     return;

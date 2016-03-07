@@ -261,9 +261,9 @@ public class TaskFilterPropertiesFragment extends CommonTaskFilterFragment
                         // Analytics
                         AnalyticsHelper.reportOperationEvent(getActivity(), AnalyticsManager.CATEGORY_FILTERS,
                                 AnalyticsManager.ACTION_EDIT, AnalyticsManager.CATEGORY_FILTERS, 1,
-                                !response.isSuccess());
+                                !response.isSuccessful());
 
-                        if (!response.isSuccess())
+                        if (!response.isSuccessful())
                         {
                             onFailure(call, new Exception(response.message()));
                             return;
@@ -308,9 +308,9 @@ public class TaskFilterPropertiesFragment extends CommonTaskFilterFragment
             {
                 // Analytics
                 AnalyticsHelper.reportOperationEvent(getActivity(), AnalyticsManager.CATEGORY_FILTERS,
-                        AnalyticsManager.ACTION_CREATE, AnalyticsManager.CATEGORY_FILTERS, 1, !response.isSuccess());
+                        AnalyticsManager.ACTION_CREATE, AnalyticsManager.CATEGORY_FILTERS, 1, !response.isSuccessful());
 
-                if (!response.isSuccess())
+                if (!response.isSuccessful())
                 {
                     onFailure(call, new Exception(response.message()));
                     return;

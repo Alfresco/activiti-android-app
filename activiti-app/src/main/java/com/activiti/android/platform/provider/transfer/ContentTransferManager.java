@@ -320,7 +320,8 @@ public class ContentTransferManager extends Manager
                         // Analytics
                         AnalyticsHelper.reportOperationEvent(fr.getActivity(),
                                 AnalyticsManager.CATEGORY_DOCUMENT_MANAGEMENT, AnalyticsManager.ACTION_LINK_CONTENT,
-                                response.isSuccess() ? response.body().getMimeType() : "", 1, !response.isSuccess());
+                                response.isSuccessful() ? response.body().getMimeType() : "", 1,
+                                !response.isSuccessful());
 
                         EventBusManager.getInstance().post(new ContentTransferEvent("-1",
                                 ContentTransferSyncAdapter.MODE_SAF_UPLOAD, response.body()));
@@ -347,7 +348,8 @@ public class ContentTransferManager extends Manager
                         // Analytics
                         AnalyticsHelper.reportOperationEvent(fr.getActivity(),
                                 AnalyticsManager.CATEGORY_DOCUMENT_MANAGEMENT, AnalyticsManager.ACTION_LINK_CONTENT,
-                                response.isSuccess() ? response.body().getMimeType() : "", 1, !response.isSuccess());
+                                response.isSuccessful() ? response.body().getMimeType() : "", 1,
+                                !response.isSuccessful());
 
                         EventBusManager.getInstance().post(new ContentTransferEvent("-1",
                                 ContentTransferSyncAdapter.MODE_SAF_UPLOAD, response.body()));

@@ -155,9 +155,9 @@ public class StartSimpleFormDialogFragment extends AlfrescoFragment
             {
                 // Analytics
                 AnalyticsHelper.reportOperationEvent(getActivity(), AnalyticsManager.CATEGORY_PROCESS,
-                        AnalyticsManager.ACTION_CREATE, AnalyticsManager.LABEL_PROCESS, 1, !response.isSuccess());
+                        AnalyticsManager.ACTION_CREATE, AnalyticsManager.LABEL_PROCESS, 1, !response.isSuccessful());
 
-                if (!response.isSuccess())
+                if (!response.isSuccessful())
                 {
                     onFailure(call, new Exception(response.message()));
                     return;

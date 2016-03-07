@@ -179,9 +179,9 @@ public class UserFilterAdapter extends BaseListAdapter<UserTaskFilterRepresentat
                                                 AnalyticsHelper.reportOperationEvent(getContext(),
                                                         AnalyticsManager.CATEGORY_FILTERS,
                                                         AnalyticsManager.ACTION_DELETE,
-                                                        AnalyticsManager.CATEGORY_FILTERS, 1, !response.isSuccess());
+                                                        AnalyticsManager.CATEGORY_FILTERS, 1, !response.isSuccessful());
 
-                                                if (!response.isSuccess())
+                                                if (!response.isSuccessful())
                                                 {
                                                     onFailure(call, new Exception(response.message()));
                                                     return;

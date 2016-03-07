@@ -311,10 +311,10 @@ public class AbstractDetailsFragment extends AlfrescoFragment
             {
                 // Analytics
                 AnalyticsHelper.reportOperationEvent(getActivity(), AnalyticsManager.CATEGORY_DOCUMENT_MANAGEMENT,
-                        AnalyticsManager.ACTION_LINK_CONTENT, response.isSuccess() ? response.body().getMimeType() : "",
-                        1, !response.isSuccess());
+                        AnalyticsManager.ACTION_LINK_CONTENT,
+                        response.isSuccessful() ? response.body().getMimeType() : "", 1, !response.isSuccessful());
 
-                if (!response.isSuccess())
+                if (!response.isSuccessful())
                 {
                     onFailure(call, new Exception(response.message()));
                     return;
@@ -341,9 +341,9 @@ public class AbstractDetailsFragment extends AlfrescoFragment
             {
                 // Analytics
                 AnalyticsHelper.reportOperationEvent(getActivity(), AnalyticsManager.CATEGORY_DOCUMENT_MANAGEMENT,
-                        AnalyticsManager.ACTION_REMOVE, content.getMimeType(), 1, !response.isSuccess());
+                        AnalyticsManager.ACTION_REMOVE, content.getMimeType(), 1, !response.isSuccessful());
 
-                if (response.isSuccess())
+                if (response.isSuccessful())
                 {
                     relatedContentRepresentations.remove(content);
                     if (relatedContentRepresentations.isEmpty())
