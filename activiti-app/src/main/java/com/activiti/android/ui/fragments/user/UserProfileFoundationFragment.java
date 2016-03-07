@@ -31,7 +31,6 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
-import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -59,8 +58,7 @@ import com.activiti.client.api.model.idm.request.UpdateProfileRepresentation;
 /**
  * Created by jpascal on 07/03/2015.
  */
-public class UserProfileFoundationFragment extends AlfrescoFragment implements
-        EditTextDialogFragment.onEditTextFragment
+public class UserProfileFoundationFragment extends AlfrescoFragment implements EditTextDialogFragment.onEditTextFragment
 {
     public static final String TAG = ProcessDefinitionFoundationFragment.class.getName();
 
@@ -170,14 +168,14 @@ public class UserProfileFoundationFragment extends AlfrescoFragment implements
     public void onResume()
     {
         super.onResume();
-        ((AppCompatActivity) getActivity()).getSupportActionBar().hide();
+        getToolbar().setVisibility(View.GONE);
     }
 
     @Override
     public void onStop()
     {
         super.onStop();
-        ((AppCompatActivity) getActivity()).getSupportActionBar().show();
+        getToolbar().setVisibility(View.VISIBLE);
     }
 
     // ///////////////////////////////////////////////////////////////////////////
@@ -188,9 +186,8 @@ public class UserProfileFoundationFragment extends AlfrescoFragment implements
         if (userRepresentation == null) { return; }
 
         // Icon
-        ((MainActivity) getActivity()).getPicasso()
-                .load(Uri.parse(getAPI().getProfileService().getProfilePictureURL())).fit()
-                .into((ImageView) viewById(R.id.circleView));
+        ((MainActivity) getActivity()).getPicasso().load(Uri.parse(getAPI().getProfileService().getProfilePictureURL()))
+                .fit().into((ImageView) viewById(R.id.circleView));
 
         viewById(R.id.circleView).setOnClickListener(new View.OnClickListener()
         {
@@ -280,11 +277,10 @@ public class UserProfileFoundationFragment extends AlfrescoFragment implements
 
     public void refreshPicture()
     {
-        ((MainActivity) getActivity()).getPicasso().invalidate(
-                Uri.parse(getAPI().getProfileService().getProfilePictureURL()));
         ((MainActivity) getActivity()).getPicasso()
-                .load(Uri.parse(getAPI().getProfileService().getProfilePictureURL())).fit()
-                .into((ImageView) viewById(R.id.circleView));
+                .invalidate(Uri.parse(getAPI().getProfileService().getProfilePictureURL()));
+        ((MainActivity) getActivity()).getPicasso().load(Uri.parse(getAPI().getProfileService().getProfilePictureURL()))
+                .fit().into((ImageView) viewById(R.id.circleView));
     }
 
     // ///////////////////////////////////////////////////////////////////////////

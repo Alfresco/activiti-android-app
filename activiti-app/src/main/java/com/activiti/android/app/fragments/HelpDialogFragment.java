@@ -1,21 +1,20 @@
 /*
- *  Copyright (C) 2005-2015 Alfresco Software Limited.
+ *  Copyright (C) 2005-2016 Alfresco Software Limited.
  *
- * This file is part of Alfresco Activiti Mobile for Android.
+ *  This file is part of Alfresco Activiti Mobile for Android.
  *
- * Alfresco Activiti Mobile for Android is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Lesser General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
+ *  Alfresco Activiti Mobile for Android is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU Lesser General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
  *
- * Alfresco Activiti Mobile for Android is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU Lesser General Public License for more details.
+ *  Alfresco Activiti Mobile for Android is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU Lesser General Public License for more details.
  *
- * You should have received a copy of the GNU Lesser General Public License
- * along with Alfresco. If not, see <http://www.gnu.org/licenses/>.
- *
+ *  You should have received a copy of the GNU Lesser General Public License
+ *  along with Alfresco. If not, see <http://www.gnu.org/licenses/>.
  */
 
 package com.activiti.android.app.fragments;
@@ -29,7 +28,7 @@ import android.os.Message;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
-import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.text.Html;
 import android.text.TextUtils;
 import android.view.KeyEvent;
@@ -46,6 +45,7 @@ import android.widget.TextView;
 import com.activiti.android.app.R;
 import com.activiti.android.platform.utils.ConnectivityUtils;
 import com.activiti.android.ui.fragments.builder.LeafFragmentBuilder;
+import com.activiti.android.ui.utils.DisplayUtils;
 
 public class HelpDialogFragment extends DialogFragment
 {
@@ -96,7 +96,7 @@ public class HelpDialogFragment extends DialogFragment
     {
         View v = inflater.inflate(R.layout.app_webview, container, false);
 
-        ((AppCompatActivity) getActivity()).getSupportActionBar().hide();
+        getToolbar().setVisibility(View.GONE);
 
         webView = (WebView) v.findViewById(R.id.webview);
         webView.getSettings().setJavaScriptEnabled(true);
@@ -202,7 +202,19 @@ public class HelpDialogFragment extends DialogFragment
     public void onStop()
     {
         super.onStop();
-        ((AppCompatActivity) getActivity()).getSupportActionBar().show();
+        getToolbar().setVisibility(View.VISIBLE);
+    }
+
+    protected Toolbar getToolbar()
+    {
+        if (DisplayUtils.hasCentralPane(getActivity()))
+        {
+            return (Toolbar) getActivity().findViewById(R.id.toolbar_central);
+        }
+        else
+        {
+            return (Toolbar) getActivity().findViewById(R.id.toolbar);
+        }
     }
 
     // ///////////////////////////////////////////////////////////////////////////
