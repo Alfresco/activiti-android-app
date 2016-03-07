@@ -103,6 +103,14 @@ public class AnalyticsHelper
 
         if (account != null)
         {
+            if (account.getServerUrl() != null && account.getServerUrl().startsWith("https://activiti.alfresco.com/"))
+            {
+                customDimensions.append(AnalyticsManager.INDEX_SERVER_TYPE, "Cloud");
+            }
+            else
+            {
+                customDimensions.append(AnalyticsManager.INDEX_SERVER_TYPE, account.getServerType());
+            }
             customDimensions.append(AnalyticsManager.INDEX_SERVER_VERSION, account.getServerVersion());
             customDimensions.append(AnalyticsManager.INDEX_SERVER_TYPE, account.getServerType());
             customDimensions.append(AnalyticsManager.INDEX_SERVER_EDITION, account.getServerEdition());
