@@ -10,7 +10,7 @@ Alfresco Activiti provides highly scalable workflow and Business Process Managem
 ## Where can I find it ?
 
 <a href="https://play.google.com/store/apps/details?id=com.activiti.android.app">
-  <img alt="Get it on Google Play"
+  <img alt="Get it on Google Play" height="100" width="300"
        src="https://play.google.com/intl/en_us/badges/images/generic/en-play-badge.png" />
 </a>
 
