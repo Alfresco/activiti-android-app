@@ -24,8 +24,8 @@ import android.content.Context;
 
 import com.activiti.android.app.R;
 import com.activiti.android.sdk.ActivitiSession;
+import com.jakewharton.picasso.OkHttp3Downloader;
 import com.makeramen.roundedimageview.RoundedTransformationBuilder;
-import com.squareup.picasso.OkHttpDownloader;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Transformation;
 
@@ -36,7 +36,7 @@ public class RenditionManager
     public RenditionManager(Context context, ActivitiSession session)
     {
         if (context == null || session == null) { return; }
-        picasso = new Picasso.Builder(context).downloader(new OkHttpDownloader(session.getOkHttpClient()))
+        picasso = new Picasso.Builder(context).downloader(new OkHttp3Downloader(session.getOkHttpClient()))
                 .loggingEnabled(false).indicatorsEnabled(false).build();
     }
 

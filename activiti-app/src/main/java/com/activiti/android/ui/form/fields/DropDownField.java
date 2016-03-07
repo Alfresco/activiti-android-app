@@ -25,9 +25,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import retrofit.Callback;
-import retrofit.RetrofitError;
-import retrofit.client.Response;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 import android.content.Context;
 import android.text.TextUtils;
@@ -95,8 +95,8 @@ public class DropDownField extends BaseField
         {
             if (editionValue instanceof OptionRepresentation)
             {
-                ((Spinner) editionView.findViewById(R.id.spinner)).setSelection(optionsIndex
-                        .get(((OptionRepresentation) editionValue).getName()));
+                ((Spinner) editionView.findViewById(R.id.spinner))
+                        .setSelection(optionsIndex.get(((OptionRepresentation) editionValue).getName()));
             }
         }
     }
@@ -177,35 +177,39 @@ public class DropDownField extends BaseField
     @Override
     public void setFragment(AlfrescoFragment fr)
     {
-        if (data instanceof RestFieldRepresentation && ((RestFieldRepresentation) data).getEndpoint() == null) { return; }
+        if (data instanceof RestFieldRepresentation
+                && ((RestFieldRepresentation) data).getEndpoint() == null) { return; }
 
         super.setFragment(fr);
-        getFragment()
-                .getAPI()
-                .getTaskService()
-                .getFormFieldValues(getFormManager().getTaskId(), data.getId(),
-                        new Callback<List<OptionRepresentation>>()
+        getFragment().getAPI().getTaskService().getFormFieldValues(getFormManager().getTaskId(), data.getId(),
+                new Callback<List<OptionRepresentation>>()
+                {
+                    @Override
+                    public void onResponse(Call<List<OptionRepresentation>> call,
+                            Response<List<OptionRepresentation>> response)
+                    {
+                        if (!response.isSuccess())
                         {
-                            @Override
-                            public void success(List<OptionRepresentation> optionsRespresentation, Response response)
-                            {
-                                if (TextUtils.isEmpty(data.getPlaceholder()))
-                                {
-                                    optionsRespresentation.add(0, new OptionRepresentation("-1",
-                                            getString(R.string.dropdown_select)));
-                                }
-                                else
-                                {
-                                    optionsRespresentation.add(0, new OptionRepresentation("-1", data.getPlaceholder()));
-                                }
-                                refreshAdapter(optionsRespresentation);
-                            }
+                            onFailure(call, new Exception(response.message()));
+                            return;
+                        }
 
-                            @Override
-                            public void failure(RetrofitError error)
-                            {
-                            }
-                        });
+                        if (TextUtils.isEmpty(data.getPlaceholder()))
+                        {
+                            response.body().add(0, new OptionRepresentation("-1", getString(R.string.dropdown_select)));
+                        }
+                        else
+                        {
+                            response.body().add(0, new OptionRepresentation("-1", data.getPlaceholder()));
+                        }
+                        refreshAdapter(response.body());
+                    }
+
+                    @Override
+                    public void onFailure(Call<List<OptionRepresentation>> call, Throwable error)
+                    {
+                    }
+                });
     }
 
     // ///////////////////////////////////////////////////////////////////////////

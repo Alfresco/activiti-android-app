@@ -1,21 +1,20 @@
 /*
- *  Copyright (C) 2005-2015 Alfresco Software Limited.
+ *  Copyright (C) 2005-2016 Alfresco Software Limited.
  *
- * This file is part of Alfresco Activiti Mobile for Android.
+ *  This file is part of Alfresco Activiti Mobile for Android.
  *
- * Alfresco Activiti Mobile for Android is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Lesser General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
+ *  Alfresco Activiti Mobile for Android is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU Lesser General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
  *
- * Alfresco Activiti Mobile for Android is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU Lesser General Public License for more details.
+ *  Alfresco Activiti Mobile for Android is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU Lesser General Public License for more details.
  *
- * You should have received a copy of the GNU Lesser General Public License
- * along with Alfresco. If not, see <http://www.gnu.org/licenses/>.
- *
+ *  You should have received a copy of the GNU Lesser General Public License
+ *  along with Alfresco. If not, see <http://www.gnu.org/licenses/>.
  */
 
 package com.activiti.android.ui.fragments.common;
@@ -23,9 +22,9 @@ package com.activiti.android.ui.fragments.common;
 import java.util.ArrayList;
 import java.util.List;
 
-import retrofit.Callback;
-import retrofit.RetrofitError;
-import retrofit.client.Response;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 import android.app.Activity;
 import android.content.Context;
@@ -45,12 +44,15 @@ import com.activiti.android.app.R;
 import com.activiti.android.app.activity.MainActivity;
 import com.activiti.android.app.fragments.comment.CommentsFragment;
 import com.activiti.android.app.fragments.content.ContentsFragment;
+import com.activiti.android.platform.integration.analytics.AnalyticsHelper;
+import com.activiti.android.platform.integration.analytics.AnalyticsManager;
 import com.activiti.android.platform.provider.mimetype.MimeType;
 import com.activiti.android.platform.provider.mimetype.MimeTypeManager;
 import com.activiti.android.platform.provider.transfer.ContentTransferEvent;
 import com.activiti.android.platform.provider.transfer.ContentTransferManager;
 import com.activiti.android.platform.rendition.RenditionManager;
 import com.activiti.android.ui.fragments.AlfrescoFragment;
+import com.activiti.android.ui.fragments.FragmentDisplayer;
 import com.activiti.android.ui.holder.HolderUtils;
 import com.activiti.android.ui.holder.TwoLinesViewHolder;
 import com.activiti.android.ui.utils.UIUtils;
@@ -71,6 +73,8 @@ import com.squareup.picasso.Transformation;
 public class AbstractDetailsFragment extends AlfrescoFragment
 {
     protected static final int SECTION_MAX_ITEMS = 3;
+
+    protected static final int TASKS_MAX_ITEMS = 15;
 
     protected ProcessInstanceRepresentation processInstanceRepresentation;
 
@@ -187,26 +191,24 @@ public class AbstractDetailsFragment extends AlfrescoFragment
                             MaterialDialog.Builder builder = new MaterialDialog.Builder(getActivity())
                                     .title(R.string.content_title_delete)
                                     .cancelListener(new DialogInterface.OnCancelListener()
-                                    {
-                                        @Override
-                                        public void onCancel(DialogInterface dialog)
-                                        {
-                                            dismiss();
-                                        }
-                                    })
-                                    .content(
-                                            String.format(getString(R.string.content_message_delete_confirmation),
-                                                    ((RelatedContentRepresentation) v.getTag()).getName()))
+                            {
+                                @Override
+                                public void onCancel(DialogInterface dialog)
+                                {
+                                    dismiss();
+                                }
+                            }).content(String.format(getString(R.string.content_message_delete_confirmation),
+                                    ((RelatedContentRepresentation) v.getTag()).getName()))
                                     .positiveText(R.string.general_action_confirm)
                                     .negativeText(R.string.general_action_cancel)
                                     .callback(new MaterialDialog.ButtonCallback()
-                                    {
-                                        @Override
-                                        public void onPositive(MaterialDialog dialog)
-                                        {
-                                            removeContent(((RelatedContentRepresentation) v.getTag()));
-                                        }
-                                    });
+                            {
+                                @Override
+                                public void onPositive(MaterialDialog dialog)
+                                {
+                                    removeContent(((RelatedContentRepresentation) v.getTag()));
+                                }
+                            });
                             builder.show();
 
                         }
@@ -235,13 +237,14 @@ public class AbstractDetailsFragment extends AlfrescoFragment
                     {
                         resetRightMenu();
                         ContentsFragment.with(getActivity()).readOnly(isEnded).taskId(taskId)
-                                .title(taskRepresentation.getName()).display();
+                                .title(taskRepresentation.getName()).display(FragmentDisplayer.PANEL_CENTRAL);
                     }
                     else if (!TextUtils.isEmpty(processId))
                     {
                         resetRightMenu();
                         ContentsFragment.with(getActivity()).processId(processId).readOnly(isEnded)
-                                .title(processInstanceRepresentation.getName()).display();
+                                .title(processInstanceRepresentation.getName())
+                                .display(FragmentDisplayer.PANEL_CENTRAL);
                     }
                 }
             });
@@ -303,14 +306,25 @@ public class AbstractDetailsFragment extends AlfrescoFragment
         getAPI().getTaskService().linkAttachment(taskId, update, new Callback<RelatedContentRepresentation>()
         {
             @Override
-            public void success(RelatedContentRepresentation content, Response response)
+            public void onResponse(Call<RelatedContentRepresentation> call,
+                    Response<RelatedContentRepresentation> response)
             {
-                relatedContentRepresentations.add(content);
+                // Analytics
+                AnalyticsHelper.reportOperationEvent(getActivity(), AnalyticsManager.CATEGORY_DOCUMENT_MANAGEMENT,
+                        AnalyticsManager.ACTION_LINK_CONTENT, response.isSuccess() ? response.body().getMimeType() : "",
+                        1, !response.isSuccess());
+
+                if (!response.isSuccess())
+                {
+                    onFailure(call, new Exception(response.message()));
+                    return;
+                }
+                relatedContentRepresentations.add(response.body());
                 displayContents(relatedContentRepresentations);
             }
 
             @Override
-            public void failure(RetrofitError error)
+            public void onFailure(Call<RelatedContentRepresentation> call, Throwable error)
             {
                 Snackbar.make(getActivity().findViewById(R.id.left_panel), error.getMessage(), Snackbar.LENGTH_SHORT)
                         .show();
@@ -323,23 +337,27 @@ public class AbstractDetailsFragment extends AlfrescoFragment
         getAPI().getTaskService().deleteAttachment(content.getId(), new Callback<Void>()
         {
             @Override
-            public void success(Void resp, Response response)
+            public void onResponse(Call<Void> call, Response<Void> response)
             {
-                relatedContentRepresentations.remove(content);
-                if (relatedContentRepresentations.isEmpty())
+                // Analytics
+                AnalyticsHelper.reportOperationEvent(getActivity(), AnalyticsManager.CATEGORY_DOCUMENT_MANAGEMENT,
+                        AnalyticsManager.ACTION_REMOVE, content.getMimeType(), 1, !response.isSuccess());
+
+                if (response.isSuccess())
                 {
-                    displayCards();
+                    relatedContentRepresentations.remove(content);
+                    if (relatedContentRepresentations.isEmpty())
+                    {
+                        displayCards();
+                    }
+                    else
+                    {
+                        displayContents(relatedContentRepresentations);
+                    }
                 }
                 else
-                {
-                    displayContents(relatedContentRepresentations);
-                }
-            }
 
-            @Override
-            public void failure(RetrofitError error)
-            {
-                if (error.getResponse().getStatus() == 500)
+                if (response.code() == 500)
                 {
                     relatedContentRepresentations.remove(content);
                     if (relatedContentRepresentations.isEmpty())
@@ -353,9 +371,15 @@ public class AbstractDetailsFragment extends AlfrescoFragment
                 }
                 else
                 {
-                    Snackbar.make(getActivity().findViewById(R.id.left_panel), error.getMessage(),
+                    Snackbar.make(getActivity().findViewById(R.id.left_panel), response.message(),
                             Snackbar.LENGTH_SHORT).show();
                 }
+            }
+
+            @Override
+            public void onFailure(Call<Void> call, Throwable error)
+            {
+
             }
         });
     }
@@ -373,7 +397,7 @@ public class AbstractDetailsFragment extends AlfrescoFragment
             return;
         }
 
-        if (getActivity() != null)
+        if (getActivity() != null && event.response != null)
         {
             relatedContentRepresentations.add(event.response);
             displayCards();

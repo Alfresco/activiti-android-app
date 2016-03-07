@@ -40,9 +40,9 @@ import com.activiti.android.platform.account.ActivitiAccount;
 import com.activiti.android.platform.integration.alfresco.AlfrescoIntegrator;
 import com.activiti.android.sdk.ActivitiSession;
 import com.activiti.android.sdk.services.ServiceRegistry;
-import com.activiti.client.api.constant.ISO8601Utils;
+import com.activiti.client.api.model.common.ResultList;
 import com.activiti.client.api.model.runtime.integration.dto.AlfrescoEndpointRepresentation;
-import com.activiti.client.api.model.runtime.integration.dto.AlfrescoEndpointsRepresentation;
+import com.alfresco.client.utils.ISO8601Utils;
 
 public class IntegrationSyncAdapter extends AbstractThreadedSyncAdapter
 {
@@ -74,8 +74,8 @@ public class IntegrationSyncAdapter extends AbstractThreadedSyncAdapter
         try
         {
             // Retrieve ActivitiAccount
-            long accountId = Long.parseLong(AccountManager.get(getContext()).getUserData(account,
-                    ActivitiAccount.ACCOUNT_ID));
+            long accountId = Long
+                    .parseLong(AccountManager.get(getContext()).getUserData(account, ActivitiAccount.ACCOUNT_ID));
 
             // Retrieve Applications from Server
             if (ActivitiSession.getInstance() != null)
@@ -86,8 +86,13 @@ public class IntegrationSyncAdapter extends AbstractThreadedSyncAdapter
             {
                 return;
             }
-            AlfrescoEndpointsRepresentation repositories = api.getProfileService().getAlfrescoRepositories();
-            List<AlfrescoEndpointRepresentation> alfrescoEndpoints = repositories.getData();
+            ResultList<AlfrescoEndpointRepresentation> repositories = api.getProfileService().getAlfrescoRepositories();
+            if (repositories == null)
+            {
+                EventBusManager.getInstance().post(new IntegrationSyncEvent("10"));
+                return;
+            }
+            List<AlfrescoEndpointRepresentation> alfrescoEndpoints = repositories.getList();
 
             // Retrieve Local Data
             Map<Long, Integration> localModelIds = integrationManager.getByAccountId(accountId);
@@ -103,8 +108,8 @@ public class IntegrationSyncAdapter extends AbstractThreadedSyncAdapter
                 {
                     // Let's find if Alfresco account
                     Account selectedAccount = null;
-                    Account[] accounts = AccountManager.get(getContext()).getAccountsByType(
-                            AlfrescoIntegrator.ALFRESCO_ACCOUNT_TYPE);
+                    Account[] accounts = AccountManager.get(getContext())
+                            .getAccountsByType(AlfrescoIntegrator.ALFRESCO_ACCOUNT_TYPE);
                     String alfrescoUsername = null, alfrescoAccountName = null;
                     int integration = Integration.OPEN_UNDEFINED;
                     Long alfrescoId = -1L;

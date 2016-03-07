@@ -67,7 +67,7 @@ public class ParcelTask implements Parcelable
 
     public final String processDefinitionCategory;
 
-    public final int processDefinitionVersion;
+    public final Integer processDefinitionVersion;
 
     public final String processDefinitionDeploymentId;
 
@@ -75,11 +75,17 @@ public class ParcelTask implements Parcelable
 
     public final String processInstanceStartUserId;
 
-    public final boolean initiatorCanCompleteTask;
+    public final Boolean initiatorCanCompleteTask;
 
-    public final boolean isMemberOfCandidateGroup;
+    public final Boolean isMemberOfCandidateGroup;
 
-    public final boolean isMemberOfCandidateUsers;
+    public final Boolean isMemberOfCandidateUsers;
+
+    protected String parentTaskId;
+
+    protected String parentTaskName;
+
+    protected Boolean adhocTaskCanBeReassigned;
 
     public ParcelTask(TaskRepresentation representation)
     {
@@ -106,6 +112,9 @@ public class ParcelTask implements Parcelable
         this.initiatorCanCompleteTask = representation.isInitiatorCanCompleteTask();
         this.isMemberOfCandidateGroup = representation.isMemberOfCandidateGroup();
         this.isMemberOfCandidateUsers = representation.isMemberOfCandidateUsers();
+        this.adhocTaskCanBeReassigned = representation.isAdhocTaskCanBeReassigned();
+        this.parentTaskId = representation.getParentTaskId();
+        this.parentTaskName = representation.getParentTaskName();
     }
 
     // ////////////////////////////////////////////////////
@@ -139,9 +148,12 @@ public class ParcelTask implements Parcelable
         dest.writeString(processDefinitionDeploymentId);
         dest.writeString(formKey);
         dest.writeString(processInstanceStartUserId);
-        dest.writeString(Boolean.toString(initiatorCanCompleteTask));
-        dest.writeString(Boolean.toString(isMemberOfCandidateGroup));
-        dest.writeString(Boolean.toString(isMemberOfCandidateUsers));
+        dest.writeString(initiatorCanCompleteTask != null ? Boolean.toString(initiatorCanCompleteTask) : null);
+        dest.writeString(isMemberOfCandidateGroup != null ? Boolean.toString(isMemberOfCandidateGroup) : null);
+        dest.writeString(isMemberOfCandidateUsers != null ? Boolean.toString(isMemberOfCandidateUsers) : null);
+        dest.writeString(adhocTaskCanBeReassigned != null ? Boolean.toString(adhocTaskCanBeReassigned) : null);
+        dest.writeString(parentTaskId);
+        dest.writeString(parentTaskName);
     }
 
     public static final Parcelable.Creator<ParcelTask> CREATOR = new Parcelable.Creator<ParcelTask>()

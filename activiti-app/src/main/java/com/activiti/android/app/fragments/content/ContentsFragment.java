@@ -34,6 +34,7 @@ import android.view.View;
 import android.widget.GridView;
 
 import com.activiti.android.app.R;
+import com.activiti.android.app.activity.MainActivity;
 import com.activiti.android.platform.provider.transfer.ContentTransferEvent;
 import com.activiti.android.platform.provider.transfer.ContentTransferManager;
 import com.activiti.android.platform.provider.transfer.ContentTransferSyncAdapter;
@@ -42,6 +43,7 @@ import com.activiti.android.platform.provider.transfer.DownloadTransferUriEvent;
 import com.activiti.android.ui.fragments.builder.ListingFragmentBuilder;
 import com.activiti.android.ui.fragments.content.ContentAdapter;
 import com.activiti.android.ui.fragments.content.ContentsFoundationFragment;
+import com.activiti.android.ui.utils.UIUtils;
 import com.activiti.client.api.model.runtime.RelatedContentRepresentation;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.squareup.otto.Subscribe;
@@ -64,6 +66,24 @@ public class ContentsFragment extends ContentsFoundationFragment
         ContentsFragment cbf = new ContentsFragment();
         cbf.setArguments(b);
         return cbf;
+    }
+
+    // ///////////////////////////////////////////////////////////////////////////
+    // LIFECYCLE
+    // ///////////////////////////////////////////////////////////////////////////
+    @Override
+    public void onStart()
+    {
+        super.onStart();
+        getRootView().setBackgroundColor(getResources().getColor(R.color.primary_background));
+        UIUtils.displayActionBarBack((MainActivity) getActivity(), getToolbar());
+    }
+
+    @Override
+    public void onStop()
+    {
+        super.onStop();
+        UIUtils.setActionBarDefault((MainActivity) getActivity(), getToolbar());
     }
 
     @Override

@@ -1,36 +1,35 @@
 /*
- *  Copyright (C) 2005-2015 Alfresco Software Limited.
+ *  Copyright (C) 2005-2016 Alfresco Software Limited.
  *
- * This file is part of Alfresco Activiti Mobile for Android.
+ *  This file is part of Alfresco Activiti Mobile for Android.
  *
- * Alfresco Activiti Mobile for Android is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Lesser General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
+ *  Alfresco Activiti Mobile for Android is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU Lesser General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
  *
- * Alfresco Activiti Mobile for Android is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU Lesser General Public License for more details.
+ *  Alfresco Activiti Mobile for Android is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU Lesser General Public License for more details.
  *
- * You should have received a copy of the GNU Lesser General Public License
- * along with Alfresco. If not, see <http://www.gnu.org/licenses/>.
- *
+ *  You should have received a copy of the GNU Lesser General Public License
+ *  along with Alfresco. If not, see <http://www.gnu.org/licenses/>.
  */
 
 
 apply plugin: 'com.android.application'
 
 android {
-    compileSdkVersion 22
-    buildToolsVersion "22.0.1"
+    compileSdkVersion 23
+    buildToolsVersion "23.0.2"
 
     defaultConfig {
         applicationId APPLICATION_ID
 
         minSdkVersion 19
         targetSdkVersion 22
-        versionCode 1
+        versionCode 10
         versionName VERSION_NAME
 
         manifestPlaceholders = [PROVIDER_AUTHORITY: PROVIDER_AUTHORITY]
@@ -50,6 +49,8 @@ android {
         buildConfigField "String", "ALFRESCO_APPLICATION_ID", "\"" + ALFRESCO_APPLICATION_ID + "\""
         buildConfigField "String", "ALFRESCO_ACCOUNT_ID", "\"" + ALFRESCO_ACCOUNT_ID + "\""
         buildConfigField "String", "ALFRESCO_PROVIDER_AUTHORITY", "\"" + ALFRESCO_PROVIDER_AUTHORITY + "\""
+
+        resValue "string", "ga_trackingId", ACTIVITI_TRACKER_ID
     }
 
     lintOptions {
@@ -90,6 +91,7 @@ android {
             buildConfigField "String", "PROVIDER_AUTHORITY", "\"" + PROVIDER_AUTHORITY_DEBUG + "\""
 
             resValue "string", "hockeyapp_key", ACTIVITI_HOCKEYAPP_KEY
+            resValue "string", "ga_trackingId", ACTIVITI_TRACKER_ID_DEBUG
 
             //ALFRESCO Integration
             buildConfigField "String", "ALFRESCO_APPLICATION_ID", "\"" + ALFRESCO_APPLICATION_ID_DEBUG + "\""
@@ -138,34 +140,51 @@ android {
 }
 
 dependencies {
-    compile project(":activiti-sdk")
+    //Alfresco SDK embedded
+    //compile project(":activiti-sdk")
+
+    //Alfresco SDK
+    //Temporary hardcoded dependencies until release to Maven.
+    compile fileTree(dir: 'libs', include: '*.jar')
+    //compile 'org.alfresco.client:client-android-bpm:1.0.0-beta1'
+    compile 'io.reactivex:rxandroid:1.1.0'
+    compile 'io.reactivex:rxjava:1.1.0'
+    compile 'io.gsonfire:gson-fire:1.5.0'
 
     //Support
-    compile 'com.android.support:design:22.2.0'
-    compile 'com.android.support:support-v4:22.2.0'
-    compile 'com.android.support:appcompat-v7:22.2.0'
-    compile 'com.android.support:cardview-v7:22.2.0'
-    compile 'com.android.support:recyclerview-v7:22.2.0'
+    compile 'com.android.support:design:23.1.1'
+    compile 'com.android.support:support-v4:23.1.1'
+    compile 'com.android.support:appcompat-v7:23.1.1'
+    compile 'com.android.support:cardview-v7:23.1.1'
+    compile 'com.android.support:recyclerview-v7:23.1.1'
 
     //Square
-    compile 'com.squareup.retrofit:retrofit:1.9.0'
-    compile 'com.squareup.okhttp:okhttp:2.4.0'
-    compile 'com.squareup.okio:okio:1.4.0'
-    compile 'com.squareup.okhttp:okhttp-urlconnection:2.4.0'
+    compile 'com.squareup.retrofit2:retrofit:2.0.0-SNAPSHOT'
+    compile 'com.squareup.retrofit2:converter-gson:2.0.0-SNAPSHOT'
+    compile 'com.squareup.retrofit2:adapter-rxjava:2.0.0-SNAPSHOT'
+    compile 'com.squareup.okhttp3:okhttp:3.0.1'
+    compile 'com.squareup.okhttp3:logging-interceptor:3.0.1'
     compile 'com.squareup:otto:1.3.7'
     compile 'com.squareup.picasso:picasso:2.5.2'
+    compile 'com.jakewharton.picasso:picasso2-okhttp3-downloader:1.0.2'
+    compile 'com.squareup.okio:okio:1.6.0'
+
 
     //3rd Party Lib
+    compile 'com.cocosw:bottomsheet:1.1.1@aar'
     compile 'com.mattprecious.telescope:telescope:1.4.0@aar'
     compile 'com.rengwuxian.materialedittext:library:2.1.4'
-    compile 'com.melnykov:floatingactionbutton:1.3.0'
+    compile 'com.github.clans:fab:1.5.5'
     compile 'com.afollestad:material-dialogs:0.7.5.5'
     compile 'com.makeramen:roundedimageview:2.1.0'
     compile 'me.relex:circleindicator:1.1.4@aar'
     compile "com.daimajia.swipelayout:library:1.2.0@aar"
+    compile 'it.sephiroth.android.library.imagezoom:imagezoom:1.0.5'
     compile('com.mikepenz:aboutlibraries:5.0.2@aar') {
         transitive = true
     }
+
+    compile 'com.google.android.gms:play-services-analytics:8.3.0'
 
     //Debug
     debugCompile 'net.hockeyapp.android:HockeySDK:3.5.0'

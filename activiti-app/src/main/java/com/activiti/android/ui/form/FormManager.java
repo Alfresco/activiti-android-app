@@ -23,10 +23,12 @@ package com.activiti.android.ui.form;
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
 import android.content.DialogInterface;
+import android.support.design.widget.TabLayout;
 import android.support.v4.app.FragmentActivity;
 import android.text.Html;
 import android.view.LayoutInflater;
@@ -37,6 +39,7 @@ import android.widget.Button;
 import com.activiti.android.app.R;
 import com.activiti.android.sdk.model.runtime.AppVersion;
 import com.activiti.android.ui.form.fields.BaseField;
+import com.activiti.android.ui.form.fields.TabField;
 import com.activiti.android.ui.fragments.AlfrescoFragment;
 import com.activiti.client.api.model.editor.form.ContainerRepresentation;
 import com.activiti.client.api.model.editor.form.DynamicTableRepresentation;
@@ -44,6 +47,7 @@ import com.activiti.client.api.model.editor.form.FormDefinitionRepresentation;
 import com.activiti.client.api.model.editor.form.FormFieldRepresentation;
 import com.activiti.client.api.model.editor.form.FormFieldTypes;
 import com.activiti.client.api.model.editor.form.FormOutcomeRepresentation;
+import com.activiti.client.api.model.editor.form.FormTabRepresentation;
 import com.activiti.client.api.model.editor.form.RestFieldRepresentation;
 import com.afollestad.materialdialogs.MaterialDialog;
 
@@ -60,6 +64,12 @@ public class FormManager
 
     private Map<String, BaseField> fieldsIndex;
 
+    private Map<String, ViewGroup> tabHookViewIndex;
+
+    private LinkedHashMap<String, TabField> formTabFieldIndex;
+
+    private Map<String, FormFieldRepresentation> formFieldIndex = new HashMap<>();
+
     private ArrayList<BaseField> fieldsOrderIndex = new ArrayList<>();
 
     private ArrayList<BaseField> mandatoryFields = new ArrayList<>(0);
@@ -71,6 +81,8 @@ public class FormManager
     private FormDefinitionRepresentation data;
 
     private AppVersion version;
+
+    private TabLayout tabLayout = null;
 
     // ///////////////////////////////////////////////////////////////////////////
     // CONSTRUCTORS & HELPERS
@@ -170,16 +182,77 @@ public class FormManager
     // ///////////////////////////////////////////////////////////////////////////
     protected void generateForm(LayoutInflater li, boolean isEdition)
     {
+        boolean hasTab = false;
+
         if (!version.is120OrAbove())
         {
             generateForm11(li, isEdition);
             return;
         }
 
-        ViewGroup rootView = (ViewGroup) li.inflate(R.layout.form_root, null);
+        ViewGroup rootView;
+
+        // Generate Tabs
+        if (data.getTabs() != null && !data.getTabs().isEmpty())
+        {
+            rootView = (ViewGroup) li.inflate(R.layout.form_root_tabs, null);
+
+            hasTab = true;
+            tabLayout = (TabLayout) rootView.findViewById(R.id.task_form_tabs_container);
+            tabLayout.setVisibility(View.VISIBLE);
+
+            tabHookViewIndex = new HashMap<>(data.getTabs().size());
+            formTabFieldIndex = new LinkedHashMap<>(data.getTabs().size());
+
+            int i = 0;
+            for (FormTabRepresentation tabRepresentation : data.getTabs())
+            {
+                TabLayout.Tab tab = tabLayout.newTab().setText(tabRepresentation.getTitle())
+                        .setTag(tabRepresentation.getId());
+                tabLayout.addTab(tab);
+                ViewGroup tabHookView = (ViewGroup) li.inflate(R.layout.form_tab_children, null);
+                tabHookViewIndex.put(tabRepresentation.getId(), tabHookView);
+                tabHookView.setVisibility(View.GONE);
+                rootView.addView(tabHookView);
+
+                formTabFieldIndex.put(tabRepresentation.getId(), new TabField(tab, tabRepresentation, i, tabHookView));
+
+                i++;
+            }
+
+            tabLayout.setOnTabSelectedListener(new TabLayout.OnTabSelectedListener()
+            {
+                @Override
+                public void onTabSelected(TabLayout.Tab tab)
+                {
+                    formTabFieldIndex.get(tab.getTag()).getHookView().setVisibility(View.VISIBLE);
+                }
+
+                @Override
+                public void onTabUnselected(TabLayout.Tab tab)
+                {
+                    formTabFieldIndex.get(tab.getTag()).getHookView().setVisibility(View.GONE);
+                }
+
+                @Override
+                public void onTabReselected(TabLayout.Tab tab)
+                {
+                    formTabFieldIndex.get(tab.getTag()).getHookView().setVisibility(View.VISIBLE);
+                }
+            });
+
+            tabLayout.getTabAt(0).select();
+
+        }
+        else
+        {
+            rootView = (ViewGroup) li.inflate(R.layout.form_root, null);
+        }
+
         ViewGroup hookView = rootView;
         fieldsIndex = new HashMap<>(data.getFields().size());
 
+        // Generate Fields
         ViewGroup groupRoot = null;
         BaseField field;
         for (FormFieldRepresentation fieldData : data.getFields())
@@ -201,7 +274,16 @@ public class FormManager
                     {
                         groupRoot = (ViewGroup) li.inflate(R.layout.form_fields_group, null);
                     }
-                    hookView = (ViewGroup) groupRoot.findViewById(R.id.form_group_container);
+
+                    if (hasTab && fieldData.getTab() != null)
+                    {
+                        hookView = (ViewGroup) tabHookViewIndex.get(fieldData.getTab())
+                                .findViewById(R.id.tab_group_container);
+                    }
+                    else
+                    {
+                        hookView = (ViewGroup) groupRoot.findViewById(R.id.form_group_container);
+                    }
 
                     Map<String, List<FormFieldRepresentation>> fields = ((ContainerRepresentation) fieldData)
                             .getFields();
@@ -209,6 +291,7 @@ public class FormManager
                     {
                         for (FormFieldRepresentation representation : entry.getValue())
                         {
+                            formFieldIndex.put(representation.getId(), representation);
                             field = generateField(representation, hookView, isEdition);
                             fieldsOrderIndex.add(field);
                             fieldsIndex.put(representation.getId(), field);
@@ -244,7 +327,16 @@ public class FormManager
                 {
                     groupRoot = (ViewGroup) li.inflate(R.layout.form_fields_group, null);
                 }
-                hookView = (ViewGroup) groupRoot.findViewById(R.id.form_group_container);
+
+                if (hasTab && fieldData.getTab() != null)
+                {
+                    hookView = (ViewGroup) tabHookViewIndex.get(fieldData.getTab())
+                            .findViewById(R.id.tab_group_container);
+                }
+                else
+                {
+                    hookView = (ViewGroup) groupRoot.findViewById(R.id.form_group_container);
+                }
 
                 Map<String, List<FormFieldRepresentation>> fields = ((ContainerRepresentation) fieldData).getFields();
                 for (Map.Entry<String, List<FormFieldRepresentation>> entry : fields.entrySet())
@@ -281,14 +373,23 @@ public class FormManager
             else if (FormFieldTypes.DYNAMIC_TABLE.equals(fieldData.getType())
                     || (FormFieldTypes.READONLY.equals(fieldData.getType())
                             && fieldData.getParams().get("field") != null && (FormFieldTypes.DYNAMIC_TABLE.toString()
-                            .equals(((HashMap) fieldData.getParams().get("field")).get("type")))))
+                                    .equals(((HashMap) fieldData.getParams().get("field")).get("type")))))
             {
                 // Create groupView
                 if (groupRoot == null)
                 {
                     groupRoot = (ViewGroup) li.inflate(R.layout.form_fields_group, null);
                 }
-                hookView = (ViewGroup) groupRoot.findViewById(R.id.form_group_container);
+
+                if (hasTab && fieldData.getTab() != null)
+                {
+                    hookView = (ViewGroup) tabHookViewIndex.get(fieldData.getTab())
+                            .findViewById(R.id.tab_group_container);
+                }
+                else
+                {
+                    hookView = (ViewGroup) groupRoot.findViewById(R.id.form_group_container);
+                }
 
                 if (fieldData instanceof DynamicTableRepresentation)
                 {
@@ -468,9 +569,46 @@ public class FormManager
 
     public void evaluateViews()
     {
+        FormEvaluateExpression formEvaluateExpression = new FormEvaluateExpression(getValues(), formFieldIndex);
+
         for (BaseField field : fieldsOrderIndex)
         {
-            field.evaluateVisibility();
+            if (field.getData().getVisibilityCondition() != null)
+            {
+                field.evaluateVisibility(
+                        formEvaluateExpression.evaluateExpression(field.getData().getVisibilityCondition()));
+            }
+            else
+            {
+                field.evaluateVisibility();
+            }
+        }
+
+        if (tabLayout == null) { return; }
+
+        Map<String, TabLayout.Tab> tabLaIndex = new HashMap<>(tabLayout.getTabCount());
+
+        for (int i = 0; i < tabLayout.getTabCount(); i++)
+        {
+            tabLaIndex.put((String) tabLayout.getTabAt(i).getTag(), tabLayout.getTabAt(i));
+        }
+
+        for (Map.Entry<String, TabField> tabField : formTabFieldIndex.entrySet())
+        {
+            if (tabField.getValue().getData().getVisibilityCondition() != null)
+            {
+                TabField tabInfo = tabField.getValue();
+                boolean isVisible = formEvaluateExpression
+                        .evaluateExpression(tabInfo.getData().getVisibilityCondition());
+                if (isVisible && !tabLaIndex.containsKey(tabInfo.getId()))
+                {
+                    tabLayout.addTab(tabInfo.getTab());
+                }
+                else if (!isVisible && tabLaIndex.containsKey(tabInfo.getId()))
+                {
+                    tabLayout.removeTabAt(tabLaIndex.get(tabInfo.getId()).getPosition());
+                }
+            }
         }
     }
 

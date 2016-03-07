@@ -1,21 +1,20 @@
 /*
- *  Copyright (C) 2005-2015 Alfresco Software Limited.
+ *  Copyright (C) 2005-2016 Alfresco Software Limited.
  *
- * This file is part of Alfresco Activiti Mobile for Android.
+ *  This file is part of Alfresco Activiti Mobile for Android.
  *
- * Alfresco Activiti Mobile for Android is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Lesser General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
+ *  Alfresco Activiti Mobile for Android is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU Lesser General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
  *
- * Alfresco Activiti Mobile for Android is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU Lesser General Public License for more details.
+ *  Alfresco Activiti Mobile for Android is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU Lesser General Public License for more details.
  *
- * You should have received a copy of the GNU Lesser General Public License
- * along with Alfresco. If not, see <http://www.gnu.org/licenses/>.
- *
+ *  You should have received a copy of the GNU Lesser General Public License
+ *  along with Alfresco. If not, see <http://www.gnu.org/licenses/>.
  */
 
 package com.activiti.android.app.fragments.account;
@@ -24,9 +23,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import retrofit.Callback;
-import retrofit.RetrofitError;
-import retrofit.client.Response;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 import android.accounts.Account;
 import android.accounts.AccountManager;
@@ -53,6 +52,8 @@ import com.activiti.android.platform.account.AccountsPreferences;
 import com.activiti.android.platform.account.ActivitiAccount;
 import com.activiti.android.platform.account.ActivitiAccountManager;
 import com.activiti.android.platform.exception.ExceptionMessageUtils;
+import com.activiti.android.platform.integration.analytics.AnalyticsHelper;
+import com.activiti.android.platform.integration.analytics.AnalyticsManager;
 import com.activiti.android.platform.provider.app.RuntimeAppInstanceManager;
 import com.activiti.android.platform.provider.group.GroupInstanceManager;
 import com.activiti.android.platform.provider.integration.IntegrationManager;
@@ -63,7 +64,7 @@ import com.activiti.android.sdk.model.runtime.AppVersion;
 import com.activiti.android.ui.fragments.AlfrescoFragment;
 import com.activiti.android.ui.fragments.builder.AlfrescoFragmentBuilder;
 import com.activiti.android.ui.utils.UIUtils;
-import com.activiti.client.api.constant.Server;
+import com.activiti.client.api.constant.ActivitiAPI;
 import com.activiti.client.api.model.idm.UserRepresentation;
 import com.activiti.client.api.model.runtime.AppVersionRepresentation;
 import com.afollestad.materialdialogs.MaterialDialog;
@@ -272,15 +273,14 @@ public class SignInFragment extends AlfrescoFragment
     {
         int shortAnimTime = getResources().getInteger(android.R.integer.config_shortAnimTime);
         mProgressView.setVisibility(show ? View.VISIBLE : View.GONE);
-        mProgressView.animate().setDuration(shortAnimTime).alpha(show ? 1 : 0)
-                .setListener(new AnimatorListenerAdapter()
-                {
-                    @Override
-                    public void onAnimationEnd(Animator animation)
-                    {
-                        mProgressView.setVisibility(show ? View.VISIBLE : View.GONE);
-                    }
-                });
+        mProgressView.animate().setDuration(shortAnimTime).alpha(show ? 1 : 0).setListener(new AnimatorListenerAdapter()
+        {
+            @Override
+            public void onAnimationEnd(Animator animation)
+            {
+                mProgressView.setVisibility(show ? View.VISIBLE : View.GONE);
+            }
+        });
         mFormView.setVisibility(show ? View.GONE : View.VISIBLE);
         mFormView.animate().setDuration(shortAnimTime).alpha(show ? 0 : 1).setListener(new AnimatorListenerAdapter()
         {
@@ -300,29 +300,32 @@ public class SignInFragment extends AlfrescoFragment
         session.getServiceRegistry().getProfileService().getProfile(new Callback<UserRepresentation>()
         {
             @Override
-            public void success(UserRepresentation userRepresentation, Response response)
+            public void onResponse(Call<UserRepresentation> call, Response<UserRepresentation> response)
             {
-                user = userRepresentation;
-                retrieveServerInfo();
+                if (response.isSuccess())
+                {
+                    user = response.body();
+                    retrieveServerInfo();
+                }
+                else if (response.code() == 401)
+                {
+                    mPasswordView.setError(getString(R.string.error_incorrect_password));
+                    View focusView = mPasswordView;
+                    UIUtils.showKeyboard(getActivity(), focusView);
+                }
+
             }
 
             @Override
-            public void failure(RetrofitError error)
+            public void onFailure(Call<UserRepresentation> call, Throwable error)
             {
                 View focusView = null;
 
                 showProgress(false);
-                if (!Server.SERVER_URL_ENDPOINT.equals(endpoint.toString()))
+                if (!ActivitiAPI.SERVER_URL_ENDPOINT.equals(endpoint.toString()))
                 {
                     show(R.id.server_form);
                 }
-
-                if (error.getResponse() != null && error.getResponse().getStatus() == 401)
-                {
-                    mPasswordView.setError(getString(R.string.error_incorrect_password));
-                    focusView = mPasswordView;
-                }
-                UIUtils.showKeyboard(getActivity(), focusView);
 
                 if (focusView == null)
                 {
@@ -338,13 +341,13 @@ public class SignInFragment extends AlfrescoFragment
                         MaterialDialog.Builder builder = new MaterialDialog.Builder(getActivity())
                                 .title(R.string.error_session_creation_title)
                                 .cancelListener(new DialogInterface.OnCancelListener()
-                                {
-                                    @Override
-                                    public void onCancel(DialogInterface dialog)
-                                    {
-                                        dismiss();
-                                    }
-                                }).content(Html.fromHtml(getString(messageId))).positiveText(R.string.ok);
+                        {
+                            @Override
+                            public void onCancel(DialogInterface dialog)
+                            {
+                                dismiss();
+                            }
+                        }).content(Html.fromHtml(getString(messageId))).positiveText(R.string.ok);
                         builder.show();
                     }
                 }
@@ -381,6 +384,10 @@ public class SignInFragment extends AlfrescoFragment
 
         // Start a sync for integration
         IntegrationManager.sync(getActivity());
+
+        // Analytics
+        AnalyticsHelper.reportOperationEvent(getActivity(), AnalyticsManager.CATEGORY_ACCOUNT,
+                AnalyticsManager.ACTION_CREATE, acc.getServerType(), 1, false);
     }
 
     private void sync()
@@ -396,15 +403,24 @@ public class SignInFragment extends AlfrescoFragment
         session.getServiceRegistry().getInfoService().getInfo(new Callback<AppVersionRepresentation>()
         {
             @Override
-            public void success(AppVersionRepresentation info, Response response)
+            public void onResponse(Call<AppVersionRepresentation> call, Response<AppVersionRepresentation> response)
             {
-                // BPM Suite 1.2
-                version = new AppVersion(info);
-                createAccount();
+                if (response.isSuccess())
+                {
+                    // BPM Suite 1.2
+                    version = new AppVersion(response.body());
+                    createAccount();
+                }
+                else
+                {
+                    // BPM Suite 1.1
+                    version = null;
+                    createAccount();
+                }
             }
 
             @Override
-            public void failure(RetrofitError error)
+            public void onFailure(Call<AppVersionRepresentation> call, Throwable error)
             {
                 // BPM Suite 1.1
                 version = null;

@@ -22,7 +22,7 @@ package com.activiti.android.platform.provider.integration;
 
 import java.util.Date;
 
-import com.activiti.client.api.constant.ISO8601Utils;
+import com.alfresco.client.utils.ISO8601Utils;
 
 /**
  * Created by jpascal on 12/03/2015.

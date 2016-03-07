@@ -1,21 +1,20 @@
 /*
- *  Copyright (C) 2005-2015 Alfresco Software Limited.
+ *  Copyright (C) 2005-2016 Alfresco Software Limited.
  *
- * This file is part of Alfresco Activiti Mobile for Android.
+ *  This file is part of Alfresco Activiti Mobile for Android.
  *
- * Alfresco Activiti Mobile for Android is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Lesser General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
+ *  Alfresco Activiti Mobile for Android is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU Lesser General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
  *
- * Alfresco Activiti Mobile for Android is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU Lesser General Public License for more details.
+ *  Alfresco Activiti Mobile for Android is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU Lesser General Public License for more details.
  *
- * You should have received a copy of the GNU Lesser General Public License
- * along with Alfresco. If not, see <http://www.gnu.org/licenses/>.
- *
+ *  You should have received a copy of the GNU Lesser General Public License
+ *  along with Alfresco. If not, see <http://www.gnu.org/licenses/>.
  */
 
 package com.activiti.android.ui.fragments.process;
@@ -24,9 +23,9 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import retrofit.Callback;
-import retrofit.RetrofitError;
-import retrofit.client.Response;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 import android.app.Activity;
 import android.content.ActivityNotFoundException;
@@ -48,9 +47,11 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.activiti.android.app.ActivitiVersionNumber;
 import com.activiti.android.app.R;
 import com.activiti.android.app.activity.MainActivity;
 import com.activiti.android.app.fragments.comment.CommentsFragment;
+import com.activiti.android.app.fragments.process.ProcessDiagram;
 import com.activiti.android.app.fragments.process.ProcessesFragment;
 import com.activiti.android.app.fragments.task.TaskDetailsFragment;
 import com.activiti.android.platform.EventBusManager;
@@ -59,6 +60,8 @@ import com.activiti.android.platform.event.CompleteTaskEvent;
 import com.activiti.android.platform.exception.ExceptionMessageUtils;
 import com.activiti.android.platform.integration.alfresco.AlfrescoIntegrator;
 import com.activiti.android.platform.integration.alfresco.NodeRefUtils;
+import com.activiti.android.platform.integration.analytics.AnalyticsHelper;
+import com.activiti.android.platform.integration.analytics.AnalyticsManager;
 import com.activiti.android.platform.intent.IntentUtils;
 import com.activiti.android.platform.provider.integration.Integration;
 import com.activiti.android.platform.provider.integration.IntegrationManager;
@@ -74,13 +77,11 @@ import com.activiti.android.ui.holder.HolderUtils;
 import com.activiti.android.ui.holder.TwoLinesViewHolder;
 import com.activiti.android.ui.utils.Formatter;
 import com.activiti.android.ui.utils.UIUtils;
+import com.activiti.client.api.model.common.ResultList;
 import com.activiti.client.api.model.runtime.ProcessContentRepresentation;
-import com.activiti.client.api.model.runtime.ProcessContentsRepresentation;
 import com.activiti.client.api.model.runtime.ProcessInstanceRepresentation;
 import com.activiti.client.api.model.runtime.RelatedContentRepresentation;
-import com.activiti.client.api.model.runtime.RelatedContentsRepresentation;
 import com.activiti.client.api.model.runtime.TaskRepresentation;
-import com.activiti.client.api.model.runtime.TasksRepresentation;
 import com.activiti.client.api.model.runtime.request.QueryTasksRepresentation;
 import com.afollestad.materialdialogs.MaterialDialog;
 
@@ -89,8 +90,6 @@ import com.afollestad.materialdialogs.MaterialDialog;
  */
 public class ProcessDetailsFoundationFragment extends AbstractDetailsFragment
 {
-    protected static final int TASKS_MAX_ITEMS = 15;
-
     public static final String TAG = ProcessDetailsFoundationFragment.class.getName();
 
     public static final String ARGUMENT_PROCESS_ID = "processId";
@@ -155,11 +154,18 @@ public class ProcessDetailsFoundationFragment extends AbstractDetailsFragment
         getAPI().getProcessService().getById(processId, new Callback<ProcessInstanceRepresentation>()
         {
             @Override
-            public void success(ProcessInstanceRepresentation process, Response response)
+            public void onResponse(Call<ProcessInstanceRepresentation> call,
+                    Response<ProcessInstanceRepresentation> response)
             {
-                processInstanceRepresentation = process;
+                if (!response.isSuccess())
+                {
+                    onFailure(call, new Exception(response.message()));
+                    return;
+                }
 
-                UIUtils.setTitle(getActivity(), process.getName(), getString(R.string.task_title_details));
+                processInstanceRepresentation = response.body();
+
+                UIUtils.setTitle(getActivity(), response.body().getName(), getString(R.string.task_title_details));
 
                 displayInfo();
                 requestExtraInfo();
@@ -172,7 +178,7 @@ public class ProcessDetailsFoundationFragment extends AbstractDetailsFragment
             }
 
             @Override
-            public void failure(RetrofitError error)
+            public void onFailure(Call<ProcessInstanceRepresentation> call, Throwable error)
             {
                 displayError(error);
             }
@@ -210,18 +216,24 @@ public class ProcessDetailsFoundationFragment extends AbstractDetailsFragment
         // Retrieve active tasks
         QueryTasksRepresentation request = new QueryTasksRepresentation(null, null, null, processId, null,
                 TaskState.OPEN.value(), null, null, null, 5L);
-        getAPI().getTaskService().list(request, new Callback<TasksRepresentation>()
+        getAPI().getTaskService().list(request, new Callback<ResultList<TaskRepresentation>>()
         {
             @Override
-            public void success(TasksRepresentation resp, Response response)
+            public void onResponse(Call<ResultList<TaskRepresentation>> call,
+                    Response<ResultList<TaskRepresentation>> response)
             {
-                activeTaskRepresentations = resp.getData();
+                if (!response.isSuccess())
+                {
+                    onFailure(call, new Exception(response.message()));
+                    return;
+                }
+                activeTaskRepresentations = response.body().getList();
                 hasActiveTasks = true;
                 displayCards();
             }
 
             @Override
-            public void failure(RetrofitError error)
+            public void onFailure(Call<ResultList<TaskRepresentation>> call, Throwable error)
             {
                 hasActiveTasks = true;
             }
@@ -230,60 +242,79 @@ public class ProcessDetailsFoundationFragment extends AbstractDetailsFragment
         // Retrieve completed tasks
         request = new QueryTasksRepresentation(null, null, null, processId, null, TaskState.COMPLETED.value(), null,
                 null, null, 5L);
-        getAPI().getTaskService().list(request, new Callback<TasksRepresentation>()
+        getAPI().getTaskService().list(request, new Callback<ResultList<TaskRepresentation>>()
         {
             @Override
-            public void success(TasksRepresentation resp, Response response)
+            public void onResponse(Call<ResultList<TaskRepresentation>> call,
+                    Response<ResultList<TaskRepresentation>> response)
             {
-                completedTaskRepresentations = resp.getData();
+                if (!response.isSuccess())
+                {
+                    onFailure(call, new Exception(response.message()));
+                    return;
+                }
+                completedTaskRepresentations = response.body().getList();
                 hasCompletedTasks = true;
                 displayCards();
             }
 
             @Override
-            public void failure(RetrofitError error)
+            public void onFailure(Call<ResultList<TaskRepresentation>> call, Throwable error)
             {
                 hasCompletedTasks = true;
             }
         });
 
         // Retrieve Contents
-        getAPI().getProcessService().getAttachments(processId, new Callback<RelatedContentsRepresentation>()
+        getAPI().getProcessService().getAttachments(processId, new Callback<ResultList<RelatedContentRepresentation>>()
         {
             @Override
-            public void success(RelatedContentsRepresentation resp, Response response)
+            public void onResponse(Call<ResultList<RelatedContentRepresentation>> call,
+                    Response<ResultList<RelatedContentRepresentation>> response)
             {
-                relatedContentRepresentations = resp.getData();
+                if (!response.isSuccess())
+                {
+                    onFailure(call, new Exception(response.message()));
+                    return;
+                }
+                relatedContentRepresentations = response.body().getList();
                 hasContentLoaded = true;
                 displayCards();
             }
 
             @Override
-            public void failure(RetrofitError error)
+            public void onFailure(Call<ResultList<RelatedContentRepresentation>> call, Throwable error)
             {
                 hasContentLoaded = true;
             }
         });
 
-        if (getVersionNumber() >= 122)
+        if (getVersionNumber() >= ActivitiVersionNumber.VERSION_1_2_2)
         {
             // Retrieve Field Contents
-            getAPI().getProcessService().getFieldContents(processId, new Callback<ProcessContentsRepresentation>()
-            {
-                @Override
-                public void success(ProcessContentsRepresentation resp, Response response)
-                {
-                    fieldContents = resp.getData();
-                    hasFieldContentLoaded = true;
-                    displayCards();
-                }
+            getAPI().getProcessService().getFieldContents(processId,
+                    new Callback<ResultList<ProcessContentRepresentation>>()
+                    {
+                        @Override
+                        public void onResponse(Call<ResultList<ProcessContentRepresentation>> call,
+                                Response<ResultList<ProcessContentRepresentation>> response)
+                        {
+                            if (!response.isSuccess())
+                            {
+                                onFailure(call, new Exception(response.message()));
+                                return;
+                            }
+                            fieldContents = response.body().getList();
+                            hasFieldContentLoaded = true;
+                            displayCards();
+                        }
 
-                @Override
-                public void failure(RetrofitError error)
-                {
-                    hasContentLoaded = true;
-                }
-            });
+                        @Override
+                        public void onFailure(Call<ResultList<ProcessContentRepresentation>> call, Throwable error)
+                        {
+                            hasContentLoaded = true;
+                        }
+                    });
         }
         else
         {
@@ -328,7 +359,7 @@ public class ProcessDetailsFoundationFragment extends AbstractDetailsFragment
         }
     }
 
-    protected void displayError(RetrofitError error)
+    protected void displayError(Throwable error)
     {
         hide(R.id.details_container);
         show(R.id.details_loading);
@@ -403,7 +434,29 @@ public class ProcessDetailsFoundationFragment extends AbstractDetailsFragment
         if (isEnded)
         {
             displayCompletedProperties(processInstanceRepresentation);
-            hide(R.id.process_action_cancel_container);
+            Button delete = (Button) viewById(R.id.process_action_cancel);
+            delete.setText(R.string.process_action_delete);
+            delete.setOnClickListener(new View.OnClickListener()
+            {
+                @Override
+                public void onClick(View v)
+                {
+                    MaterialDialog.Builder builder = new MaterialDialog.Builder(getActivity())
+                            .title(R.string.process_popup_delete_title)
+                            .content(String.format(getString(R.string.process_popup_delete_description),
+                                    processInstanceRepresentation.getName()))
+                            .positiveText(R.string.general_action_confirm).negativeText(R.string.general_action_cancel)
+                            .callback(new MaterialDialog.ButtonCallback()
+                    {
+                        @Override
+                        public void onPositive(MaterialDialog dialog)
+                        {
+                            cancelProcess();
+                        }
+                    });
+                    builder.show();
+                }
+            });
         }
         else
         {
@@ -415,26 +468,17 @@ public class ProcessDetailsFoundationFragment extends AbstractDetailsFragment
                 {
                     MaterialDialog.Builder builder = new MaterialDialog.Builder(getActivity())
                             .title(R.string.process_popup_cancel_title)
-                            .cancelListener(new DialogInterface.OnCancelListener()
-                            {
-                                @Override
-                                public void onCancel(DialogInterface dialog)
-                                {
-                                    dismiss();
-                                }
-                            })
-                            .content(
-                                    String.format(getString(R.string.process_popup_cancel_description),
-                                            processInstanceRepresentation.getName()))
+                            .content(String.format(getString(R.string.process_popup_cancel_description),
+                                    processInstanceRepresentation.getName()))
                             .positiveText(R.string.general_action_confirm).negativeText(R.string.general_action_cancel)
                             .callback(new MaterialDialog.ButtonCallback()
-                            {
-                                @Override
-                                public void onPositive(MaterialDialog dialog)
-                                {
-                                    cancelProcess();
-                                }
-                            });
+                    {
+                        @Override
+                        public void onPositive(MaterialDialog dialog)
+                        {
+                            cancelProcess();
+                        }
+                    });
                     builder.show();
                 }
             });
@@ -474,7 +518,7 @@ public class ProcessDetailsFoundationFragment extends AbstractDetailsFragment
     {
         show(R.id.details_fieldcontents_card);
         if (processContents == null || (processContents != null && processContents.isEmpty())
-                || getVersionNumber() < 122)
+                || getVersionNumber() < ActivitiVersionNumber.VERSION_1_2_2)
         {
             hide(R.id.details_fieldcontents_card);
             return;
@@ -515,8 +559,8 @@ public class ProcessDetailsFoundationFragment extends AbstractDetailsFragment
                     {
                         mime = MimeTypeManager.getInstance(getActivity()).getMimetype(content.getName());
                     }
-                    TwoLinesViewHolder tvh = HolderUtils.configure(v, content.getName(), content.getCreatedBy()
-                            .getFullname(), mime.getSmallIconId(getActivity()));
+                    TwoLinesViewHolder tvh = HolderUtils.configure(v, content.getName(),
+                            content.getCreatedBy().getFullname(), mime.getSmallIconId(getActivity()));
 
                     // FIXME Duplicate Code with ContentAdapter
                     tvh.choose.setVisibility(View.VISIBLE);
@@ -580,13 +624,15 @@ public class ProcessDetailsFoundationFragment extends AbstractDetailsFragment
                                             try
                                             {
                                                 if (TextUtils.isEmpty(content.getSource())
-                                                        || !content.getSource().contains("alfresco")) { throw new ActivityNotFoundException(); }
+                                                        || !content.getSource().contains(
+                                                                "alfresco")) { throw new ActivityNotFoundException(); }
 
                                                 // Retrieve Integration
                                                 Integration integration = IntegrationManager.getInstance(getActivity())
                                                         .getById(
-                                                                Long.parseLong(content.getSource().replace("alfresco-",
-                                                                        "")), getAccount().getId());
+                                                                Long.parseLong(
+                                                                        content.getSource().replace("alfresco-", "")),
+                                                                getAccount().getId());
 
                                                 if (integration == null
                                                         || integration.getOpenType() == Integration.OPEN_UNDEFINED)
@@ -599,8 +645,8 @@ public class ProcessDetailsFoundationFragment extends AbstractDetailsFragment
                                                 }
                                                 else if (integration.getOpenType() == Integration.OPEN_NATIVE_APP)
                                                 {
-                                                    String nodeRef = Uri.parse(content.getLinkUrl()).getQueryParameter(
-                                                            "nodeRef");
+                                                    String nodeRef = Uri.parse(content.getLinkUrl())
+                                                            .getQueryParameter("nodeRef");
                                                     Intent i = AlfrescoIntegrator.viewDocument(
                                                             integration.getAlfrescoAccountId(),
                                                             NodeRefUtils.getCleanIdentifier(nodeRef));
@@ -612,36 +658,34 @@ public class ProcessDetailsFoundationFragment extends AbstractDetailsFragment
                                             {
                                                 // Revert to Alfresco WebApp
                                                 MaterialDialog.Builder builder2 = new MaterialDialog.Builder(
-                                                        getActivity())
-                                                        .title(R.string.integration_alfresco_open)
-                                                        .cancelListener(new DialogInterface.OnCancelListener()
-                                                        {
-                                                            @Override
-                                                            public void onCancel(DialogInterface dialog)
-                                                            {
-                                                                dialog.dismiss();
-                                                            }
-                                                        })
-                                                        .content(
-                                                                Html.fromHtml(getString(R.string.integration_alfresco_open_summary)))
-                                                        .positiveText(R.string.integration_alfresco_open_play)
-                                                        .negativeText(R.string.integration_alfresco_open_web)
-                                                        .callback(new MaterialDialog.ButtonCallback()
-                                                        {
-                                                            @Override
-                                                            public void onPositive(MaterialDialog dialog)
-                                                            {
-                                                                IntentUtils.startPlayStore(getActivity(),
-                                                                        AlfrescoIntegrator.ALFRESCO_APP_PACKAGE);
-                                                            }
+                                                        getActivity()).title(R.string.integration_alfresco_open)
+                                                                .cancelListener(new DialogInterface.OnCancelListener()
+                                                {
+                                                    @Override
+                                                    public void onCancel(DialogInterface dialog)
+                                                    {
+                                                        dialog.dismiss();
+                                                    }
+                                                }).content(Html.fromHtml(
+                                                        getString(R.string.integration_alfresco_open_summary)))
+                                                                .positiveText(R.string.integration_alfresco_open_play)
+                                                                .negativeText(R.string.integration_alfresco_open_web)
+                                                                .callback(new MaterialDialog.ButtonCallback()
+                                                {
+                                                    @Override
+                                                    public void onPositive(MaterialDialog dialog)
+                                                    {
+                                                        IntentUtils.startPlayStore(getActivity(),
+                                                                AlfrescoIntegrator.ALFRESCO_APP_PACKAGE);
+                                                    }
 
-                                                            @Override
-                                                            public void onNegative(MaterialDialog dialog)
-                                                            {
-                                                                IntentUtils.startWebBrowser(getActivity(),
-                                                                        content.getLinkUrl());
-                                                            }
-                                                        });
+                                                    @Override
+                                                    public void onNegative(MaterialDialog dialog)
+                                                    {
+                                                        IntentUtils.startWebBrowser(getActivity(),
+                                                                content.getLinkUrl());
+                                                    }
+                                                });
                                                 builder2.show();
                                             }
                                             break;
@@ -673,15 +717,15 @@ public class ProcessDetailsFoundationFragment extends AbstractDetailsFragment
         LayoutInflater inflater = (LayoutInflater) getActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
         // TASKS
-        LinearLayout activeTaskContainer = (LinearLayout) viewById(isActive ? R.id.process_details_active_tasks_container
-                : R.id.process_details_completed_tasks_container);
+        LinearLayout activeTaskContainer = (LinearLayout) viewById(isActive
+                ? R.id.process_details_active_tasks_container : R.id.process_details_completed_tasks_container);
         activeTaskContainer.removeAllViews();
         View v;
         if (taskRepresentations == null || taskRepresentations.isEmpty())
         {
             v = inflater.inflate(R.layout.row_single_line, activeTaskContainer, false);
-            ((TextView) v.findViewById(R.id.toptext)).setText(isActive ? R.string.process_message_no_tasks
-                    : R.string.process_message_no_completed_tasks);
+            ((TextView) v.findViewById(R.id.toptext)).setText(
+                    isActive ? R.string.process_message_no_tasks : R.string.process_message_no_completed_tasks);
             v.findViewById(R.id.icon).setVisibility(View.GONE);
             activeTaskContainer.addView(v);
         }
@@ -694,10 +738,11 @@ public class ProcessDetailsFoundationFragment extends AbstractDetailsFragment
                 taskRepresentation = taskRepresentations.get(i);
                 v = inflater.inflate(R.layout.row_two_lines_caption_borderless, activeTaskContainer, false);
                 v.setTag(taskRepresentation);
-                HolderUtils.configure(v, taskRepresentation.getName(), Formatter.formatToRelativeDate(getActivity(),
-                        taskRepresentation.getCreated()),
+                HolderUtils.configure(v, taskRepresentation.getName(),
+                        Formatter.formatToRelativeDate(getActivity(), taskRepresentation.getCreated()),
                         (taskRepresentation.getAssignee() != null) ? taskRepresentation.getAssignee().getFullname()
-                                : getString(R.string.task_message_no_assignee), R.drawable.ic_account_circle_grey);
+                                : getString(R.string.task_message_no_assignee),
+                        R.drawable.ic_account_circle_grey);
                 activeTaskContainer.addView(v);
                 v.setOnClickListener(new View.OnClickListener()
                 {
@@ -724,6 +769,27 @@ public class ProcessDetailsFoundationFragment extends AbstractDetailsFragment
             }
         });
 
+        // Admin feature
+        // Display Process diagram
+        if (getAccount().isAdmin() && !isEnded)
+        {
+            show(R.id.process_action_show_diagram);
+            viewById(R.id.process_action_show_diagram).setOnClickListener(new View.OnClickListener()
+            {
+                @Override
+                public void onClick(View v)
+                {
+                    ProcessDiagram.with(getActivity()).processId(processInstanceRepresentation.getId())
+                            .tenantId(processInstanceRepresentation.getTenantId())
+                            .processName(processInstanceRepresentation.getName()).display();
+                }
+            });
+        }
+        else
+        {
+            hide(R.id.process_action_show_diagram);
+        }
+
         if (isEnded)
         {
             hide(R.id.process_action_add_content);
@@ -745,8 +811,8 @@ public class ProcessDetailsFoundationFragment extends AbstractDetailsFragment
                 @Override
                 public void onClick(View v)
                 {
-                    ((MainActivity) getActivity()).setRightMenuVisibility(!((MainActivity) getActivity())
-                            .isRightMenuVisible());
+                    ((MainActivity) getActivity())
+                            .setRightMenuVisibility(!((MainActivity) getActivity()).isRightMenuVisible());
                 }
             });
         }
@@ -760,8 +826,18 @@ public class ProcessDetailsFoundationFragment extends AbstractDetailsFragment
         getAPI().getProcessService().delete(processId, new Callback<Void>()
         {
             @Override
-            public void success(Void taskResponse, Response response)
+            public void onResponse(Call<Void> call, Response<Void> response)
             {
+                // Analytics
+                AnalyticsHelper.reportOperationEvent(getActivity(), AnalyticsManager.CATEGORY_PROCESS,
+                        AnalyticsManager.ACTION_REMOVE, AnalyticsManager.LABEL_PROCESS, 1, !response.isSuccess());
+
+                if (!response.isSuccess())
+                {
+                    onFailure(call, new Exception(response.message()));
+                    return;
+                }
+
                 // Event
                 try
                 {
@@ -782,7 +858,7 @@ public class ProcessDetailsFoundationFragment extends AbstractDetailsFragment
             }
 
             @Override
-            public void failure(RetrofitError error)
+            public void onFailure(Call<Void> call, Throwable error)
             {
 
             }

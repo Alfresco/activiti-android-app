@@ -31,10 +31,6 @@ import java.security.cert.CertificateNotYetValidException;
 import javax.net.ssl.SSLHandshakeException;
 import javax.net.ssl.SSLProtocolException;
 
-import org.apache.http.HttpStatus;
-
-import retrofit.RetrofitError;
-
 import android.accounts.NetworkErrorException;
 import android.content.Context;
 
@@ -50,34 +46,26 @@ public class ExceptionMessageUtils
     {
     }
 
-    public static boolean isGeneralError(RetrofitError error)
+    public static boolean isGeneralError(Throwable error)
     {
-        if (error.getResponse() != null)
-        {
-            int httpStatus = error.getResponse().getStatus();
-            switch (httpStatus)
-            {
-                case HttpStatus.SC_UNAUTHORIZED:
-                    return true;
-            }
-        }
+        /*
+         * if (error.getResponse() != null) { int httpStatus =
+         * error.getResponse().getStatus(); switch (httpStatus) { case
+         * HttpStatus.SC_UNAUTHORIZED: return true; } }
+         */
         return false;
     }
 
-    public static String getMessage(Context context, RetrofitError error)
+    public static String getMessage(Context context, Throwable error)
     {
         Integer message = null;
-        if (error.getResponse() != null)
-        {
-            int httpStatus = error.getResponse().getStatus();
-            switch (httpStatus)
-            {
-                case HttpStatus.SC_UNAUTHORIZED:
-                    message = R.string.app_error_unauthorized;
-                    break;
-            }
-            if (message != null) { return context.getString(message); }
-        }
+        /*
+         * if (error.getResponse() != null) { int httpStatus =
+         * error.getResponse().getStatus(); switch (httpStatus) { case
+         * HttpStatus.SC_UNAUTHORIZED: message =
+         * R.string.app_error_unauthorized; break; } if (message != null) {
+         * return context.getString(message); } }
+         */
 
         message = R.string.app_error_generic;
         try

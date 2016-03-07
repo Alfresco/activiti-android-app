@@ -1,21 +1,20 @@
 /*
- *  Copyright (C) 2005-2015 Alfresco Software Limited.
+ *  Copyright (C) 2005-2016 Alfresco Software Limited.
  *
- * This file is part of Alfresco Activiti Mobile for Android.
+ *  This file is part of Alfresco Activiti Mobile for Android.
  *
- * Alfresco Activiti Mobile for Android is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Lesser General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
+ *  Alfresco Activiti Mobile for Android is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU Lesser General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
  *
- * Alfresco Activiti Mobile for Android is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU Lesser General Public License for more details.
+ *  Alfresco Activiti Mobile for Android is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU Lesser General Public License for more details.
  *
- * You should have received a copy of the GNU Lesser General Public License
- * along with Alfresco. If not, see <http://www.gnu.org/licenses/>.
- *
+ *  You should have received a copy of the GNU Lesser General Public License
+ *  along with Alfresco. If not, see <http://www.gnu.org/licenses/>.
  */
 
 package com.activiti.android.ui.fragments.builder;
@@ -28,14 +27,15 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.widget.Button;
 
+import com.activiti.android.platform.integration.analytics.AnalyticsHelper;
+import com.activiti.android.platform.integration.analytics.AnalyticsManager;
 import com.activiti.android.platform.utils.BundleUtils;
 import com.activiti.android.ui.fragments.FragmentDisplayer;
 
 /**
  * Goal is to createNewTask a Fragment based on configuration provided.
- * 
+ *
  * @author jpascal
  */
 public abstract class AlfrescoFragmentBuilder
@@ -125,7 +125,7 @@ public abstract class AlfrescoFragmentBuilder
     public AlfrescoFragmentBuilder(FragmentActivity activity, Map<String, Object> configuration, Bundle b)
     {
         this.onClick = onDefaultClick;
-        this.activity = new WeakReference<FragmentActivity>(activity);
+        this.activity = new WeakReference<>(activity);
         this.configuration = configuration;
         this.extraConfiguration = b;
     }
@@ -170,14 +170,6 @@ public abstract class AlfrescoFragmentBuilder
     // MENU CONFIGURATION
     // Responsible to display the fragment after selection
     // ///////////////////////////////////////////////////////////////////////////
-    public void createMenuItem(Button v)
-    {
-        v.setCompoundDrawablesWithIntrinsicBounds(menuIconId, 0, 0, 0);
-        v.setText(menuTitleId);
-        v.setTag(this);
-        v.setOnClickListener(onClick);
-    }
-
     public Bundle createArguments()
     {
         return prepareArguments(configuration, extraConfiguration);
@@ -187,7 +179,20 @@ public abstract class AlfrescoFragmentBuilder
     {
         Fragment frag = createFragment(createArguments());
         if (frag == null) { return null; }
-        // Retrieve session if fragment need it.
+
+        // Analytics
+        // Report only fragment & report at creation enable (cf. pager case)
+        if (AnalyticsManager.getInstance(getActivity()) != null
+                || AnalyticsManager.getInstance(getActivity()).isEnable())
+        {
+            if (frag instanceof AnalyticsManager.FragmentAnalyzed
+                    && ((AnalyticsManager.FragmentAnalyzed) frag).reportAtCreationEnable())
+            {
+                // Track all fragment created
+                AnalyticsHelper.reportScreen(getActivity(), ((AnalyticsManager.FragmentAnalyzed) frag).getScreenName());
+            }
+        }
+
         return frag;
     }
 

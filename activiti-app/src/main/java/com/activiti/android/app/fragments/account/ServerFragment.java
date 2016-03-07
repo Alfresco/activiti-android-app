@@ -158,12 +158,13 @@ public class ServerFragment extends AlfrescoFragment
             // Do Nothing. We consider it's a plain url
             isComplete = true;
             builder.append(value);
+            builder.append(value.endsWith("/") ? "" : "/");
         }
         else
         {
             builder.append((https) ? "https://" : "http://");
             builder.append(value);
-            builder.append(value.endsWith("/") ? "activit-app" : "/activiti-app");
+            builder.append(value.endsWith("/") ? "activit-app/" : "/activiti-app/");
         }
 
         // Check it's a valid URL

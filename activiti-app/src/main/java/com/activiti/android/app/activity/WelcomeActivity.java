@@ -29,7 +29,7 @@ import com.activiti.android.app.fragments.account.ServerFragment;
 import com.activiti.android.app.fragments.account.SignInFragment;
 import com.activiti.android.app.fragments.account.WelcomeFragment;
 import com.activiti.android.ui.fragments.FragmentDisplayer;
-import com.activiti.client.api.constant.Server;
+import com.activiti.client.api.constant.ActivitiAPI;
 import com.squareup.picasso.Picasso;
 
 /**
@@ -64,7 +64,7 @@ public class WelcomeActivity extends FragmentActivity
 
     public void signInOnline(View v)
     {
-        SignInFragment.with(this).hostname(Server.SERVER_URL_ENDPOINT).display();
+        SignInFragment.with(this).hostname(ActivitiAPI.SERVER_URL_ENDPOINT).display();
     }
 
     public Picasso getPicasso()

@@ -25,9 +25,9 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-import retrofit.Callback;
-import retrofit.RetrofitError;
-import retrofit.client.Response;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -46,8 +46,8 @@ import com.activiti.android.ui.fragments.builder.ListingFragmentBuilder;
 import com.activiti.android.ui.fragments.user.LightGroupAdapter;
 import com.activiti.android.ui.utils.DisplayUtils;
 import com.activiti.android.ui.utils.UIUtils;
+import com.activiti.client.api.model.common.ResultList;
 import com.activiti.client.api.model.idm.LightGroupRepresentation;
-import com.activiti.client.api.model.idm.LightGroupsRepresentation;
 
 /**
  * JM
@@ -144,16 +144,22 @@ public class UserGroupPickerFragment extends IdmPickerFragment
     // //////////////////////////////////////////////////////////////////////
     // LOADERS
     // //////////////////////////////////////////////////////////////////////
-    protected Callback<LightGroupsRepresentation> callBack = new Callback<LightGroupsRepresentation>()
+    protected Callback<ResultList<LightGroupRepresentation>> callBack = new Callback<ResultList<LightGroupRepresentation>>()
     {
         @Override
-        public void success(LightGroupsRepresentation response, Response response2)
+        public void onResponse(Call<ResultList<LightGroupRepresentation>> call,
+                Response<ResultList<LightGroupRepresentation>> response)
         {
-            displayData(response);
+            if (!response.isSuccess())
+            {
+                onFailure(call, new Exception(response.message()));
+                return;
+            }
+            displayData(response.body());
         }
 
         @Override
-        public void failure(RetrofitError error)
+        public void onFailure(Call<ResultList<LightGroupRepresentation>> call, Throwable error)
         {
             displayError(error);
         }

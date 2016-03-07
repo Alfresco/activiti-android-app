@@ -1,30 +1,29 @@
 /*
- *  Copyright (C) 2005-2015 Alfresco Software Limited.
+ *  Copyright (C) 2005-2016 Alfresco Software Limited.
  *
- * This file is part of Alfresco Activiti Mobile for Android.
+ *  This file is part of Alfresco Activiti Mobile for Android.
  *
- * Alfresco Activiti Mobile for Android is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Lesser General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
+ *  Alfresco Activiti Mobile for Android is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU Lesser General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
  *
- * Alfresco Activiti Mobile for Android is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU Lesser General Public License for more details.
+ *  Alfresco Activiti Mobile for Android is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU Lesser General Public License for more details.
  *
- * You should have received a copy of the GNU Lesser General Public License
- * along with Alfresco. If not, see <http://www.gnu.org/licenses/>.
- *
+ *  You should have received a copy of the GNU Lesser General Public License
+ *  along with Alfresco. If not, see <http://www.gnu.org/licenses/>.
  */
 
 package com.activiti.android.ui.fragments.comment;
 
 import java.util.ArrayList;
 
-import retrofit.Callback;
-import retrofit.RetrofitError;
-import retrofit.client.Response;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -42,14 +41,16 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 
 import com.activiti.android.app.R;
+import com.activiti.android.platform.integration.analytics.AnalyticsHelper;
+import com.activiti.android.platform.integration.analytics.AnalyticsManager;
 import com.activiti.android.platform.utils.BundleUtils;
 import com.activiti.android.sdk.model.runtime.ParcelTask;
 import com.activiti.android.ui.fragments.base.BasePagingGridFragment;
 import com.activiti.android.ui.utils.DisplayUtils;
 import com.activiti.android.ui.utils.UIUtils;
 import com.activiti.client.api.constant.RequestConstant;
+import com.activiti.client.api.model.common.ResultList;
 import com.activiti.client.api.model.runtime.CommentRepresentation;
-import com.activiti.client.api.model.runtime.CommentsRepresentation;
 
 public class CommentsFoundationFragment extends BasePagingGridFragment
 {
@@ -100,18 +101,24 @@ public class CommentsFoundationFragment extends BasePagingGridFragment
         isReadOnly = BundleUtils.getBoolean(bundle, ARGUMENT_RO);
     }
 
-    protected Callback<CommentsRepresentation> callBack = new Callback<CommentsRepresentation>()
+    protected Callback<ResultList<CommentRepresentation>> callBack = new Callback<ResultList<CommentRepresentation>>()
     {
         @Override
-        public void success(CommentsRepresentation response, Response response2)
+        public void onResponse(Call<ResultList<CommentRepresentation>> call,
+                Response<ResultList<CommentRepresentation>> response)
         {
-            displayData(response);
-            gv.smoothScrollToPosition(response.getSize());
-            updateFragmentIcon(response.getSize() > 0);
+            if (!response.isSuccess())
+            {
+                onFailure(call, new Exception(response.message()));
+                return;
+            }
+            displayData(response.body());
+            gv.smoothScrollToPosition(response.body().getSize());
+            updateFragmentIcon(response.body().getSize() > 0);
         }
 
         @Override
-        public void failure(RetrofitError error)
+        public void onFailure(Call<ResultList<CommentRepresentation>> call, Throwable error)
         {
             displayError(error);
         }
@@ -172,7 +179,7 @@ public class CommentsFoundationFragment extends BasePagingGridFragment
         });
 
         gv.setSelector(android.R.color.transparent);
-        gv.setCacheColorHint(android.R.color.transparent);
+        gv.setCacheColorHint(getResources().getColor(android.R.color.transparent));
 
         return getRootView();
     }
@@ -241,8 +248,8 @@ public class CommentsFoundationFragment extends BasePagingGridFragment
     private void updateFragmentIcon(boolean hasComment)
     {
         if (getActivity() == null) { return; }
-        Fragment fr = getActivity().getSupportFragmentManager().findFragmentById(
-                DisplayUtils.getLeftFragmentId(getActivity()));
+        Fragment fr = getActivity().getSupportFragmentManager()
+                .findFragmentById(DisplayUtils.getLeftFragmentId(getActivity()));
         if (fr != null && fr instanceof FragmentWithComments)
         {
             ((FragmentWithComments) fr).hasComment(hasComment);
@@ -281,8 +288,17 @@ public class CommentsFoundationFragment extends BasePagingGridFragment
         Callback<CommentRepresentation> callback = new Callback<CommentRepresentation>()
         {
             @Override
-            public void success(CommentRepresentation commentResponse, Response response)
+            public void onResponse(Call<CommentRepresentation> call, Response<CommentRepresentation> response)
             {
+                // Analytics
+                AnalyticsHelper.reportOperationEvent(getActivity(), AnalyticsManager.CATEGORY_TASK,
+                        AnalyticsManager.ACTION_COMMENT, AnalyticsManager.LABEL_TASK, 1, !response.isSuccess());
+
+                if (!response.isSuccess())
+                {
+                    onFailure(call, new Exception(response.message()));
+                    return;
+                }
                 commentText.setEnabled(true);
                 commentText.setText("");
                 bAdd.setEnabled(false);
@@ -290,7 +306,7 @@ public class CommentsFoundationFragment extends BasePagingGridFragment
             }
 
             @Override
-            public void failure(RetrofitError error)
+            public void onFailure(Call<CommentRepresentation> call, Throwable error)
             {
 
             }

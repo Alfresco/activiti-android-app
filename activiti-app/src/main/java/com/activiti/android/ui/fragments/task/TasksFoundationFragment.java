@@ -21,10 +21,11 @@
 package com.activiti.android.ui.fragments.task;
 
 import java.util.ArrayList;
+import java.util.List;
 
-import retrofit.Callback;
-import retrofit.RetrofitError;
-import retrofit.client.Response;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -38,8 +39,8 @@ import com.activiti.android.platform.provider.app.RuntimeAppInstanceManager;
 import com.activiti.android.platform.utils.BundleUtils;
 import com.activiti.android.ui.fragments.base.BasePagingGridFragment;
 import com.activiti.client.api.constant.RequestConstant;
+import com.activiti.client.api.model.common.ResultList;
 import com.activiti.client.api.model.runtime.TaskRepresentation;
-import com.activiti.client.api.model.runtime.TasksRepresentation;
 import com.activiti.client.api.model.runtime.request.QueryTasksRepresentation;
 
 public class TasksFoundationFragment extends BasePagingGridFragment implements RequestConstant
@@ -64,9 +65,13 @@ public class TasksFoundationFragment extends BasePagingGridFragment implements R
 
     protected String keywords;
 
+    protected Long filterId;
+
     protected Long page;
 
     protected Long size;
+
+    protected List<TaskRepresentation> selectedTask = new ArrayList<>();
 
     // ///////////////////////////////////////////////////////////////////////////
     // CONSTRUCTORS & HELPERS
@@ -86,9 +91,15 @@ public class TasksFoundationFragment extends BasePagingGridFragment implements R
         {
             appId = getLastAppId();
         }
-        appName = (appId != null) ? RuntimeAppInstanceManager.getInstance(getActivity()).getById(appId,
-                getAccount().getId()) != null ? RuntimeAppInstanceManager.getInstance(getActivity())
-                .getById(appId, getAccount().getId()).getName() : null : null;
+        appName = (appId != null)
+                ? RuntimeAppInstanceManager.getInstance(getActivity()).getById(appId, getAccount().getId()) != null
+                        ? RuntimeAppInstanceManager.getInstance(getActivity()).getById(appId, getAccount().getId())
+                                .getName()
+                        : null
+                : null;
+
+        // if (getVersionNumber() <= ActivitiVersionNumber.VERSION_1_3_0)
+        // {
         processDefinitionId = BundleUtils.getString(bundle, ARGUMENT_PROCESSDEFINITION_ID);
         keywords = BundleUtils.getString(bundle, ARGUMENT_TEXT);
         processId = BundleUtils.getString(bundle, ARGUMENT_PROCESS_ID);
@@ -108,6 +119,7 @@ public class TasksFoundationFragment extends BasePagingGridFragment implements R
         {
             sort = SORT_CREATED_DESC;
         }
+        // }
         page = BundleUtils.getLong(bundle, ARGUMENT_PAGE);
         size = BundleUtils.getLong(bundle, ARGUMENT_SIZE);
     }
@@ -137,34 +149,39 @@ public class TasksFoundationFragment extends BasePagingGridFragment implements R
         }
         if (appId == -1)
         {
-            getAPI().getTaskService().list(
-                    new QueryTasksRepresentation(null, processDefinitionId, keywords, processId, assignee, state,
-                            assignment, sort, page, size), callBack);
+            getAPI().getTaskService().list(new QueryTasksRepresentation(null, processDefinitionId, keywords, processId,
+                    assignee, state, assignment, sort, page, size), callBack);
         }
         else
         {
-            getAPI().getTaskService().list(
-                    new QueryTasksRepresentation(appId, processDefinitionId, keywords, processId, assignee, state,
-                            assignment, sort, page, size), callBack);
+            getAPI().getTaskService().list(new QueryTasksRepresentation(appId, processDefinitionId, keywords, processId,
+                    assignee, state, assignment, sort, page, size), callBack);
         }
     }
 
     @Override
     protected BaseAdapter onAdapterCreation()
     {
-        return new TaskAdapter(getActivity(), R.layout.row_three_lines_caption, new ArrayList<TaskRepresentation>(0));
+        return new TaskAdapter(getActivity(), R.layout.row_four_lines, new ArrayList<TaskRepresentation>(0),
+                selectedTask);
     }
 
-    protected Callback<TasksRepresentation> callBack = new Callback<TasksRepresentation>()
+    protected Callback<ResultList<TaskRepresentation>> callBack = new Callback<ResultList<TaskRepresentation>>()
     {
         @Override
-        public void success(TasksRepresentation response, Response response2)
+        public void onResponse(Call<ResultList<TaskRepresentation>> call,
+                Response<ResultList<TaskRepresentation>> response)
         {
-            displayData(response);
+            if (!response.isSuccess())
+            {
+                onFailure(call, new Exception(response.message()));
+                return;
+            }
+            displayData(response.body());
         }
 
         @Override
-        public void failure(RetrofitError error)
+        public void onFailure(Call<ResultList<TaskRepresentation>> call, Throwable error)
         {
             displayError(error);
         }

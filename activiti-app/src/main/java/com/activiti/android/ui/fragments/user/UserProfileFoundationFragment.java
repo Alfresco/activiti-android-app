@@ -22,9 +22,9 @@ package com.activiti.android.ui.fragments.user;
 
 import java.util.List;
 
-import retrofit.Callback;
-import retrofit.RetrofitError;
-import retrofit.client.Response;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 import android.app.Activity;
 import android.content.Context;
@@ -127,9 +127,15 @@ public class UserProfileFoundationFragment extends AlfrescoFragment implements
         getAPI().getProfileService().getProfile(new Callback<UserRepresentation>()
         {
             @Override
-            public void success(UserRepresentation userRepresentationProfileResponse, Response response)
+            public void onResponse(Call<UserRepresentation> call, Response<UserRepresentation> response)
             {
-                userRepresentation = userRepresentationProfileResponse;
+                if (!response.isSuccess())
+                {
+                    onFailure(call, new Exception(response.message()));
+                    return;
+                }
+
+                userRepresentation = response.body();
                 if (memberOfGroups == null && userRepresentation.getGroups() != null
                         && !userRepresentation.getGroups().isEmpty())
                 {
@@ -140,7 +146,7 @@ public class UserProfileFoundationFragment extends AlfrescoFragment implements
             }
 
             @Override
-            public void failure(RetrofitError error)
+            public void onFailure(Call<UserRepresentation> call, Throwable error)
             {
                 displayError(error);
                 if (getActivity() != null)
@@ -343,9 +349,15 @@ public class UserProfileFoundationFragment extends AlfrescoFragment implements
         getAPI().getProfileService().updateProfile(update, new Callback<UserRepresentation>()
         {
             @Override
-            public void success(UserRepresentation user, Response response)
+            public void onResponse(Call<UserRepresentation> call, Response<UserRepresentation> response)
             {
-                userRepresentation = user;
+                if (!response.isSuccess())
+                {
+                    onFailure(call, new Exception(response.message()));
+                    return;
+                }
+
+                userRepresentation = response.body();
                 displayInfo();
 
                 switch (fieldId)
@@ -370,7 +382,7 @@ public class UserProfileFoundationFragment extends AlfrescoFragment implements
             }
 
             @Override
-            public void failure(RetrofitError error)
+            public void onFailure(Call<UserRepresentation> call, Throwable error)
             {
                 Snackbar.make(getActivity().findViewById(R.id.left_panel), error.getMessage(), Snackbar.LENGTH_SHORT)
                         .show();
@@ -397,7 +409,7 @@ public class UserProfileFoundationFragment extends AlfrescoFragment implements
         hide(R.id.empty);
     }
 
-    protected void displayError(RetrofitError error)
+    protected void displayError(Throwable error)
     {
         hide(R.id.details_container);
         show(R.id.details_loading);

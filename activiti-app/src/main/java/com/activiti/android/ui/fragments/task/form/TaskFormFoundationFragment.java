@@ -1,21 +1,20 @@
 /*
- *  Copyright (C) 2005-2015 Alfresco Software Limited.
+ *  Copyright (C) 2005-2016 Alfresco Software Limited.
  *
- * This file is part of Alfresco Activiti Mobile for Android.
+ *  This file is part of Alfresco Activiti Mobile for Android.
  *
- * Alfresco Activiti Mobile for Android is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Lesser General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
+ *  Alfresco Activiti Mobile for Android is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU Lesser General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
  *
- * Alfresco Activiti Mobile for Android is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU Lesser General Public License for more details.
+ *  Alfresco Activiti Mobile for Android is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU Lesser General Public License for more details.
  *
- * You should have received a copy of the GNU Lesser General Public License
- * along with Alfresco. If not, see <http://www.gnu.org/licenses/>.
- *
+ *  You should have received a copy of the GNU Lesser General Public License
+ *  along with Alfresco. If not, see <http://www.gnu.org/licenses/>.
  */
 
 package com.activiti.android.ui.fragments.task.form;
@@ -24,15 +23,16 @@ import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.Map;
 
-import retrofit.Callback;
-import retrofit.RetrofitError;
-import retrofit.client.Response;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -42,12 +42,15 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.activiti.android.app.ActivitiVersionNumber;
 import com.activiti.android.app.R;
 import com.activiti.android.app.fragments.task.TasksFragment;
 import com.activiti.android.platform.EventBusManager;
 import com.activiti.android.platform.event.CompleteTaskEvent;
 import com.activiti.android.platform.event.SaveTaskEvent;
 import com.activiti.android.platform.exception.ExceptionMessageUtils;
+import com.activiti.android.platform.integration.analytics.AnalyticsHelper;
+import com.activiti.android.platform.integration.analytics.AnalyticsManager;
 import com.activiti.android.platform.provider.transfer.ContentTransferManager;
 import com.activiti.android.sdk.model.runtime.AppVersion;
 import com.activiti.android.sdk.model.runtime.ParcelTask;
@@ -180,17 +183,35 @@ public class TaskFormFoundationFragment extends AlfrescoFragment implements Date
     public void onResume()
     {
         super.onResume();
-        UIUtils.setTitle(getActivity(), task.name, getString(R.string.form_message_title));
+        UIUtils.setTitle(getActivity(), task.name, getString(R.string.form_message_title), true);
     }
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater)
     {
         super.onCreateOptionsMenu(menu, inflater);
-        if (getVersionNumber() >= 122 && !isEnded)
+        if (getVersionNumber() >= ActivitiVersionNumber.VERSION_1_2_2 && !isEnded)
         {
-            menu.clear();
-            inflater.inflate(R.menu.task_form, menu);
+            if (!DisplayUtils.hasCentralPane(getActivity()))
+            {
+                menu.clear();
+                inflater.inflate(R.menu.task_form, menu);
+            }
+            else
+            {
+                getToolbar().getMenu().clear();
+                getToolbar().inflateMenu(R.menu.task_form);
+                // Set an OnMenuItemClickListener to handle menu item clicks
+                getToolbar().setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener()
+                {
+                    @Override
+                    public boolean onMenuItemClick(MenuItem item)
+                    {
+                        return onOptionsItemSelected(item);
+                    }
+                });
+
+            }
         }
     }
 
@@ -200,13 +221,26 @@ public class TaskFormFoundationFragment extends AlfrescoFragment implements Date
         int id = item.getItemId();
         switch (id)
         {
+            case android.R.id.home:
+                getActivity().onBackPressed();
+                return true;
             case R.id.task_form_save:
                 SaveFormRepresentation rep = new SaveFormRepresentation(formManager.getValues());
                 getAPI().getTaskService().saveTaskForm(task.id, rep, new Callback<Void>()
                 {
                     @Override
-                    public void success(Void aVoid, Response response)
+                    public void onResponse(Call<Void> call, Response<Void> response)
                     {
+                        // Analytics
+                        AnalyticsHelper.reportOperationEvent(getActivity(), AnalyticsManager.CATEGORY_TASK,
+                                AnalyticsManager.ACTION_FORM, AnalyticsManager.LABEL_SAVE, 1, !response.isSuccess());
+
+                        if (!response.isSuccess())
+                        {
+                            onFailure(call, new Exception(response.message()));
+                            return;
+                        }
+
                         try
                         {
                             EventBusManager.getInstance().post(new SaveTaskEvent(null, task.id, task.category));
@@ -232,7 +266,7 @@ public class TaskFormFoundationFragment extends AlfrescoFragment implements Date
                     }
 
                     @Override
-                    public void failure(RetrofitError error)
+                    public void onFailure(Call<Void> call, Throwable error)
                     {
                         Snackbar.make(getActivity().findViewById(R.id.left_panel), error.getMessage(),
                                 Snackbar.LENGTH_SHORT).show();
@@ -254,11 +288,17 @@ public class TaskFormFoundationFragment extends AlfrescoFragment implements Date
         getAPI().getTaskService().getTaskForm(task.id, new Callback<FormDefinitionRepresentation>()
         {
             @Override
-            public void success(FormDefinitionRepresentation formDefinitionRepresentation, Response response)
+            public void onResponse(Call<FormDefinitionRepresentation> call,
+                    Response<FormDefinitionRepresentation> response)
             {
+                if (!response.isSuccess())
+                {
+                    onFailure(call, new Exception(response.message()));
+                    return;
+                }
                 AppVersion version = new AppVersion(getAccount().getServerVersion());
                 formManager = new FormManager(TaskFormFoundationFragment.this,
-                        (ViewGroup) viewById(R.id.form_container), formDefinitionRepresentation, version);
+                        (ViewGroup) viewById(R.id.form_container), response.body(), version);
 
                 isEnded = task.endDate != null;
 
@@ -293,7 +333,7 @@ public class TaskFormFoundationFragment extends AlfrescoFragment implements Date
             }
 
             @Override
-            public void failure(RetrofitError error)
+            public void onFailure(Call<FormDefinitionRepresentation> call, Throwable error)
             {
                 displayError(error);
                 Snackbar.make(getActivity().findViewById(R.id.left_panel), error.getMessage(), Snackbar.LENGTH_SHORT)
@@ -324,8 +364,18 @@ public class TaskFormFoundationFragment extends AlfrescoFragment implements Date
         getAPI().getTaskService().completeTaskForm(task.id, rep, new Callback<Void>()
         {
             @Override
-            public void success(Void aVoid, Response response)
+            public void onResponse(Call<Void> call, Response<Void> response)
             {
+                // Analytics
+                AnalyticsHelper.reportOperationEvent(getActivity(), AnalyticsManager.CATEGORY_TASK,
+                        AnalyticsManager.ACTION_COMPLETE_TASK, AnalyticsManager.LABEL_WITH_FORM, 1,
+                        !response.isSuccess());
+
+                if (!response.isSuccess())
+                {
+                    onFailure(call, new Exception(response.message()));
+                    return;
+                }
                 try
                 {
                     EventBusManager.getInstance().post(new CompleteTaskEvent(null, task.id, task.category));
@@ -351,7 +401,7 @@ public class TaskFormFoundationFragment extends AlfrescoFragment implements Date
             }
 
             @Override
-            public void failure(RetrofitError error)
+            public void onFailure(Call<Void> call, Throwable error)
             {
                 Snackbar.make(getActivity().findViewById(R.id.left_panel), error.getMessage(), Snackbar.LENGTH_SHORT)
                         .show();
@@ -435,7 +485,7 @@ public class TaskFormFoundationFragment extends AlfrescoFragment implements Date
         hide(R.id.empty);
     }
 
-    protected void displayError(RetrofitError error)
+    protected void displayError(Throwable error)
     {
         hide(R.id.form_master);
         show(R.id.details_loading);

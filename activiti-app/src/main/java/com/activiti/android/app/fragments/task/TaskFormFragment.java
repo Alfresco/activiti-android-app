@@ -31,11 +31,13 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 
 import com.activiti.android.app.R;
+import com.activiti.android.app.activity.MainActivity;
 import com.activiti.android.platform.provider.transfer.ContentTransferSyncAdapter;
 import com.activiti.android.platform.provider.transfer.DownloadTransferEvent;
 import com.activiti.android.sdk.model.runtime.ParcelTask;
-import com.activiti.android.ui.fragments.builder.AlfrescoFragmentBuilder;
+import com.activiti.android.ui.fragments.builder.LeafFragmentBuilder;
 import com.activiti.android.ui.fragments.task.form.TaskFormFoundationFragment;
+import com.activiti.android.ui.utils.UIUtils;
 import com.activiti.client.api.model.runtime.TaskRepresentation;
 import com.squareup.otto.Subscribe;
 
@@ -56,6 +58,23 @@ public class TaskFormFragment extends TaskFormFoundationFragment
         TaskFormFragment cbf = new TaskFormFragment();
         cbf.setArguments(b);
         return cbf;
+    }
+
+    // ///////////////////////////////////////////////////////////////////////////
+    // LIFECYCLE
+    // ///////////////////////////////////////////////////////////////////////////
+    @Override
+    public void onStart()
+    {
+        super.onStart();
+        UIUtils.displayActionBarBack((MainActivity) getActivity(), getToolbar());
+    }
+
+    @Override
+    public void onStop()
+    {
+        super.onStop();
+        UIUtils.setActionBarDefault((MainActivity) getActivity(), getToolbar());
     }
 
     // ///////////////////////////////////////////////////////////////////////////
@@ -108,7 +127,7 @@ public class TaskFormFragment extends TaskFormFoundationFragment
         return new Builder(activity);
     }
 
-    public static class Builder extends AlfrescoFragmentBuilder
+    public static class Builder extends LeafFragmentBuilder
     {
         // ///////////////////////////////////////////////////////////////////////////
         // CONSTRUCTORS

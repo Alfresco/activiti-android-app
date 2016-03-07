@@ -23,9 +23,9 @@ package com.activiti.android.ui.form.fields;
 import java.util.ArrayList;
 import java.util.List;
 
-import retrofit.Callback;
-import retrofit.RetrofitError;
-import retrofit.client.Response;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 import android.content.Context;
 import android.text.TextUtils;
@@ -177,26 +177,31 @@ public class RadioButtonsField extends BaseField
     @Override
     public void setFragment(AlfrescoFragment fr)
     {
-        if (data instanceof RestFieldRepresentation && ((RestFieldRepresentation) data).getEndpoint() == null) { return; }
+        if (data instanceof RestFieldRepresentation
+                && ((RestFieldRepresentation) data).getEndpoint() == null) { return; }
 
         super.setFragment(fr);
-        getFragment()
-                .getAPI()
-                .getTaskService()
-                .getFormFieldValues(getFormManager().getTaskId(), data.getId(),
-                        new Callback<List<OptionRepresentation>>()
+        getFragment().getAPI().getTaskService().getFormFieldValues(getFormManager().getTaskId(), data.getId(),
+                new Callback<List<OptionRepresentation>>()
+                {
+                    @Override
+                    public void onResponse(Call<List<OptionRepresentation>> call,
+                            Response<List<OptionRepresentation>> response)
+                    {
+                        if (!response.isSuccess())
                         {
-                            @Override
-                            public void success(List<OptionRepresentation> optionsRespresentation, Response response)
-                            {
-                                refreshRadioButtons(optionsRespresentation);
-                            }
+                            onFailure(call, new Exception(response.message()));
+                            return;
+                        }
+                        refreshRadioButtons(response.body());
+                    }
 
-                            @Override
-                            public void failure(RetrofitError error)
-                            {
-                            }
-                        });
+                    @Override
+                    public void onFailure(Call<List<OptionRepresentation>> call, Throwable t)
+                    {
+
+                    }
+                });
     }
 
     // ///////////////////////////////////////////////////////////////////////////

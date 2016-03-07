@@ -21,23 +21,26 @@
 package com.activiti.android.ui.utils;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.res.Resources;
+import android.support.v4.app.FragmentActivity;
 import android.util.DisplayMetrics;
 import android.util.TypedValue;
 import android.view.Display;
 import android.view.View;
+import android.widget.LinearLayout;
 
 import com.activiti.android.app.R;
 
 public abstract class DisplayUtils
 {
 
-    public static int getFragmentPlace(Activity a)
+    public static int getFragmentPlace(FragmentActivity a)
     {
         int id = R.id.left_pane_body;
         if (DisplayUtils.hasCentralPane(a))
         {
-            // id = R.id.central_pane_body;
+            id = R.id.central_pane_body;
         }
         return id;
     }
@@ -45,49 +48,49 @@ public abstract class DisplayUtils
     // ///////////////////////////////////////////
     // FLAGS
     // ///////////////////////////////////////////
-    public static boolean hasLeftPane(Activity a)
+    public static boolean hasLeftPane(FragmentActivity a)
     {
-        return getLeftPane(a) != null;
+        return true;
     }
 
-    public static boolean hasCentralPane(Activity a)
+    public static boolean hasCentralPane(FragmentActivity a)
     {
-        return getCentralPane(a) != null;
+        return a.getResources().getBoolean(R.bool.hasTabletLayout);
     }
 
     // ///////////////////////////////////////////
     // RETRIEVE FRAGMENT IDS
     // ///////////////////////////////////////////
-    public static int getLeftFragmentId(Activity a)
+    public static int getLeftFragmentId(FragmentActivity a)
     {
         return R.id.left_pane_body;
     }
 
-    public static int getCentralFragmentId(Activity a)
+    public static int getCentralFragmentId(FragmentActivity a)
     {
-        return -1; // R.id.central_pane_body;
+        return R.id.central_pane_body;
     }
 
-    public static int getMainPaneId(Activity a)
+    public static int getMainPaneId(FragmentActivity a)
     {
         if (hasCentralPane(a)) { return getCentralFragmentId(a); }
         return getLeftFragmentId(a);
     }
 
     // ///////////////////////////////////////////
-    // RETRIEVE PANE
+    // RETRIEVE PANEL
     // ///////////////////////////////////////////
-    public static View getLeftPane(Activity a)
+    public static View getLeftPane(FragmentActivity a)
     {
         return a.findViewById(R.id.left_panel);
     }
 
-    public static View getCentralPane(Activity a)
+    public static View getCentralPane(FragmentActivity a)
     {
-        return null; // a.findViewById(R.id.central_pane);
+        return a.findViewById(R.id.central_panel);
     }
 
-    public static View getMainPane(Activity a)
+    public static View getMainPane(FragmentActivity a)
     {
         if (hasCentralPane(a)) { return getCentralPane(a); }
         return getLeftPane(a);
@@ -138,5 +141,16 @@ public abstract class DisplayUtils
     public static int getDPI(DisplayMetrics dm, int sizeInDp)
     {
         return (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, sizeInDp, dm);
+    }
+
+    public static int getPixels(Context context, int sizeInDp)
+    {
+        return context.getResources().getDimensionPixelSize(sizeInDp);
+    }
+
+    public static LinearLayout.LayoutParams resizeLayout(Context context, int widthInDp, int heightInDp)
+    {
+        return new LinearLayout.LayoutParams(getDPI(context.getResources().getDisplayMetrics(), widthInDp),
+                getDPI(context.getResources().getDisplayMetrics(), heightInDp));
     }
 }

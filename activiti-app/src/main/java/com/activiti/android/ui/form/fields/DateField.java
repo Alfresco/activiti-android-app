@@ -32,8 +32,8 @@ import com.activiti.android.app.R;
 import com.activiti.android.ui.form.FormManager;
 import com.activiti.android.ui.fragments.AlfrescoFragment;
 import com.activiti.android.ui.fragments.form.picker.DatePickerFragment;
-import com.activiti.client.api.constant.ISO8601Utils;
 import com.activiti.client.api.model.editor.form.FormFieldRepresentation;
+import com.alfresco.client.utils.ISO8601Utils;
 import com.rengwuxian.materialedittext.MaterialEditText;
 
 /**

@@ -1,21 +1,20 @@
 /*
- *  Copyright (C) 2005-2015 Alfresco Software Limited.
+ *  Copyright (C) 2005-2016 Alfresco Software Limited.
  *
- * This file is part of Alfresco Activiti Mobile for Android.
+ *  This file is part of Alfresco Activiti Mobile for Android.
  *
- * Alfresco Activiti Mobile for Android is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Lesser General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
+ *  Alfresco Activiti Mobile for Android is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU Lesser General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
  *
- * Alfresco Activiti Mobile for Android is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU Lesser General Public License for more details.
+ *  Alfresco Activiti Mobile for Android is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU Lesser General Public License for more details.
  *
- * You should have received a copy of the GNU Lesser General Public License
- * along with Alfresco. If not, see <http://www.gnu.org/licenses/>.
- *
+ *  You should have received a copy of the GNU Lesser General Public License
+ *  along with Alfresco. If not, see <http://www.gnu.org/licenses/>.
  */
 
 package com.activiti.android.app.fragments.settings;
@@ -50,6 +49,8 @@ import com.activiti.android.app.fragments.integration.alfresco.AlfrescoIntegrati
 import com.activiti.android.platform.account.AccountsPreferences;
 import com.activiti.android.platform.account.ActivitiAccount;
 import com.activiti.android.platform.account.ActivitiAccountManager;
+import com.activiti.android.platform.integration.analytics.AnalyticsHelper;
+import com.activiti.android.platform.integration.analytics.AnalyticsManager;
 import com.activiti.android.platform.preferences.InternalAppPreferences;
 import com.activiti.android.platform.provider.app.RuntimeAppInstanceManager;
 import com.activiti.android.platform.provider.group.GroupInstanceManager;
@@ -63,6 +64,7 @@ import com.activiti.android.ui.fragments.builder.LeafFragmentBuilder;
 import com.activiti.android.ui.fragments.form.EditTextDialogFragment;
 import com.activiti.android.ui.holder.ThreeLinesViewHolder;
 import com.activiti.android.ui.holder.TwoLinesViewHolder;
+import com.activiti.android.ui.utils.UIUtils;
 import com.afollestad.materialdialogs.MaterialDialog;
 
 /**
@@ -118,8 +120,8 @@ public class AccountSettingsFragment extends AlfrescoFragment implements EditTex
 
         // TITLE
         ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle(getString(R.string.settings_account));
-        ((AppCompatActivity) getActivity()).getSupportActionBar().setSubtitle(
-                (account != null) ? account.getUsername() : null);
+        ((AppCompatActivity) getActivity()).getSupportActionBar()
+                .setSubtitle((account != null) ? account.getUsername() : null);
 
         // User Info
         TwoLinesViewHolder vh = new TwoLinesViewHolder(viewById(R.id.settings_account_info));
@@ -159,10 +161,30 @@ public class AccountSettingsFragment extends AlfrescoFragment implements EditTex
     }
 
     @Override
+    public void onStart()
+    {
+        super.onStart();
+        if (getActivity() instanceof MainActivity)
+        {
+            UIUtils.displayActionBarBack((MainActivity) getActivity());
+        }
+    }
+
+    @Override
     public void onResume()
     {
         super.onResume();
         updateIntegrations();
+    }
+
+    @Override
+    public void onStop()
+    {
+        super.onStop();
+        if (getActivity() instanceof MainActivity)
+        {
+            UIUtils.setActionBarDefault((MainActivity) getActivity());
+        }
     }
 
     // ///////////////////////////////////////////////////////////////////////////
@@ -181,6 +203,9 @@ public class AccountSettingsFragment extends AlfrescoFragment implements EditTex
     {
         switch (item.getItemId())
         {
+            case android.R.id.home:
+                getActivity().onBackPressed();
+                return true;
             case R.id.account_action_remove:
                 MaterialDialog.Builder builder = new MaterialDialog.Builder(getActivity())
                         .cancelListener(new DialogInterface.OnCancelListener()
@@ -341,16 +366,34 @@ public class AccountSettingsFragment extends AlfrescoFragment implements EditTex
                             switch (item.getItemId())
                             {
                                 case R.id.integration_alfresco_remove:
-                                    IntegrationManager.getInstance(getActivity()).update(
-                                            ((Integration) v.getTag()).getProviderId(), -1l, null, null);
+                                    // Analytics
+                                    AnalyticsHelper.reportOperationEvent(getActivity(),
+                                            AnalyticsManager.CATEGORY_SETTINGS,
+                                            AnalyticsManager.ACTION_ALFRESCO_INTEGRATION, AnalyticsManager.LABEL_REMOVE,
+                                            1, false);
+
+                                    IntegrationManager.getInstance(getActivity())
+                                            .update(((Integration) v.getTag()).getProviderId(), -1l, null, null);
                                     updateIntegrations();
                                     break;
                                 case R.id.integration_alfresco_mobile:
+                                    // Analytics
+                                    AnalyticsHelper.reportOperationEvent(getActivity(),
+                                            AnalyticsManager.CATEGORY_SETTINGS,
+                                            AnalyticsManager.ACTION_ALFRESCO_INTEGRATION,
+                                            AnalyticsManager.LABEL_LINK_MOBILE, 1, false);
+
                                     AlfrescoIntegrationFragment.with(getActivity())
                                             .integrationProviverId(((Integration) v.getTag()).getProviderId())
                                             .accountId(accountId).display();
                                     break;
                                 case R.id.integration_alfresco_web:
+                                    // Analytics
+                                    AnalyticsHelper.reportOperationEvent(getActivity(),
+                                            AnalyticsManager.CATEGORY_SETTINGS,
+                                            AnalyticsManager.ACTION_ALFRESCO_INTEGRATION,
+                                            AnalyticsManager.LABEL_LINK_WEB, 1, false);
+
                                     IntegrationManager.getInstance(getActivity()).update(
                                             ((Integration) v.getTag()).getProviderId(),
                                             IntegrationSchema.COLUMN_OPEN_TYPE, Integration.OPEN_BROWSER);

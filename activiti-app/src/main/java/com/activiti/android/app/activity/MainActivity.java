@@ -1,21 +1,20 @@
 /*
- *  Copyright (C) 2005-2015 Alfresco Software Limited.
+ *  Copyright (C) 2005-2016 Alfresco Software Limited.
  *
- * This file is part of Alfresco Activiti Mobile for Android.
+ *  This file is part of Alfresco Activiti Mobile for Android.
  *
- * Alfresco Activiti Mobile for Android is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Lesser General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
+ *  Alfresco Activiti Mobile for Android is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU Lesser General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
  *
- * Alfresco Activiti Mobile for Android is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU Lesser General Public License for more details.
+ *  Alfresco Activiti Mobile for Android is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU Lesser General Public License for more details.
  *
- * You should have received a copy of the GNU Lesser General Public License
- * along with Alfresco. If not, see <http://www.gnu.org/licenses/>.
- *
+ *  You should have received a copy of the GNU Lesser General Public License
+ *  along with Alfresco. If not, see <http://www.gnu.org/licenses/>.
  */
 
 package com.activiti.android.app.activity;
@@ -47,11 +46,14 @@ import com.activiti.android.platform.account.AccountsPreferences;
 import com.activiti.android.platform.account.ActivitiAccount;
 import com.activiti.android.platform.account.ActivitiAccountManager;
 import com.activiti.android.platform.event.ProfilePictureEvent;
+import com.activiti.android.platform.integration.analytics.AnalyticsHelper;
+import com.activiti.android.platform.integration.analytics.AnalyticsManager;
 import com.activiti.android.platform.preferences.InternalAppPreferences;
 import com.activiti.android.platform.rendition.RenditionManager;
 import com.activiti.android.ui.activity.AlfrescoActivity;
 import com.activiti.android.ui.fragments.FragmentDisplayer;
 import com.activiti.android.ui.fragments.form.picker.UserPickerFragment;
+import com.activiti.android.ui.fragments.task.filter.TaskFilterPropertiesFragment;
 import com.activiti.android.ui.utils.DisplayUtils;
 import com.activiti.client.api.model.idm.UserRepresentation;
 import com.squareup.otto.Subscribe;
@@ -63,7 +65,9 @@ public class MainActivity extends AlfrescoActivity
 
     protected DrawerLayout mDrawerLayout;
 
-    protected ViewGroup mLeftDrawer, mRightDrawer;
+    protected DrawerLayout mCentralDrawerLayout;
+
+    protected ViewGroup mLeftDrawer, mRightDrawer, mCentralLeftDrawer;
 
     protected Toolbar toolbar;
 
@@ -112,6 +116,7 @@ public class MainActivity extends AlfrescoActivity
     {
         super.onStart();
 
+        // Configure
         if (mDrawerLayout == null || mLeftDrawer == null || mDrawerToggle == null)
         {
             // Configure navigation drawer
@@ -130,7 +135,9 @@ public class MainActivity extends AlfrescoActivity
                     mDrawerToggle.syncState();
                 }
 
-                /** Called when a drawer has settled in a completely open state. */
+                /**
+                 * Called when a drawer has settled in a completely open state.
+                 */
                 public void onDrawerOpened(View drawerView)
                 {
                     if (drawerView.equals(mLeftDrawer))
@@ -147,6 +154,13 @@ public class MainActivity extends AlfrescoActivity
                 }
             };
             mDrawerLayout.setDrawerListener(mDrawerToggle);
+        }
+
+        if (DisplayUtils.hasCentralPane(this) && mCentralDrawerLayout == null)
+        {
+            mCentralDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout_central);
+            mCentralLeftDrawer = (ViewGroup) findViewById(R.id.central_left_drawer);
+            mCentralDrawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
         }
 
         if (!isLeftMenuVisible() && getSupportFragmentManager().getBackStackEntryCount() == 0)
@@ -181,7 +195,15 @@ public class MainActivity extends AlfrescoActivity
         }
         else if (isRightMenuVisible())
         {
-            setRightMenuVisibility(false);
+            if (getFragment(TaskFilterPropertiesFragment.TAG) != null
+                    && getFragment(TaskFilterPropertiesFragment.TAG).isVisible())
+            {
+                getSupportFragmentManager().popBackStack();
+            }
+            else
+            {
+                setRightMenuVisibility(false);
+            }
         }
         else
         {
@@ -243,6 +265,21 @@ public class MainActivity extends AlfrescoActivity
         mDrawerLayout.openDrawer(mLeftDrawer);
     }
 
+    public void setCentralLefttMenuVisibility(boolean visible)
+    {
+        if (DisplayUtils.hasCentralPane(this))
+        {
+            if (visible)
+            {
+                mCentralDrawerLayout.openDrawer(mCentralLeftDrawer);
+            }
+            else
+            {
+                mCentralDrawerLayout.closeDrawer(mCentralLeftDrawer);
+            }
+        }
+    }
+
     public void setRightMenuVisibility(boolean visible)
     {
         if (visible)
@@ -270,9 +307,20 @@ public class MainActivity extends AlfrescoActivity
         return mDrawerLayout.isDrawerOpen(mRightDrawer);
     }
 
+    public boolean isCentralMenuVisible()
+    {
+        if (DisplayUtils.hasCentralPane(this))
+        {
+            return mCentralDrawerLayout.isDrawerOpen(mCentralLeftDrawer);
+        }
+        else
+        {
+            return mDrawerLayout.isDrawerOpen(mRightDrawer);
+        }
+    }
+
     public void lockSlidingMenu()
     {
-        // getSupportActionBar().setDisplayHomeAsUpEnabled(false);
         getSupportActionBar().setHomeButtonEnabled(false);
         if (mDrawerLayout != null)
         {
@@ -295,7 +343,6 @@ public class MainActivity extends AlfrescoActivity
 
     public void unlockSlidingMenu()
     {
-        // getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setHomeButtonEnabled(true);
         mDrawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
     }
@@ -333,12 +380,9 @@ public class MainActivity extends AlfrescoActivity
         {
             ((ImageView) findViewById(R.id.account_switcher)).setImageResource(R.drawable.ic_expand_more_white);
             FragmentDisplayer
-                    .with(MainActivity.this)
-                    .animate(null)
-                    .back(false)
-                    .replace(
-                            AppInstancesFragment.with(MainActivity.this).drawer(R.id.left_drawer_content)
-                                    .createFragment()).into(R.id.left_drawer_content);
+                    .with(MainActivity.this).animate(null).back(false).replace(AppInstancesFragment
+                            .with(MainActivity.this).drawer(R.id.left_drawer_content).createFragment())
+                    .into(R.id.left_drawer_content);
         }
         else
         {
@@ -396,6 +440,10 @@ public class MainActivity extends AlfrescoActivity
 
     public void switchAccount(ActivitiAccount acc)
     {
+        // Analytics
+        AnalyticsHelper.reportOperationEvent(this, AnalyticsManager.CATEGORY_SESSION, AnalyticsManager.ACTION_SWITCH,
+                acc.getServerType(), 1, false);
+
         AccountsPreferences.setDefaultAccount(this, acc.getId());
         connect(acc.getId());
         getSupportFragmentManager().popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
@@ -426,5 +474,10 @@ public class MainActivity extends AlfrescoActivity
     public Picasso getPicasso()
     {
         return picasso;
+    }
+
+    public ActionBarDrawerToggle getmDrawerToggle()
+    {
+        return mDrawerToggle;
     }
 }
