@@ -42,7 +42,7 @@ When submitting code, please make every effort to follow existing conventions an
 ## What's the code License ?
 
 
-    Alfresco Activiti Mobile for Android 1.0
+    Alfresco Activiti Mobile for Android 1.1
 
     Copyright © 2015 Alfresco Software, Ltd. and others.
 
