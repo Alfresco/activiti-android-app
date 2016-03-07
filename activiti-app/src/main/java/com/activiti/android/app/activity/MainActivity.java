@@ -159,8 +159,11 @@ public class MainActivity extends AlfrescoActivity
         if (DisplayUtils.hasCentralPane(this) && mCentralDrawerLayout == null)
         {
             mCentralDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout_central);
+            if (mCentralDrawerLayout != null)
+            {
+                mCentralDrawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
+            }
             mCentralLeftDrawer = (ViewGroup) findViewById(R.id.central_left_drawer);
-            mCentralDrawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
         }
 
         if (!isLeftMenuVisible() && getSupportFragmentManager().getBackStackEntryCount() == 0)
@@ -399,7 +402,7 @@ public class MainActivity extends AlfrescoActivity
     {
         if (getFragment(GeneralSettingsFragment.TAG) == null)
         {
-            HelpDialogFragment.with(MainActivity.this).back(DisplayUtils.hasCentralPane(this)).display();
+            HelpDialogFragment.with(MainActivity.this).back(true).display();
         }
         hideSlideMenu();
     }
@@ -408,7 +411,7 @@ public class MainActivity extends AlfrescoActivity
     {
         if (getFragment(GeneralSettingsFragment.TAG) == null)
         {
-            GeneralSettingsFragment.with(MainActivity.this).back(DisplayUtils.hasCentralPane(this)).display();
+            GeneralSettingsFragment.with(MainActivity.this).back(true).display();
         }
         hideSlideMenu();
     }
@@ -417,7 +420,7 @@ public class MainActivity extends AlfrescoActivity
     {
         if (getFragment(UserProfileFragment.TAG) == null)
         {
-            UserProfileFragment.with(MainActivity.this).back(DisplayUtils.hasCentralPane(this)).display();
+            UserProfileFragment.with(MainActivity.this).back(true).display();
         }
         hideSlideMenu();
     }
