@@ -31,8 +31,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.PopupMenu;
+import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -64,6 +64,7 @@ import com.activiti.android.ui.fragments.builder.LeafFragmentBuilder;
 import com.activiti.android.ui.fragments.form.EditTextDialogFragment;
 import com.activiti.android.ui.holder.ThreeLinesViewHolder;
 import com.activiti.android.ui.holder.TwoLinesViewHolder;
+import com.activiti.android.ui.utils.DisplayUtils;
 import com.activiti.android.ui.utils.UIUtils;
 import com.afollestad.materialdialogs.MaterialDialog;
 
@@ -119,9 +120,8 @@ public class AccountSettingsFragment extends AlfrescoFragment implements EditTex
         }
 
         // TITLE
-        ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle(getString(R.string.settings_account));
-        ((AppCompatActivity) getActivity()).getSupportActionBar()
-                .setSubtitle((account != null) ? account.getUsername() : null);
+        getToolbar().setTitle(getString(R.string.settings_account));
+        getToolbar().setSubtitle((account != null) ? account.getUsername() : null);
 
         // User Info
         TwoLinesViewHolder vh = new TwoLinesViewHolder(viewById(R.id.settings_account_info));
@@ -185,6 +185,13 @@ public class AccountSettingsFragment extends AlfrescoFragment implements EditTex
         {
             UIUtils.setActionBarDefault((MainActivity) getActivity());
         }
+
+        if (DisplayUtils.hasCentralPane(getActivity()))
+        {
+            getToolbar().setTitle(null);
+            getToolbar().setSubtitle(null);
+            getToolbar().getMenu().clear();
+        }
     }
 
     // ///////////////////////////////////////////////////////////////////////////
@@ -194,8 +201,26 @@ public class AccountSettingsFragment extends AlfrescoFragment implements EditTex
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater)
     {
         super.onCreateOptionsMenu(menu, inflater);
-        menu.clear();
-        inflater.inflate(R.menu.account, menu);
+
+        if (!DisplayUtils.hasCentralPane(getActivity()))
+        {
+            menu.clear();
+            inflater.inflate(R.menu.account, menu);
+        }
+        else
+        {
+            getToolbar().getMenu().clear();
+            getToolbar().inflateMenu(R.menu.account);
+            getToolbar().setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener()
+            {
+                @Override
+                public boolean onMenuItemClick(MenuItem item)
+                {
+                    return onOptionsItemSelected(item);
+                }
+            });
+
+        }
     }
 
     @Override

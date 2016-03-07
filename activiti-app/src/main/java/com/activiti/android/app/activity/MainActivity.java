@@ -399,7 +399,7 @@ public class MainActivity extends AlfrescoActivity
     {
         if (getFragment(GeneralSettingsFragment.TAG) == null)
         {
-            HelpDialogFragment.with(MainActivity.this).display();
+            HelpDialogFragment.with(MainActivity.this).back(DisplayUtils.hasCentralPane(this)).display();
         }
         hideSlideMenu();
     }
@@ -408,7 +408,7 @@ public class MainActivity extends AlfrescoActivity
     {
         if (getFragment(GeneralSettingsFragment.TAG) == null)
         {
-            GeneralSettingsFragment.with(MainActivity.this).display();
+            GeneralSettingsFragment.with(MainActivity.this).back(DisplayUtils.hasCentralPane(this)).display();
         }
         hideSlideMenu();
     }
@@ -417,7 +417,7 @@ public class MainActivity extends AlfrescoActivity
     {
         if (getFragment(UserProfileFragment.TAG) == null)
         {
-            UserProfileFragment.with(MainActivity.this).display();
+            UserProfileFragment.with(MainActivity.this).back(DisplayUtils.hasCentralPane(this)).display();
         }
         hideSlideMenu();
     }

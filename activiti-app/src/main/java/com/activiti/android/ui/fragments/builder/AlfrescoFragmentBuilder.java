@@ -202,7 +202,7 @@ public abstract class AlfrescoFragmentBuilder
     public void display()
     {
         // Display Fragment
-        FragmentDisplayer.load(this).into(FragmentDisplayer.PANEL_LEFT);
+        FragmentDisplayer.load(this).into(FragmentDisplayer.PANEL_CENTRAL);
     }
 
     public void display(int viewId)

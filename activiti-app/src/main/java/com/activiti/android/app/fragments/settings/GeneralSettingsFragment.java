@@ -26,7 +26,6 @@ import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
-import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -45,6 +44,7 @@ import com.activiti.android.ui.fragments.builder.LeafFragmentBuilder;
 import com.activiti.android.ui.holder.HolderUtils;
 import com.activiti.android.ui.holder.TwoLinesCheckboxViewHolder;
 import com.activiti.android.ui.holder.TwoLinesViewHolder;
+import com.activiti.android.ui.utils.DisplayUtils;
 import com.activiti.android.ui.utils.UIUtils;
 import com.mikepenz.aboutlibraries.Libs;
 import com.mikepenz.aboutlibraries.LibsBuilder;
@@ -79,8 +79,8 @@ public class GeneralSettingsFragment extends AlfrescoFragment
         setRootView(inflater.inflate(R.layout.fr_settings, container, false));
 
         // TITLE
-        ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle(R.string.settings);
-        ((AppCompatActivity) getActivity()).getSupportActionBar().setSubtitle(null);
+        getToolbar().setTitle(R.string.settings);
+        getToolbar().setSubtitle(null);
 
         // ADD Accounts
         List<ActivitiAccount> accounts = ActivitiAccountManager.retrieveAccounts(getActivity());
@@ -98,7 +98,8 @@ public class GeneralSettingsFragment extends AlfrescoFragment
                 @Override
                 public void onClick(View v)
                 {
-                    AccountSettingsFragment.with(getActivity()).accountId((Long) v.getTag()).display();
+                    AccountSettingsFragment.with(getActivity()).accountId((Long) v.getTag())
+                            .back(DisplayUtils.hasCentralPane(getActivity())).display();
                 }
             });
             accountContainer.addView(accountView);
@@ -240,6 +241,13 @@ public class GeneralSettingsFragment extends AlfrescoFragment
         if (getActivity() instanceof MainActivity)
         {
             UIUtils.setActionBarDefault((MainActivity) getActivity());
+        }
+
+        if (DisplayUtils.hasCentralPane(getActivity()))
+        {
+            getToolbar().setTitle(null);
+            getToolbar().setSubtitle(null);
+            getToolbar().getMenu().clear();
         }
     }
 

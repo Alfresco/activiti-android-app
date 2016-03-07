@@ -1003,7 +1003,7 @@ public class TaskDetailsFoundationFragment extends AbstractDetailsFragment
                 }
                 else
                 {
-                    vh.choose.setImageResource(R.drawable.ic_more_grey);
+                    vh.choose.setImageResource(android.R.color.transparent);
                 }
                 vh.choose.setVisibility(View.VISIBLE);
 
