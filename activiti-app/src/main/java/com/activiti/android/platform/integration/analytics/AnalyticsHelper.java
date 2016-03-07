@@ -112,7 +112,6 @@ public class AnalyticsHelper
                 customDimensions.append(AnalyticsManager.INDEX_SERVER_TYPE, account.getServerType());
             }
             customDimensions.append(AnalyticsManager.INDEX_SERVER_VERSION, account.getServerVersion());
-            customDimensions.append(AnalyticsManager.INDEX_SERVER_TYPE, account.getServerType());
             customDimensions.append(AnalyticsManager.INDEX_SERVER_EDITION, account.getServerEdition());
         }
         return customDimensions;
