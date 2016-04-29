@@ -165,7 +165,8 @@ public class ProcessDetailsFoundationFragment extends AbstractDetailsFragment
 
                 processInstanceRepresentation = response.body();
 
-                UIUtils.setTitle(getActivity(), response.body().getName(), getString(R.string.task_title_details));
+                UIUtils.setTitle(getActivity(), response.body().getName(), getString(R.string.task_title_details),
+                        true);
 
                 displayInfo();
                 requestExtraInfo();
@@ -204,6 +205,14 @@ public class ProcessDetailsFoundationFragment extends AbstractDetailsFragment
             ContentTransferManager.startSaveAsTransfer(getActivity(), Long.toString(selectedContent.getId()),
                     resultData.getData().toString());
         }
+    }
+
+    @Override
+    public void onStop()
+    {
+        super.onStop();
+        getToolbar().getMenu().clear();
+        UIUtils.setTitle(getActivity(), "", "", true);
     }
 
     // ///////////////////////////////////////////////////////////////////////////

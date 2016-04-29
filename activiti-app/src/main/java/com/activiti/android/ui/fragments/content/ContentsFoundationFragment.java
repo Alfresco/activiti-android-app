@@ -340,6 +340,7 @@ public class ContentsFoundationFragment extends BasePagingGridFragment implement
         else
         {
             tmpMenu = getToolbar().getMenu();
+            tmpMenu.clear();
             // Set an OnMenuItemClickListener to handle menu item clicks
             getToolbar().setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener()
             {
