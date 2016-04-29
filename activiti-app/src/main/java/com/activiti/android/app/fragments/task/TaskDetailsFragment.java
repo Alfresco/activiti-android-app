@@ -110,7 +110,8 @@ public class TaskDetailsFragment extends TaskDetailsFoundationFragment implement
             @Override
             public void onClick(View v)
             {
-                ProcessDetailsFragment.with(getActivity()).processId(processInstanceRepresentation.getId()).display();
+                ProcessDetailsFragment.with(getActivity()).processId(processInstanceRepresentation.getId())
+                        .back(DisplayUtils.hasCentralPane(getActivity())).display();
             }
         };
     }

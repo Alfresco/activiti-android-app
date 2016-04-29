@@ -1,21 +1,20 @@
 /*
- *  Copyright (C) 2005-2015 Alfresco Software Limited.
+ *  Copyright (C) 2005-2016 Alfresco Software Limited.
  *
- * This file is part of Alfresco Activiti Mobile for Android.
+ *  This file is part of Alfresco Activiti Mobile for Android.
  *
- * Alfresco Activiti Mobile for Android is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Lesser General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
+ *  Alfresco Activiti Mobile for Android is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU Lesser General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
  *
- * Alfresco Activiti Mobile for Android is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU Lesser General Public License for more details.
+ *  Alfresco Activiti Mobile for Android is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU Lesser General Public License for more details.
  *
- * You should have received a copy of the GNU Lesser General Public License
- * along with Alfresco. If not, see <http://www.gnu.org/licenses/>.
- *
+ *  You should have received a copy of the GNU Lesser General Public License
+ *  along with Alfresco. If not, see <http://www.gnu.org/licenses/>.
  */
 
 package com.activiti.android.app.fragments.process;
@@ -29,6 +28,7 @@ import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
+import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -43,6 +43,7 @@ import com.activiti.android.ui.fragments.FragmentDisplayer;
 import com.activiti.android.ui.fragments.builder.LeafFragmentBuilder;
 import com.activiti.android.ui.fragments.comment.FragmentWithComments;
 import com.activiti.android.ui.fragments.process.ProcessDetailsFoundationFragment;
+import com.activiti.android.ui.utils.DisplayUtils;
 import com.squareup.otto.Subscribe;
 
 /**
@@ -99,8 +100,26 @@ public class ProcessDetailsFragment extends ProcessDetailsFoundationFragment imp
         super.onCreateOptionsMenu(menu, inflater);
         if (processInstanceRepresentation != null)
         {
-            menu.clear();
-            inflater.inflate(R.menu.process_details, menu);
+            if (!DisplayUtils.hasCentralPane(getActivity()))
+            {
+                menu.clear();
+                inflater.inflate(R.menu.process_details, menu);
+            }
+            else
+            {
+                getToolbar().getMenu().clear();
+                getToolbar().inflateMenu(R.menu.process_details);
+                // Set an OnMenuItemClickListener to handle menu item clicks
+                getToolbar().setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener()
+                {
+                    @Override
+                    public boolean onMenuItemClick(MenuItem item)
+                    {
+                        return onOptionsItemSelected(item);
+                    }
+                });
+
+            }
             this.menu = menu;
         }
     }
