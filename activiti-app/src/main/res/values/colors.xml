@@ -22,6 +22,30 @@
 <resources>
 
     <!-- Alfresco Colors -->
+    <color name="alfresco_dbp_blue">#2196f3</color>
+    <color name="alfresco_dbp_blue_dark">#01579b</color>
+    <color name="alfresco_dbp_blue_aqua">#00bcd4</color>
+    <color name="alfresco_dbp_blue_baby">#81d4fa</color>
+
+    <color name="alfresco_dbp_green">#8bc34a</color>
+    <color name="alfresco_dbp_green_dark">#43a047</color>
+    <color name="alfresco_dbp_green_jade">#22be73</color>
+    <color name="alfresco_dbp_green_pear">#cddc39</color>
+
+    <color name="alfresco_dbp_orange">#ff9901</color>
+    <color name="alfresco_dbp_orange_dark">#e65100</color>
+    <color name="alfresco_dbp_orange_gold">#f2b20f</color>
+    <color name="alfresco_dbp_orange_sunlight">#ffd600</color>
+
+    <color name="alfresco_dbp_gray">#727174</color>
+    <color name="alfresco_dbp_gray_harbor">#e3e3e4</color>
+    <color name="alfresco_dbp_gray_silver">#eef0f0</color>
+    <color name="alfresco_dbp_gray_dark">#36373a</color>
+    <color name="alfresco_dbp_gray_fog">#e6e6ec</color>
+    <color name="alfresco_dbp_gray_silk">#f9f9f9</color>
+
+
+    <!-- Alfresco Colors -->
     <color name="alfresco_lime_darker">#8FBE6F</color>
     <color name="alfresco_lime">#8DC63F</color>
     <color name="alfresco_lemon">#FFE14F</color>
