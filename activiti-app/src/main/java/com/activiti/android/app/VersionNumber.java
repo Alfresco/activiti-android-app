@@ -21,11 +21,14 @@ package com.activiti.android.app;
 
 public interface VersionNumber
 {
-    /** Released Q2 2015. */
+    /** Released 16 June 2015. */
     int VERSION_1_0_0 = 1;
 
-    /** Released Q1 2016. */
-    int VERSION_1_1_0 = VERSION_1_0_0;
+    /** Released 8 March 2016. */
+    int VERSION_1_1_0 = 10;
 
-    int LATEST_VERSION = VERSION_1_1_0;
+    /** Released Q2 2017. */
+    int VERSION_1_1_1 = 11;
+
+    int LATEST_VERSION = VERSION_1_1_1;
 }

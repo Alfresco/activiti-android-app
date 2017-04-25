@@ -25,13 +25,14 @@ buildscript {
         mavenCentral()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:1.5.0'
+        classpath 'com.android.tools.build:gradle:2.2.3'
         classpath 'com.google.gms:google-services:1.5.0'
     }
 }
 
 allprojects {
     repositories {
+        mavenLocal()
         jcenter()
         maven {
             url "https://artifacts.alfresco.com/nexus/content/groups/public"
@@ -42,8 +43,10 @@ allprojects {
         maven {
             url "https://artifacts.alfresco.com/nexus/content/groups/public"
         }
+        maven {
+            url "https://jitpack.io"
+        }
         mavenCentral()
-        mavenLocal()
         maven { url "https://oss.sonatype.org/content/repositories/snapshots/" }
         maven { url 'https://oss.sonatype.org/content/groups/public' }
     }

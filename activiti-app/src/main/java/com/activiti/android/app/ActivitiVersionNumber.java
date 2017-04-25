@@ -56,7 +56,31 @@ public interface ActivitiVersionNumber
     int VERSION_1_4_0 = 140;
 
     // 22 Jan 2016
-    int VERSION_1_4_1 = 140;
+    int VERSION_1_4_1 = 141;
 
-    int LATEST_VERSION = VERSION_1_4_1;
+    // 23 March 2016
+    int VERSION_1_4_2 = 142;
+
+    // 10 May 2016
+    int VERSION_1_4_3 = 143;
+
+    // 27 May 2016
+    int VERSION_1_4_4 = 144;
+
+    // 22 Jun 2016
+    int VERSION_1_4_5 = 145;
+
+    // 31 Aug 2016
+    int VERSION_1_5 = 150;
+
+    // 3 Nov 2016
+    int VERSION_1_5_2 = 152;
+
+    // 19 Dec 2016
+    int VERSION_1_5_3 = 153;
+
+    // 17 Mar 2017
+    int VERSION_1_6 = 160;
+
+    int LATEST_VERSION = VERSION_1_6;
 }
