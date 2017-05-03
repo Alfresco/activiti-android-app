@@ -24,7 +24,7 @@
     <!-- ################################################################################## -->
     <!-- GENERAL -->
     <string name="app_name">@string/general_main_title</string>
-    <string name="general_main_title">Activiti</string>
+    <string name="general_main_title">Process Services</string>
     <string name="general_navigation_tasks">Tasks</string>
     <string name="general_navigation_processes">Processes</string>
     <string name="general_navigation_process_models">Process Definition Models</string>
@@ -34,7 +34,7 @@
 
     <string name="general_login_title">Get started</string>
     <string name="general_login_title_sign_in">Sign in</string>
-    <string name="general_login_server_title">Enter your Activiti server hostname</string>
+    <string name="general_login_server_title">Enter the address to connect to</string>
     <string name="general_login_server_hostname">Hostname</string>
     <string name="general_login_server_next">Continue</string>
     <string name="general_login_server_done">Done</string>
@@ -42,9 +42,9 @@
     <string name="general_login_credentials_username">Username</string>
     <string name="general_login_credentials_password">Password</string>
     <string name="general_login_credentials_show_password">Show password</string>
-    <string name="general_login_credentials_sign_in">Alfresco Activiti in the Cloud</string>
+    <string name="general_login_credentials_sign_in">Process Services in the Cloud</string>
     <string name="general_login_credentials_or">or</string>
-    <string name="general_login_credentials_connect">Alfresco Activiti</string>
+    <string name="general_login_credentials_connect">Process Services</string>
     <string name="general_login_account_added">Account added!</string>
     <string name="general_login_account_name">Give this account a name (optional)</string>
 
@@ -149,8 +149,8 @@
     <string name="task_action_add_checklist_confirm">Add task to checklist</string>
 
 
-    <string name="task_action_share_link_long">Sharing Link from Alfresco Activiti Mobile</string>
-    <string name="task_share_link_pattern">Sharing Link from Alfresco Activiti Mobile</string>
+    <string name="task_action_share_link_long">Sharing Link</string>
+    <string name="task_share_link_pattern">Sharing Link</string>
 
 
     <!-- TASKS TITLE -->
@@ -345,7 +345,7 @@
     <string name="settings_accounts_title">Accounts</string>
     <string name="settings_about_title">About</string>
     <string name="settings_about_version">Version</string>
-    <string name="settings_google_play_title">Do you like Activiti?</string>
+    <string name="settings_google_play_title">Rate this app on Google Play</string>
     <string name="settings_google_play_summary">Show us your support on Google Play</string>
     <string name="settings_about_help">Help</string>
     <string name="settings_about_clu">Terms and Conditions</string>
@@ -500,7 +500,7 @@
     <string name="error_session_certificate">
 <![CDATA[<p><b>The server\'s security certificate is not trusted!</b><br/></p>
 		The third-party organization that issued your server destination\'s certificate is not one that your device recognizes.<br/>
-		In order for Alfresco Activiti to verify that you\'re connecting with the appropriate server, its certificate must be from a trusted organization.<br/>
+		For Process Services to verify that you\'re connecting with the appropriate server, its certificate must be from a trusted organization.<br/>
 		If your server has a self-signed certificate please add it to your device to successfully connect.<br/> ]]>
     </string>
     <string name="error_session_certificate_expired">
@@ -511,11 +511,11 @@
 <![CDATA[<p><b>An error occurred with the SSL protocol.</b><br/></p>
         Please check your account settings and try again.<br/> If the problem persists please contact your administrator.]]>
     </string>
-    <string name="bug_report_title">[Activiti Report] : </string>
+    <string name="bug_report_title">[Process Report] : </string>
 
     <string name="settings.feedback">Feedback</string>
     <string name="settings.feedback.diagnostic">Send Diagnostics</string>
-    <string name="settings.feedback.diagnostic.summary">To help us improve Alfresco Mobile, we collect anonymous technical diagnostic data. Switch off if preferred.</string>
+    <string name="settings.feedback.diagnostic.summary">To help us improve this app, we collect anonymous technical diagnostic data. Switch off if preferred.</string>
     <string name="settings.feedback.email">Send Feedback</string>
 
 </resources>
