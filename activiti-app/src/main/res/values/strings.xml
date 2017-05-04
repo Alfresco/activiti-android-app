@@ -187,7 +187,7 @@
     <string name="task_message_no_related_content">This task has no related content yet&#8230;</string>
     <string name="task_message_no_people_involved">This task has no people involved yet&#8230;</string>
     <string name="task_message_no_comments">This task has no comments yet&#8230;</string>
-    <string name="task_message_no_task_help">Well, it looks like there are no tasks for you! </string>
+    <string name="task_message_no_task_help">You have no current tasks</string>
     <string name="task_message_comment_header">Added by %1$s</string>
     <string name="task_message_new_comment_placeholder">Enter a comment&#8230;</string>
     <string name="task_message_no_form">No form</string>
@@ -196,7 +196,7 @@
     <string name="task_help_description">This task has no details yet.</string>
     <string name="task_help_description_2">You can change that by choosing one of these actions:</string>
     <string name="task_help_add_people">Involve someone else and start collaborating</string>
-    <string name="task_help_add_comment">Enlighten others by adding a comment</string>
+    <string name="task_help_add_comment">Add a comment</string>
     <string name="task_help_add_content">Add a document and share the knowledge</string>
     <string name="task_help_add_checklist">Add a task to checklist</string>
     <string name="task_help_add_first_checklist">Create your own checklist of items needed for this task. You can assign an item to someone else, give it a due date and attach a form from the library</string>
@@ -358,7 +358,7 @@
     <string name="settings_userinfo_account_name_summary">Edit account name</string>
 
     <string name="settings_account">Account Settings</string>
-    <string name="settings_account_integration">Alfresco Integration</string>
+    <string name="settings_account_integration">Alfresco Content Services Integration</string>
 
     <string name="settings_account_integration_alfresco_action_remove">Remove Link</string>
     <string name="settings_account_integration_alfresco_action_mobile">Link to Alfresco Content Services Mobile</string>
@@ -368,12 +368,12 @@
     <string name="settings_account_integration_alfresco_browser">Linked to Web Browser</string>
     <string name="settings_account_integration_alfresco_none">Account not configured</string>
 
-    <string name="settings_alfresco_update">Update Alfresco</string>
-    <string name="settings_alfresco_update_summary"><![CDATA[<p>Apparently your version of Alfresco Content Services Mobile requires an update.</p> In order to use this integration you need to update the application from the Google Play Store]]></string>
+    <string name="settings_alfresco_update">Update</string>
+    <string name="settings_alfresco_update_summary"><![CDATA[<p>Your version of Alfresco Content Services Mobile requires an update.</p> In order to use this integration you need to update the application from the Google Play Store]]></string>
     <string name="settings_alfresco_update_action">Go to Play Store</string>
 
-    <string name="settings_alfresco_install">Install Alfresco</string>
-    <string name="settings_alfresco_install_summary"><![CDATA[<p>Apparently you don\'t have Alfresco Content Services Mobile installed in your device.</p> In order to use this integration you need install the Alfresco Content Services Application from the Google Play Store]]></string>
+    <string name="settings_alfresco_install">Install</string>
+    <string name="settings_alfresco_install_summary"><![CDATA[<p>You don\'t have Alfresco Content Services Mobile installed in your device.</p> In order to use this integration you need install the Alfresco Content Services Application from the Google Play Store]]></string>
     <string name="settings_alfresco_install_action">Go to Play Store</string>
 
     <string name="settings_alfresco_not_found">Alfresco Content Services account not found!</string>
@@ -386,7 +386,7 @@
 
 
     <string name="integration_alfresco_open">Open Alfresco Content Services</string>
-    <string name="integration_alfresco_open_summary"><![CDATA[<p>Apparently you don\'t have Alfresco Content Services Mobile installed in your device.</p> <p>In order to use this integration you can install the Alfresco Content Services Application from the Google Play Store</p> or access the document directly from a Web Browser.]]></string>
+    <string name="integration_alfresco_open_summary"><![CDATA[<p>You don\'t have Alfresco Content Services Mobile installed in your device.</p> <p>In order to use this integration you can install the Alfresco Content Services Application from the Google Play Store</p> or access the document directly from a Web Browser.]]></string>
     <string name="integration_alfresco_open_play">Go to Play Store</string>
     <string name="integration_alfresco_open_web">Open Web Browser</string>
 
@@ -397,7 +397,7 @@
     <string name="sync_adapter_groups_title">Groups</string>
     <string name="sync_adapter_content_transfer">Content Transfer</string>
 
-    <string name="error_general">An error has occurred. Please try again.</string>
+    <string name="error_general">We hit a problem. Try again.</string>
     <string name="error_general_no_connection">No connection available</string>
     <string name="error_offline"><![CDATA[<p><b>Help can\'t be accessed because you\'re offline. Try again when you\'re back online.</b><br/></p> Please try again when you\'re back online.]]></string>
 
