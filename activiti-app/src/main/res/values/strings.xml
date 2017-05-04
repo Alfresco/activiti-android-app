@@ -24,7 +24,7 @@
     <!-- ################################################################################## -->
     <!-- GENERAL -->
     <string name="app_name">@string/general_main_title</string>
-    <string name="general_main_title">Activiti</string>
+    <string name="general_main_title">Process Services</string>
     <string name="general_navigation_tasks">Tasks</string>
     <string name="general_navigation_processes">Processes</string>
     <string name="general_navigation_process_models">Process Definition Models</string>
@@ -34,17 +34,17 @@
 
     <string name="general_login_title">Get started</string>
     <string name="general_login_title_sign_in">Sign in</string>
-    <string name="general_login_server_title">Enter your Activiti server hostname</string>
-    <string name="general_login_server_hostname">Hostname</string>
+    <string name="general_login_server_title">Enter the address to connect to</string>
+    <string name="general_login_server_hostname">www.example.com</string>
     <string name="general_login_server_next">Continue</string>
     <string name="general_login_server_done">Done</string>
     <string name="general_login_credentials_title">Enter your credentials</string>
     <string name="general_login_credentials_username">Username</string>
     <string name="general_login_credentials_password">Password</string>
     <string name="general_login_credentials_show_password">Show password</string>
-    <string name="general_login_credentials_sign_in">Alfresco Activiti in the Cloud</string>
+    <string name="general_login_credentials_sign_in">Process Services in the Cloud</string>
     <string name="general_login_credentials_or">or</string>
-    <string name="general_login_credentials_connect">Alfresco Activiti</string>
+    <string name="general_login_credentials_connect">Process Services</string>
     <string name="general_login_account_added">Account added!</string>
     <string name="general_login_account_name">Give this account a name (optional)</string>
 
@@ -149,8 +149,8 @@
     <string name="task_action_add_checklist_confirm">Add task to checklist</string>
 
 
-    <string name="task_action_share_link_long">Sharing Link from Alfresco Activiti Mobile</string>
-    <string name="task_share_link_pattern">Sharing Link from Alfresco Activiti Mobile</string>
+    <string name="task_action_share_link_long">Sharing Link</string>
+    <string name="task_share_link_pattern">Sharing Link</string>
 
 
     <!-- TASKS TITLE -->
@@ -187,7 +187,7 @@
     <string name="task_message_no_related_content">This task has no related content yet&#8230;</string>
     <string name="task_message_no_people_involved">This task has no people involved yet&#8230;</string>
     <string name="task_message_no_comments">This task has no comments yet&#8230;</string>
-    <string name="task_message_no_task_help">Well, it looks like there are no tasks for you! </string>
+    <string name="task_message_no_task_help">You have no current tasks</string>
     <string name="task_message_comment_header">Added by %1$s</string>
     <string name="task_message_new_comment_placeholder">Enter a comment&#8230;</string>
     <string name="task_message_no_form">No form</string>
@@ -196,7 +196,7 @@
     <string name="task_help_description">This task has no details yet.</string>
     <string name="task_help_description_2">You can change that by choosing one of these actions:</string>
     <string name="task_help_add_people">Involve someone else and start collaborating</string>
-    <string name="task_help_add_comment">Enlighten others by adding a comment</string>
+    <string name="task_help_add_comment">Add a comment</string>
     <string name="task_help_add_content">Add a document and share the knowledge</string>
     <string name="task_help_add_checklist">Add a task to checklist</string>
     <string name="task_help_add_first_checklist">Create your own checklist of items needed for this task. You can assign an item to someone else, give it a due date and attach a form from the library</string>
@@ -288,7 +288,7 @@
     <string name="content_message_content_pending">Getting content&#8230;</string>
     <string name="content_title_delete">Delete content</string>
     <string name="content_message_delete_confirmation">Are you sure you want to delete %s?</string>
-    <string name="content_action_open_in_alfresco">Open in Alfresco</string>
+    <string name="content_action_open_in_alfresco">Open in Alfresco Content Services</string>
 
     <!-- APP DEFINITIONS -->
     <!-- ################################################################################## -->
@@ -345,7 +345,7 @@
     <string name="settings_accounts_title">Accounts</string>
     <string name="settings_about_title">About</string>
     <string name="settings_about_version">Version</string>
-    <string name="settings_google_play_title">Do you like Activiti?</string>
+    <string name="settings_google_play_title">Rate this app on Google Play</string>
     <string name="settings_google_play_summary">Show us your support on Google Play</string>
     <string name="settings_about_help">Help</string>
     <string name="settings_about_clu">Terms and Conditions</string>
@@ -358,35 +358,35 @@
     <string name="settings_userinfo_account_name_summary">Edit account name</string>
 
     <string name="settings_account">Account Settings</string>
-    <string name="settings_account_integration">Alfresco Integration</string>
+    <string name="settings_account_integration">Alfresco Content Services Integration</string>
 
     <string name="settings_account_integration_alfresco_action_remove">Remove Link</string>
-    <string name="settings_account_integration_alfresco_action_mobile">Link to Alfresco Mobile</string>
+    <string name="settings_account_integration_alfresco_action_mobile">Link to Alfresco Content Services Mobile</string>
     <string name="settings_account_integration_alfresco_action_browser">Link to Web Browser</string>
 
-    <string name="settings_account_integration_alfresco_mobile">Linked to Alfresco Mobile</string>
+    <string name="settings_account_integration_alfresco_mobile">Linked to Alfresco Content Services Mobile</string>
     <string name="settings_account_integration_alfresco_browser">Linked to Web Browser</string>
     <string name="settings_account_integration_alfresco_none">Account not configured</string>
 
-    <string name="settings_alfresco_update">Update Alfresco</string>
-    <string name="settings_alfresco_update_summary"><![CDATA[<p>Apparently your version of Alfresco Mobile requires an update.</p> In order to use this integration you need to update the application from the Google Play Store]]></string>
+    <string name="settings_alfresco_update">Update</string>
+    <string name="settings_alfresco_update_summary"><![CDATA[<p>Your version of Alfresco Content Services Mobile requires an update.</p> In order to use this integration you need to update the application from the Google Play Store]]></string>
     <string name="settings_alfresco_update_action">Go to Play Store</string>
 
-    <string name="settings_alfresco_install">Install Alfresco</string>
-    <string name="settings_alfresco_install_summary"><![CDATA[<p>Apparently you don\'t have Alfresco Mobile installed in your device.</p> In order to use this integration you need install the Alfresco Application from the Google Play Store]]></string>
+    <string name="settings_alfresco_install">Install</string>
+    <string name="settings_alfresco_install_summary"><![CDATA[<p>You don\'t have Alfresco Content Services Mobile installed in your device.</p> In order to use this integration you need install the Alfresco Content Services Application from the Google Play Store]]></string>
     <string name="settings_alfresco_install_action">Go to Play Store</string>
 
-    <string name="settings_alfresco_not_found">Alfresco account not found!</string>
-    <string name="settings_alfresco_not_found_summary"><![CDATA[<p>We are unable to detect the appropriate Alfresco account.</p> Please tap select to choose the correct one.]]></string>
-    <string name="settings_alfresco_not_found_action">Select or create Alfresco account</string>
+    <string name="settings_alfresco_not_found">Alfresco Content Services account not found!</string>
+    <string name="settings_alfresco_not_found_summary"><![CDATA[<p>We are unable to detect the appropriate Alfresco Content Services account.</p> Please tap select to choose the correct one.]]></string>
+    <string name="settings_alfresco_not_found_action">Select or create Alfresco Content Services account</string>
 
-    <string name="settings_alfresco_account_found">Alfresco account found!</string>
-    <string name="settings_alfresco_account_found_summary"><![CDATA[<p>We have detected the following Alfresco account.</p> <b><p>%1$s<br/>%2$s</p></b>If it\'s the correct one tap validate or select another one.]]></string>
-    <string name="settings_alfresco_account_found_action">Select or create Alfresco account</string>
+    <string name="settings_alfresco_account_found">Alfresco Content Services account found!</string>
+    <string name="settings_alfresco_account_found_summary"><![CDATA[<p>We have detected the following Alfresco Content Services account.</p> <b><p>%1$s<br/>%2$s</p></b>If it\'s the correct one tap validate or select another one.]]></string>
+    <string name="settings_alfresco_account_found_action">Select or create Alfresco Content Services account</string>
 
 
-    <string name="integration_alfresco_open">Open Alfresco</string>
-    <string name="integration_alfresco_open_summary"><![CDATA[<p>Apparently you don\'t have Alfresco Mobile installed in your device.</p> <p>In order to use this integration you can install the Alfresco Application from the Google Play Store</p> or access the document directly from a Web Browser.]]></string>
+    <string name="integration_alfresco_open">Open Alfresco Content Services</string>
+    <string name="integration_alfresco_open_summary"><![CDATA[<p>You don\'t have Alfresco Content Services Mobile installed in your device.</p> <p>In order to use this integration you can install the Alfresco Content Services Application from the Google Play Store</p> or access the document directly from a Web Browser.]]></string>
     <string name="integration_alfresco_open_play">Go to Play Store</string>
     <string name="integration_alfresco_open_web">Open Web Browser</string>
 
@@ -397,9 +397,9 @@
     <string name="sync_adapter_groups_title">Groups</string>
     <string name="sync_adapter_content_transfer">Content Transfer</string>
 
-    <string name="error_general">An error has occurred. Please try again.</string>
+    <string name="error_general">We hit a problem. Try again.</string>
     <string name="error_general_no_connection">No connection available</string>
-    <string name="error_offline"><![CDATA[<p><b>Alfresco Mobile help can\'t be accessed because you\'re offline.</b><br/></p> Please try again when you\'re back online.]]></string>
+    <string name="error_offline"><![CDATA[<p><b>Help can\'t be accessed because you\'re offline. Try again when you\'re back online.</b><br/></p> Please try again when you\'re back online.]]></string>
 
     <string name="account_manage">Manage Account</string>
     <string name="account_add">Add Account</string>
@@ -500,7 +500,7 @@
     <string name="error_session_certificate">
 <![CDATA[<p><b>The server\'s security certificate is not trusted!</b><br/></p>
 		The third-party organization that issued your server destination\'s certificate is not one that your device recognizes.<br/>
-		In order for Alfresco Activiti to verify that you\'re connecting with the appropriate server, its certificate must be from a trusted organization.<br/>
+		For Process Services to verify that you\'re connecting with the appropriate server, its certificate must be from a trusted organization.<br/>
 		If your server has a self-signed certificate please add it to your device to successfully connect.<br/> ]]>
     </string>
     <string name="error_session_certificate_expired">
@@ -511,11 +511,11 @@
 <![CDATA[<p><b>An error occurred with the SSL protocol.</b><br/></p>
         Please check your account settings and try again.<br/> If the problem persists please contact your administrator.]]>
     </string>
-    <string name="bug_report_title">[Activiti Report] : </string>
+    <string name="bug_report_title">[Process Report] : </string>
 
     <string name="settings.feedback">Feedback</string>
     <string name="settings.feedback.diagnostic">Send Diagnostics</string>
-    <string name="settings.feedback.diagnostic.summary">To help us improve Alfresco Mobile, we collect anonymous technical diagnostic data. Switch off if preferred.</string>
+    <string name="settings.feedback.diagnostic.summary">To help us improve this app, we collect anonymous technical diagnostic data. Switch off if preferred.</string>
     <string name="settings.feedback.email">Send Feedback</string>
 
 </resources>
