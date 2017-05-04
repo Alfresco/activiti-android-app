@@ -35,7 +35,7 @@
     <string name="general_login_title">Get started</string>
     <string name="general_login_title_sign_in">Sign in</string>
     <string name="general_login_server_title">Enter the address to connect to</string>
-    <string name="general_login_server_hostname">Hostname</string>
+    <string name="general_login_server_hostname">www.example.com</string>
     <string name="general_login_server_next">Continue</string>
     <string name="general_login_server_done">Done</string>
     <string name="general_login_credentials_title">Enter your credentials</string>
@@ -288,7 +288,7 @@
     <string name="content_message_content_pending">Getting content&#8230;</string>
     <string name="content_title_delete">Delete content</string>
     <string name="content_message_delete_confirmation">Are you sure you want to delete %s?</string>
-    <string name="content_action_open_in_alfresco">Open in Alfresco</string>
+    <string name="content_action_open_in_alfresco">Open in Alfresco Content Services</string>
 
     <!-- APP DEFINITIONS -->
     <!-- ################################################################################## -->
@@ -378,11 +378,11 @@
 
     <string name="settings_alfresco_not_found">Alfresco account not found!</string>
     <string name="settings_alfresco_not_found_summary"><![CDATA[<p>We are unable to detect the appropriate Alfresco account.</p> Please tap select to choose the correct one.]]></string>
-    <string name="settings_alfresco_not_found_action">Select or create Alfresco account</string>
+    <string name="settings_alfresco_not_found_action">Select or create Alfresco Content Services account</string>
 
     <string name="settings_alfresco_account_found">Alfresco account found!</string>
     <string name="settings_alfresco_account_found_summary"><![CDATA[<p>We have detected the following Alfresco account.</p> <b><p>%1$s<br/>%2$s</p></b>If it\'s the correct one tap validate or select another one.]]></string>
-    <string name="settings_alfresco_account_found_action">Select or create Alfresco account</string>
+    <string name="settings_alfresco_account_found_action">Select or create Alfresco Content Services account</string>
 
 
     <string name="integration_alfresco_open">Open Alfresco</string>
@@ -399,7 +399,7 @@
 
     <string name="error_general">An error has occurred. Please try again.</string>
     <string name="error_general_no_connection">No connection available</string>
-    <string name="error_offline"><![CDATA[<p><b>Alfresco Mobile help can\'t be accessed because you\'re offline.</b><br/></p> Please try again when you\'re back online.]]></string>
+    <string name="error_offline"><![CDATA[<p><b>Help can\'t be accessed because you\'re offline. Try again when you\'re back online.</b><br/></p> Please try again when you\'re back online.]]></string>
 
     <string name="account_manage">Manage Account</string>
     <string name="account_add">Add Account</string>
