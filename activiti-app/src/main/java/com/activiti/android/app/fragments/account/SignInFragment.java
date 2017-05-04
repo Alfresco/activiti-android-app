@@ -212,7 +212,7 @@ public class SignInFragment extends AlfrescoFragment
         View focusView = null;
 
         // Check for a valid password, if the task entered one.
-        if (!TextUtils.isEmpty(password))
+        if (TextUtils.isEmpty(password))
         {
             mPasswordView.setError(getString(R.string.error_invalid_password));
             focusView = mPasswordView;
