@@ -23,7 +23,7 @@
     <!-- GENERAL -->
     <!-- ################################################################################## -->
     <!-- GENERAL -->
-    <string name="app_name">@string/general_main_title</string>
+    <string name="app_name">Process</string>
     <string name="general_main_title">Process Services</string>
     <string name="general_navigation_tasks">Tasks</string>
     <string name="general_navigation_processes">Processes</string>
