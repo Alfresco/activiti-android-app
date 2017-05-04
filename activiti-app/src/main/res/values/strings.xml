@@ -361,32 +361,32 @@
     <string name="settings_account_integration">Alfresco Integration</string>
 
     <string name="settings_account_integration_alfresco_action_remove">Remove Link</string>
-    <string name="settings_account_integration_alfresco_action_mobile">Link to Alfresco Mobile</string>
+    <string name="settings_account_integration_alfresco_action_mobile">Link to Alfresco Content Services Mobile</string>
     <string name="settings_account_integration_alfresco_action_browser">Link to Web Browser</string>
 
-    <string name="settings_account_integration_alfresco_mobile">Linked to Alfresco Mobile</string>
+    <string name="settings_account_integration_alfresco_mobile">Linked to Alfresco Content Services Mobile</string>
     <string name="settings_account_integration_alfresco_browser">Linked to Web Browser</string>
     <string name="settings_account_integration_alfresco_none">Account not configured</string>
 
     <string name="settings_alfresco_update">Update Alfresco</string>
-    <string name="settings_alfresco_update_summary"><![CDATA[<p>Apparently your version of Alfresco Mobile requires an update.</p> In order to use this integration you need to update the application from the Google Play Store]]></string>
+    <string name="settings_alfresco_update_summary"><![CDATA[<p>Apparently your version of Alfresco Content Services Mobile requires an update.</p> In order to use this integration you need to update the application from the Google Play Store]]></string>
     <string name="settings_alfresco_update_action">Go to Play Store</string>
 
     <string name="settings_alfresco_install">Install Alfresco</string>
-    <string name="settings_alfresco_install_summary"><![CDATA[<p>Apparently you don\'t have Alfresco Mobile installed in your device.</p> In order to use this integration you need install the Alfresco Application from the Google Play Store]]></string>
+    <string name="settings_alfresco_install_summary"><![CDATA[<p>Apparently you don\'t have Alfresco Content Services Mobile installed in your device.</p> In order to use this integration you need install the Alfresco Content Services Application from the Google Play Store]]></string>
     <string name="settings_alfresco_install_action">Go to Play Store</string>
 
-    <string name="settings_alfresco_not_found">Alfresco account not found!</string>
-    <string name="settings_alfresco_not_found_summary"><![CDATA[<p>We are unable to detect the appropriate Alfresco account.</p> Please tap select to choose the correct one.]]></string>
+    <string name="settings_alfresco_not_found">Alfresco Content Services account not found!</string>
+    <string name="settings_alfresco_not_found_summary"><![CDATA[<p>We are unable to detect the appropriate Alfresco Content Services account.</p> Please tap select to choose the correct one.]]></string>
     <string name="settings_alfresco_not_found_action">Select or create Alfresco Content Services account</string>
 
-    <string name="settings_alfresco_account_found">Alfresco account found!</string>
-    <string name="settings_alfresco_account_found_summary"><![CDATA[<p>We have detected the following Alfresco account.</p> <b><p>%1$s<br/>%2$s</p></b>If it\'s the correct one tap validate or select another one.]]></string>
+    <string name="settings_alfresco_account_found">Alfresco Content Services account found!</string>
+    <string name="settings_alfresco_account_found_summary"><![CDATA[<p>We have detected the following Alfresco Content Services account.</p> <b><p>%1$s<br/>%2$s</p></b>If it\'s the correct one tap validate or select another one.]]></string>
     <string name="settings_alfresco_account_found_action">Select or create Alfresco Content Services account</string>
 
 
-    <string name="integration_alfresco_open">Open Alfresco</string>
-    <string name="integration_alfresco_open_summary"><![CDATA[<p>Apparently you don\'t have Alfresco Mobile installed in your device.</p> <p>In order to use this integration you can install the Alfresco Application from the Google Play Store</p> or access the document directly from a Web Browser.]]></string>
+    <string name="integration_alfresco_open">Open Alfresco Content Services</string>
+    <string name="integration_alfresco_open_summary"><![CDATA[<p>Apparently you don\'t have Alfresco Content Services Mobile installed in your device.</p> <p>In order to use this integration you can install the Alfresco Content Services Application from the Google Play Store</p> or access the document directly from a Web Browser.]]></string>
     <string name="integration_alfresco_open_play">Go to Play Store</string>
     <string name="integration_alfresco_open_web">Open Web Browser</string>
 
