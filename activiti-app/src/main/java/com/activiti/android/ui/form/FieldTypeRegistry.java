@@ -28,7 +28,7 @@ import com.activiti.client.api.model.editor.form.FormFieldTypes;
 public enum FieldTypeRegistry
 {
     SINGLE_LINE_TEXT(FormFieldTypes.SINGLE_LINE_TEXT), MULTI_LINE_TEXT(FormFieldTypes.MULTI_LINE_TEXT), INTEGER(
-            FormFieldTypes.INTEGER), DATE(FormFieldTypes.DATE), BOOLEAN(FormFieldTypes.BOOLEAN), RADIO_BUTTONS(
+            FormFieldTypes.INTEGER), DATE(FormFieldTypes.DATE), DATE_TIME(FormFieldTypes.DATE_TIME), BOOLEAN(FormFieldTypes.BOOLEAN), RADIO_BUTTONS(
             FormFieldTypes.RADIO_BUTTONS), DROPDOWN(FormFieldTypes.DROPDOWN), TYPEAHEAD(FormFieldTypes.TYPEAHEAD), UPLOAD(
             FormFieldTypes.UPLOAD), GROUP(FormFieldTypes.GROUP), READONLY(FormFieldTypes.READONLY), READONLY_TEXT(
             FormFieldTypes.READONLY_TEXT), PEOPLE(FormFieldTypes.PEOPLE), FUNCTIONAL_GROUP(

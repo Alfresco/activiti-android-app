@@ -26,6 +26,7 @@ import com.activiti.android.ui.form.fields.AmountField;
 import com.activiti.android.ui.form.fields.BaseField;
 import com.activiti.android.ui.form.fields.CheckBoxField;
 import com.activiti.android.ui.form.fields.DateField;
+import com.activiti.android.ui.form.fields.DateTimeField;
 import com.activiti.android.ui.form.fields.DropDownField;
 import com.activiti.android.ui.form.fields.DynamicTableField;
 import com.activiti.android.ui.form.fields.HeaderField;
@@ -68,6 +69,8 @@ public class FieldTypeFactory
                 return new NumberField(context, manager, data, isReadMode);
             case DATE:
                 return new DateField(context, manager, data, isReadMode);
+            case DATE_TIME:
+                return new DateTimeField(context, manager, data, isReadMode);
             case BOOLEAN:
                 return new CheckBoxField(context, manager, data, isReadMode);
             case RADIO_BUTTONS:

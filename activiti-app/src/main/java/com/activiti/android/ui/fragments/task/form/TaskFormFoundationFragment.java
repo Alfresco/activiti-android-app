@@ -19,14 +19,6 @@
 
 package com.activiti.android.ui.fragments.task.form;
 
-import java.util.GregorianCalendar;
-import java.util.HashMap;
-import java.util.Map;
-
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
-
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
@@ -69,12 +61,19 @@ import com.activiti.client.api.model.idm.LightUserRepresentation;
 import com.activiti.client.api.model.runtime.RelatedContentRepresentation;
 import com.activiti.client.api.model.runtime.SaveFormRepresentation;
 
+import java.util.Calendar;
+import java.util.HashMap;
+import java.util.Map;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
 /**
  * Created by jpascal on 28/03/2015.
  */
-public class TaskFormFoundationFragment extends AlfrescoFragment implements DatePickerFragment.onPickDateFragment,
-        UserPickerFragment.onPickAuthorityFragment, UserGroupPickerFragment.onPickGroupFragment
-{
+public class TaskFormFoundationFragment extends AlfrescoFragment implements DatePickerFragment.OnPickDateFragment,
+        UserPickerFragment.onPickAuthorityFragment, UserGroupPickerFragment.onPickGroupFragment {
     public static final String TAG = TaskFormFoundationFragment.class.getName();
 
     protected static final String ARGUMENT_TASK = "parcelTask";
@@ -94,15 +93,13 @@ public class TaskFormFoundationFragment extends AlfrescoFragment implements Date
     // ///////////////////////////////////////////////////////////////////////////
     // CONSTRUCTORS & HELPERS
     // ///////////////////////////////////////////////////////////////////////////
-    public TaskFormFoundationFragment()
-    {
+    public TaskFormFoundationFragment() {
         super();
         eventBusRequired = true;
         setHasOptionsMenu(true);
     }
 
-    public static TaskFormFoundationFragment newInstanceByTemplate(Bundle b)
-    {
+    public static TaskFormFoundationFragment newInstanceByTemplate(Bundle b) {
         TaskFormFoundationFragment cbf = new TaskFormFoundationFragment();
         cbf.setArguments(b);
         return cbf;
@@ -111,21 +108,18 @@ public class TaskFormFoundationFragment extends AlfrescoFragment implements Date
     // ///////////////////////////////////////////////////////////////////////////
     // LIFECYCLE
     // ///////////////////////////////////////////////////////////////////////////
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
-    {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         resetRightMenu();
 
         // This fragment must retain instance because there's temporary walue.
         // We want to avoid their lost after rotation or picker
         setRetainInstance(true);
 
-        if (getArguments() != null)
-        {
+        if (getArguments() != null) {
             task = getArguments().getParcelable(ARGUMENT_TASK);
         }
 
-        if (getRootView() == null)
-        {
+        if (getRootView() == null) {
             setRootView(inflater.inflate(R.layout.form_container, container, false));
             show(R.id.progressbar_group);
             show(R.id.progressbar);
@@ -136,15 +130,11 @@ public class TaskFormFoundationFragment extends AlfrescoFragment implements Date
     }
 
     @Override
-    public void onActivityCreated(Bundle savedInstanceState)
-    {
+    public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        if (formManager == null)
-        {
+        if (formManager == null) {
             generateForm();
-        }
-        else
-        {
+        } else {
             // Hack : we detect the fragment has been recreated
             // We enforce their value display
             // A picker might have updated its value and its not currently
@@ -154,10 +144,8 @@ public class TaskFormFoundationFragment extends AlfrescoFragment implements Date
     }
 
     @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent resultData)
-    {
-        if (requestCode == ContentTransferManager.PICKER_REQUEST_CODE && resultCode == Activity.RESULT_OK)
-        {
+    public void onActivityResult(int requestCode, int resultCode, Intent resultData) {
+        if (requestCode == ContentTransferManager.PICKER_REQUEST_CODE && resultCode == Activity.RESULT_OK) {
             MultiValueField field = (MultiValueField) formManager.getCurrentPickerField();
             RelatedContentRepresentation content = ContentTransferManager.getRelatedContent(getActivity(),
                     resultData.getData());
@@ -167,10 +155,8 @@ public class TaskFormFoundationFragment extends AlfrescoFragment implements Date
     }
 
     @Override
-    public void onStart()
-    {
-        if (refresh)
-        {
+    public void onStart() {
+        if (refresh) {
             // We do the refreshEditionView to display the latest value inside
             // the BaseField
             formManager.refreshViews();
@@ -180,33 +166,25 @@ public class TaskFormFoundationFragment extends AlfrescoFragment implements Date
     }
 
     @Override
-    public void onResume()
-    {
+    public void onResume() {
         super.onResume();
         UIUtils.setTitle(getActivity(), task.name, getString(R.string.form_message_title), true);
     }
 
     @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater)
-    {
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);
-        if (getVersionNumber() >= ActivitiVersionNumber.VERSION_1_2_2 && !isEnded)
-        {
-            if (!DisplayUtils.hasCentralPane(getActivity()))
-            {
+        if (getVersionNumber() >= ActivitiVersionNumber.VERSION_1_2_2 && !isEnded) {
+            if (!DisplayUtils.hasCentralPane(getActivity())) {
                 menu.clear();
                 inflater.inflate(R.menu.task_form, menu);
-            }
-            else
-            {
+            } else {
                 getToolbar().getMenu().clear();
                 getToolbar().inflateMenu(R.menu.task_form);
                 // Set an OnMenuItemClickListener to handle menu item clicks
-                getToolbar().setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener()
-                {
+                getToolbar().setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
                     @Override
-                    public boolean onMenuItemClick(MenuItem item)
-                    {
+                    public boolean onMenuItemClick(MenuItem item) {
                         return onOptionsItemSelected(item);
                     }
                 });
@@ -216,48 +194,38 @@ public class TaskFormFoundationFragment extends AlfrescoFragment implements Date
     }
 
     @Override
-    public boolean onOptionsItemSelected(MenuItem item)
-    {
+    public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
-        switch (id)
-        {
+        switch (id) {
             case android.R.id.home:
                 getActivity().onBackPressed();
                 return true;
             case R.id.task_form_save:
                 SaveFormRepresentation rep = new SaveFormRepresentation(formManager.getValues());
-                getAPI().getTaskService().saveTaskForm(task.id, rep, new Callback<Void>()
-                {
+                getAPI().getTaskService().saveTaskForm(task.id, rep, new Callback<Void>() {
                     @Override
-                    public void onResponse(Call<Void> call, Response<Void> response)
-                    {
+                    public void onResponse(Call<Void> call, Response<Void> response) {
                         // Analytics
                         AnalyticsHelper.reportOperationEvent(getActivity(), AnalyticsManager.CATEGORY_TASK,
                                 AnalyticsManager.ACTION_FORM, AnalyticsManager.LABEL_SAVE, 1, !response.isSuccessful());
 
-                        if (!response.isSuccessful())
-                        {
+                        if (!response.isSuccessful()) {
                             onFailure(call, new Exception(response.message()));
                             return;
                         }
 
-                        try
-                        {
+                        try {
                             EventBusManager.getInstance().post(new SaveTaskEvent(null, task.id, task.category));
-                        }
-                        catch (Exception e)
-                        {
+                        } catch (Exception e) {
                             // Do nothing
                         }
                         Snackbar.make(getActivity().findViewById(R.id.left_panel), R.string.task_alert_saved,
                                 Snackbar.LENGTH_LONG).show();
 
                         // Refresh Task Fragment
-                        if (!DisplayUtils.hasCentralPane(getActivity()))
-                        {
+                        if (!DisplayUtils.hasCentralPane(getActivity())) {
                             Fragment fr = getAttachedFragment();
-                            if (fr != null && fr instanceof TasksFragment)
-                            {
+                            if (fr != null && fr instanceof TasksFragment) {
                                 ((TasksFragment) fr).refresh();
                             }
                         }
@@ -266,8 +234,7 @@ public class TaskFormFoundationFragment extends AlfrescoFragment implements Date
                     }
 
                     @Override
-                    public void onFailure(Call<Void> call, Throwable error)
-                    {
+                    public void onFailure(Call<Void> call, Throwable error) {
                         Snackbar.make(getActivity().findViewById(R.id.left_panel), error.getMessage(),
                                 Snackbar.LENGTH_SHORT).show();
                     }
@@ -282,17 +249,13 @@ public class TaskFormFoundationFragment extends AlfrescoFragment implements Date
     // ///////////////////////////////////////////////////////////////////////////
     // REQUEST
     // ///////////////////////////////////////////////////////////////////////////
-    protected void generateForm()
-    {
+    protected void generateForm() {
         displayLoading();
-        getAPI().getTaskService().getTaskForm(task.id, new Callback<FormDefinitionRepresentation>()
-        {
+        getAPI().getTaskService().getTaskForm(task.id, new Callback<FormDefinitionRepresentation>() {
             @Override
             public void onResponse(Call<FormDefinitionRepresentation> call,
-                    Response<FormDefinitionRepresentation> response)
-            {
-                if (!response.isSuccessful())
-                {
+                                   Response<FormDefinitionRepresentation> response) {
+                if (!response.isSuccessful()) {
                     onFailure(call, new Exception(response.message()));
                     return;
                 }
@@ -302,26 +265,20 @@ public class TaskFormFoundationFragment extends AlfrescoFragment implements Date
 
                 isEnded = task.endDate != null;
 
-                if (task.endDate == null)
-                {
+                if (task.endDate == null) {
                     formManager.displayEditForm();
-                }
-                else
-                {
+                } else {
                     formManager.displayReadForm();
                 }
 
                 outcomesView = formManager.getOutComesView();
                 Button button;
-                for (Map.Entry<String, View> outcomeEntry : outcomesView.entrySet())
-                {
+                for (Map.Entry<String, View> outcomeEntry : outcomesView.entrySet()) {
                     button = (Button) outcomeEntry.getValue().findViewById(R.id.outcome_button);
                     button.setTag(outcomeEntry.getKey());
-                    button.setOnClickListener(new View.OnClickListener()
-                    {
+                    button.setOnClickListener(new View.OnClickListener() {
                         @Override
-                        public void onClick(View v)
-                        {
+                        public void onClick(View v) {
                             UIUtils.hideKeyboard(getActivity(), v);
                             completeTask((String) v.getTag());
                         }
@@ -333,8 +290,7 @@ public class TaskFormFoundationFragment extends AlfrescoFragment implements Date
             }
 
             @Override
-            public void onFailure(Call<FormDefinitionRepresentation> call, Throwable error)
-            {
+            public void onFailure(Call<FormDefinitionRepresentation> call, Throwable error) {
                 displayError(error);
                 Snackbar.make(getActivity().findViewById(R.id.left_panel), error.getMessage(), Snackbar.LENGTH_SHORT)
                         .show();
@@ -345,54 +301,43 @@ public class TaskFormFoundationFragment extends AlfrescoFragment implements Date
     // ///////////////////////////////////////////////////////////////////////////
     // COMPLETE
     // ///////////////////////////////////////////////////////////////////////////
-    protected void completeTask(String outcome)
-    {
+    protected void completeTask(String outcome) {
         // Form valid ?
-        if (!formManager.checkValidation())
-        {
+        if (!formManager.checkValidation()) {
             Snackbar.make(getActivity().findViewById(R.id.left_panel), R.string.form_message_validation,
                     Snackbar.LENGTH_LONG).show();
             return;
         }
 
-        if (!formManager.hasOutcome())
-        {
+        if (!formManager.hasOutcome()) {
             outcome = null;
         }
 
         CompleteFormRepresentation rep = new CompleteFormRepresentation(formManager.getValues(), outcome);
-        getAPI().getTaskService().completeTaskForm(task.id, rep, new Callback<Void>()
-        {
+        getAPI().getTaskService().completeTaskForm(task.id, rep, new Callback<Void>() {
             @Override
-            public void onResponse(Call<Void> call, Response<Void> response)
-            {
+            public void onResponse(Call<Void> call, Response<Void> response) {
                 // Analytics
                 AnalyticsHelper.reportOperationEvent(getActivity(), AnalyticsManager.CATEGORY_TASK,
                         AnalyticsManager.ACTION_COMPLETE_TASK, AnalyticsManager.LABEL_WITH_FORM, 1,
                         !response.isSuccessful());
 
-                if (!response.isSuccessful())
-                {
+                if (!response.isSuccessful()) {
                     onFailure(call, new Exception(response.message()));
                     return;
                 }
-                try
-                {
+                try {
                     EventBusManager.getInstance().post(new CompleteTaskEvent(null, task.id, task.category));
-                }
-                catch (Exception e)
-                {
+                } catch (Exception e) {
                     // Do nothing
                 }
                 Snackbar.make(getActivity().findViewById(R.id.left_panel), R.string.task_alert_completed,
                         Snackbar.LENGTH_LONG).show();
 
                 // Refresh Task Fragment
-                if (!DisplayUtils.hasCentralPane(getActivity()))
-                {
+                if (!DisplayUtils.hasCentralPane(getActivity())) {
                     Fragment fr = getAttachedFragment();
-                    if (fr != null && fr instanceof TasksFragment)
-                    {
+                    if (fr != null && fr instanceof TasksFragment) {
                         ((TasksFragment) fr).refresh();
                     }
                 }
@@ -401,8 +346,7 @@ public class TaskFormFoundationFragment extends AlfrescoFragment implements Date
             }
 
             @Override
-            public void onFailure(Call<Void> call, Throwable error)
-            {
+            public void onFailure(Call<Void> call, Throwable error) {
                 Snackbar.make(getActivity().findViewById(R.id.left_panel), error.getMessage(), Snackbar.LENGTH_SHORT)
                         .show();
             }
@@ -413,14 +357,12 @@ public class TaskFormFoundationFragment extends AlfrescoFragment implements Date
     // PICKER CALLBACK
     // //////////////////////////////////////////////////////////////////////////////////////
     @Override
-    public void onDatePicked(String fieldId, GregorianCalendar gregorianCalendar)
-    {
-        formManager.setPropertyValue(fieldId, gregorianCalendar.getTime());
+    public void onDatePicked(String fieldId, Calendar calendar) {
+        formManager.setPropertyValue(fieldId, calendar.getTime());
     }
 
     @Override
-    public void onDateClear(String dateId)
-    {
+    public void onDateClear(String dateId) {
         formManager.setPropertyValue(dateId, null);
     }
 
@@ -428,20 +370,17 @@ public class TaskFormFoundationFragment extends AlfrescoFragment implements Date
     // PICKER CALLBACK
     // //////////////////////////////////////////////////////////////////////////////////////
     @Override
-    public void onPersonSelected(String fieldId, Map<String, LightUserRepresentation> p)
-    {
+    public void onPersonSelected(String fieldId, Map<String, LightUserRepresentation> p) {
         formManager.setPropertyValue(fieldId, p.get(p.keySet().toArray()[0]));
     }
 
     @Override
-    public void onPersonClear(String fieldId)
-    {
+    public void onPersonClear(String fieldId) {
         formManager.setPropertyValue(fieldId, null);
     }
 
     @Override
-    public Map<String, LightUserRepresentation> getPersonSelected(String fieldId)
-    {
+    public Map<String, LightUserRepresentation> getPersonSelected(String fieldId) {
         return new HashMap<>(0);
     }
 
@@ -449,44 +388,38 @@ public class TaskFormFoundationFragment extends AlfrescoFragment implements Date
     // PICKER CALLBACK
     // //////////////////////////////////////////////////////////////////////////////////////
     @Override
-    public void onGroupSelected(String fieldId, Map<Long, LightGroupRepresentation> p)
-    {
+    public void onGroupSelected(String fieldId, Map<Long, LightGroupRepresentation> p) {
         formManager.setPropertyValue(fieldId, p.get(p.keySet().toArray()[0]));
     }
 
     @Override
-    public void onGroupClear(String fieldId)
-    {
+    public void onGroupClear(String fieldId) {
         formManager.setPropertyValue(fieldId, null);
     }
 
     @Override
-    public Map<Long, LightGroupRepresentation> getGroupsSelected(String fieldId)
-    {
+    public Map<Long, LightGroupRepresentation> getGroupsSelected(String fieldId) {
         return new HashMap<>(0);
     }
 
     // ///////////////////////////////////////////////////////////////////////////
     // CARDS
     // ///////////////////////////////////////////////////////////////////////////
-    protected void displayLoading()
-    {
+    protected void displayLoading() {
         hide(R.id.form_master);
         show(R.id.details_loading);
         show(R.id.progressbar);
         hide(R.id.empty);
     }
 
-    protected void displayData()
-    {
+    protected void displayData() {
         show(R.id.form_master);
         hide(R.id.details_loading);
         hide(R.id.progressbar);
         hide(R.id.empty);
     }
 
-    protected void displayError(Throwable error)
-    {
+    protected void displayError(Throwable error) {
         hide(R.id.form_master);
         show(R.id.details_loading);
         hide(R.id.progressbar);
@@ -497,11 +430,9 @@ public class TaskFormFoundationFragment extends AlfrescoFragment implements Date
         emptyText.setText(ExceptionMessageUtils.getMessage(getActivity(), error));
         Button bRetry = (Button) viewById(R.id.empty_action);
         bRetry.setText(R.string.retry);
-        bRetry.setOnClickListener(new View.OnClickListener()
-        {
+        bRetry.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v)
-            {
+            public void onClick(View v) {
                 generateForm();
             }
         });
