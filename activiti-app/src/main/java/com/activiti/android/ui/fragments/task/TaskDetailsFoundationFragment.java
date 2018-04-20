@@ -19,17 +19,6 @@
 
 package com.activiti.android.ui.fragments.task;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.GregorianCalendar;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
-
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -71,7 +60,7 @@ import com.activiti.android.ui.fragments.common.ListingModeFragment;
 import com.activiti.android.ui.fragments.form.EditTextDialogFragment;
 import com.activiti.android.ui.fragments.form.picker.ActivitiUserPickerFragment;
 import com.activiti.android.ui.fragments.form.picker.DatePickerFragment;
-import com.activiti.android.ui.fragments.form.picker.DatePickerFragment.onPickDateFragment;
+import com.activiti.android.ui.fragments.form.picker.DatePickerFragment.OnPickDateFragment;
 import com.activiti.android.ui.fragments.form.picker.UserPickerFragment;
 import com.activiti.android.ui.fragments.task.create.CreateStandaloneTaskDialogFragment;
 import com.activiti.android.ui.fragments.task.form.AttachFormTaskDialogFragment;
@@ -93,13 +82,24 @@ import com.activiti.client.api.model.runtime.request.InvolveTaskRepresentation;
 import com.activiti.client.api.model.runtime.request.UpdateTaskRepresentation;
 import com.daimajia.swipe.SwipeLayout;
 
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
 /**
  * Created by jpascal on 07/03/2015.
  */
 public class TaskDetailsFoundationFragment extends AbstractDetailsFragment
-        implements onPickDateFragment, UserPickerFragment.onPickAuthorityFragment,
-        EditTextDialogFragment.onEditTextFragment, ActivitiUserPickerFragment.UserEmailPickerCallback
-{
+        implements OnPickDateFragment, UserPickerFragment.onPickAuthorityFragment,
+        EditTextDialogFragment.onEditTextFragment, ActivitiUserPickerFragment.UserEmailPickerCallback {
     public static final String TAG = TaskDetailsFoundationFragment.class.getName();
 
     public static final String ARGUMENT_TASK_ID = "userId";
@@ -126,7 +126,9 @@ public class TaskDetailsFoundationFragment extends AbstractDetailsFragment
 
     protected Date dueAt;
 
-    /** real value of formkey (variable as change is possible) */
+    /**
+     * real value of formkey (variable as change is possible)
+     */
     protected String formKey;
 
     protected String description;
@@ -140,13 +142,11 @@ public class TaskDetailsFoundationFragment extends AbstractDetailsFragment
     // ///////////////////////////////////////////////////////////////////////////
     // CONSTRUCTORS & HELPERS
     // ///////////////////////////////////////////////////////////////////////////
-    public TaskDetailsFoundationFragment()
-    {
+    public TaskDetailsFoundationFragment() {
         super();
     }
 
-    public static TaskDetailsFoundationFragment newInstanceByTemplate(Bundle b)
-    {
+    public static TaskDetailsFoundationFragment newInstanceByTemplate(Bundle b) {
         TaskDetailsFoundationFragment cbf = new TaskDetailsFoundationFragment();
         cbf.setArguments(b);
         return cbf;
@@ -155,46 +155,36 @@ public class TaskDetailsFoundationFragment extends AbstractDetailsFragment
     // ///////////////////////////////////////////////////////////////////////////
     // LIFECYCLE
     // ///////////////////////////////////////////////////////////////////////////
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
-    {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         rendition = new RenditionManager(getActivity(), ActivitiSession.getInstance());
         setRootView(inflater.inflate(R.layout.fr_task_details, container, false));
         return getRootView();
     }
 
     @Override
-    public void onActivityCreated(Bundle savedInstanceState)
-    {
+    public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
         displayLoading();
 
-        if (getArguments() != null)
-        {
+        if (getArguments() != null) {
             task = getArguments().getParcelable(ARGUMENT_TASK);
-            if (task == null)
-            {
+            if (task == null) {
                 taskId = BundleUtils.getString(getArguments(), ARGUMENT_TASK_ID);
-            }
-            else
-            {
+            } else {
                 taskId = task.id;
             }
         }
 
         // Retrieve Information
-        getAPI().getTaskService().getById(taskId, new Callback<TaskRepresentation>()
-        {
+        getAPI().getTaskService().getById(taskId, new Callback<TaskRepresentation>() {
             @Override
-            public void onResponse(Call<TaskRepresentation> call, Response<TaskRepresentation> response)
-            {
-                if (!response.isSuccessful())
-                {
+            public void onResponse(Call<TaskRepresentation> call, Response<TaskRepresentation> response) {
+                if (!response.isSuccessful()) {
                     onFailure(call, new Exception(response.message()));
                     return;
                 }
-                if (!response.isSuccessful())
-                {
+                if (!response.isSuccessful()) {
                     onFailure(call, new Exception(response.message()));
                 }
                 taskRepresentation = response.body();
@@ -216,8 +206,7 @@ public class TaskDetailsFoundationFragment extends AbstractDetailsFragment
             }
 
             @Override
-            public void onFailure(Call<TaskRepresentation> call, Throwable error)
-            {
+            public void onFailure(Call<TaskRepresentation> call, Throwable error) {
                 displayError();
                 Snackbar.make(getActivity().findViewById(R.id.left_panel), error.getMessage(), Snackbar.LENGTH_SHORT)
                         .show();
@@ -226,17 +215,14 @@ public class TaskDetailsFoundationFragment extends AbstractDetailsFragment
     }
 
     @Override
-    public void onResume()
-    {
+    public void onResume() {
         super.onResume();
         UIUtils.setTitle(getActivity(), task != null ? task.name : null, getString(R.string.task_title_details), true);
     }
 
     @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent resultData)
-    {
-        if (requestCode == ContentTransferManager.PICKER_REQUEST_CODE && resultCode == Activity.RESULT_OK)
-        {
+    public void onActivityResult(int requestCode, int resultCode, Intent resultData) {
+        if (requestCode == ContentTransferManager.PICKER_REQUEST_CODE && resultCode == Activity.RESULT_OK) {
             ContentTransferManager.prepareTransfer(resultData, this, taskId, ContentTransferManager.TYPE_TASK_ID);
         }
     }
@@ -244,16 +230,12 @@ public class TaskDetailsFoundationFragment extends AbstractDetailsFragment
     // ///////////////////////////////////////////////////////////////////////////
     // API REQUEST
     // ///////////////////////////////////////////////////////////////////////////
-    private void refreshInfo()
-    {
+    private void refreshInfo() {
         // Retrieve Information
-        getAPI().getTaskService().getById(taskId, new Callback<TaskRepresentation>()
-        {
+        getAPI().getTaskService().getById(taskId, new Callback<TaskRepresentation>() {
             @Override
-            public void onResponse(Call<TaskRepresentation> call, Response<TaskRepresentation> response)
-            {
-                if (!response.isSuccessful())
-                {
+            public void onResponse(Call<TaskRepresentation> call, Response<TaskRepresentation> response) {
+                if (!response.isSuccessful()) {
                     onFailure(call, new Exception(response.message()));
                     return;
                 }
@@ -271,8 +253,7 @@ public class TaskDetailsFoundationFragment extends AbstractDetailsFragment
             }
 
             @Override
-            public void onFailure(Call<TaskRepresentation> call, Throwable error)
-            {
+            public void onFailure(Call<TaskRepresentation> call, Throwable error) {
                 displayError();
                 Snackbar.make(getActivity().findViewById(R.id.left_panel), error.getMessage(), Snackbar.LENGTH_SHORT)
                         .show();
@@ -280,30 +261,24 @@ public class TaskDetailsFoundationFragment extends AbstractDetailsFragment
         });
     }
 
-    private void requestExtraInfo()
-    {
-        if (taskRepresentation == null) { return; }
+    private void requestExtraInfo() {
+        if (taskRepresentation == null) {
+            return;
+        }
 
         // Retrieve Process Info
-        if (taskRepresentation.getProcessInstanceId() != null)
-        {
-            if (processInstanceRepresentation != null)
-            {
+        if (taskRepresentation.getProcessInstanceId() != null) {
+            if (processInstanceRepresentation != null) {
                 displayProcessProperty(processInstanceRepresentation);
-            }
-            else
-            {
+            } else {
                 displayProcessProperty(null);
 
                 getAPI().getProcessService().getById(taskRepresentation.getProcessInstanceId(),
-                        new Callback<ProcessInstanceRepresentation>()
-                        {
+                        new Callback<ProcessInstanceRepresentation>() {
                             @Override
                             public void onResponse(Call<ProcessInstanceRepresentation> call,
-                                    Response<ProcessInstanceRepresentation> response)
-                            {
-                                if (!response.isSuccessful())
-                                {
+                                                   Response<ProcessInstanceRepresentation> response) {
+                                if (!response.isSuccessful()) {
                                     onFailure(call, new Exception(response.message()));
                                     return;
                                 }
@@ -312,16 +287,14 @@ public class TaskDetailsFoundationFragment extends AbstractDetailsFragment
                             }
 
                             @Override
-                            public void onFailure(Call<ProcessInstanceRepresentation> call, Throwable error)
-                            {
+                            public void onFailure(Call<ProcessInstanceRepresentation> call, Throwable error) {
 
                             }
                         });
             }
         }
 
-        if (taskRepresentation.getParentTaskId() != null)
-        {
+        if (taskRepresentation.getParentTaskId() != null) {
             displayParentTaskProperty();
         }
 
@@ -330,14 +303,11 @@ public class TaskDetailsFoundationFragment extends AbstractDetailsFragment
         retrieveForm();
 
         // Retrieve Contents
-        getAPI().getTaskService().getAttachments(taskId, new Callback<ResultList<RelatedContentRepresentation>>()
-        {
+        getAPI().getTaskService().getAttachments(taskId, new Callback<ResultList<RelatedContentRepresentation>>() {
             @Override
             public void onResponse(Call<ResultList<RelatedContentRepresentation>> call,
-                    Response<ResultList<RelatedContentRepresentation>> response)
-            {
-                if (!response.isSuccessful())
-                {
+                                   Response<ResultList<RelatedContentRepresentation>> response) {
+                if (!response.isSuccessful()) {
                     onFailure(call, new Exception(response.message()));
                     return;
                 }
@@ -347,15 +317,13 @@ public class TaskDetailsFoundationFragment extends AbstractDetailsFragment
             }
 
             @Override
-            public void onFailure(Call<ResultList<RelatedContentRepresentation>> call, Throwable error)
-            {
+            public void onFailure(Call<ResultList<RelatedContentRepresentation>> call, Throwable error) {
                 displayContents(null);
             }
         });
 
         // Retrieve CheckList
-        if (getVersionNumber() < ActivitiVersionNumber.VERSION_1_3_0)
-        {
+        if (getVersionNumber() < ActivitiVersionNumber.VERSION_1_3_0) {
             hasCheckList = true;
             return;
         }
@@ -363,17 +331,13 @@ public class TaskDetailsFoundationFragment extends AbstractDetailsFragment
 
     }
 
-    protected void requestChecklist()
-    {
+    protected void requestChecklist() {
         getAPI().getTaskService().getChecklist(taskRepresentation.getId(),
-                new Callback<ResultList<TaskRepresentation>>()
-                {
+                new Callback<ResultList<TaskRepresentation>>() {
                     @Override
                     public void onResponse(Call<ResultList<TaskRepresentation>> call,
-                            Response<ResultList<TaskRepresentation>> response)
-                    {
-                        if (!response.isSuccessful())
-                        {
+                                           Response<ResultList<TaskRepresentation>> response) {
+                        if (!response.isSuccessful()) {
                             onFailure(call, new Exception(response.message()));
                             return;
                         }
@@ -383,8 +347,7 @@ public class TaskDetailsFoundationFragment extends AbstractDetailsFragment
                     }
 
                     @Override
-                    public void onFailure(Call<ResultList<TaskRepresentation>> call, Throwable error)
-                    {
+                    public void onFailure(Call<ResultList<TaskRepresentation>> call, Throwable error) {
                         hasCheckList = true;
                     }
                 });
@@ -393,16 +356,14 @@ public class TaskDetailsFoundationFragment extends AbstractDetailsFragment
     // ///////////////////////////////////////////////////////////////////////////
     // CARDS LIFECYCLE
     // ///////////////////////////////////////////////////////////////////////////
-    protected void displayLoading()
-    {
+    protected void displayLoading() {
         hide(R.id.details_container);
         show(R.id.details_loading);
         show(R.id.progressbar);
         hide(R.id.empty);
     }
 
-    protected void displayData()
-    {
+    protected void displayData() {
         show(R.id.details_container);
         hide(R.id.details_loading);
         hide(R.id.task_details_help_card);
@@ -410,8 +371,7 @@ public class TaskDetailsFoundationFragment extends AbstractDetailsFragment
         hide(R.id.empty);
     }
 
-    protected void displayHelp()
-    {
+    protected void displayHelp() {
         show(R.id.details_container);
         hide(R.id.details_loading);
         hide(R.id.progressbar);
@@ -419,49 +379,39 @@ public class TaskDetailsFoundationFragment extends AbstractDetailsFragment
         hide(R.id.task_details_people_card);
         hide(R.id.details_contents_card);
         hide(R.id.task_details_checklist_card);
-        if (isEnded)
-        {
+        if (isEnded) {
             hide(R.id.task_details_help_card);
-        }
-        else
-        {
+        } else {
             createHelpSection();
         }
     }
 
-    protected void displayError()
-    {
+    protected void displayError() {
         hide(R.id.details_container);
         show(R.id.details_loading);
         hide(R.id.progressbar);
         show(R.id.empty);
     }
 
-    protected void displayCards()
-    {
-        if (hasPeopleLoaded && hasContentLoaded && hasCheckList)
-        {
-            if (people.isEmpty() && relatedContentRepresentations.isEmpty() && checkListTasks.isEmpty())
-            {
+    protected void displayCards() {
+        if (hasPeopleLoaded && hasContentLoaded && hasCheckList) {
+            if (people.isEmpty() && relatedContentRepresentations.isEmpty() && checkListTasks.isEmpty()) {
                 displayHelp();
-            }
-            else
-            {
+            } else {
                 displayCheckList(checkListTasks);
                 displayPeopleSection(people);
                 displayContents(relatedContentRepresentations);
                 displayData();
             }
-        }
-        else
-        {
+        } else {
             displayLoading();
         }
     }
 
-    protected void displayInfo()
-    {
-        if (taskRepresentation == null) { return; }
+    protected void displayInfo() {
+        if (taskRepresentation == null) {
+            return;
+        }
 
         // What's the status ?
         isEnded = (taskRepresentation.getEndDate() != null);
@@ -494,70 +444,50 @@ public class TaskDetailsFoundationFragment extends AbstractDetailsFragment
 
     }
 
-    private void displayOutcome()
-    {
-        if (isEnded)
-        {
+    private void displayOutcome() {
+        if (isEnded) {
             displayCompletedProperties(taskRepresentation);
-            if (formKey != null)
-            {
+            if (formKey != null) {
                 Button myTasks = (Button) viewById(R.id.task_action_complete);
                 myTasks.setText(R.string.task_action_complete_task_with_form);
-                myTasks.setOnClickListener(new View.OnClickListener()
-                {
+                myTasks.setOnClickListener(new View.OnClickListener() {
                     @Override
-                    public void onClick(View v)
-                    {
+                    public void onClick(View v) {
                         TaskFormFragment.with(getActivity()).task(taskRepresentation).back(true)
                                 .display(FragmentDisplayer.PANEL_CENTRAL);
                     }
                 });
-            }
-            else
-            {
+            } else {
                 hide(R.id.task_action_outcome_container);
             }
-        }
-        else
-        {
+        } else {
             Button taskAction = (Button) viewById(R.id.task_action_complete);
             taskAction.setEnabled(true);
-            if (TaskHelper.canClaim(taskRepresentation, assignee))
-            {
+            if (TaskHelper.canClaim(taskRepresentation, assignee)) {
                 taskAction.setText(R.string.task_action_claim);
-                taskAction.setOnClickListener(new View.OnClickListener()
-                {
+                taskAction.setOnClickListener(new View.OnClickListener() {
                     @Override
-                    public void onClick(View v)
-                    {
+                    public void onClick(View v) {
                         claim();
                         v.setEnabled(false);
                     }
                 });
-            }
-            else if (formKey != null)
-            {
+            } else if (formKey != null) {
                 taskAction.setText(R.string.task_action_complete_task_with_form);
-                taskAction.setOnClickListener(new View.OnClickListener()
-                {
+                taskAction.setOnClickListener(new View.OnClickListener() {
                     @Override
-                    public void onClick(View v)
-                    {
+                    public void onClick(View v) {
                         TaskFormFragment.with(getActivity()).task(taskRepresentation)
                                 .bindFragmentTag(BundleUtils.getString(getArguments(), ARGUMENT_BIND_FRAGMENT_TAG))
                                 .back(true).display();
                         v.setEnabled(false);
                     }
                 });
-            }
-            else
-            {
+            } else {
                 taskAction.setText(R.string.task_action_complete);
-                taskAction.setOnClickListener(new View.OnClickListener()
-                {
+                taskAction.setOnClickListener(new View.OnClickListener() {
                     @Override
-                    public void onClick(View v)
-                    {
+                    public void onClick(View v) {
                         completeTask();
                         v.setEnabled(false);
                     }
@@ -566,148 +496,111 @@ public class TaskDetailsFoundationFragment extends AbstractDetailsFragment
         }
     }
 
-    private void displayAssignee(String assignee)
-    {
+    private void displayAssignee(String assignee) {
         HolderUtils.configure(assigneeHolder, getString(R.string.task_field_assignee),
                 (assignee != null) ? assignee : getString(R.string.task_message_no_assignee),
                 R.drawable.ic_assignment_ind_grey);
-        if (TaskHelper.canReassign(taskRepresentation, getAccount().getUserId()))
-        {
+        if (TaskHelper.canReassign(taskRepresentation, getAccount().getUserId())) {
             View v = viewById(R.id.task_details_assignee_container);
-            v.setOnClickListener(new View.OnClickListener()
-            {
+            v.setOnClickListener(new View.OnClickListener() {
                 @Override
-                public void onClick(View v)
-                {
+                public void onClick(View v) {
                     // Special case activiti.alfresco.com & tenantid == null
                     // User must pick user via email only
-                    if (ActivitiSession.getInstance().isActivitiOnTheCloud() && getAccount().getTenantId() == null)
-                    {
+                    if (ActivitiSession.getInstance().isActivitiOnTheCloud() && getAccount().getTenantId() == null) {
                         ActivitiUserPickerFragment.with(getActivity()).fragmentTag(getTag()).fieldId("assign")
                                 .displayAsDialog();
-                    }
-                    else
-                    {
+                    } else {
                         UserPickerFragment.with(getActivity()).fragmentTag(getTag()).fieldId("assign")
                                 .singleChoice(true).mode(ListingModeFragment.MODE_PICK).display();
                     }
                 }
             });
-        }
-        else
-        {
+        } else {
             UIUtils.setBackground(viewById(R.id.task_details_assignee_container), null);
         }
     }
 
-    private void displayDueDate(Date due)
-    {
+    private void displayDueDate(Date due) {
         dueDateHolder.topText.setText(R.string.task_field_due);
         dueDateHolder.icon.setImageResource(R.drawable.ic_event_grey);
 
         dueAt = due;
-        if (due != null)
-        {
+        if (due != null) {
             StringBuilder builder = new StringBuilder();
             GregorianCalendar calendar = new GregorianCalendar();
             calendar.setTime(due);
-            if (calendar.before(new GregorianCalendar()))
-            {
+            if (calendar.before(new GregorianCalendar())) {
                 builder.append("<font color='#F44336'>");
                 builder.append(DateFormat.getLongDateFormat(getActivity()).format(due.getTime()));
                 builder.append("</font>");
-            }
-            else
-            {
+            } else {
                 builder.append(DateFormat.getLongDateFormat(getActivity()).format(due.getTime()));
             }
             dueDateHolder.bottomText.setText(builder.toString());
             dueDateHolder.bottomText.setText(Html.fromHtml(builder.toString()), TextView.BufferType.SPANNABLE);
-        }
-        else
-        {
+        } else {
             dueDateHolder.bottomText.setText(R.string.task_message_no_duedate);
         }
-        if (!isEnded)
-        {
-            viewById(R.id.task_details_due_container).setOnClickListener(new View.OnClickListener()
-            {
+        if (!isEnded) {
+            viewById(R.id.task_details_due_container).setOnClickListener(new View.OnClickListener() {
                 @Override
-                public void onClick(View v)
-                {
+                public void onClick(View v) {
                     DatePickerFragment.newInstance(DUE_DATE, getTag()).show(getFragmentManager(),
                             DatePickerFragment.TAG);
                 }
             });
-        }
-        else
-        {
+        } else {
             UIUtils.setBackground(viewById(R.id.task_details_due_container), null);
         }
     }
 
-    private void displayDescription(final String description)
-    {
+    private void displayDescription(final String description) {
         descriptionHolder.bottomText.setVisibility(View.GONE);
         descriptionHolder.icon.setImageResource(R.drawable.ic_info_outline_grey);
-        if (TextUtils.isEmpty(description))
-        {
+        if (TextUtils.isEmpty(description)) {
             descriptionHolder.topText.setText(R.string.task_message_no_description);
-        }
-        else
-        {
+        } else {
             descriptionHolder.topText.setText(description);
         }
         descriptionHolder.topText.setMaxLines(15);
         descriptionHolder.topText.setSingleLine(false);
-        if (!isEnded)
-        {
+        if (!isEnded) {
             View v = viewById(R.id.task_details_description_container);
-            v.setOnClickListener(new View.OnClickListener()
-            {
+            v.setOnClickListener(new View.OnClickListener() {
                 @Override
-                public void onClick(View v)
-                {
+                public void onClick(View v) {
                     EditTextDialogFragment.with(getActivity()).fieldId(EDIT_DESCRIPTION).tag(getTag())
                             .value(description).displayAsDialog();
                 }
             });
-        }
-        else
-        {
+        } else {
             clearBackground(viewById(R.id.task_details_description_container));
         }
     }
 
-    private void retrieveForm()
-    {
+    private void retrieveForm() {
         // Unsupported below 1.3.0
-        if (getVersionNumber() < ActivitiVersionNumber.VERSION_1_3_0)
-        {
+        if (getVersionNumber() < ActivitiVersionNumber.VERSION_1_3_0) {
             hide(R.id.task_details_form_container);
             return;
         }
 
         // Can't change if task in process
-        if (taskRepresentation.getProcessDefinitionId() != null)
-        {
+        if (taskRepresentation.getProcessDefinitionId() != null) {
             hide(R.id.task_details_form_container);
             return;
         }
 
         // Retrieve FormModel Info
         displayFormField();
-        if (formKey != null)
-        {
+        if (formKey != null) {
             getAPI().getTaskService().getTaskForm(taskRepresentation.getId(),
-                    new Callback<FormDefinitionRepresentation>()
-                    {
+                    new Callback<FormDefinitionRepresentation>() {
                         @Override
                         public void onResponse(Call<FormDefinitionRepresentation> call,
-                                Response<FormDefinitionRepresentation> response)
-                        {
-                            if (!response.isSuccessful())
-                            {
+                                               Response<FormDefinitionRepresentation> response) {
+                            if (!response.isSuccessful()) {
                                 onFailure(call, new Exception(response.message()));
                                 return;
                             }
@@ -715,25 +608,21 @@ public class TaskDetailsFoundationFragment extends AbstractDetailsFragment
                             formDefinitionModel = null;
                             formKey = Long.toString(response.body().getId());
                             displayFormField();
-                            if (!isEnded)
-                            {
+                            if (!isEnded) {
                                 displayOutcome();
                             }
                         }
 
                         @Override
-                        public void onFailure(Call<FormDefinitionRepresentation> call, Throwable error)
-                        {
+                        public void onFailure(Call<FormDefinitionRepresentation> call, Throwable error) {
 
                         }
                     });
         }
     }
 
-    private void displayFormField()
-    {
-        if (isEnded)
-        {
+    private void displayFormField() {
+        if (isEnded) {
             hide(R.id.task_details_form_container);
             return;
         }
@@ -743,11 +632,9 @@ public class TaskDetailsFoundationFragment extends AbstractDetailsFragment
                 getString(R.string.task_action_retrieve_info), R.drawable.ic_assignment_grey);
 
         View v = viewById(R.id.task_details_form_container);
-        v.setOnClickListener(new View.OnClickListener()
-        {
+        v.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v)
-            {
+            public void onClick(View v) {
                 AttachFormTaskDialogFragment.with(getActivity()).bindFragmentTag(getTag())
                         .taskId(taskRepresentation.getId()).formKey(formKey != null ? Long.parseLong(formKey) : null)
                         .displayAsDialog();
@@ -757,18 +644,16 @@ public class TaskDetailsFoundationFragment extends AbstractDetailsFragment
         ((TextView) viewById(R.id.task_details_form_container).findViewById(R.id.bottomtext))
                 .setText(formModelName != null ? formModelName
                         : formDefinitionModel != null ? formDefinitionModel.getName()
-                                : getString(R.string.task_message_no_form));
+                        : getString(R.string.task_message_no_form));
     }
 
-    private void displayCompletedProperties(TaskRepresentation taskRepresentation)
-    {
+    private void displayCompletedProperties(TaskRepresentation taskRepresentation) {
         TwoLinesViewHolder vh = HolderUtils.configure((LinearLayout) viewById(R.id.task_details_property_container),
                 R.layout.row_two_lines_inverse, getString(R.string.task_field_ended),
                 Formatter.formatToRelativeDate(getActivity(), taskRepresentation.getEndDate()),
                 R.drawable.ic_history_grey);
 
-        if (viewById(R.id.task_container_large) != null)
-        {
+        if (viewById(R.id.task_container_large) != null) {
             ((RelativeLayout) vh.icon.getParent()).setLayoutParams(new LinearLayout.LayoutParams(
                     ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT, 1f));
         }
@@ -777,53 +662,41 @@ public class TaskDetailsFoundationFragment extends AbstractDetailsFragment
                 R.layout.row_two_lines_inverse, getString(R.string.task_field_duration),
                 Formatter.formatDuration(getActivity(), taskRepresentation.getDuration()), R.drawable.ic_schedule_grey);
 
-        if (viewById(R.id.task_container_large) != null)
-        {
+        if (viewById(R.id.task_container_large) != null) {
             ((RelativeLayout) vh.icon.getParent()).setLayoutParams(new LinearLayout.LayoutParams(
                     ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT, 1f));
         }
     }
 
-    private void displayProcessProperty(ProcessInstanceRepresentation processInstanceRepresentation)
-    {
+    private void displayProcessProperty(ProcessInstanceRepresentation processInstanceRepresentation) {
         if (processInstanceRepresentation == null
-                || viewById(R.id.task_details_part_of_container).findViewById(R.id.bottomtext) == null)
-        {
+                || viewById(R.id.task_details_part_of_container).findViewById(R.id.bottomtext) == null) {
             HolderUtils.configure((LinearLayout) viewById(R.id.task_details_part_of_container),
                     R.layout.row_two_lines_inverse_borderless, getString(R.string.task_field_process_instance),
                     getString(R.string.task_action_retrieve_info), R.drawable.ic_transform_grey, onProcessListener);
         }
 
-        if (processInstanceRepresentation != null)
-        {
+        if (processInstanceRepresentation != null) {
             ((TextView) viewById(R.id.task_details_part_of_container).findViewById(R.id.bottomtext))
                     .setText(processInstanceRepresentation.getName());
         }
     }
 
-    private void displayParentTaskProperty()
-    {
-        if (taskRepresentation.getParentTaskId() != null)
-        {
+    private void displayParentTaskProperty() {
+        if (taskRepresentation.getParentTaskId() != null) {
             HolderUtils.configure((LinearLayout) viewById(R.id.task_details_part_of_container),
                     R.layout.row_two_lines_inverse_borderless, getString(R.string.task_field_parent_task),
                     taskRepresentation.getParentTaskName(), R.drawable.ic_transform_grey, onParentTaskListener);
         }
     }
 
-    private void displayActionsSection()
-    {
-        if (getVersionNumber() < ActivitiVersionNumber.VERSION_1_3_0)
-        {
+    private void displayActionsSection() {
+        if (getVersionNumber() < ActivitiVersionNumber.VERSION_1_3_0) {
             hide(R.id.task_action_add_task_cheklist);
-        }
-        else
-        {
-            viewById(R.id.task_action_add_task_cheklist).setOnClickListener(new View.OnClickListener()
-            {
+        } else {
+            viewById(R.id.task_action_add_task_cheklist).setOnClickListener(new View.OnClickListener() {
                 @Override
-                public void onClick(View v)
-                {
+                public void onClick(View v) {
                     CreateStandaloneTaskDialogFragment.with(getActivity()).taskId(taskRepresentation.getId())
                             .displayAsDialog();
                     // TaskChecklistFragment.with(getActivity()).taskId(taskRepresentation.getId()).display();
@@ -831,36 +704,27 @@ public class TaskDetailsFoundationFragment extends AbstractDetailsFragment
             });
         }
 
-        if (isEnded)
-        {
+        if (isEnded) {
             hide(R.id.task_actions_container_bar);
             hide(R.id.task_actions_container);
-        }
-        else
-        {
-            viewById(R.id.task_action_involve).setOnClickListener(new View.OnClickListener()
-            {
+        } else {
+            viewById(R.id.task_action_involve).setOnClickListener(new View.OnClickListener() {
                 @Override
-                public void onClick(View v)
-                {
+                public void onClick(View v) {
                     startInvolveAction();
                 }
             });
 
-            viewById(R.id.task_action_add_content).setOnClickListener(new View.OnClickListener()
-            {
+            viewById(R.id.task_action_add_content).setOnClickListener(new View.OnClickListener() {
                 @Override
-                public void onClick(View v)
-                {
+                public void onClick(View v) {
                     ContentTransferManager.requestGetContent(TaskDetailsFoundationFragment.this);
                 }
             });
 
-            viewById(R.id.task_action_add_comment).setOnClickListener(new View.OnClickListener()
-            {
+            viewById(R.id.task_action_add_comment).setOnClickListener(new View.OnClickListener() {
                 @Override
-                public void onClick(View v)
-                {
+                public void onClick(View v) {
                     ((MainActivity) getActivity())
                             .setRightMenuVisibility(!((MainActivity) getActivity()).isRightMenuVisible());
                 }
@@ -868,11 +732,9 @@ public class TaskDetailsFoundationFragment extends AbstractDetailsFragment
         }
     }
 
-    private void displayPeopleSection(List<LightUserRepresentation> people)
-    {
+    private void displayPeopleSection(List<LightUserRepresentation> people) {
         show(R.id.task_details_people_card);
-        if (people.isEmpty() || isEnded)
-        {
+        if (people.isEmpty() || isEnded) {
             hide(R.id.task_details_people_card);
             return;
         }
@@ -882,25 +744,20 @@ public class TaskDetailsFoundationFragment extends AbstractDetailsFragment
         LinearLayout userContainer = (LinearLayout) viewById(R.id.task_details_people_container);
         userContainer.removeAllViews();
         View v;
-        if (people == null || people.isEmpty())
-        {
+        if (people == null || people.isEmpty()) {
             v = inflater.inflate(R.layout.row_single_line, userContainer, false);
             ((TextView) v.findViewById(R.id.toptext)).setText(R.string.task_message_no_people_involved);
             v.findViewById(R.id.icon).setVisibility(View.GONE);
             userContainer.addView(v);
-        }
-        else
-        {
+        } else {
             TwoLinesViewHolder vh;
-            for (LightUserRepresentation user : people)
-            {
+            for (LightUserRepresentation user : people) {
                 v = inflater.inflate(R.layout.row_two_lines_swipe, userContainer, false);
                 v.setTag(user.getId());
                 String fullName = user.getFullname();
                 vh = HolderUtils.configure(v, fullName != null && !fullName.isEmpty() ? fullName : user.getEmail(),
                         null, R.drawable.ic_account_circle_grey);
-                if (picasso != null)
-                {
+                if (picasso != null) {
                     picasso.cancelRequest(vh.icon);
                     picasso.load(getAPI().getUserGroupService().getPicture(user.getId()))
                             .placeholder(R.drawable.ic_account_circle_grey).fit().transform(roundedTransformation)
@@ -915,11 +772,9 @@ public class TaskDetailsFoundationFragment extends AbstractDetailsFragment
                         (LinearLayout) swipeLayout.findViewById(R.id.bottom_wrapper), false);
                 action.setImageResource(R.drawable.ic_remove_circle_outline_white);
                 action.setTag(user);
-                action.setOnClickListener(new View.OnClickListener()
-                {
+                action.setOnClickListener(new View.OnClickListener() {
                     @Override
-                    public void onClick(View v)
-                    {
+                    public void onClick(View v) {
                         removeInvolved(((LightUserRepresentation) v.getTag()),
                                 new InvolveTaskRepresentation(((LightUserRepresentation) v.getTag()).getId()));
                     }
@@ -930,18 +785,15 @@ public class TaskDetailsFoundationFragment extends AbstractDetailsFragment
             }
         }
 
-        if (!isEnded)
-        {
+        if (!isEnded) {
             v = inflater.inflate(R.layout.footer_two_buttons_borderless, userContainer, false);
             Button b = (Button) v.findViewById(R.id.button_action_left);
             b.setVisibility(View.GONE);
             b = (Button) v.findViewById(R.id.button_action_right);
             b.setText(R.string.task_action_involve);
-            b.setOnClickListener(new View.OnClickListener()
-            {
+            b.setOnClickListener(new View.OnClickListener() {
                 @Override
-                public void onClick(View v)
-                {
+                public void onClick(View v) {
                     startInvolveAction();
                 }
             });
@@ -952,17 +804,14 @@ public class TaskDetailsFoundationFragment extends AbstractDetailsFragment
     // ///////////////////////////////////////////////////////////////////////////
     // TASKS
     // ///////////////////////////////////////////////////////////////////////////
-    protected void displayCheckList(List<TaskRepresentation> taskRepresentations)
-    {
-        if (getVersionNumber() < ActivitiVersionNumber.VERSION_1_3_0)
-        {
+    protected void displayCheckList(List<TaskRepresentation> taskRepresentations) {
+        if (getVersionNumber() < ActivitiVersionNumber.VERSION_1_3_0) {
             hide(R.id.task_details_checklist_card);
             return;
         }
 
         show(R.id.task_details_checklist_card);
-        if (taskRepresentations == null || taskRepresentations.isEmpty() || isEnded)
-        {
+        if (taskRepresentations == null || taskRepresentations.isEmpty() || isEnded) {
             hide(R.id.task_details_checklist_card);
             return;
         }
@@ -973,21 +822,17 @@ public class TaskDetailsFoundationFragment extends AbstractDetailsFragment
         LinearLayout activeTaskContainer = (LinearLayout) viewById(R.id.task_details_checklist_container);
         activeTaskContainer.removeAllViews();
         View v;
-        if (taskRepresentations == null || taskRepresentations.isEmpty())
-        {
+        if (taskRepresentations == null || taskRepresentations.isEmpty()) {
             v = inflater.inflate(R.layout.row_single_line, activeTaskContainer, false);
             ((TextView) v.findViewById(R.id.toptext)).setText(R.string.task_help_add_first_checklist);
             HolderUtils.makeMultiLine(((TextView) v.findViewById(R.id.toptext)), 4);
             v.findViewById(R.id.icon).setVisibility(View.GONE);
             activeTaskContainer.addView(v);
-        }
-        else
-        {
+        } else {
             TaskRepresentation taskCheckList;
             TwoLinesViewHolder vh;
             int max = (taskRepresentations.size() > TASKS_MAX_ITEMS) ? TASKS_MAX_ITEMS : taskRepresentations.size();
-            for (int i = 0; i < max; i++)
-            {
+            for (int i = 0; i < max; i++) {
                 taskCheckList = taskRepresentations.get(i);
                 v = inflater.inflate(R.layout.row_three_lines_caption_borderless, activeTaskContainer, false);
                 v.setTag(taskCheckList);
@@ -997,23 +842,18 @@ public class TaskDetailsFoundationFragment extends AbstractDetailsFragment
                         TaskAdapter.createRelativeDateInfo(getActivity(), taskCheckList),
                         R.drawable.ic_account_circle_grey);
 
-                if (taskCheckList.getEndDate() != null)
-                {
+                if (taskCheckList.getEndDate() != null) {
                     vh.choose.setImageResource(R.drawable.ic_done_grey);
-                }
-                else
-                {
+                } else {
                     vh.choose.setImageResource(android.R.color.transparent);
                 }
                 vh.choose.setVisibility(View.VISIBLE);
 
                 activeTaskContainer.addView(v);
 
-                v.setOnClickListener(new View.OnClickListener()
-                {
+                v.setOnClickListener(new View.OnClickListener() {
                     @Override
-                    public void onClick(View v)
-                    {
+                    public void onClick(View v) {
                         TaskDetailsFragment.with(getActivity()).task((TaskRepresentation) v.getTag())
                                 .bindFragmentTag(getTag()).back(true).display();
                     }
@@ -1022,9 +862,10 @@ public class TaskDetailsFoundationFragment extends AbstractDetailsFragment
         }
     }
 
-    private void createHelpSection()
-    {
-        if (isEnded) { return; }
+    private void createHelpSection() {
+        if (isEnded) {
+            return;
+        }
 
         show(R.id.task_details_help_card);
 
@@ -1038,11 +879,9 @@ public class TaskDetailsFoundationFragment extends AbstractDetailsFragment
         TwoLinesViewHolder vh = HolderUtils.configure(v.findViewById(R.id.help_details_involve),
                 getString(R.string.task_help_add_people), null, R.drawable.ic_account_box_grey);
         HolderUtils.makeMultiLine(vh.topText, 3);
-        v.findViewById(R.id.help_details_involve_container).setOnClickListener(new View.OnClickListener()
-        {
+        v.findViewById(R.id.help_details_involve_container).setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v)
-            {
+            public void onClick(View v) {
                 // Special case activiti.alfresco.com & tenantid == null
                 // User must pick user via email only
                 startInvolveAction();
@@ -1054,11 +893,9 @@ public class TaskDetailsFoundationFragment extends AbstractDetailsFragment
         vh = HolderUtils.configure(v.findViewById(R.id.help_details_add_content),
                 getString(R.string.task_help_add_content), null, R.drawable.ic_insert_drive_file_grey);
         HolderUtils.makeMultiLine(vh.topText, 3);
-        v.findViewById(R.id.help_details_add_content_container).setOnClickListener(new View.OnClickListener()
-        {
+        v.findViewById(R.id.help_details_add_content_container).setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v)
-            {
+            public void onClick(View v) {
                 ContentTransferManager.requestGetContent(TaskDetailsFoundationFragment.this);
             }
         });
@@ -1067,11 +904,9 @@ public class TaskDetailsFoundationFragment extends AbstractDetailsFragment
         vh = HolderUtils.configure(v.findViewById(R.id.help_details_comment), getString(R.string.task_help_add_comment),
                 null, R.drawable.ic_insert_comment_grey);
         HolderUtils.makeMultiLine(vh.topText, 3);
-        v.findViewById(R.id.help_details_comment_container).setOnClickListener(new View.OnClickListener()
-        {
+        v.findViewById(R.id.help_details_comment_container).setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v)
-            {
+            public void onClick(View v) {
                 ((MainActivity) getActivity())
                         .setRightMenuVisibility(!((MainActivity) getActivity()).isRightMenuVisible());
             }
@@ -1081,11 +916,9 @@ public class TaskDetailsFoundationFragment extends AbstractDetailsFragment
         vh = HolderUtils.configure(v.findViewById(R.id.help_details_add_task_checklist),
                 getString(R.string.task_help_add_checklist), null, R.drawable.ic_add_circle_grey);
         HolderUtils.makeMultiLine(vh.topText, 3);
-        v.findViewById(R.id.help_details_add_task_checklist_container).setOnClickListener(new View.OnClickListener()
-        {
+        v.findViewById(R.id.help_details_add_task_checklist_container).setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v)
-            {
+            public void onClick(View v) {
                 CreateStandaloneTaskDialogFragment.with(getActivity()).taskId(taskRepresentation.getId())
                         .displayAsDialog();
             }
@@ -1097,44 +930,33 @@ public class TaskDetailsFoundationFragment extends AbstractDetailsFragment
     // ///////////////////////////////////////////////////////////////////////////
     // ACTIONS
     // ///////////////////////////////////////////////////////////////////////////
-    private void startInvolveAction()
-    {
-        if (ActivitiSession.getInstance().isActivitiOnTheCloud() && getAccount().getTenantId() == null)
-        {
+    private void startInvolveAction() {
+        if (ActivitiSession.getInstance().isActivitiOnTheCloud() && getAccount().getTenantId() == null) {
             ActivitiUserPickerFragment.with(getActivity()).fragmentTag(getTag()).fieldId("involve").displayAsDialog();
-        }
-        else
-        {
+        } else {
             UserPickerFragment.with(getActivity()).fragmentTag(getTag()).fieldId("involve")
                     .taskId(taskRepresentation.getId()).singleChoice(true).mode(ListingModeFragment.MODE_PICK)
                     .display();
         }
     }
 
-    private void completeTask()
-    {
-        getAPI().getTaskService().complete(taskId, new Callback<Void>()
-        {
+    private void completeTask() {
+        getAPI().getTaskService().complete(taskId, new Callback<Void>() {
             @Override
-            public void onResponse(Call<Void> call, Response<Void> response)
-            {
+            public void onResponse(Call<Void> call, Response<Void> response) {
                 // Analytics
                 AnalyticsHelper.reportOperationEvent(getActivity(), AnalyticsManager.CATEGORY_TASK,
                         AnalyticsManager.ACTION_COMPLETE_TASK, AnalyticsManager.LABEL_WITHOUT_FORM, 1,
                         !response.isSuccessful());
 
-                if (!response.isSuccessful())
-                {
+                if (!response.isSuccessful()) {
                     onFailure(call, new Exception(response.message()));
                     return;
                 }
-                try
-                {
+                try {
                     EventBusManager.getInstance()
                             .post(new CompleteTaskEvent(null, taskId, taskRepresentation.getCategory()));
-                }
-                catch (Exception e)
-                {
+                } catch (Exception e) {
                     // Do nothing
                 }
 
@@ -1142,14 +964,10 @@ public class TaskDetailsFoundationFragment extends AbstractDetailsFragment
                         Snackbar.LENGTH_SHORT).show();
 
                 Fragment fr = getAttachedFragment();
-                if (fr != null && fr instanceof TasksFragment)
-                {
-                    if (DisplayUtils.hasCentralPane(getActivity()))
-                    {
+                if (fr != null && fr instanceof TasksFragment) {
+                    if (DisplayUtils.hasCentralPane(getActivity())) {
                         ((TasksFragment) fr).refreshOutside();
-                    }
-                    else
-                    {
+                    } else {
                         ((TasksFragment) fr).refresh();
                     }
                 }
@@ -1158,27 +976,22 @@ public class TaskDetailsFoundationFragment extends AbstractDetailsFragment
             }
 
             @Override
-            public void onFailure(Call<Void> call, Throwable error)
-            {
+            public void onFailure(Call<Void> call, Throwable error) {
                 Snackbar.make(getActivity().findViewById(R.id.left_panel), error.getMessage(), Snackbar.LENGTH_SHORT)
                         .show();
             }
         });
     }
 
-    private void claim()
-    {
-        getAPI().getTaskService().claimTask(taskId, new Callback<Void>()
-        {
+    private void claim() {
+        getAPI().getTaskService().claimTask(taskId, new Callback<Void>() {
             @Override
-            public void onResponse(Call<Void> call, Response<Void> response)
-            {
+            public void onResponse(Call<Void> call, Response<Void> response) {
                 // Analytics
                 AnalyticsHelper.reportOperationEvent(getActivity(), AnalyticsManager.CATEGORY_TASK,
                         AnalyticsManager.ACTION_CLAIM, AnalyticsManager.LABEL_TASK, 1, !response.isSuccessful());
 
-                if (!response.isSuccessful())
-                {
+                if (!response.isSuccessful()) {
                     onFailure(call, new Exception(response.message()));
                     return;
                 }
@@ -1188,30 +1001,25 @@ public class TaskDetailsFoundationFragment extends AbstractDetailsFragment
             }
 
             @Override
-            public void onFailure(Call<Void> call, Throwable error)
-            {
+            public void onFailure(Call<Void> call, Throwable error) {
                 Snackbar.make(getActivity().findViewById(R.id.left_panel), error.getMessage(), Snackbar.LENGTH_SHORT)
                         .show();
             }
         });
     }
 
-    private void assign(LightUserRepresentation user)
-    {
+    private void assign(LightUserRepresentation user) {
         AssignTaskRepresentation body = (ActivitiSession.getInstance().isActivitiOnTheCloud())
                 ? new AssignTaskRepresentation(user.getEmail()) : new AssignTaskRepresentation(user.getId());
 
-        getAPI().getTaskService().assign(taskId, body, new Callback<TaskRepresentation>()
-        {
+        getAPI().getTaskService().assign(taskId, body, new Callback<TaskRepresentation>() {
             @Override
-            public void onResponse(Call<TaskRepresentation> call, Response<TaskRepresentation> response)
-            {
+            public void onResponse(Call<TaskRepresentation> call, Response<TaskRepresentation> response) {
                 // Analytics
                 AnalyticsHelper.reportOperationEvent(getActivity(), AnalyticsManager.CATEGORY_TASK,
                         AnalyticsManager.ACTION_REASSIGN, AnalyticsManager.LABEL_USER, 1, !response.isSuccessful());
 
-                if (!response.isSuccessful())
-                {
+                if (!response.isSuccessful()) {
                     onFailure(call, new Exception(response.message()));
                     return;
                 }
@@ -1225,28 +1033,23 @@ public class TaskDetailsFoundationFragment extends AbstractDetailsFragment
             }
 
             @Override
-            public void onFailure(Call<TaskRepresentation> call, Throwable error)
-            {
+            public void onFailure(Call<TaskRepresentation> call, Throwable error) {
                 Snackbar.make(getActivity().findViewById(R.id.left_panel), error.getMessage(), Snackbar.LENGTH_SHORT)
                         .show();
             }
         });
     }
 
-    private void assign(final String userEmail)
-    {
+    private void assign(final String userEmail) {
         AssignTaskRepresentation body = new AssignTaskRepresentation(userEmail);
-        getAPI().getTaskService().assign(taskId, body, new Callback<TaskRepresentation>()
-        {
+        getAPI().getTaskService().assign(taskId, body, new Callback<TaskRepresentation>() {
             @Override
-            public void onResponse(Call<TaskRepresentation> call, Response<TaskRepresentation> response)
-            {
+            public void onResponse(Call<TaskRepresentation> call, Response<TaskRepresentation> response) {
                 // Analytics
                 AnalyticsHelper.reportOperationEvent(getActivity(), AnalyticsManager.CATEGORY_TASK,
                         AnalyticsManager.ACTION_REASSIGN, AnalyticsManager.LABEL_USER, 1, !response.isSuccessful());
 
-                if (!response.isSuccessful())
-                {
+                if (!response.isSuccessful()) {
                     onFailure(call, new Exception(response.message()));
                     return;
                 }
@@ -1259,29 +1062,24 @@ public class TaskDetailsFoundationFragment extends AbstractDetailsFragment
             }
 
             @Override
-            public void onFailure(Call<TaskRepresentation> call, Throwable error)
-            {
+            public void onFailure(Call<TaskRepresentation> call, Throwable error) {
                 Snackbar.make(getActivity().findViewById(R.id.left_panel), error.getMessage(), Snackbar.LENGTH_SHORT)
                         .show();
             }
         });
     }
 
-    private void involve(final LightUserRepresentation user)
-    {
-        getAPI().getTaskService().involve(taskId, new InvolveTaskRepresentation(user.getId()), new Callback<Void>()
-        {
+    private void involve(final LightUserRepresentation user) {
+        getAPI().getTaskService().involve(taskId, new InvolveTaskRepresentation(user.getId()), new Callback<Void>() {
             @Override
-            public void onResponse(Call<Void> call, Response<Void> response)
-            {
+            public void onResponse(Call<Void> call, Response<Void> response) {
 
                 // Analytics
                 AnalyticsHelper.reportOperationEvent(getActivity(), AnalyticsManager.CATEGORY_TASK,
                         AnalyticsManager.ACTION_USER_INVOLVED, AnalyticsManager.ACTION_ADD, 1,
                         !response.isSuccessful());
 
-                if (!response.isSuccessful())
-                {
+                if (!response.isSuccessful()) {
                     onFailure(call, new Exception(response.message()));
                     return;
                 }
@@ -1293,28 +1091,23 @@ public class TaskDetailsFoundationFragment extends AbstractDetailsFragment
             }
 
             @Override
-            public void onFailure(Call<Void> call, Throwable error)
-            {
+            public void onFailure(Call<Void> call, Throwable error) {
                 Snackbar.make(getActivity().findViewById(R.id.left_panel), error.getMessage(), Snackbar.LENGTH_SHORT)
                         .show();
             }
         });
     }
 
-    private void involve(String userEmail)
-    {
-        getAPI().getTaskService().involve(taskId, new InvolveTaskRepresentation(userEmail), new Callback<Void>()
-        {
+    private void involve(String userEmail) {
+        getAPI().getTaskService().involve(taskId, new InvolveTaskRepresentation(userEmail), new Callback<Void>() {
             @Override
-            public void onResponse(Call<Void> call, Response<Void> response)
-            {
+            public void onResponse(Call<Void> call, Response<Void> response) {
                 // Analytics
                 AnalyticsHelper.reportOperationEvent(getActivity(), AnalyticsManager.CATEGORY_TASK,
                         AnalyticsManager.ACTION_USER_INVOLVED, AnalyticsManager.ACTION_ADD, 1,
                         !response.isSuccessful());
 
-                if (!response.isSuccessful())
-                {
+                if (!response.isSuccessful()) {
                     onFailure(call, new Exception(response.message()));
                     return;
                 }
@@ -1322,27 +1115,22 @@ public class TaskDetailsFoundationFragment extends AbstractDetailsFragment
             }
 
             @Override
-            public void onFailure(Call<Void> call, Throwable error)
-            {
+            public void onFailure(Call<Void> call, Throwable error) {
                 Snackbar.make(getActivity().findViewById(R.id.left_panel), error.getMessage(), Snackbar.LENGTH_SHORT)
                         .show();
             }
         });
     }
 
-    private void edit(final UpdateTaskRepresentation update)
-    {
-        getAPI().getTaskService().edit(taskId, update, new Callback<TaskRepresentation>()
-        {
+    private void edit(final UpdateTaskRepresentation update) {
+        getAPI().getTaskService().edit(taskId, update, new Callback<TaskRepresentation>() {
             @Override
-            public void onResponse(Call<TaskRepresentation> call, Response<TaskRepresentation> response)
-            {
+            public void onResponse(Call<TaskRepresentation> call, Response<TaskRepresentation> response) {
                 // Analytics
                 AnalyticsHelper.reportOperationEvent(getActivity(), AnalyticsManager.CATEGORY_TASK,
                         AnalyticsManager.ACTION_EDIT, AnalyticsManager.LABEL_TASK, 1, !response.isSuccessful());
 
-                if (!response.isSuccessful())
-                {
+                if (!response.isSuccessful()) {
                     onFailure(call, new Exception(response.message()));
                     return;
                 }
@@ -1352,38 +1140,30 @@ public class TaskDetailsFoundationFragment extends AbstractDetailsFragment
             }
 
             @Override
-            public void onFailure(Call<TaskRepresentation> call, Throwable error)
-            {
+            public void onFailure(Call<TaskRepresentation> call, Throwable error) {
                 Snackbar.make(getActivity().findViewById(R.id.left_panel), error.getMessage(), Snackbar.LENGTH_SHORT)
                         .show();
             }
         });
     }
 
-    private void removeInvolved(final LightUserRepresentation userRemoved, final InvolveTaskRepresentation involvement)
-    {
-        getAPI().getTaskService().removeInvolved(taskId, involvement, new Callback<Void>()
-        {
+    private void removeInvolved(final LightUserRepresentation userRemoved, final InvolveTaskRepresentation involvement) {
+        getAPI().getTaskService().removeInvolved(taskId, involvement, new Callback<Void>() {
             @Override
-            public void onResponse(Call<Void> call, Response<Void> response)
-            {
+            public void onResponse(Call<Void> call, Response<Void> response) {
                 // Analytics
                 AnalyticsHelper.reportOperationEvent(getActivity(), AnalyticsManager.CATEGORY_TASK,
                         AnalyticsManager.ACTION_USER_INVOLVED, AnalyticsManager.ACTION_REMOVE, 1,
                         !response.isSuccessful());
 
-                if (!response.isSuccessful())
-                {
+                if (!response.isSuccessful()) {
                     onFailure(call, new Exception(response.message()));
                     return;
                 }
                 people.remove(userRemoved);
-                if (people.isEmpty())
-                {
+                if (people.isEmpty()) {
                     displayCards();
-                }
-                else
-                {
+                } else {
                     displayPeopleSection(people);
                 }
 
@@ -1394,26 +1174,21 @@ public class TaskDetailsFoundationFragment extends AbstractDetailsFragment
             }
 
             @Override
-            public void onFailure(Call<Void> call, Throwable error)
-            {
+            public void onFailure(Call<Void> call, Throwable error) {
                 // SnackbarManager.show(Snackbar.with(getActivity()).text(error.getMessage()));
             }
         });
     }
 
-    public void removeForm()
-    {
-        getAPI().getTaskService().removeForm(taskId, new Callback<Void>()
-        {
+    public void removeForm() {
+        getAPI().getTaskService().removeForm(taskId, new Callback<Void>() {
             @Override
-            public void onResponse(Call<Void> call, Response<Void> response)
-            {
+            public void onResponse(Call<Void> call, Response<Void> response) {
                 // Analytics
                 AnalyticsHelper.reportOperationEvent(getActivity(), AnalyticsManager.CATEGORY_TASK,
                         AnalyticsManager.ACTION_FORM, AnalyticsManager.ACTION_REMOVE, 1, !response.isSuccessful());
 
-                if (!response.isSuccessful())
-                {
+                if (!response.isSuccessful()) {
                     onFailure(call, new Exception(response.message()));
                     return;
                 }
@@ -1429,28 +1204,23 @@ public class TaskDetailsFoundationFragment extends AbstractDetailsFragment
             }
 
             @Override
-            public void onFailure(Call<Void> call, Throwable error)
-            {
+            public void onFailure(Call<Void> call, Throwable error) {
                 Snackbar.make(getActivity().findViewById(R.id.left_panel), error.getMessage(), Snackbar.LENGTH_SHORT)
                         .show();
             }
         });
     }
 
-    public void attachForm(final ModelRepresentation formModel)
-    {
+    public void attachForm(final ModelRepresentation formModel) {
         AttachFormTaskRepresentation rep = new AttachFormTaskRepresentation(formModel.getId());
-        getAPI().getTaskService().attachForm(taskId, rep, new Callback<Void>()
-        {
+        getAPI().getTaskService().attachForm(taskId, rep, new Callback<Void>() {
             @Override
-            public void onResponse(Call<Void> call, Response<Void> response)
-            {
+            public void onResponse(Call<Void> call, Response<Void> response) {
                 // Analytics
                 AnalyticsHelper.reportOperationEvent(getActivity(), AnalyticsManager.CATEGORY_TASK,
                         AnalyticsManager.ACTION_FORM, AnalyticsManager.ACTION_ADD, 1, !response.isSuccessful());
 
-                if (!response.isSuccessful())
-                {
+                if (!response.isSuccessful()) {
                     onFailure(call, new Exception(response.message()));
                     return;
                 }
@@ -1466,8 +1236,7 @@ public class TaskDetailsFoundationFragment extends AbstractDetailsFragment
             }
 
             @Override
-            public void onFailure(Call<Void> call, Throwable error)
-            {
+            public void onFailure(Call<Void> call, Throwable error) {
                 Snackbar.make(getActivity().findViewById(R.id.left_panel), error.getMessage(), Snackbar.LENGTH_SHORT)
                         .show();
             }
@@ -1478,67 +1247,53 @@ public class TaskDetailsFoundationFragment extends AbstractDetailsFragment
     // PICKER CALLBACK
     // //////////////////////////////////////////////////////////////////////////////////////
     @Override
-    public void onDatePicked(String dateId, GregorianCalendar gregorianCalendar)
-    {
-        dueAt = gregorianCalendar.getTime();
+    public void onDatePicked(String dateId, Calendar calendar) {
+        dueAt = calendar.getTime();
         edit(new UpdateTaskRepresentation(taskRepresentation.getName(), taskRepresentation.getDescription(), dueAt));
     }
 
     @Override
-    public void onDateClear(String dateId)
-    {
+    public void onDateClear(String dateId) {
         dueAt = null;
         edit(new UpdateTaskRepresentation(taskRepresentation.getName(), taskRepresentation.getDescription(), dueAt));
     }
 
     @Override
-    public void onPersonSelected(String fieldId, Map<String, LightUserRepresentation> p)
-    {
-        if ("involve".equals(fieldId))
-        {
+    public void onPersonSelected(String fieldId, Map<String, LightUserRepresentation> p) {
+        if ("involve".equals(fieldId)) {
             involve(p.get(p.keySet().toArray()[0]));
-        }
-        else if ("assign".equals(fieldId))
-        {
+        } else if ("assign".equals(fieldId)) {
             assign(p.get(p.keySet().toArray()[0]));
         }
     }
 
     @Override
-    public void onUserEmailSelected(String fieldId, String username)
-    {
-        if ("involve".equals(fieldId))
-        {
+    public void onUserEmailSelected(String fieldId, String username) {
+        if ("involve".equals(fieldId)) {
             involve(username);
-        }
-        else if ("assign".equals(fieldId))
-        {
+        } else if ("assign".equals(fieldId)) {
             assign(username);
         }
     }
 
     @Override
-    public void onPersonClear(String fieldId)
-    {
+    public void onPersonClear(String fieldId) {
         Snackbar.make(getActivity().findViewById(R.id.left_panel), R.string.cleared, Snackbar.LENGTH_SHORT).show();
     }
 
     @Override
-    public Map<String, LightUserRepresentation> getPersonSelected(String fieldId)
-    {
+    public Map<String, LightUserRepresentation> getPersonSelected(String fieldId) {
         return new HashMap<>(0);
     }
 
     @Override
-    public void onTextEdited(int id, String newValue)
-    {
+    public void onTextEdited(int id, String newValue) {
         description = newValue;
         edit(new UpdateTaskRepresentation(taskRepresentation.getName(), newValue, dueAt));
     }
 
     @Override
-    public void onTextClear(int valueId)
-    {
+    public void onTextClear(int valueId) {
         description = null;
         edit(new UpdateTaskRepresentation(taskRepresentation.getName(), null, dueAt));
     }
