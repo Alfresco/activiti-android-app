@@ -22,7 +22,7 @@ import java.util.GregorianCalendar;
 public class DateTimeField extends BaseField {
     protected MaterialEditText editText;
 
-    private static String DEFAULT_DATE_FORMAT = "yyyy EEE dd MMM HH : mm";
+    private static String DEFAULT_DATE_FORMAT = "dd-MM-yyyy HH : mm";
 
     // ///////////////////////////////////////////////////////////////////////////
     // CONSTRUCTOR
