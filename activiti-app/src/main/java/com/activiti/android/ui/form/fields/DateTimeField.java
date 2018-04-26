@@ -9,6 +9,7 @@ import com.activiti.android.app.R;
 import com.activiti.android.ui.form.FormManager;
 import com.activiti.android.ui.fragments.AlfrescoFragment;
 import com.activiti.android.ui.fragments.form.picker.DateTimePickerFragment;
+import com.activiti.android.ui.utils.TimeUtils;
 import com.activiti.client.api.model.editor.form.FormFieldRepresentation;
 import com.alfresco.client.utils.ISO8601Utils;
 import com.rengwuxian.materialedittext.MaterialEditText;
@@ -21,8 +22,6 @@ import java.util.GregorianCalendar;
  */
 public class DateTimeField extends BaseField {
     protected MaterialEditText editText;
-
-    private static String DEFAULT_DATE_FORMAT = "dd-MM-yyyy HH : mm";
 
     // ///////////////////////////////////////////////////////////////////////////
     // CONSTRUCTOR
@@ -44,13 +43,14 @@ public class DateTimeField extends BaseField {
         }
         if (originalValue instanceof Date) {
             if (!TextUtils.isEmpty(data.getDateDisplayFormat())) {
+                String parsedDateDisplayFormat = TimeUtils.normalizeDate(data.getDateDisplayFormat());
                 try {
-                    readValue = DateFormat.format(data.getDateDisplayFormat(), (Date) originalValue).toString();
+                    readValue = DateFormat.format(parsedDateDisplayFormat, (Date) originalValue).toString();
                 } catch (Exception e) {
-                    readValue = DateFormat.format(DEFAULT_DATE_FORMAT, (Date) originalValue).toString();
+                    readValue = DateFormat.format(TimeUtils.DEFAULT_DATE_FORMAT, (Date) originalValue).toString();
                 }
             } else {
-                readValue = DateFormat.format(DEFAULT_DATE_FORMAT, (Date) originalValue).toString();
+                readValue = DateFormat.format(TimeUtils.DEFAULT_DATE_FORMAT, (Date) originalValue).toString();
             }
         }
         return readValue;
@@ -70,13 +70,14 @@ public class DateTimeField extends BaseField {
         }
         if (editionValue instanceof Date) {
             if (!TextUtils.isEmpty(data.getDateDisplayFormat())) {
+                String parsedDateDisplayFormat = TimeUtils.normalizeDate(data.getDateDisplayFormat());
                 try {
-                    readValue = DateFormat.format(data.getDateDisplayFormat(), (Date) editionValue).toString();
+                    readValue = DateFormat.format(parsedDateDisplayFormat, (Date) editionValue).toString();
                 } catch (Exception e) {
-                    readValue = DateFormat.format(DEFAULT_DATE_FORMAT, (Date) editionValue).toString();
+                    readValue = DateFormat.format(TimeUtils.DEFAULT_DATE_FORMAT, (Date) editionValue).toString();
                 }
             } else {
-                readValue = DateFormat.format(DEFAULT_DATE_FORMAT, (Date) editionValue).toString();
+                readValue = DateFormat.format(TimeUtils.DEFAULT_DATE_FORMAT, (Date) editionValue).toString();
             }
         }
         return readValue;
