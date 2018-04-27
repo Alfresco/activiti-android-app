@@ -155,7 +155,7 @@ public class GeneralSettingsFragment extends AlfrescoFragment
                 new LibsBuilder().withActivityTitle(getString(R.string.settings_about_thirdparty))
                         .withLibraries("MaterialEdittext", "MaterialDialogs", "AndroidSwipeLayout", "CircleIndicator",
                                 "Otto", "AppCompat Library")
-                        .withLicenseDialog(true).withVersionShown(false).withAnimations(false).withLicenseShown(true)
+                        .withLicenseDialog(true).withVersionShown(false).withLicenseShown(true)
                         .withFields(R.string.class.getFields()).withActivityStyle(Libs.ActivityStyle.LIGHT_DARK_TOOLBAR)
                         .start(getActivity());
             }
