@@ -98,8 +98,7 @@ public class GeneralSettingsFragment extends AlfrescoFragment
                 @Override
                 public void onClick(View v)
                 {
-                    AccountSettingsFragment.with(getActivity()).accountId((Long) v.getTag())
-                            .back(DisplayUtils.hasCentralPane(getActivity())).display();
+                    AccountSettingsFragment.with(getActivity()).accountId((Long) v.getTag()).back(true).display();
                 }
             });
             accountContainer.addView(accountView);

@@ -229,7 +229,7 @@ public class AccountSettingsFragment extends AlfrescoFragment implements EditTex
         switch (item.getItemId())
         {
             case android.R.id.home:
-                getActivity().onBackPressed();
+                getActivity().getSupportFragmentManager().popBackStackImmediate();
                 return true;
             case R.id.account_action_remove:
                 MaterialDialog.Builder builder = new MaterialDialog.Builder(getActivity())
