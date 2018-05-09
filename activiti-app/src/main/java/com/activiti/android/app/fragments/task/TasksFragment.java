@@ -45,6 +45,7 @@ import com.activiti.android.ui.fragments.task.TasksFoundationFragment;
 import com.activiti.android.ui.fragments.task.create.CreateStandaloneTaskDialogFragment;
 import com.activiti.android.ui.fragments.task.filter.TaskFiltersFragment;
 import com.activiti.android.ui.utils.DisplayUtils;
+import com.activiti.android.ui.utils.UIUtils;
 import com.activiti.client.api.constant.RequestConstant;
 import com.activiti.client.api.model.runtime.TaskRepresentation;
 import com.squareup.otto.Subscribe;
@@ -115,6 +116,7 @@ public class TasksFragment extends TasksFoundationFragment
                     .replace(FiltersFragment.with(getActivity()).appId(appId).typeId(FiltersFragment.TYPE_TASK)
                             .createFragment())
                     .into(DisplayUtils.hasCentralPane(getActivity()) ? R.id.central_left_drawer : R.id.right_drawer);
+            UIUtils.setTitle(getActivity(), mTitle, mSubTitle);
         }
         else
         {
