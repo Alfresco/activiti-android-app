@@ -343,6 +343,7 @@ public class FormManager
                 {
                     for (FormFieldRepresentation representation : entry.getValue())
                     {
+                        formFieldIndex.put(representation.getId(), representation);
                         field = generateField(representation, hookView, isEdition);
                         fieldsOrderIndex.add(field);
                         fieldsIndex.put(representation.getId(), field);
