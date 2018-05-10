@@ -242,7 +242,7 @@ public class DropDownField extends BaseField
             }
             else
             {
-                return getEditionValue();
+                return ((OptionRepresentation) getEditionValue()).getName();
             }
         }
         return super.getOutputValue();
