@@ -233,7 +233,10 @@ public class DropDownField extends BaseField
     @Override
     public Object getOutputValue()
     {
-        if (getEditionValue() instanceof OptionRepresentation)
+        if (isReadMode) {
+            return originalValue;
+        }
+        if (editionValue instanceof OptionRepresentation)
         {
             // Return null if the optionRepresentation is the empty value
             if (selectedPosition == 0)
@@ -242,7 +245,7 @@ public class DropDownField extends BaseField
             }
             else
             {
-                return ((OptionRepresentation) getEditionValue()).getName();
+                return editionValue;
             }
         }
         return super.getOutputValue();
