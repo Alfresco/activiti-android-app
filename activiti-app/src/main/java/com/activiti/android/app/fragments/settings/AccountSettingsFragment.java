@@ -133,7 +133,7 @@ public class AccountSettingsFragment extends AlfrescoFragment implements EditTex
             @Override
             public void onClick(View v)
             {
-                AccountEditFragment.with(getActivity()).accountId(accountId).display();
+                AccountEditFragment.with(getActivity()).accountId(accountId).back(true).display();
             }
         });
 
