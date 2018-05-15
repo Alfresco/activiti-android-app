@@ -37,6 +37,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
@@ -46,6 +47,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import com.activiti.android.app.R;
+import com.activiti.android.app.activity.MainActivity;
 import com.activiti.android.platform.account.AccountsPreferences;
 import com.activiti.android.platform.account.ActivitiAccount;
 import com.activiti.android.platform.account.ActivitiAccountManager;
@@ -59,7 +61,8 @@ import com.activiti.android.platform.provider.processdefinition.ProcessDefinitio
 import com.activiti.android.sdk.ActivitiSession;
 import com.activiti.android.sdk.model.runtime.AppVersion;
 import com.activiti.android.ui.fragments.AlfrescoFragment;
-import com.activiti.android.ui.fragments.builder.AlfrescoFragmentBuilder;
+import com.activiti.android.ui.fragments.builder.LeafFragmentBuilder;
+import com.activiti.android.ui.utils.DisplayUtils;
 import com.activiti.android.ui.utils.UIUtils;
 import com.activiti.client.api.constant.ActivitiAPI;
 import com.activiti.client.api.model.idm.UserRepresentation;
@@ -108,6 +111,7 @@ public class AccountEditFragment extends AlfrescoFragment
     {
         super();
         eventBusRequired = true;
+        setHasOptionsMenu(true);
     }
 
     public static AccountEditFragment newInstanceByTemplate(Bundle b)
@@ -130,6 +134,37 @@ public class AccountEditFragment extends AlfrescoFragment
     public void onStart()
     {
         super.onStart();
+        if (getActivity() instanceof MainActivity)
+        {
+            UIUtils.displayActionBarBack((MainActivity) getActivity());
+        }
+    }
+
+    @Override
+    public void onStop()
+    {
+        super.onStop();
+        if (getActivity() instanceof MainActivity)
+        {
+            UIUtils.setActionBarDefault((MainActivity) getActivity());
+        }
+
+        if (DisplayUtils.hasCentralPane(getActivity()))
+        {
+            getToolbar().setTitle(null);
+            getToolbar().setSubtitle(null);
+            getToolbar().getMenu().clear();
+        }
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                getActivity().getSupportFragmentManager().popBackStackImmediate();
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     // ///////////////////////////////////////////////////////////////////////////
@@ -451,7 +486,7 @@ public class AccountEditFragment extends AlfrescoFragment
         return new Builder(activity);
     }
 
-    public static class Builder extends AlfrescoFragmentBuilder
+    public static class Builder extends LeafFragmentBuilder
     {
         // ///////////////////////////////////////////////////////////////////////////
         // CONSTRUCTORS
@@ -479,6 +514,6 @@ public class AccountEditFragment extends AlfrescoFragment
         protected Fragment createFragment(Bundle b)
         {
             return newInstanceByTemplate(b);
-        };
+        }
     }
 }
