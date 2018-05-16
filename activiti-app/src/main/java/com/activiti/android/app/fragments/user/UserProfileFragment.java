@@ -25,7 +25,6 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 
-import com.activiti.android.app.activity.MainActivity;
 import com.activiti.android.platform.event.ProfilePictureEvent;
 import com.activiti.android.ui.fragments.builder.LeafFragmentBuilder;
 import com.activiti.android.ui.fragments.user.UserProfileFoundationFragment;
@@ -49,29 +48,6 @@ public class UserProfileFragment extends UserProfileFoundationFragment
         UserProfileFragment cbf = new UserProfileFragment();
         cbf.setArguments(b);
         return cbf;
-    }
-
-    // ///////////////////////////////////////////////////////////////////////////
-    // LIFECYCLE
-    // ///////////////////////////////////////////////////////////////////////////
-    @Override
-    public void onStart()
-    {
-        super.onStart();
-        if (getActivity() instanceof MainActivity)
-        {
-            ((MainActivity) getActivity()).lockSlidingMenu();
-        }
-    }
-
-    @Override
-    public void onStop()
-    {
-        super.onStop();
-        if (getActivity() instanceof MainActivity)
-        {
-            ((MainActivity) getActivity()).unlockSlidingMenu();
-        }
     }
 
     // ///////////////////////////////////////////////////////////////////////////
