@@ -34,7 +34,6 @@ import android.widget.GridView;
 import com.activiti.android.app.ActivitiVersionNumber;
 import com.activiti.android.app.R;
 import com.activiti.android.app.activity.MainActivity;
-import com.activiti.android.app.fragments.filters.FiltersFragment;
 import com.activiti.android.app.fragments.task.TasksFragment;
 import com.activiti.android.platform.event.CompleteProcessEvent;
 import com.activiti.android.platform.event.StartProcessEvent;
@@ -43,6 +42,7 @@ import com.activiti.android.ui.fragments.builder.ListingFragmentBuilder;
 import com.activiti.android.ui.fragments.process.ProcessesFoundationFragment;
 import com.activiti.android.ui.fragments.process.create.StartProcessDialogFragment;
 import com.activiti.android.ui.fragments.process.filter.ProcessFiltersFragment;
+import com.activiti.android.ui.utils.DisplayUtils;
 import com.activiti.client.api.constant.RequestConstant;
 import com.activiti.client.api.model.runtime.ProcessInstanceRepresentation;
 import com.squareup.otto.Subscribe;
@@ -101,11 +101,14 @@ public class ProcessesFragment extends ProcessesFoundationFragment
     @Override
     public void onStart()
     {
+        setLockRightMenu(DisplayUtils.hasCentralPane(getActivity()));
+        
         if (getVersionNumber() >= ActivitiVersionNumber.VERSION_1_3_0)
         {
-            FragmentDisplayer.with(getActivity()).back(false).animate(null).replace(
-                    FiltersFragment.with(getActivity()).appId(appId).typeId(FiltersFragment.TYPE_TASK).createFragment())
-                    .into(R.id.right_drawer);
+            FragmentDisplayer.with(getActivity()).back(false).animate(null)
+                    .replace(ProcessFiltersFragment
+                            .newInstanceByTemplate(getArguments() != null ? getArguments() : new Bundle()))
+                    .into(DisplayUtils.hasCentralPane(getActivity()) ? R.id.central_left_drawer : R.id.right_drawer);
         }
         else
         {
@@ -171,8 +174,17 @@ public class ProcessesFragment extends ProcessesFoundationFragment
             case R.id.processes_menu_filter:
                 if (getActivity() instanceof MainActivity)
                 {
-                    ((MainActivity) getActivity())
-                            .setRightMenuVisibility(!((MainActivity) getActivity()).isRightMenuVisible());
+                    if (DisplayUtils.hasCentralPane(getActivity()))
+                    {
+                        ((MainActivity) getActivity())
+                                .setCentralLefttMenuVisibility(!((MainActivity) getActivity()).isCentralMenuVisible());
+                    }
+                    else
+                    {
+                        ((MainActivity) getActivity())
+                                .setRightMenuVisibility(!((MainActivity) getActivity()).isCentralMenuVisible());
+                    }
+
                 }
                 return true;
             case R.id.processes_menu_tasks:
