@@ -178,7 +178,7 @@ public class ContentsFoundationFragment extends BasePagingGridFragment implement
         {
             if (!TextUtils.isEmpty(processId))
             {
-                ContentTransferManager.prepareTransfer(resultData, this, taskId,
+                ContentTransferManager.prepareTransfer(resultData, this, processId,
                         ContentTransferManager.TYPE_PROCESS_ID);
             }
             else if (!TextUtils.isEmpty(taskId))
