@@ -33,7 +33,7 @@
         <ImageView
             android:layout_width="200dip"
             android:layout_height="match_parent"
-            android:src="@drawable/alfresco_banner" />
+            android:src="@drawable/alfresco_banner_white" />
 
     </LinearLayout>
 
