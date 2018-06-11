@@ -90,7 +90,9 @@ public class CheckBoxField extends BaseField
     // ///////////////////////////////////////////////////////////////////////////
     protected void updateEditionView()
     {
-        ((CheckBox) editionView).setChecked((Boolean) editionValue);
+        if (editionView != null) {
+            ((CheckBox) editionView).setChecked((Boolean) editionValue);
+        }
     }
 
     public View setupEditionView(Object value)
