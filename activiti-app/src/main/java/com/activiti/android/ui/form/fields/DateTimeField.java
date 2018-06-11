@@ -87,7 +87,9 @@ public class DateTimeField extends BaseField {
     // EDITION VIEW
     // ///////////////////////////////////////////////////////////////////////////
     protected void updateEditionView() {
-        editText.setText(getHumanReadableEditionValue());
+        if (editText != null) {
+            editText.setText(getHumanReadableEditionValue());
+        }
         getFormManager().evaluateViews();
     }
 
