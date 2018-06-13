@@ -97,7 +97,9 @@ public class UserPickerField extends BaseField
     // ///////////////////////////////////////////////////////////////////////////
     protected void updateEditionView()
     {
-        editText.setText(getHumanReadableEditionValue());
+        if (editText != null) {
+            editText.setText(getHumanReadableEditionValue());
+        }
         getFormManager().evaluateViews();
     }
 
