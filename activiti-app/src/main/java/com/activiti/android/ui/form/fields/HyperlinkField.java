@@ -149,7 +149,7 @@ public class HyperlinkField extends BaseField
 
     protected void updateEditionView()
     {
-        if (getHumanReadableEditionValue() != null)
+        if (getHumanReadableEditionValue() != null && editionView != null)
         {
             ((MaterialEditText) editionView.findViewById(R.id.date_picker)).setText(getHumanReadableEditionValue());
         }

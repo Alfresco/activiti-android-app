@@ -178,22 +178,22 @@ public class UploadPickerField extends BaseField implements MultiValueField
     // ///////////////////////////////////////////////////////////////////////////
     protected void updateEditionView()
     {
-        // We update only rows.
-        ViewGroup container = (ViewGroup) editionView.findViewById(R.id.contents_container);
-        container.removeAllViews();
+        if (editionView != null) {
+            // We update only rows.
+            ViewGroup container = (ViewGroup) editionView.findViewById(R.id.contents_container);
+            container.removeAllViews();
 
-        displayAddIcon();
-        displayUnsupported((ViewGroup) editionView);
+            displayAddIcon();
+            displayUnsupported((ViewGroup) editionView);
 
-        if (!hasDisplayedEmpty((ViewGroup) editionView, editionValue, false))
-        {
-            // Create Item Rows
-            for (Object item : (List) editionValue)
-            {
-                createRow(container, (RelatedContentRepresentation) item, false);
+            if (!hasDisplayedEmpty((ViewGroup) editionView, editionValue, false)) {
+                // Create Item Rows
+                for (Object item : (List) editionValue) {
+                    createRow(container, (RelatedContentRepresentation) item, false);
+                }
             }
         }
-
+        
         getFormManager().evaluateViews();
     }
 

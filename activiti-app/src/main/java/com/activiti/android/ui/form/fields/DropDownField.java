@@ -90,7 +90,7 @@ public class DropDownField extends BaseField
     // ///////////////////////////////////////////////////////////////////////////
     protected void updateEditionView()
     {
-        if (editionValue != null)
+        if (editionValue != null && editionView != null)
         {
             if (editionValue instanceof OptionRepresentation)
             {
