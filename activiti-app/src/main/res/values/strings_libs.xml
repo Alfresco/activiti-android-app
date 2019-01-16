@@ -26,7 +26,7 @@
     <!-- ################################################################################## -->
     <string name="aboutLibraries_description_showIcon">true</string>
     <string name="aboutLibraries_description_showVersion">true</string>
-    <string name="aboutLibraries_description_text">Alfresco Activiti for Android Copyright (C) 2005-2015 Alfresco Software Limited.</string>
+    <string name="aboutLibraries_description_text">Alfresco Activiti for Android Copyright (C) 2005-2019 Alfresco Software Limited.</string>
 
     <string name="library_AboutLibraries_libraryDescription">AboutLibrariesis a library to offer you all the information you need of your libraries.</string>
 
