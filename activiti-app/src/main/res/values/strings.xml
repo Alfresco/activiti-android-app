@@ -283,6 +283,9 @@
     <string name="form_message_link_error_title">Link unsupported</string>
     <string name="form_message_link_error"><![CDATA[<p>This content is not from a supported source of content.</p> Please select another one.]]></string>
 
+    <string name="offline_save_form_message_title">Offline</string>
+    <string name="offline_save_form_message">You are trying to save a form whilst offline. Task form values will be stored locally until the connectivity is restored and then pushed to the server automatically.</string>
+
     <!-- CONTENT -->
     <!-- ################################################################################## -->
     <string name="content_message_content_pending">Getting content&#8230;</string>

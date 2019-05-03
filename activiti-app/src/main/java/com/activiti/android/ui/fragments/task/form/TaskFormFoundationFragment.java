@@ -44,6 +44,7 @@ import com.activiti.android.platform.exception.ExceptionMessageUtils;
 import com.activiti.android.platform.integration.analytics.AnalyticsHelper;
 import com.activiti.android.platform.integration.analytics.AnalyticsManager;
 import com.activiti.android.platform.provider.transfer.ContentTransferManager;
+import com.activiti.android.platform.utils.ConnectivityUtils;
 import com.activiti.android.sdk.model.runtime.AppVersion;
 import com.activiti.android.sdk.model.runtime.ParcelTask;
 import com.activiti.android.ui.form.FormManager;
@@ -54,12 +55,14 @@ import com.activiti.android.ui.fragments.form.picker.UserGroupPickerFragment;
 import com.activiti.android.ui.fragments.form.picker.UserPickerFragment;
 import com.activiti.android.ui.utils.DisplayUtils;
 import com.activiti.android.ui.utils.UIUtils;
+import com.activiti.android.ui.utils.WorkerManagerUtils;
 import com.activiti.client.api.model.editor.form.FormDefinitionRepresentation;
 import com.activiti.client.api.model.editor.form.request.CompleteFormRepresentation;
 import com.activiti.client.api.model.idm.LightGroupRepresentation;
 import com.activiti.client.api.model.idm.LightUserRepresentation;
 import com.activiti.client.api.model.runtime.RelatedContentRepresentation;
 import com.activiti.client.api.model.runtime.SaveFormRepresentation;
+import com.afollestad.materialdialogs.MaterialDialog;
 
 import java.util.Calendar;
 import java.util.HashMap;
@@ -202,43 +205,59 @@ public class TaskFormFoundationFragment extends AlfrescoFragment implements Date
                 return true;
             case R.id.task_form_save:
                 SaveFormRepresentation rep = new SaveFormRepresentation(formManager.getValues());
-                getAPI().getTaskService().saveTaskForm(task.id, rep, new Callback<Void>() {
-                    @Override
-                    public void onResponse(Call<Void> call, Response<Void> response) {
-                        // Analytics
-                        AnalyticsHelper.reportOperationEvent(getActivity(), AnalyticsManager.CATEGORY_TASK,
-                                AnalyticsManager.ACTION_FORM, AnalyticsManager.LABEL_SAVE, 1, !response.isSuccessful());
+                if (ConnectivityUtils.hasInternetAvailable(getContext())) {
+                    getAPI().getTaskService().saveTaskForm(task.id, rep, new Callback<Void>() {
+                        @Override
+                        public void onResponse(Call<Void> call, Response<Void> response) {
+                            // Analytics
+                            AnalyticsHelper.reportOperationEvent(getActivity(), AnalyticsManager.CATEGORY_TASK,
+                                    AnalyticsManager.ACTION_FORM, AnalyticsManager.LABEL_SAVE, 1, !response.isSuccessful());
 
-                        if (!response.isSuccessful()) {
-                            onFailure(call, new Exception(response.message()));
-                            return;
-                        }
-
-                        try {
-                            EventBusManager.getInstance().post(new SaveTaskEvent(null, task.id, task.category));
-                        } catch (Exception e) {
-                            // Do nothing
-                        }
-                        Snackbar.make(getActivity().findViewById(R.id.left_panel), R.string.task_alert_saved,
-                                Snackbar.LENGTH_LONG).show();
-
-                        // Refresh Task Fragment
-                        if (!DisplayUtils.hasCentralPane(getActivity())) {
-                            Fragment fr = getAttachedFragment();
-                            if (fr != null && fr instanceof TasksFragment) {
-                                ((TasksFragment) fr).refresh();
+                            if (!response.isSuccessful()) {
+                                onFailure(call, new Exception(response.message()));
+                                return;
                             }
+
+                            try {
+                                EventBusManager.getInstance().post(new SaveTaskEvent(null, task.id, task.category));
+                            } catch (Exception e) {
+                                // Do nothing
+                            }
+                            Snackbar.make(getActivity().findViewById(R.id.left_panel), R.string.task_alert_saved,
+                                    Snackbar.LENGTH_LONG).show();
+
+                            // Refresh Task Fragment
+                            if (!DisplayUtils.hasCentralPane(getActivity())) {
+                                Fragment fr = getAttachedFragment();
+                                if (fr != null && fr instanceof TasksFragment) {
+                                    ((TasksFragment) fr).refresh();
+                                }
+                            }
+
+                            getActivity().onBackPressed();
                         }
 
-                        getActivity().onBackPressed();
-                    }
+                        @Override
+                        public void onFailure(Call<Void> call, Throwable error) {
+                            Snackbar.make(getActivity().findViewById(R.id.left_panel), error.getMessage(),
+                                    Snackbar.LENGTH_SHORT).show();
+                        }
+                    });
+                } else {
+                    WorkerManagerUtils.startFormSaverWorker(
+                            task.id,
+                            getAccount().getServerUrl(),
+                            getAccount().getUsername(),
+                            getAccount().getPassword(),
+                            formManager.getValues());
 
-                    @Override
-                    public void onFailure(Call<Void> call, Throwable error) {
-                        Snackbar.make(getActivity().findViewById(R.id.left_panel), error.getMessage(),
-                                Snackbar.LENGTH_SHORT).show();
-                    }
-                });
+                    new MaterialDialog.Builder(getActivity())
+                            .title(R.string.offline_save_form_message_title)
+                            .cancelListener(dialog -> dismiss())
+                            .content(getString(R.string.offline_save_form_message))
+                            .positiveText(R.string.ok)
+                            .show();
+                }
                 return true;
             default:
                 break;

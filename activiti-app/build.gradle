@@ -24,6 +24,8 @@ android {
     compileSdkVersion 27
     buildToolsVersion "27.0.3"
 
+    flavorDimensions "default"
+
     defaultConfig {
         applicationId APPLICATION_ID
 
@@ -137,6 +139,10 @@ android {
             }
         }
     }
+    compileOptions {
+        sourceCompatibility = '1.8'
+        targetCompatibility = '1.8'
+    }
 }
 
 dependencies {
@@ -188,4 +194,9 @@ dependencies {
 
     //Debug
     debugCompile 'net.hockeyapp.android:HockeySDK:3.5.0'
+
+    compile "android.arch.work:work-runtime:1.0.1"
+    implementation "androidx.concurrent:concurrent-futures:1.0.0-alpha03"
+
+    implementation 'com.google.code.gson:gson:2.8.5'
 }
