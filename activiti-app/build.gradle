@@ -107,7 +107,7 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
             applicationVariants.all { variant ->
                 variant.outputs.all { output ->
-                    outputFileName = outputFileName.replace(".apk", "-${variant.versionName}.apk")
+                    output.outputFileName = output.outputFileName.replace(".apk", "-${variant.versionName}.apk")
                 }
             }
         }
