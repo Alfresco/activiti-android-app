@@ -109,7 +109,7 @@ android {
                 variant.outputs.all { output ->
                     def task = project.tasks.create("copy${variant.name.capitalize()}Apk", Copy)
 
-                    def sourceDir = "${project.buildDir}/outputs/apk/${signingConfig.alias}/${variant.name}/"
+                    def sourceDir = "${project.buildDir}/outputs/apk/${signingConfig.name}/${variant.name}/"
                     def destDir = "${project.buildDir}/outputs/apk/"
                     def apkName = output.outputFileName.replace(".apk", "-${variant.versionName}.apk")
 
