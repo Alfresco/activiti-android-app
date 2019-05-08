@@ -107,12 +107,23 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
             applicationVariants.all { variant ->
                 variant.outputs.all { output ->
-                    output.outputFileName = new File(output.outputFileName.replace(".apk", "-${variant.versionName}.apk")).getName()
-                    copy {
-                        from file("${project.buildDir}/outputs/apk/" + variant.name + "/release/${outputFileName}")
-                        into file("${project.buildDir}/outputs/apk/")
+                    def task = project.tasks.create("copy${variant.name.capitalize()}Apk", Copy)
+
+                    def sourceDir = "${project.buildDir}\\outputs\\apk\\" + variant.name + "\\"
+                    def destDir = "${project.buildDir}\\outputs\\apk\\"
+                    def apkName = output.outputFileName.replace(".apk", "-${variant.versionName}.apk")
+
+                    task.from file(sourceDir)
+                    task.into file(destDir)
+                    task.rename output.outputFileName, apkName
+                    task.doLast{
+                        println ">>>Copied ${variant.name} with success!" +
+                                "\nsource dir: ${sourceDir}" +
+                                "\ndest dir: ${destDir}" +
+                                "\napk: ${apkName}"
+                        delete file("${project.buildDir}\\outputs\\apk\\" + variant.name)
                     }
-                    delete file("${project.buildDir}/outputs/apk/" + variant.name) // i don't want apk on this location so after successful copy i am deleting it
+                    variant.getAssembleProvider().get().finalizedBy(task)
                 }
             }
         }
