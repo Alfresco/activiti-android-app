@@ -109,9 +109,14 @@ android {
                 variant.outputs.all { output ->
                     def task = project.tasks.create("copy${variant.name.capitalize()}Apk", Copy)
 
-                    def sourceDir = "${project.buildDir}\\outputs\\apk\\" + variant.name + "\\"
+                    def sourceDir = "${project.buildDir}\\outputs\\apk\\$signingConfig" + variant.name + "\\"
                     def destDir = "${project.buildDir}\\outputs\\apk\\"
                     def apkName = output.outputFileName.replace(".apk", "-${variant.versionName}.apk")
+
+                    println ">>>Pre-copy ${apkName}" +
+                            "\nsource dir: ${sourceDir}" +
+                            "\ndest dir: ${destDir}" +
+                            "\napk: ${apkName}"
 
                     task.from file(sourceDir)
                     task.into file(destDir)
