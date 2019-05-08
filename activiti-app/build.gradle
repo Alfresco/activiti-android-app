@@ -116,6 +116,13 @@ android {
                     task.from file(sourceDir)
                     task.into file(destDir)
                     task.rename output.outputFileName, apkName
+                    task.doFirst {
+                        println ">>>Copying ${apkName}" +
+                                "\nsource dir: ${sourceDir}" +
+                                "\ndest dir: ${destDir}" +
+                                "\napk: ${apkName}"
+
+                    }
                     task.doLast{
                         println ">>>Copied ${variant.name} with success!" +
                                 "\nsource dir: ${sourceDir}" +
