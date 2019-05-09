@@ -109,7 +109,7 @@ android {
                 variant.outputs.all { output ->
                     def task = project.tasks.create("copy${variant.name.capitalize()}Apk", Copy)
 
-                    def sourceDir = "${project.buildDir}/outputs/apk/${variant.getFlavorName()}" + "/${output.name}/"
+                    def sourceDir = "${project.buildDir}/outputs/apk/${variant.getFlavorName()}" + "/${variant.buildType.name}/"
                     def destDir = "${project.buildDir}/outputs/apk/"
                     def apkName = output.outputFileName.replace(".apk", "-${variant.versionName}.apk")
 
@@ -124,16 +124,14 @@ android {
                     task.doFirst {
                         println ">>>Copying ${apkName}" +
                                 "\nsource dir: ${sourceDir}" +
-                                "\ndest dir: ${destDir}" +
-                                "\napk: ${apkName}"
-
+                                "\ndest dir: ${destDir}"
                     }
                     task.doLast{
-                        println ">>>Copied ${variant.name} with success!" +
+                        println ">>>Copied ${apkName} with success!" +
                                 "\nsource dir: ${sourceDir}" +
-                                "\ndest dir: ${destDir}" +
-                                "\napk: ${apkName}"
-                        delete file("${project.buildDir}\\outputs\\apk\\" + variant.name)
+                                "\ndest dir: ${destDir}"
+
+                        delete file("${project.buildDir}\\outputs\\apk\\" + variant.getFlavorName())
                     }
                     variant.getAssembleProvider().get().finalizedBy(task)
                 }
