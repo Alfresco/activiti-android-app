@@ -93,7 +93,7 @@ public class TypeAhead extends BaseField
         }
         else
         {
-            editionValue = ((MaterialEditText) editionView).getText().toString();
+            editionValue = ((MaterialMultiAutoCompleteTextView) editionView).getText().toString();
             return TextUtils.isEmpty((String) editionValue) ? null : editionValue;
         }
     }
@@ -159,7 +159,7 @@ public class TypeAhead extends BaseField
         }
         else
         {
-            editionValue = ((MaterialEditText) editionView).getText().toString();
+            editionValue = ((MaterialMultiAutoCompleteTextView) editionView).getText().toString();
             return TextUtils.isEmpty((String) editionValue) ? null : editionValue;
         }
     }
