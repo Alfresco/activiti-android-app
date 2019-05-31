@@ -57,7 +57,7 @@ public class ReadOnlyTextField extends MultiLineTextField
         View vr = super.setupEditionView(value);
         vr.setEnabled(false);
         ((MaterialEditText) vr).setText(getHumanReadableEditionValue());
-        ((MaterialEditText) vr).setFloatingLabel(0);
+        ((MaterialEditText) vr).setFloatingLabel(MaterialEditText.FLOATING_LABEL_NONE);
         ((MaterialEditText) vr).setMetTextColor(getContext().getResources().getColorStateList(
                 R.color.form_readonly_text));
 
