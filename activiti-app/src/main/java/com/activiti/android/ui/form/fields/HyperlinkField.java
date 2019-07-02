@@ -118,7 +118,14 @@ public class HyperlinkField extends BaseField
             {
                 Intent i = new Intent(Intent.ACTION_VIEW);
                 i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                i.setData(Uri.parse(((HyperlinkRepresentation) data).getHyperlinkUrl()));
+
+                String url = ((HyperlinkRepresentation) data).getHyperlinkUrl();
+
+                if (!url.startsWith("https://") && !url.startsWith("http://")){
+                    url = "http://" + url;
+                }
+
+                i.setData(Uri.parse(url));
                 getFragment().getActivity().startActivity(i);
             }
         });
