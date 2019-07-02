@@ -57,8 +57,9 @@ public class FieldTypeFactory
         }
         catch (IllegalArgumentException e)
         {
-            // Unsupported field
+            return new TextField(context, manager, data, isReadMode);
         }
+
         switch (type)
         {
             case SINGLE_LINE_TEXT:
