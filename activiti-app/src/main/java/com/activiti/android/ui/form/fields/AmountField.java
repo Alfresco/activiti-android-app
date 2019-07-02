@@ -24,6 +24,7 @@ import java.math.RoundingMode;
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
 import java.text.NumberFormat;
+import java.util.HashMap;
 
 import android.content.Context;
 import android.text.Editable;
@@ -72,7 +73,7 @@ public class AmountField extends BaseField
         if (originalValue == null) { return getString(R.string.form_message_empty); }
 
         DecimalFormat df;
-        if ((((AmountFieldRepresentation) data).isEnableFractions()))
+        if (areFractionsEnabled())
         {
             df = new DecimalFormat("#.00", DecimalFormatSymbols.getInstance());
         }
@@ -134,14 +135,11 @@ public class AmountField extends BaseField
         edit.addTextChangedListener(new DecimalTextWatcher(edit, 10, 2));
         edit.setFloatingLabelText(getLabelText(getCurrencyLabel()));
 
-        if ((((AmountFieldRepresentation) data).isEnableFractions()))
-        {
+        if (areFractionsEnabled()) {
             edit.setInputType(EditorInfo.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL
                     | EditorInfo.TYPE_NUMBER_FLAG_SIGNED);
 
-        }
-        else
-        {
+        } else {
             edit.setInputType(EditorInfo.TYPE_CLASS_NUMBER | EditorInfo.TYPE_NUMBER_FLAG_SIGNED);
         }
         return edit;
@@ -149,15 +147,37 @@ public class AmountField extends BaseField
 
     protected String getCurrencyLabel()
     {
-        String currency = ((AmountFieldRepresentation) data).getCurrency();
+        String currency;
         StringBuilder b = new StringBuilder(data.getName());
-        if (!TextUtils.isEmpty(currency))
-        {
+        if (data instanceof AmountFieldRepresentation) {
+            currency = ((AmountFieldRepresentation) data).getCurrency();
+        } else {
+            currency = (String) getField("currency");
+        }
+
+        if (!TextUtils.isEmpty(currency)) {
             b.append(" (");
             b.append(currency);
             b.append(")");
         }
         return b.toString();
+    }
+
+    private boolean areFractionsEnabled() {
+        if (data instanceof AmountFieldRepresentation) {
+            return ((AmountFieldRepresentation) data).isEnableFractions();
+        } else {
+            return Boolean.valueOf((String) getField("enableFractions"));
+        }
+    }
+
+    private Object getField(String paramKey) {
+        try {
+            HashMap<String, Object> params = (HashMap<String, Object>) data.getParam("field");
+            return params.get(paramKey);
+        } catch (Exception e) {
+            return null;
+        }
     }
 
     public class DecimalTextWatcher implements TextWatcher
