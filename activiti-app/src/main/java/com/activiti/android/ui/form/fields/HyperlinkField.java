@@ -31,6 +31,8 @@ import com.activiti.client.api.model.editor.form.FormFieldRepresentation;
 import com.activiti.client.api.model.editor.form.HyperlinkRepresentation;
 import com.rengwuxian.materialedittext.MaterialEditText;
 
+import java.util.HashMap;
+
 /**
  * Created by jpascal on 28/03/2015.
  */
@@ -55,7 +57,6 @@ public class HyperlinkField extends BaseField
 
     public View setupdReadView()
     {
-        if (!(data instanceof HyperlinkRepresentation)) { return null; }
         View vr = inflater.inflate(R.layout.form_hyperlink, null);
         vr.findViewById(R.id.button_container).setOnClickListener(new View.OnClickListener()
         {
@@ -64,18 +65,18 @@ public class HyperlinkField extends BaseField
             {
                 Intent i = new Intent(Intent.ACTION_VIEW);
                 i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                i.setData(Uri.parse((((HyperlinkRepresentation) data).getHyperlinkUrl())));
+                i.setData(formatExistingUrl(getStringHyperlink()));
                 getFragment().getActivity().startActivity(i);
             }
         });
 
         MaterialEditText editText = (MaterialEditText) vr.findViewById(R.id.hyperlink);
-        editText.setText((((HyperlinkRepresentation) data).getDisplayText()));
+        editText.setText(getDisplayText());
         editText.setHideUnderline(true);
         editText.setHelperTextAlwaysShown(true);
         try
         {
-            editText.setHelperText(Uri.parse(((HyperlinkRepresentation) data).getHyperlinkUrl()).getHost());
+            editText.setHelperText(getHyperlink().getHost());
         }
         catch (Exception e)
         {
@@ -91,6 +92,47 @@ public class HyperlinkField extends BaseField
         readView = vr;
 
         return vr;
+    }
+
+    private String getDisplayText() {
+        if (data instanceof HyperlinkRepresentation) {
+            return ((HyperlinkRepresentation) data).getDisplayText();
+        } else {
+            return (String) getField("displayText");
+        }
+    }
+
+    private Uri getHyperlink() {
+        return Uri.parse(getStringHyperlink());
+    }
+
+    private String getStringHyperlink() {
+        if (data instanceof HyperlinkRepresentation) {
+            return ((HyperlinkRepresentation) data).getHyperlinkUrl();
+        } else {
+            return (String) getField("hyperlinkUrl");
+        }
+    }
+
+    private Uri formatExistingUrl(String url) {
+        if(!url.startsWith("www.") && !url.startsWith("http://") && !url.startsWith("https://")) {
+            url = "www." + url;
+        }
+
+        if(!url.startsWith("http://") && !url.startsWith("https://")) {
+            url = "http://" + url;
+        }
+
+        return Uri.parse(url);
+    }
+
+    private Object getField(String paramKey) {
+        try {
+            HashMap<String, Object> params = (HashMap<String, Object>) data.getParam("field");
+            return params.get(paramKey);
+        } catch (Exception e) {
+            return null;
+        }
     }
 
     // ///////////////////////////////////////////////////////////////////////////
@@ -118,14 +160,7 @@ public class HyperlinkField extends BaseField
             {
                 Intent i = new Intent(Intent.ACTION_VIEW);
                 i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-
-                String url = ((HyperlinkRepresentation) data).getHyperlinkUrl();
-
-                if (!url.startsWith("https://") && !url.startsWith("http://")){
-                    url = "http://" + url;
-                }
-
-                i.setData(Uri.parse(url));
+                i.setData(formatExistingUrl(getStringHyperlink()));
                 getFragment().getActivity().startActivity(i);
             }
         });
