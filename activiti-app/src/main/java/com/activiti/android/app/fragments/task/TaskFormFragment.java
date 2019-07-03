@@ -24,7 +24,6 @@ import java.util.Map;
 
 import android.content.ActivityNotFoundException;
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
@@ -37,6 +36,7 @@ import com.activiti.android.platform.provider.transfer.DownloadTransferEvent;
 import com.activiti.android.sdk.model.runtime.ParcelTask;
 import com.activiti.android.ui.fragments.builder.LeafFragmentBuilder;
 import com.activiti.android.ui.fragments.task.form.TaskFormFoundationFragment;
+import com.activiti.android.ui.utils.IntentUtils;
 import com.activiti.android.ui.utils.UIUtils;
 import com.activiti.client.api.model.runtime.TaskRepresentation;
 import com.squareup.otto.Subscribe;
@@ -94,21 +94,22 @@ public class TaskFormFragment extends TaskFormFoundationFragment
 
         try
         {
+            Intent actionIntent;
+
             switch (event.mode)
             {
                 case ContentTransferSyncAdapter.MODE_SHARE:
-                    Intent sendIntent = new Intent(Intent.ACTION_SEND);
-                    sendIntent.putExtra(Intent.EXTRA_SUBJECT, event.data.getName());
-                    sendIntent.putExtra(Intent.EXTRA_STREAM, Uri.fromFile(event.data));
-                    sendIntent.setType(event.mimetype);
-                    getActivity().startActivity(
-                            Intent.createChooser(sendIntent, getResources().getText(R.string.action_send_file)));
+                    actionIntent = new Intent(Intent.ACTION_SEND);
+                    actionIntent.putExtra(Intent.EXTRA_SUBJECT, event.data.getName());
+                    actionIntent.putExtra(Intent.EXTRA_STREAM, IntentUtils.exposeFile(event.data, actionIntent, getContext()));
+                    actionIntent.setType(event.mimetype);
+                    getActivity().startActivity(Intent.createChooser(actionIntent, getResources().getText(R.string.action_send_file)));
                     break;
                 case ContentTransferSyncAdapter.MODE_OPEN_IN:
-                    Intent viewIntent = new Intent(Intent.ACTION_VIEW);
-                    viewIntent.putExtra(Intent.EXTRA_SUBJECT, event.data.getName());
-                    viewIntent.setDataAndType(Uri.fromFile(event.data), event.mimetype);
-                    startActivity(viewIntent);
+                    actionIntent = new Intent(Intent.ACTION_VIEW);
+                    actionIntent.putExtra(Intent.EXTRA_SUBJECT, event.data.getName());
+                    actionIntent.setDataAndType(IntentUtils.exposeFile(event.data, actionIntent, getContext()), event.mimetype);
+                    startActivity(actionIntent);
                     break;
             }
         }
