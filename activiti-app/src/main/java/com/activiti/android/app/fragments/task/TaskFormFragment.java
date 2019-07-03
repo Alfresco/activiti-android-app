@@ -94,22 +94,20 @@ public class TaskFormFragment extends TaskFormFoundationFragment
 
         try
         {
-            Intent actionIntent;
-
             switch (event.mode)
             {
                 case ContentTransferSyncAdapter.MODE_SHARE:
-                    actionIntent = new Intent(Intent.ACTION_SEND);
-                    actionIntent.putExtra(Intent.EXTRA_SUBJECT, event.data.getName());
-                    actionIntent.putExtra(Intent.EXTRA_STREAM, IntentUtils.exposeFile(event.data, actionIntent, getContext()));
-                    actionIntent.setType(event.mimetype);
-                    getActivity().startActivity(Intent.createChooser(actionIntent, getResources().getText(R.string.action_send_file)));
+                    Intent shareIntent = new Intent(Intent.ACTION_SEND);
+                    shareIntent.putExtra(Intent.EXTRA_SUBJECT, event.data.getName());
+                    shareIntent.putExtra(Intent.EXTRA_STREAM, IntentUtils.exposeFile(event.data, shareIntent, getContext()));
+                    shareIntent.setType(event.mimetype);
+                    getActivity().startActivity(Intent.createChooser(shareIntent, getResources().getText(R.string.action_send_file)));
                     break;
                 case ContentTransferSyncAdapter.MODE_OPEN_IN:
-                    actionIntent = new Intent(Intent.ACTION_VIEW);
-                    actionIntent.putExtra(Intent.EXTRA_SUBJECT, event.data.getName());
-                    actionIntent.setDataAndType(IntentUtils.exposeFile(event.data, actionIntent, getContext()), event.mimetype);
-                    startActivity(actionIntent);
+                    Intent viewIntent = new Intent(Intent.ACTION_VIEW);
+                    viewIntent.putExtra(Intent.EXTRA_SUBJECT, event.data.getName());
+                    viewIntent.setDataAndType(IntentUtils.exposeFile(event.data, viewIntent, getContext()), event.mimetype);
+                    startActivity(viewIntent);
                     break;
             }
         }

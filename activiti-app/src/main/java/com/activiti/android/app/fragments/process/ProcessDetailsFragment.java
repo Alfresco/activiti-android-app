@@ -44,6 +44,7 @@ import com.activiti.android.ui.fragments.builder.LeafFragmentBuilder;
 import com.activiti.android.ui.fragments.comment.FragmentWithComments;
 import com.activiti.android.ui.fragments.process.ProcessDetailsFoundationFragment;
 import com.activiti.android.ui.utils.DisplayUtils;
+import com.activiti.android.ui.utils.IntentUtils;
 import com.squareup.otto.Subscribe;
 
 /**
@@ -181,7 +182,7 @@ public class ProcessDetailsFragment extends ProcessDetailsFoundationFragment imp
                 case ContentTransferSyncAdapter.MODE_SHARE:
                     Intent sendIntent = new Intent(Intent.ACTION_SEND);
                     sendIntent.putExtra(Intent.EXTRA_SUBJECT, event.data.getName());
-                    sendIntent.putExtra(Intent.EXTRA_STREAM, Uri.fromFile(event.data));
+                    sendIntent.putExtra(Intent.EXTRA_STREAM, IntentUtils.exposeFile(event.data, sendIntent, getContext()));
                     sendIntent.setType(event.mimetype);
                     getActivity().startActivity(
                             Intent.createChooser(sendIntent, getResources().getText(R.string.action_send_file)));
@@ -189,7 +190,7 @@ public class ProcessDetailsFragment extends ProcessDetailsFoundationFragment imp
                 case ContentTransferSyncAdapter.MODE_OPEN_IN:
                     Intent viewIntent = new Intent(Intent.ACTION_VIEW);
                     viewIntent.putExtra(Intent.EXTRA_SUBJECT, event.data.getName());
-                    viewIntent.setDataAndType(Uri.fromFile(event.data), event.mimetype);
+                    viewIntent.setDataAndType(IntentUtils.exposeFile(event.data, viewIntent, getContext()), event.mimetype);
                     startActivity(viewIntent);
                     break;
             }
