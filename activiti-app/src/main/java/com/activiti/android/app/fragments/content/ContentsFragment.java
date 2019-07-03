@@ -43,6 +43,7 @@ import com.activiti.android.platform.provider.transfer.DownloadTransferUriEvent;
 import com.activiti.android.ui.fragments.builder.ListingFragmentBuilder;
 import com.activiti.android.ui.fragments.content.ContentAdapter;
 import com.activiti.android.ui.fragments.content.ContentsFoundationFragment;
+import com.activiti.android.ui.utils.IntentUtils;
 import com.activiti.android.ui.utils.UIUtils;
 import com.activiti.client.api.model.runtime.RelatedContentRepresentation;
 import com.afollestad.materialdialogs.MaterialDialog;
@@ -158,7 +159,7 @@ public class ContentsFragment extends ContentsFoundationFragment
                 case ContentTransferSyncAdapter.MODE_SHARE:
                     Intent sendIntent = new Intent(Intent.ACTION_SEND);
                     sendIntent.putExtra(Intent.EXTRA_SUBJECT, event.data.getName());
-                    sendIntent.putExtra(Intent.EXTRA_STREAM, Uri.fromFile(event.data));
+                    sendIntent.putExtra(Intent.EXTRA_STREAM, IntentUtils.exposeFile(event.data, sendIntent, getContext()));
                     sendIntent.setType(event.mimetype);
                     getActivity().startActivity(
                             Intent.createChooser(sendIntent, getResources().getText(R.string.action_send_file)));
@@ -166,7 +167,7 @@ public class ContentsFragment extends ContentsFoundationFragment
                 case ContentTransferSyncAdapter.MODE_OPEN_IN:
                     Intent viewIntent = new Intent(Intent.ACTION_VIEW);
                     viewIntent.putExtra(Intent.EXTRA_SUBJECT, event.data.getName());
-                    viewIntent.setDataAndType(Uri.fromFile(event.data), event.mimetype);
+                    viewIntent.setDataAndType(IntentUtils.exposeFile(event.data, viewIntent, getContext()), event.mimetype);
                     startActivity(viewIntent);
                     break;
             }
