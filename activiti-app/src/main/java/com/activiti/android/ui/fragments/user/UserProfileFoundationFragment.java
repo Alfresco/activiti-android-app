@@ -413,7 +413,9 @@ public class UserProfileFoundationFragment extends AlfrescoFragment implements E
 
         // Update controls in regards
         TextView emptyText = (TextView) viewById(R.id.empty_text);
-        emptyText.setText(ExceptionMessageUtils.getMessage(getActivity(), error));
+        if (getActivity() != null) {
+            emptyText.setText(ExceptionMessageUtils.getMessage(getActivity(), error));
+        }
         Button bRetry = (Button) viewById(R.id.empty_action);
         bRetry.setText(R.string.retry);
         bRetry.setOnClickListener(new View.OnClickListener()
