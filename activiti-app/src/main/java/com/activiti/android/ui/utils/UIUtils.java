@@ -239,6 +239,13 @@ public class UIUtils
         activity.unlockSlidingMenu();
         activity.getmDrawerToggle().setDrawerIndicatorEnabled(true);
         activity.getmDrawerToggle().setHomeAsUpIndicator(null);
+
+        ActionBar actionBar = ((AppCompatActivity) activity).getSupportActionBar();
+        actionBar.setCustomView(null);
+        actionBar.setDisplayHomeAsUpEnabled(true);
+        actionBar.setDisplayShowHomeEnabled(true);
+        actionBar.setDisplayShowTitleEnabled(true);
+        actionBar.setDisplayShowCustomEnabled(false);
     }
 
     public static View setActionBarCustomView(FragmentActivity activity, int layoutId, boolean fillParent)

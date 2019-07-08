@@ -43,6 +43,7 @@ import com.activiti.android.ui.fragments.process.ProcessesFoundationFragment;
 import com.activiti.android.ui.fragments.process.create.StartProcessDialogFragment;
 import com.activiti.android.ui.fragments.process.filter.ProcessFiltersFragment;
 import com.activiti.android.ui.utils.DisplayUtils;
+import com.activiti.android.ui.utils.UIUtils;
 import com.activiti.client.api.constant.RequestConstant;
 import com.activiti.client.api.model.runtime.ProcessInstanceRepresentation;
 import com.squareup.otto.Subscribe;
@@ -161,6 +162,7 @@ public class ProcessesFragment extends ProcessesFoundationFragment
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater)
     {
         super.onCreateOptionsMenu(menu, inflater);
+        UIUtils.setActionBarDefault((MainActivity) getActivity());
         menu.clear();
         inflater.inflate(R.menu.processes, menu);
     }
