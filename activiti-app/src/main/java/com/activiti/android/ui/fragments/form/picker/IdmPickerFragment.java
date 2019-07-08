@@ -49,6 +49,7 @@ import android.widget.TextView;
 import android.widget.TextView.OnEditorActionListener;
 
 import com.activiti.android.app.R;
+import com.activiti.android.app.activity.MainActivity;
 import com.activiti.android.platform.intent.RequestCode;
 import com.activiti.android.platform.utils.FeatureUtils;
 import com.activiti.android.ui.fragments.base.BasePagingGridFragment;
@@ -343,6 +344,7 @@ public abstract class IdmPickerFragment extends BasePagingGridFragment implement
     {
         super.onStop();
         UIUtils.hideKeyboard(getActivity(), getRootView());
+        UIUtils.setActionBarDefault((MainActivity) getActivity());
     }
 
     // //////////////////////////////////////////////////////////////////////

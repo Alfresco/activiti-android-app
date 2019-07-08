@@ -497,27 +497,29 @@ public class TaskDetailsFoundationFragment extends AbstractDetailsFragment
     }
 
     private void displayAssignee(String assignee) {
-        HolderUtils.configure(assigneeHolder, getString(R.string.task_field_assignee),
-                (assignee != null) ? assignee : getString(R.string.task_message_no_assignee),
-                R.drawable.ic_assignment_ind_grey);
-        if (TaskHelper.canReassign(taskRepresentation, getAccount().getUserId())) {
-            View v = viewById(R.id.task_details_assignee_container);
-            v.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    // Special case activiti.alfresco.com & tenantid == null
-                    // User must pick user via email only
-                    if (ActivitiSession.getInstance().isActivitiOnTheCloud() && getAccount().getTenantId() == null) {
-                        ActivitiUserPickerFragment.with(getActivity()).fragmentTag(getTag()).fieldId("assign")
-                                .displayAsDialog();
-                    } else {
-                        UserPickerFragment.with(getActivity()).fragmentTag(getTag()).fieldId("assign")
-                                .singleChoice(true).mode(ListingModeFragment.MODE_PICK).display();
+        if (isAdded()) {
+            HolderUtils.configure(assigneeHolder, getString(R.string.task_field_assignee),
+                    (assignee != null) ? assignee : getString(R.string.task_message_no_assignee),
+                    R.drawable.ic_assignment_ind_grey);
+            if (TaskHelper.canReassign(taskRepresentation, getAccount().getUserId())) {
+                View v = viewById(R.id.task_details_assignee_container);
+                v.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        // Special case activiti.alfresco.com & tenantid == null
+                        // User must pick user via email only
+                        if (ActivitiSession.getInstance().isActivitiOnTheCloud() && getAccount().getTenantId() == null) {
+                            ActivitiUserPickerFragment.with(getActivity()).fragmentTag(getTag()).fieldId("assign")
+                                    .displayAsDialog();
+                        } else {
+                            UserPickerFragment.with(getActivity()).fragmentTag(getTag()).fieldId("assign")
+                                    .singleChoice(true).mode(ListingModeFragment.MODE_PICK).display();
+                        }
                     }
-                }
-            });
-        } else {
-            UIUtils.setBackground(viewById(R.id.task_details_assignee_container), null);
+                });
+            } else {
+                UIUtils.setBackground(viewById(R.id.task_details_assignee_container), null);
+            }
         }
     }
 
@@ -1025,17 +1027,22 @@ public class TaskDetailsFoundationFragment extends AbstractDetailsFragment
                 }
                 displayAssignee(
                         response.body().getAssignee() != null ? response.body().getAssignee().getFullname() : null);
-                Snackbar.make(getActivity().findViewById(R.id.left_panel),
-                        String.format(getString(R.string.task_alert_assigned),
-                                task.name, response.body().getAssignee() != null
-                                        ? response.body().getAssignee().getFullname() : ""),
-                        Snackbar.LENGTH_SHORT).show();
+
+                if (getActivity() != null) {
+                    Snackbar.make(getActivity().findViewById(R.id.left_panel),
+                            String.format(getString(R.string.task_alert_assigned),
+                                    task.name, response.body().getAssignee() != null
+                                            ? response.body().getAssignee().getFullname() : ""),
+                            Snackbar.LENGTH_SHORT).show();
+                }
             }
 
             @Override
             public void onFailure(Call<TaskRepresentation> call, Throwable error) {
-                Snackbar.make(getActivity().findViewById(R.id.left_panel), error.getMessage(), Snackbar.LENGTH_SHORT)
-                        .show();
+                if (getActivity() != null) {
+                    Snackbar.make(getActivity().findViewById(R.id.left_panel), error.getMessage(), Snackbar.LENGTH_SHORT)
+                            .show();
+                }
             }
         });
     }
