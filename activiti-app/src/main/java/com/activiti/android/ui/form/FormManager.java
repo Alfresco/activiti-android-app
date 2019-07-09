@@ -603,7 +603,7 @@ public class FormManager
                         .evaluateExpression(tabInfo.getData().getVisibilityCondition());
                 if (isVisible && !tabLaIndex.containsKey(tabInfo.getId()))
                 {
-                    tabLayout.addTab(tabInfo.getTab());
+                    tabLayout.addTab(tabInfo.getTab(tabLayout));
                 }
                 else if (!isVisible && tabLaIndex.containsKey(tabInfo.getId()))
                 {
