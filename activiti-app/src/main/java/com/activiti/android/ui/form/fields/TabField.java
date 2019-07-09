@@ -43,6 +43,20 @@ public class TabField
         return tab.get();
     }
 
+    public TabLayout.Tab getTab(TabLayout tabLayout) {
+        TabLayout.Tab existingTab = tab.get();
+
+        if (existingTab.getPosition() != -1) {
+            tabLayout.removeTabAt(existingTab.getPosition());
+        }
+
+        return tabLayout.newTab().setContentDescription(existingTab.getContentDescription())
+                .setCustomView(existingTab.getCustomView())
+                .setIcon(existingTab.getIcon())
+                .setTag(existingTab.getTag())
+                .setText(existingTab.getText());
+    }
+
     public String getId()
     {
         return id;
