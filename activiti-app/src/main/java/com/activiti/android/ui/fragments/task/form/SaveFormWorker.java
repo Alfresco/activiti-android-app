@@ -14,8 +14,7 @@ import com.activiti.android.sdk.services.TaskService;
 import com.activiti.android.ui.utils.WorkerManagerUtils;
 import com.activiti.client.api.model.runtime.SaveFormRepresentation;
 import com.google.common.util.concurrent.ListenableFuture;
-
-import java.util.Map;
+import com.google.gson.Gson;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -23,7 +22,7 @@ import retrofit2.Response;
 
 /**
  * Worker for saving the values of a form
- *
+ * <p>
  * Created by Bogdan Roatis on 4/25/2019.
  */
 public class SaveFormWorker extends ListenableWorker {
@@ -36,8 +35,10 @@ public class SaveFormWorker extends ListenableWorker {
     @Override
     public ListenableFuture<Result> startWork() {
         final String taskId = getInputData().getString(WorkerManagerUtils.FORM_SAVE_TASK_ID);
-        Map<String, Object> values = getInputData().getKeyValueMap();
-        SaveFormRepresentation rep = new SaveFormRepresentation(values);
+        SaveFormRepresentation saveFormRepresentation =
+                new Gson().fromJson(
+                        getInputData().getString(WorkerManagerUtils.FORM_SAVE_REP),
+                        SaveFormRepresentation.class);
 
         ActivitiSession session = new ActivitiSession.Builder()
                 .connect(getInputData().getString(WorkerManagerUtils.FORM_SAVE_ENDPOINT),
@@ -47,7 +48,7 @@ public class SaveFormWorker extends ListenableWorker {
         TaskService taskService = session.getServiceRegistry().getTaskService();
 
         return CallbackToFutureAdapter.getFuture(completer -> {
-            taskService.saveTaskForm(taskId, rep, new Callback<Void>() {
+            taskService.saveTaskForm(taskId, saveFormRepresentation, new Callback<Void>() {
                 @Override
                 public void onResponse(Call<Void> call, Response<Void> response) {
                     // Analytics

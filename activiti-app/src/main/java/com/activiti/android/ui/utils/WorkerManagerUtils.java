@@ -9,8 +9,9 @@ import androidx.work.OneTimeWorkRequest;
 import androidx.work.WorkManager;
 
 import com.activiti.android.ui.fragments.task.form.SaveFormWorker;
+import com.activiti.client.api.model.runtime.SaveFormRepresentation;
+import com.google.gson.Gson;
 
-import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -22,6 +23,7 @@ public class WorkerManagerUtils {
     public static final String FORM_SAVE_ENDPOINT = "endpoint";
     public static final String FORM_SAVE_USERNAME = "username";
     public static final String FORM_SAVE_PASSWORD = "password";
+    public static final String FORM_SAVE_REP = "rep";
     private static final long FORM_INITIAL_RETRY_DELAY = 1000L;
 
     /**
@@ -36,13 +38,13 @@ public class WorkerManagerUtils {
      *                 object in order to get the rest client.
      * @param password The password of the current account making the API call. Used for creating a session
      *                 object in order to get the rest client.
-     * @param values   The form values
+     * @param saveFormRepresentation The form values representation object
      */
     public static void startFormSaverWorker(String taskId,
                                             String endpoint,
                                             String username,
                                             String password,
-                                            Map<String, Object> values) {
+                                            SaveFormRepresentation saveFormRepresentation) {
 
         Constraints constraints = new Constraints.Builder()
                 .setRequiredNetworkType(NetworkType.CONNECTED)
@@ -53,7 +55,7 @@ public class WorkerManagerUtils {
                 .putString(FORM_SAVE_ENDPOINT, endpoint)
                 .putString(FORM_SAVE_USERNAME, username)
                 .putString(FORM_SAVE_PASSWORD, password)
-                .putAll(values)
+                .putString(FORM_SAVE_REP, new Gson().toJson(saveFormRepresentation))
                 .build();
 
         OneTimeWorkRequest workRequest = new OneTimeWorkRequest.Builder(SaveFormWorker.class)
