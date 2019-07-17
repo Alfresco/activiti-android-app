@@ -204,9 +204,9 @@ public class TaskFormFoundationFragment extends AlfrescoFragment implements Date
                 getActivity().onBackPressed();
                 return true;
             case R.id.task_form_save:
-                SaveFormRepresentation rep = new SaveFormRepresentation(formManager.getValues());
+                SaveFormRepresentation saveFormRepresentation = new SaveFormRepresentation(formManager.getValues());
                 if (ConnectivityUtils.hasInternetAvailable(getContext())) {
-                    getAPI().getTaskService().saveTaskForm(task.id, rep, new Callback<Void>() {
+                    getAPI().getTaskService().saveTaskForm(task.id, saveFormRepresentation, new Callback<Void>() {
                         @Override
                         public void onResponse(Call<Void> call, Response<Void> response) {
                             // Analytics
@@ -249,7 +249,7 @@ public class TaskFormFoundationFragment extends AlfrescoFragment implements Date
                             getAccount().getServerUrl(),
                             getAccount().getUsername(),
                             getAccount().getPassword(),
-                            formManager.getValues());
+                            saveFormRepresentation);
 
                     new MaterialDialog.Builder(getActivity())
                             .title(R.string.offline_save_form_message_title)
