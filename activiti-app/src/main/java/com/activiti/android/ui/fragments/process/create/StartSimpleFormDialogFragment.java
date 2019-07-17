@@ -47,7 +47,9 @@ import com.activiti.android.ui.fragments.builder.AlfrescoFragmentBuilder;
 import com.activiti.android.ui.utils.UIUtils;
 import com.activiti.client.api.model.runtime.ProcessInstanceRepresentation;
 import com.activiti.client.api.model.runtime.request.CreateProcessInstanceRepresentation;
+import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
+import com.afollestad.materialdialogs.internal.MDButton;
 
 public class StartSimpleFormDialogFragment extends AlfrescoFragment
 {
@@ -58,6 +60,8 @@ public class StartSimpleFormDialogFragment extends AlfrescoFragment
     protected String processDefinitionId, processDefinitionName;
 
     protected EditText nameView;
+
+    private MDButton positiveButton;
 
     // ///////////////////////////////////////////////////////////////////////////
     // CONSTRUCTORS & HELPERS
@@ -99,6 +103,9 @@ public class StartSimpleFormDialogFragment extends AlfrescoFragment
                     @Override
                     public void onPositive(MaterialDialog dialog)
                     {
+                        positiveButton = dialog.getActionButton(DialogAction.POSITIVE);
+                        positiveButton.setEnabled(false);
+
                         String processName;
                         if (nameView.getText().length() == 0)
                         {
@@ -159,6 +166,7 @@ public class StartSimpleFormDialogFragment extends AlfrescoFragment
 
                 if (!response.isSuccessful())
                 {
+                    positiveButton.setEnabled(true);
                     onFailure(call, new Exception(response.message()));
                     return;
                 }
@@ -187,6 +195,7 @@ public class StartSimpleFormDialogFragment extends AlfrescoFragment
             @Override
             public void onFailure(Call<ProcessInstanceRepresentation> call, Throwable error)
             {
+                positiveButton.setEnabled(true);
                 Snackbar.make(getActivity().findViewById(R.id.left_panel), error.getMessage(), Snackbar.LENGTH_LONG)
                         .show();
             }
