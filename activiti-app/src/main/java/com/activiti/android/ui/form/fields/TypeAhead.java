@@ -178,11 +178,7 @@ public class TypeAhead extends BaseField
     // AUTOCOMPLETE
     // ///////////////////////////////////////////////////////////////////////////
     @Override
-    public void setFragment(AlfrescoFragment fr)
-    {
-        if (data instanceof RestFieldRepresentation
-                && ((RestFieldRepresentation) data).getEndpoint() == null) { return; }
-
+    public void setFragment(AlfrescoFragment fr) {
         super.setFragment(fr);
         getFragment().getAPI().getTaskService().getFormFieldValues(getFormManager().getTaskId(), data.getId(),
                 new Callback<List<OptionRepresentation>>()
@@ -209,6 +205,7 @@ public class TypeAhead extends BaseField
                                 R.layout.row_single_line, optionsValue);
                         ((MaterialMultiAutoCompleteTextView) editionView).setAdapter(adapter);
                         ((MaterialMultiAutoCompleteTextView) editionView).setTokenizer(new SpaceTokenizer());
+                        ((MaterialMultiAutoCompleteTextView) editionView).setThreshold(1);
                     }
 
                     @Override
