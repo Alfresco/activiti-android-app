@@ -155,6 +155,10 @@ public abstract class BaseField
         return editionView;
     }
 
+    public View getReadView() {
+        return readView;
+    }
+
     protected void updateEditionView()
     {
         if (getHumanReadableEditionValue() != null)
