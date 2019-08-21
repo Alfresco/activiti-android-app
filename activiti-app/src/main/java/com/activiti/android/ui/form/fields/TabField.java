@@ -51,10 +51,9 @@ public class TabField
         }
 
         return tabLayout.newTab().setContentDescription(existingTab.getContentDescription())
-                .setCustomView(existingTab.getCustomView())
                 .setIcon(existingTab.getIcon())
-                .setTag(existingTab.getTag())
-                .setText(existingTab.getText());
+                .setTag(data.getId())
+                .setText(data.getTitle());
     }
 
     public String getId()
