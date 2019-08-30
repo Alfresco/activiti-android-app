@@ -100,7 +100,7 @@ public abstract class BaseField
         return originalValue;
     }
 
-    public View setupdReadView()
+    public View setupReadView()
     {
         readView = inflater.inflate(R.layout.form_read_row, null);
         HolderUtils.configure(readView, data.getName(), getHumanReadableReadValue(), -1);
@@ -127,6 +127,12 @@ public abstract class BaseField
     {
         editionValue = object;
         updateEditionView();
+    }
+
+    public void setReadValue(Object object)
+    {
+        originalValue = object;
+        updateReadView();
     }
 
     public boolean hasEditionValueChanged()
@@ -164,6 +170,14 @@ public abstract class BaseField
         if (getHumanReadableEditionValue() != null)
         {
             ((MaterialEditText) editionView).setText(getHumanReadableEditionValue());
+        }
+    }
+
+    protected void updateReadView() {
+        String readValue = getHumanReadableReadValue();
+        if (readValue != null) {
+            HolderUtils.configure(readView, data.getName(), readValue, -1);
+            readView.setFocusable(false);
         }
     }
 
@@ -253,6 +267,14 @@ public abstract class BaseField
         return isVisible ? getEditionValue() : null;
     }
 
+    public void refreshView() {
+        if (isReadMode) {
+            refreshReadView();
+        } else {
+            refreshEditionView();
+        }
+    }
+
     // ///////////////////////////////////////////////////////////////////////////
     // REFRESH
     // ///////////////////////////////////////////////////////////////////////////
@@ -261,6 +283,10 @@ public abstract class BaseField
         // We reaffect the same value to update the view with the latest edition
         // value
         setEditionValue(getEditionValue());
+    }
+
+    public void refreshReadView() {
+        setReadValue(getEditionValue());
     }
 
     // ///////////////////////////////////////////////////////////////////////////

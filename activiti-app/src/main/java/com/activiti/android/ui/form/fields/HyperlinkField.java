@@ -55,7 +55,7 @@ public class HyperlinkField extends BaseField
         return originalValue.toString();
     }
 
-    public View setupdReadView()
+    public View setupReadView()
     {
         View vr = inflater.inflate(R.layout.form_hyperlink, null);
         vr.findViewById(R.id.button_container).setOnClickListener(new View.OnClickListener()
@@ -194,6 +194,14 @@ public class HyperlinkField extends BaseField
         if (getHumanReadableEditionValue() != null && editionView != null)
         {
             ((MaterialEditText) editionView.findViewById(R.id.date_picker)).setText(getHumanReadableEditionValue());
+        }
+    }
+
+    protected void updateReadView() {
+        String readValue = getHumanReadableReadValue();
+        if (readValue != null && readView != null)
+        {
+            ((MaterialEditText) readView.findViewById(R.id.date_picker)).setText(readValue);
         }
     }
 

@@ -59,7 +59,7 @@ public class AmountField extends BaseField
     // READ
     // ///////////////////////////////////////////////////////////////////////////
     @Override
-    public View setupdReadView()
+    public View setupReadView()
     {
         readView = inflater.inflate(R.layout.form_read_row, null);
         HolderUtils.configure(readView, getCurrencyLabel(), getHumanReadableReadValue(), -1);

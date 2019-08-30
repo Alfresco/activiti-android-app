@@ -32,13 +32,11 @@ import com.activiti.client.api.model.editor.form.FormFieldRepresentation;
 /**
  * Created by jpascal on 28/03/2015.
  */
-public class HeaderField extends BaseField
-{
+public class HeaderField extends BaseField {
     // ///////////////////////////////////////////////////////////////////////////
     // CONSTRUCTOR
     // ///////////////////////////////////////////////////////////////////////////
-    public HeaderField(Context context, FormManager manager, FormFieldRepresentation data, boolean isReadMode)
-    {
+    public HeaderField(Context context, FormManager manager, FormFieldRepresentation data, boolean isReadMode) {
         super(context, manager, data, isReadMode);
     }
 
@@ -46,16 +44,14 @@ public class HeaderField extends BaseField
     // VALUES
     // ///////////////////////////////////////////////////////////////////////////
     @Override
-    public Object getEditionValue()
-    {
+    public Object getEditionValue() {
         return null;
     }
 
     // ///////////////////////////////////////////////////////////////////////////
     // VIEW GENERATOR
     // ///////////////////////////////////////////////////////////////////////////
-    public View setupdReadView()
-    {
+    public View setupReadView() {
         LinearLayout vr = (LinearLayout) inflater.inflate(R.layout.form_header, null);
         ((TextView) vr.findViewById(R.id.header_title)).setText(data.getName());
 
@@ -65,10 +61,19 @@ public class HeaderField extends BaseField
     }
 
     @Override
-    public View setupEditionView(Object value)
-    {
-        editionView = setupdReadView();
+    public View setupEditionView(Object value) {
+        editionView = setupReadView();
 
         return editionView;
+    }
+
+    @Override
+    protected void updateReadView() {
+        ((TextView) readView.findViewById(R.id.header_title)).setText(data.getName());
+    }
+
+    @Override
+    protected void updateEditionView() {
+        ((TextView) editionView.findViewById(R.id.header_title)).setText(data.getName());
     }
 }

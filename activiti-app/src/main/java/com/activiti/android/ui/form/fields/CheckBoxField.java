@@ -60,7 +60,7 @@ public class CheckBoxField extends BaseField
     }
 
     @Override
-    public View setupdReadView()
+    public View setupReadView()
     {
         if (data.getValue() == null)
         {
@@ -90,6 +90,12 @@ public class CheckBoxField extends BaseField
     // ///////////////////////////////////////////////////////////////////////////
     protected void updateEditionView()
     {
+        if (editionView != null) {
+            ((CheckBox) editionView).setChecked((Boolean) editionValue);
+        }
+    }
+
+    protected void updateReadView() {
         if (editionView != null) {
             ((CheckBox) editionView).setChecked((Boolean) editionValue);
         }

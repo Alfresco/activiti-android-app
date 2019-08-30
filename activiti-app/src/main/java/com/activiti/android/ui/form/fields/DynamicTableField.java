@@ -57,7 +57,7 @@ public class DynamicTableField extends BaseField
         return getString(R.string.form_message_unsupported_field_summary);
     }
 
-    public View setupdReadView()
+    public View setupReadView()
     {
         View vr = inflater.inflate(readLayoutId, null);
         TwoLinesViewHolder tv = HolderUtils.configure(vr, data.getName(), getHumanReadableReadValue(), -1);

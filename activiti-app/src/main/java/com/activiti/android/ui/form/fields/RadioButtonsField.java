@@ -71,7 +71,7 @@ public class RadioButtonsField extends BaseField
         return originalValue.toString();
     }
 
-    public View setupdReadView()
+    public View setupReadView()
     {
         View vr = inflater.inflate(R.layout.form_read_row, null);
         HolderUtils.configure(vr, data.getName(), getHumanReadableReadValue(), -1);
@@ -90,6 +90,22 @@ public class RadioButtonsField extends BaseField
     // EDITION VIEW
     // ///////////////////////////////////////////////////////////////////////////
     protected void updateEditionView()
+    {
+        // Retrieve info
+        if (data instanceof RestFieldRepresentation && ((RestFieldRepresentation) data).getEndpoint() != null)
+        {
+            List<OptionRepresentation> options = new ArrayList<>(1);
+            OptionRepresentation rep = new OptionRepresentation("-1", "Loading...");
+            options.add(rep);
+            refreshRadioButtons(options);
+        }
+        else
+        {
+            refreshRadioButtons(data.getOptions());
+        }
+    }
+
+    protected void updateReadView()
     {
         // Retrieve info
         if (data instanceof RestFieldRepresentation && ((RestFieldRepresentation) data).getEndpoint() != null)
