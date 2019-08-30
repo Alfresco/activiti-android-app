@@ -75,7 +75,7 @@ public class DropDownField extends BaseField
         return originalValue.toString();
     }
 
-    public View setupdReadView()
+    public View setupReadView()
     {
         View vr = inflater.inflate(R.layout.form_read_row, null);
         HolderUtils.configure(vr, data.getName(), getHumanReadableReadValue(), -1);
@@ -96,6 +96,17 @@ public class DropDownField extends BaseField
             {
                 ((Spinner) editionView.findViewById(R.id.spinner))
                         .setSelection(optionsIndex.get(((OptionRepresentation) editionValue).getName()));
+            }
+        }
+    }
+
+    protected void updateReadView() {
+        if (originalValue != null && readView != null)
+        {
+            if (originalValue instanceof OptionRepresentation)
+            {
+                ((Spinner) readView.findViewById(R.id.spinner))
+                        .setSelection(optionsIndex.get(((OptionRepresentation) originalValue).getName()));
             }
         }
     }

@@ -545,7 +545,7 @@ public class FormManager
         BaseField field = FieldTypeFactory.createField(getActivity(), this, dataType, data, !tmpIsEdition);
 
         // Then we create the view
-        View fieldView = (tmpIsEdition) ? field.setupEditionView(data.getValue()) : field.setupdReadView();
+        View fieldView = (tmpIsEdition) ? field.setupEditionView(data.getValue()) : field.setupReadView();
 
         // If a view has been generated we kept it.
         if (fieldView != null)
@@ -613,7 +613,7 @@ public class FormManager
     {
         for (BaseField field : fieldsOrderIndex)
         {
-            field.refreshEditionView();
+            field.refreshView();
         }
     }
 

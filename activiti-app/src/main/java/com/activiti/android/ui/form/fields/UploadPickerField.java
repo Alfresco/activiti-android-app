@@ -115,7 +115,7 @@ public class UploadPickerField extends BaseField implements MultiValueField
         return "";
     }
 
-    public View setupdReadView()
+    public View setupReadView()
     {
         ViewGroup vr = (ViewGroup) inflater.inflate(R.layout.form_user_upload, null);
 
@@ -194,6 +194,28 @@ public class UploadPickerField extends BaseField implements MultiValueField
             }
         }
         
+        getFormManager().evaluateViews();
+    }
+
+    protected void updateReadView() {
+
+        // use the same values for now as on the updateEditionView method
+        if (editionView != null) {
+            // We update only rows.
+            ViewGroup container = editionView.findViewById(R.id.contents_container);
+            container.removeAllViews();
+
+            displayAddIcon();
+            displayUnsupported((ViewGroup) editionView);
+
+            if (!hasDisplayedEmpty((ViewGroup) editionView, editionValue, false)) {
+                // Create Item Rows
+                for (Object item : (List) editionValue) {
+                    createRow(container, (RelatedContentRepresentation) item, false);
+                }
+            }
+        }
+
         getFormManager().evaluateViews();
     }
 

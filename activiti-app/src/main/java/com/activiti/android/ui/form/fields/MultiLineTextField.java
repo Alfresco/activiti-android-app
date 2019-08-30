@@ -50,7 +50,7 @@ public class MultiLineTextField extends TextField
     // ///////////////////////////////////////////////////////////////////////////
     // VALUES
     // ///////////////////////////////////////////////////////////////////////////
-    public View setupdReadView()
+    public View setupReadView()
     {
         View vr = inflater.inflate(R.layout.form_read_row, null);
         TwoLinesViewHolder tvh = HolderUtils.configure(vr, data.getName(), getHumanReadableReadValue(), -1);

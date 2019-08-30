@@ -70,7 +70,7 @@ public class TypeAhead extends BaseField
         readLayoutId = R.layout.form_read_row;
     }
 
-    public View setupdReadView()
+    public View setupReadView()
     {
         View vr = inflater.inflate(readLayoutId, null);
         HolderUtils.configure(vr, data.getName(), getHumanReadableReadValue(), -1);
@@ -99,6 +99,22 @@ public class TypeAhead extends BaseField
                 return originalValue;
             }
             return TextUtils.isEmpty((String) editionValue) ? null : editionValue;
+        }
+    }
+
+    protected void updateEditionView()
+    {
+        String editionValue = getHumanReadableEditionValue();
+        if (editionValue != null) {
+            ((MaterialMultiAutoCompleteTextView) editionView).setText(editionValue);
+        }
+    }
+
+    protected void updateReadView() {
+        String readValue = getHumanReadableReadValue();
+        if (readValue != null) {
+            HolderUtils.configure(readView, data.getName(), getHumanReadableReadValue(), -1);
+            readView.setFocusable(false);
         }
     }
 

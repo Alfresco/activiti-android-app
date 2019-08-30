@@ -103,6 +103,13 @@ public class UserPickerField extends BaseField
         getFormManager().evaluateViews();
     }
 
+    protected void updateReadView() {
+        if (editText != null) {
+            editText.setText(getHumanReadableReadValue());
+        }
+        getFormManager().evaluateViews();
+    }
+
     @Override
     public View setupEditionView(Object value)
     {

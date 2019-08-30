@@ -51,7 +51,7 @@ public class TextField extends BaseField
         readLayoutId = R.layout.form_read_row;
     }
 
-    public View setupdReadView()
+    public View setupReadView()
     {
         View vr = inflater.inflate(readLayoutId, null);
         HolderUtils.configure(vr, data.getName(), getHumanReadableReadValue(), -1);
