@@ -45,8 +45,6 @@ import com.activiti.android.ui.fragments.AlfrescoFragment;
 import com.activiti.android.ui.holder.HolderUtils;
 import com.activiti.client.api.model.editor.form.FormFieldRepresentation;
 import com.activiti.client.api.model.editor.form.OptionRepresentation;
-import com.activiti.client.api.model.editor.form.RestFieldRepresentation;
-import com.rengwuxian.materialedittext.MaterialEditText;
 import com.rengwuxian.materialedittext.MaterialMultiAutoCompleteTextView;
 
 /**
@@ -116,6 +114,14 @@ public class TypeAhead extends BaseField
             HolderUtils.configure(readView, data.getName(), getHumanReadableReadValue(), -1);
             readView.setFocusable(false);
         }
+    }
+
+    @Override
+    public String getHumanReadableEditionValue() {
+        if (editionValue != null && editionValue instanceof OptionRepresentation) {
+            return ((OptionRepresentation) editionValue).getName();
+        }
+        return null;
     }
 
     // ///////////////////////////////////////////////////////////////////////////
