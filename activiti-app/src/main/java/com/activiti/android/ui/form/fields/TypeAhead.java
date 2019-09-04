@@ -229,6 +229,12 @@ public class TypeAhead extends BaseField
                         {
                             optionsValue.add(item.getName());
                             optionsIndex.put(item.getName(), item);
+
+                            if (originalValue instanceof String) {
+                                if (item.getId().equals(originalValue)) {
+                                    editionValue = item;
+                                }
+                            }
                         }
 
                         ArrayAdapter adapter = new TypeAheadAdapter(getFragment().getActivity(),
@@ -236,6 +242,7 @@ public class TypeAhead extends BaseField
                         ((MaterialMultiAutoCompleteTextView) editionView).setAdapter(adapter);
                         ((MaterialMultiAutoCompleteTextView) editionView).setTokenizer(new SpaceTokenizer());
                         ((MaterialMultiAutoCompleteTextView) editionView).setThreshold(1);
+                        getFormManager().refreshViews();
                     }
 
                     @Override
