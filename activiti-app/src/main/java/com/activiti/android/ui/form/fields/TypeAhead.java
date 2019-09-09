@@ -23,11 +23,9 @@ import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-
 import android.content.Context;
 import android.text.Editable;
 import android.text.SpannableString;
@@ -38,13 +36,13 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.MultiAutoCompleteTextView;
-
 import com.activiti.android.app.R;
 import com.activiti.android.ui.form.FormManager;
 import com.activiti.android.ui.fragments.AlfrescoFragment;
 import com.activiti.android.ui.holder.HolderUtils;
 import com.activiti.client.api.model.editor.form.FormFieldRepresentation;
 import com.activiti.client.api.model.editor.form.OptionRepresentation;
+import com.activiti.client.api.model.runtime.RestVariable;
 import com.rengwuxian.materialedittext.MaterialMultiAutoCompleteTextView;
 
 /**
@@ -71,12 +69,34 @@ public class TypeAhead extends BaseField
     public View setupReadView()
     {
         View vr = inflater.inflate(readLayoutId, null);
-        HolderUtils.configure(vr, data.getName(), getHumanReadableReadValue(), -1);
+        HolderUtils.configure(vr, data.getName(), getReadValueFromVariables(), -1);
         vr.setFocusable(false);
 
         readView = vr;
 
         return vr;
+    }
+
+    private String getReadValueFromVariables() {
+        if (data.getVariables() != null && !data.getVariables().isEmpty()) {
+            StringBuilder end = new StringBuilder();
+
+            for (RestVariable variable : data.getVariables()) {
+                if (variable.getId().equals(data.getId())) {
+                    end.append(variable.getValue()).append(" - ");
+                }
+            }
+
+            for (RestVariable variable : data.getVariables()) {
+                if (variable.getId().equals(data.getId() + "_LABEL")) {
+                    end.append(variable.getValue());
+                }
+            }
+
+            return end.toString();
+        } else {
+            return getHumanReadableReadValue();
+        }
     }
 
     // ///////////////////////////////////////////////////////////////////////////
@@ -109,9 +129,22 @@ public class TypeAhead extends BaseField
     }
 
     protected void updateReadView() {
-        String readValue = getHumanReadableReadValue();
+        String readValue = null;
+        if (originalValue == null) {
+            readValue = getHumanReadableReadValue();
+        } else {
+            if (originalValue instanceof String && isReadMode && optionsIndex != null) {
+                for (OptionRepresentation item: optionsIndex.values()) {
+                    if (item.getId().equals(originalValue)) {
+                        originalValue = item;
+                        readValue = item.getName();
+                    }
+                }
+            }
+        }
+
         if (readValue != null) {
-            HolderUtils.configure(readView, data.getName(), getHumanReadableReadValue(), -1);
+            HolderUtils.configure(readView, data.getName(), readValue, -1);
             readView.setFocusable(false);
         }
     }
@@ -232,16 +265,24 @@ public class TypeAhead extends BaseField
 
                             if (originalValue instanceof String) {
                                 if (item.getId().equals(originalValue)) {
-                                    editionValue = item;
+                                    if (isReadMode) {
+                                        setReadValue(item);
+                                    } else {
+                                        editionValue = item;
+                                    }
                                 }
                             }
                         }
 
-                        ArrayAdapter adapter = new TypeAheadAdapter(getFragment().getActivity(),
-                                R.layout.row_single_line, optionsValue);
-                        ((MaterialMultiAutoCompleteTextView) editionView).setAdapter(adapter);
-                        ((MaterialMultiAutoCompleteTextView) editionView).setTokenizer(new SpaceTokenizer());
-                        ((MaterialMultiAutoCompleteTextView) editionView).setThreshold(1);
+                        if (!isReadMode) {
+                            ArrayAdapter adapter = new TypeAheadAdapter(getFragment().getActivity(),
+                                    R.layout.row_single_line, optionsValue);
+                            ((MaterialMultiAutoCompleteTextView) editionView).setAdapter(adapter);
+                            ((MaterialMultiAutoCompleteTextView) editionView).setTokenizer(new SpaceTokenizer());
+                            ((MaterialMultiAutoCompleteTextView) editionView).setThreshold(1);
+                        } else {
+                            updateReadView();
+                        }
                         getFormManager().refreshViews();
                     }
 

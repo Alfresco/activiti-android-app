@@ -49,6 +49,7 @@ import com.activiti.client.api.model.editor.form.FormFieldTypes;
 import com.activiti.client.api.model.editor.form.FormOutcomeRepresentation;
 import com.activiti.client.api.model.editor.form.FormTabRepresentation;
 import com.activiti.client.api.model.editor.form.RestFieldRepresentation;
+import com.activiti.client.api.model.runtime.RestVariable;
 import com.afollestad.materialdialogs.MaterialDialog;
 
 /**
@@ -142,6 +143,20 @@ public class FormManager
     public boolean hasOutcome()
     {
         return data.getOutcomes() != null && data.getOutcomes().size() > 0;
+    }
+
+    public void insertVariables(List<RestVariable> variables) {
+        data.setVariables(variables);
+
+        for (FormFieldRepresentation fieldData : data.getFields()) {
+            Map<String, List<FormFieldRepresentation>> fields = ((ContainerRepresentation) fieldData).getFields();
+
+            for (Map.Entry<String, List<FormFieldRepresentation>> entry : fields.entrySet()) {
+                for (FormFieldRepresentation representation : entry.getValue()) {
+                    representation.setVariables(getVariablesForField(representation));
+                }
+            }
+        }
     }
 
     public boolean checkValidation()
@@ -426,6 +441,21 @@ public class FormManager
                 outcomeIndex.put(outcomeData.getName(), vr);
             }
         }
+    }
+
+    private List<RestVariable> getVariablesForField(FormFieldRepresentation formFieldRepresentation) {
+        List<RestVariable> fieldVariables = new ArrayList<>();
+
+        for (RestVariable variable : data.getVariables()) {
+            String variableId = variable.getId();
+            if (variableId.equals(formFieldRepresentation.getId())) {
+                fieldVariables.add(variable);
+            } else if (variableId.equals(formFieldRepresentation.getId() + "_LABEL")) {
+                fieldVariables.add(variable);
+            }
+        }
+
+        return fieldVariables;
     }
 
     /**

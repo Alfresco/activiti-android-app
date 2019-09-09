@@ -22,7 +22,6 @@ package com.activiti.android.ui.form.fields;
 import android.content.Context;
 import android.view.View;
 import android.widget.CheckBox;
-import android.widget.CompoundButton;
 
 import com.activiti.android.app.R;
 import com.activiti.android.ui.form.FormManager;
@@ -49,6 +48,22 @@ public class CheckBoxField extends BaseField
     {
         if (editionView == null) { return editionValue; }
         return ((CheckBox) editionView).isChecked();
+    }
+
+    @Override
+    public Object getOutputValue() {
+        if (editionValue != null) {
+            return editionValue;
+        } else if (originalValue != null) {
+            return originalValue;
+        } else {
+            return false;
+        }
+    }
+
+    @Override
+    public Object getReadValue() {
+        return originalValue;
     }
 
     // ///////////////////////////////////////////////////////////////////////////
@@ -111,14 +126,10 @@ public class CheckBoxField extends BaseField
         // Asterix if required
         ((CheckBox) vr).setText(getLabelText(data.getName()));
 
-        ((CheckBox) vr).setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener()
-        {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked)
-            {
-                buttonView.setError(null);
-                getFormManager().evaluateViews();
-            }
+        ((CheckBox) vr).setOnCheckedChangeListener((buttonView, isChecked) -> {
+            editionValue = isChecked;
+            buttonView.setError(null);
+            getFormManager().evaluateViews();
         });
 
         editionView = vr;

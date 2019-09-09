@@ -286,7 +286,7 @@ public abstract class BaseField
     }
 
     public void refreshReadView() {
-        setReadValue(getEditionValue());
+        setReadValue(getReadValue());
     }
 
     // ///////////////////////////////////////////////////////////////////////////
