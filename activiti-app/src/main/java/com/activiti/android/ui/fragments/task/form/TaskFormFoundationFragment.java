@@ -61,11 +61,13 @@ import com.activiti.client.api.model.editor.form.request.CompleteFormRepresentat
 import com.activiti.client.api.model.idm.LightGroupRepresentation;
 import com.activiti.client.api.model.idm.LightUserRepresentation;
 import com.activiti.client.api.model.runtime.RelatedContentRepresentation;
+import com.activiti.client.api.model.runtime.RestVariable;
 import com.activiti.client.api.model.runtime.SaveFormRepresentation;
 import com.afollestad.materialdialogs.MaterialDialog;
 
 import java.util.Calendar;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import retrofit2.Call;
@@ -283,29 +285,7 @@ public class TaskFormFoundationFragment extends AlfrescoFragment implements Date
                         (ViewGroup) viewById(R.id.form_container), response.body(), version);
 
                 isEnded = task.endDate != null;
-
-                if (task.endDate == null) {
-                    formManager.displayEditForm();
-                } else {
-                    formManager.displayReadForm();
-                }
-
-                outcomesView = formManager.getOutComesView();
-                Button button;
-                for (Map.Entry<String, View> outcomeEntry : outcomesView.entrySet()) {
-                    button = (Button) outcomeEntry.getValue().findViewById(R.id.outcome_button);
-                    button.setTag(outcomeEntry.getKey());
-                    button.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            UIUtils.hideKeyboard(getActivity(), v);
-                            completeTask((String) v.getTag());
-                        }
-                    });
-                }
-
-                displayData();
-                getActivity().invalidateOptionsMenu();
+                getAPI().getTaskService().getFormVariables(task.id, variablesCallback);
             }
 
             @Override
@@ -316,6 +296,42 @@ public class TaskFormFoundationFragment extends AlfrescoFragment implements Date
             }
         });
     }
+
+    private Callback<List<RestVariable>> variablesCallback = new Callback<List<RestVariable>>() {
+        @Override
+        public void onResponse(Call<List< RestVariable >> call, Response<List<RestVariable>> response) {
+            if (!response.isSuccessful()) {
+                onFailure(call, new Exception(response.message()));
+                return;
+            }
+
+            formManager.insertVariables(response.body());
+
+            if (task.endDate == null) {
+                formManager.displayEditForm();
+            } else {
+                formManager.displayReadForm();
+            }
+
+            outcomesView = formManager.getOutComesView();
+            Button button;
+            for (Map.Entry<String, View> outcomeEntry : outcomesView.entrySet()) {
+                button = outcomeEntry.getValue().findViewById(R.id.outcome_button);
+                button.setTag(outcomeEntry.getKey());
+                button.setOnClickListener(v -> {
+                    UIUtils.hideKeyboard(getActivity(), v);
+                    completeTask((String) v.getTag());
+                });
+            }
+
+            displayData();
+            getActivity().invalidateOptionsMenu();
+        }
+
+        @Override
+        public void onFailure(Call<List<RestVariable>> call, Throwable t) {
+        }
+    };
 
     // ///////////////////////////////////////////////////////////////////////////
     // COMPLETE
