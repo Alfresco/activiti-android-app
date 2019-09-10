@@ -58,35 +58,14 @@ public class HyperlinkField extends BaseField
     public View setupReadView()
     {
         View vr = inflater.inflate(R.layout.form_hyperlink, null);
-        vr.findViewById(R.id.button_container).setOnClickListener(new View.OnClickListener()
-        {
-            @Override
-            public void onClick(View v)
-            {
-                Intent i = new Intent(Intent.ACTION_VIEW);
-                i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                i.setData(formatExistingUrl(getStringHyperlink()));
-                getFragment().getActivity().startActivity(i);
-            }
+        vr.findViewById(R.id.button_container).setOnClickListener(v -> {
+            Intent i = new Intent(Intent.ACTION_VIEW);
+            i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            i.setData(formatExistingUrl(getStringHyperlink()));
+            getFragment().getActivity().startActivity(i);
         });
 
-        MaterialEditText editText = (MaterialEditText) vr.findViewById(R.id.hyperlink);
-        editText.setText(getDisplayText());
-        editText.setHideUnderline(true);
-        editText.setHelperTextAlwaysShown(true);
-        try
-        {
-            editText.setHelperText(getHyperlink().getHost());
-        }
-        catch (Exception e)
-        {
-
-        }
-
-        // Asterix if required
-        editText.setFloatingLabelText(data.getName());
-        editText.setFloatingLabelAlwaysShown(true);
-        editText.setIconRight(R.drawable.ic_link_grey);
+        createLink(vr);
 
         editionView = vr;
         readView = vr;
@@ -153,37 +132,14 @@ public class HyperlinkField extends BaseField
         editionValue = value;
 
         View vr = inflater.inflate(R.layout.form_hyperlink, null);
-        vr.findViewById(R.id.button_container).setOnClickListener(new View.OnClickListener()
-        {
-            @Override
-            public void onClick(View v)
-            {
-                Intent i = new Intent(Intent.ACTION_VIEW);
-                i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                i.setData(formatExistingUrl(getStringHyperlink()));
-                getFragment().getActivity().startActivity(i);
-            }
+        vr.findViewById(R.id.button_container).setOnClickListener(v -> {
+            Intent i = new Intent(Intent.ACTION_VIEW);
+            i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            i.setData(formatExistingUrl(getStringHyperlink()));
+            getFragment().getActivity().startActivity(i);
         });
 
-        MaterialEditText editText = (MaterialEditText) vr.findViewById(R.id.hyperlink);
-        editText.setText(((HyperlinkRepresentation) data).getDisplayText());
-        StringBuilder builder = new StringBuilder(data.getName());
-        editText.setHideUnderline(true);
-        try
-        {
-            builder.append(" (");
-            builder.append(Uri.parse(((HyperlinkRepresentation) data).getHyperlinkUrl()).getAuthority()
-                    .replaceFirst("^(http://|http://www\\.|www\\.)", ""));
-            builder.append(")");
-        }
-        catch (Exception e)
-        {
-
-        }
-        editText.setFloatingLabelText(builder.toString());
-
-        editText.setFloatingLabelAlwaysShown(true);
-        editText.setIconRight(R.drawable.ic_link_grey);
+        createLink(vr);
 
         editionView = vr;
         return vr;
@@ -191,18 +147,31 @@ public class HyperlinkField extends BaseField
 
     protected void updateEditionView()
     {
-        if (getHumanReadableEditionValue() != null && editionView != null)
-        {
-            ((MaterialEditText) editionView.findViewById(R.id.date_picker)).setText(getHumanReadableEditionValue());
+        if (editionView != null) {
+            createLink(editionView);
         }
     }
 
     protected void updateReadView() {
-        String readValue = getHumanReadableReadValue();
-        if (readValue != null && readView != null)
-        {
-            ((MaterialEditText) readView.findViewById(R.id.date_picker)).setText(readValue);
+        if (readView != null) {
+            createLink(readView);
         }
+    }
+
+    private void createLink(View rootView) {
+        MaterialEditText editText = rootView.findViewById(R.id.hyperlink);
+        editText.setText(getDisplayText());
+        StringBuilder builder = new StringBuilder(data.getName());
+        editText.setHideUnderline(true);
+        try {
+            builder.append(" (");
+            builder.append(getStringHyperlink());
+            builder.append(")");
+        } catch (Exception e) {}
+        editText.setFloatingLabelText(builder.toString());
+
+        editText.setFloatingLabelAlwaysShown(true);
+        editText.setIconRight(R.drawable.ic_link_grey);
     }
 
     // ///////////////////////////////////////////////////////////////////////////
