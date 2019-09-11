@@ -452,6 +452,15 @@ public class FormManager
                 fieldVariables.add(variable);
             } else if (variableId.equals(formFieldRepresentation.getId() + "_LABEL")) {
                 fieldVariables.add(variable);
+            } else {
+                if (formFieldRepresentation.getId().endsWith("id")) {
+                    String refactoredFormFieldRepresentationId = formFieldRepresentation.getId().substring(0, formFieldRepresentation.getId().length() - 2);
+                    if (variableId.equals(refactoredFormFieldRepresentationId)) {
+                        fieldVariables.add(variable);
+                    } else if (variableId.equals(refactoredFormFieldRepresentationId + "_LABEL")) {
+                        fieldVariables.add(variable);
+                    }
+                }
             }
         }
 
