@@ -168,7 +168,8 @@ public class AbstractDetailsFragment extends AlfrescoFragment
                 {
                     mime = MimeTypeManager.getInstance(getActivity()).getMimetype(content.getName());
                 }
-                HolderUtils.configure(v, content.getName(), content.getCreatedBy().getFullname(),
+                HolderUtils.configure(v, content.getName(), (content.getCreatedBy() != null) ? content.getCreatedBy().getFullname()
+                                : getString(R.string.task_message_no_assignee),
                         mime.getSmallIconId(getActivity()));
 
                 if (!isEnded)
