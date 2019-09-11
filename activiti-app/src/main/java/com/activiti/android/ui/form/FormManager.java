@@ -149,11 +149,13 @@ public class FormManager
         data.setVariables(variables);
 
         for (FormFieldRepresentation fieldData : data.getFields()) {
-            Map<String, List<FormFieldRepresentation>> fields = ((ContainerRepresentation) fieldData).getFields();
+            if (fieldData instanceof ContainerRepresentation) {
+                Map<String, List<FormFieldRepresentation>> fields = ((ContainerRepresentation) fieldData).getFields();
 
-            for (Map.Entry<String, List<FormFieldRepresentation>> entry : fields.entrySet()) {
-                for (FormFieldRepresentation representation : entry.getValue()) {
-                    representation.setVariables(getVariablesForField(representation));
+                for (Map.Entry<String, List<FormFieldRepresentation>> entry : fields.entrySet()) {
+                    for (FormFieldRepresentation representation : entry.getValue()) {
+                        representation.setVariables(getVariablesForField(representation));
+                    }
                 }
             }
         }
