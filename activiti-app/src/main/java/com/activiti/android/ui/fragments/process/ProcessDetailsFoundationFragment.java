@@ -571,7 +571,9 @@ public class ProcessDetailsFoundationFragment extends AbstractDetailsFragment
                         mime = MimeTypeManager.getInstance(getActivity()).getMimetype(content.getName());
                     }
                     TwoLinesViewHolder tvh = HolderUtils.configure(v, content.getName(),
-                            content.getCreatedBy().getFullname(), mime.getSmallIconId(getActivity()));
+                            (content.getCreatedBy() != null) ? content.getCreatedBy().getFullname()
+                                    : getString(R.string.task_message_no_assignee),
+                            mime.getSmallIconId(getActivity()));
 
                     // FIXME Duplicate Code with ContentAdapter
                     tvh.choose.setVisibility(View.VISIBLE);
