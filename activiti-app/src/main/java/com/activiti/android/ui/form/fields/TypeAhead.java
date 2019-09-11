@@ -83,13 +83,13 @@ public class TypeAhead extends BaseField
 
             for (RestVariable variable : data.getVariables()) {
                 if (variable.getId().equals(data.getId())) {
-                    end.append(variable.getValue()).append(" - ");
+                    end.append(variable.getValue());
                 }
             }
 
             for (RestVariable variable : data.getVariables()) {
                 if (variable.getId().equals(data.getId() + "_LABEL")) {
-                    end.append(variable.getValue());
+                    end.append(" (").append(variable.getValue()).append(")");
                 }
             }
 
