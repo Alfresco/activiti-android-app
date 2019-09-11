@@ -79,17 +79,35 @@ public class TypeAhead extends BaseField
 
     private String getReadValueFromVariables() {
         if (data.getVariables() != null && !data.getVariables().isEmpty()) {
+            boolean foundId = false;
+            boolean foundLabel = false;
+
             StringBuilder end = new StringBuilder();
 
             for (RestVariable variable : data.getVariables()) {
                 if (variable.getId().equals(data.getId())) {
                     end.append(variable.getValue());
+                    foundId = true;
                 }
             }
 
             for (RestVariable variable : data.getVariables()) {
                 if (variable.getId().equals(data.getId() + "_LABEL")) {
                     end.append(" (").append(variable.getValue()).append(")");
+                    foundLabel = true;
+                }
+            }
+
+            if (!foundId || !foundLabel) {
+                for (RestVariable variable : data.getVariables()) {
+                    if (data.getId().endsWith("id")) {
+                        String refactoredFormFieldRepresentationId = data.getId().substring(0, data.getId().length() - 2);
+                        if (variable.getId().equals(refactoredFormFieldRepresentationId)) {
+                            end.append(variable.getValue());
+                        } else if (variable.getId().equals(refactoredFormFieldRepresentationId + "_LABEL")) {
+                            end.append(" (").append(variable.getValue()).append(")");
+                        }
+                    }
                 }
             }
 
