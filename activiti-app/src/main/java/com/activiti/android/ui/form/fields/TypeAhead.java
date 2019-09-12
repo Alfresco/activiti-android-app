@@ -88,6 +88,7 @@ public class TypeAhead extends BaseField
                 if (variable.getId().equals(data.getId())) {
                     end.append(variable.getValue());
                     foundId = true;
+                    break;
                 }
             }
 
@@ -95,17 +96,25 @@ public class TypeAhead extends BaseField
                 if (variable.getId().equals(data.getId() + "_LABEL")) {
                     end.append(" (").append(variable.getValue()).append(")");
                     foundLabel = true;
+                    break;
                 }
             }
 
             if (!foundId || !foundLabel) {
-                for (RestVariable variable : data.getVariables()) {
-                    if (data.getId().endsWith("id")) {
-                        String refactoredFormFieldRepresentationId = data.getId().substring(0, data.getId().length() - 2);
+                if (data.getId().endsWith("id")) {
+                    String refactoredFormFieldRepresentationId = data.getId().substring(0, data.getId().length() - 2);
+
+                    for (RestVariable variable : data.getVariables()) {
                         if (variable.getId().equals(refactoredFormFieldRepresentationId)) {
                             end.append(variable.getValue());
-                        } else if (variable.getId().equals(refactoredFormFieldRepresentationId + "_LABEL")) {
+                            break;
+                        }
+                    }
+
+                    for (RestVariable variable : data.getVariables()) {
+                        if (variable.getId().equals(refactoredFormFieldRepresentationId + "_LABEL")) {
                             end.append(" (").append(variable.getValue()).append(")");
+                            break;
                         }
                     }
                 }
