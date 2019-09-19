@@ -54,6 +54,7 @@ import com.activiti.android.app.fragments.comment.CommentsFragment;
 import com.activiti.android.app.fragments.process.ProcessDiagram;
 import com.activiti.android.app.fragments.process.ProcessesFragment;
 import com.activiti.android.app.fragments.task.TaskDetailsFragment;
+import com.activiti.android.app.fragments.task.startform.StartFormFragment;
 import com.activiti.android.platform.EventBusManager;
 import com.activiti.android.platform.event.CompleteProcessEvent;
 import com.activiti.android.platform.event.CompleteTaskEvent;
@@ -78,6 +79,7 @@ import com.activiti.android.ui.holder.TwoLinesViewHolder;
 import com.activiti.android.ui.utils.Formatter;
 import com.activiti.android.ui.utils.UIUtils;
 import com.activiti.client.api.model.common.ResultList;
+import com.activiti.client.api.model.editor.form.FormDefinitionRepresentation;
 import com.activiti.client.api.model.runtime.ProcessContentRepresentation;
 import com.activiti.client.api.model.runtime.ProcessInstanceRepresentation;
 import com.activiti.client.api.model.runtime.RelatedContentRepresentation;
@@ -96,7 +98,12 @@ public class ProcessDetailsFoundationFragment extends AbstractDetailsFragment
 
     public static final String ARGUMENT_APP_ID = "appId";
 
-    protected boolean hasActiveTasks = false, hasCompletedTasks = false, hasFieldContentLoaded = false;
+    protected boolean hasActiveTasks = false;
+    protected boolean hasStartForm = false;
+    protected boolean hasCompletedTasks = false;
+    protected boolean hasFieldContentLoaded = false;
+
+    protected FormDefinitionRepresentation startForm;
 
     protected List<TaskRepresentation> activeTaskRepresentations, completedTaskRepresentations;
 
@@ -165,8 +172,11 @@ public class ProcessDetailsFoundationFragment extends AbstractDetailsFragment
 
                 processInstanceRepresentation = response.body();
 
-                UIUtils.setTitle(getActivity(), response.body().getName(), getString(R.string.task_title_details),
-                        true);
+                UIUtils.setTitle(getActivity(), response.body().getName(), getString(R.string.task_title_details), true);
+
+                if (processInstanceRepresentation.isStartFormDefined()) {
+                    requestStartForm();
+                }
 
                 displayInfo();
                 requestExtraInfo();
@@ -218,6 +228,28 @@ public class ProcessDetailsFoundationFragment extends AbstractDetailsFragment
     // ///////////////////////////////////////////////////////////////////////////
     // API REQUEST
     // ///////////////////////////////////////////////////////////////////////////
+    private void requestStartForm() {
+        getAPI().getProcessService().getStartFormProcessInstance(processInstanceRepresentation.getId(),
+                new Callback<FormDefinitionRepresentation>() {
+            @Override
+            public void onResponse(Call<FormDefinitionRepresentation> call, Response<FormDefinitionRepresentation> response) {
+                if (!response.isSuccessful())
+                {
+                    onFailure(call, new Exception(response.message()));
+                    return;
+                }
+                startForm = response.body();
+                hasStartForm = true;
+                displayStartForm();
+            }
+
+            @Override
+            public void onFailure(Call<FormDefinitionRepresentation> call, Throwable t) {
+                hasStartForm = false;
+            }
+        });
+    }
+
     private void requestExtraInfo()
     {
         if (processInstanceRepresentation == null) { return; }
@@ -382,14 +414,7 @@ public class ProcessDetailsFoundationFragment extends AbstractDetailsFragment
         }
         Button bRetry = (Button) viewById(R.id.empty_action);
         bRetry.setText(R.string.retry);
-        bRetry.setOnClickListener(new View.OnClickListener()
-        {
-            @Override
-            public void onClick(View v)
-            {
-                load();
-            }
-        });
+        bRetry.setOnClickListener(v -> load());
         bRetry.setVisibility(View.VISIBLE);
     }
 
@@ -409,6 +434,7 @@ public class ProcessDetailsFoundationFragment extends AbstractDetailsFragment
                 displayContents(relatedContentRepresentations);
                 displayTasks(activeTaskRepresentations, true);
                 displayTasks(completedTaskRepresentations, false);
+                displayStartForm();
                 displayFieldContents(fieldContents);
                 displayData();
             }
@@ -447,51 +473,41 @@ public class ProcessDetailsFoundationFragment extends AbstractDetailsFragment
             displayCompletedProperties(processInstanceRepresentation);
             Button delete = (Button) viewById(R.id.process_action_cancel);
             delete.setText(R.string.process_action_delete);
-            delete.setOnClickListener(new View.OnClickListener()
-            {
-                @Override
-                public void onClick(View v)
+            delete.setOnClickListener(v -> {
+                MaterialDialog.Builder builder = new MaterialDialog.Builder(getActivity())
+                        .title(R.string.process_popup_delete_title)
+                        .content(String.format(getString(R.string.process_popup_delete_description),
+                                processInstanceRepresentation.getName()))
+                        .positiveText(R.string.general_action_confirm).negativeText(R.string.general_action_cancel)
+                        .callback(new MaterialDialog.ButtonCallback()
                 {
-                    MaterialDialog.Builder builder = new MaterialDialog.Builder(getActivity())
-                            .title(R.string.process_popup_delete_title)
-                            .content(String.format(getString(R.string.process_popup_delete_description),
-                                    processInstanceRepresentation.getName()))
-                            .positiveText(R.string.general_action_confirm).negativeText(R.string.general_action_cancel)
-                            .callback(new MaterialDialog.ButtonCallback()
+                    @Override
+                    public void onPositive(MaterialDialog dialog)
                     {
-                        @Override
-                        public void onPositive(MaterialDialog dialog)
-                        {
-                            cancelProcess();
-                        }
-                    });
-                    builder.show();
-                }
+                        cancelProcess();
+                    }
+                });
+                builder.show();
             });
         }
         else
         {
             Button cancel = (Button) viewById(R.id.process_action_cancel);
-            cancel.setOnClickListener(new View.OnClickListener()
-            {
-                @Override
-                public void onClick(View v)
+            cancel.setOnClickListener(v -> {
+                MaterialDialog.Builder builder = new MaterialDialog.Builder(getActivity())
+                        .title(R.string.process_popup_cancel_title)
+                        .content(String.format(getString(R.string.process_popup_cancel_description),
+                                processInstanceRepresentation.getName()))
+                        .positiveText(R.string.general_action_confirm).negativeText(R.string.general_action_cancel)
+                        .callback(new MaterialDialog.ButtonCallback()
                 {
-                    MaterialDialog.Builder builder = new MaterialDialog.Builder(getActivity())
-                            .title(R.string.process_popup_cancel_title)
-                            .content(String.format(getString(R.string.process_popup_cancel_description),
-                                    processInstanceRepresentation.getName()))
-                            .positiveText(R.string.general_action_confirm).negativeText(R.string.general_action_cancel)
-                            .callback(new MaterialDialog.ButtonCallback()
+                    @Override
+                    public void onPositive(MaterialDialog dialog)
                     {
-                        @Override
-                        public void onPositive(MaterialDialog dialog)
-                        {
-                            cancelProcess();
-                        }
-                    });
-                    builder.show();
-                }
+                        cancelProcess();
+                    }
+                });
+                builder.show();
             });
         }
 
@@ -713,6 +729,32 @@ public class ProcessDetailsFoundationFragment extends AbstractDetailsFragment
                     contentContainer.addView(v);
                 }
             }
+        }
+    }
+
+    protected void displayStartForm() {
+        if (hasStartForm) {
+            LinearLayout startFormContainer = (LinearLayout) viewById(R.id.process_details_start_form_container);
+            startFormContainer.removeAllViews();
+
+            LayoutInflater inflater = (LayoutInflater) getActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+
+            View v = inflater.inflate(R.layout.row_two_lines_caption_borderless, startFormContainer, false);
+            HolderUtils.configure(v, getString(R.string.process_section_start_form),
+                    Formatter.formatToRelativeDate(getActivity(),  processInstanceRepresentation.getStarted()),
+                    (processInstanceRepresentation.getStartedBy() != null) ? processInstanceRepresentation.getStartedBy().getFullname()
+                            :
+            getString(R.string.task_message_no_assignee),
+                    R.drawable.ic_account_circle_grey);
+            startFormContainer.addView(v);
+            v.setOnClickListener(new View.OnClickListener()
+            {
+                @Override
+                public void onClick(View v)
+                {
+                    StartFormFragment.with(getActivity()).startFormId(processId).back(true).display(FragmentDisplayer.PANEL_CENTRAL);
+                }
+            });
         }
     }
 

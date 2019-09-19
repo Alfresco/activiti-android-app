@@ -38,6 +38,7 @@ import android.widget.EditText;
 import com.activiti.android.app.R;
 import com.activiti.android.app.fragments.process.ProcessDetailsFragment;
 import com.activiti.android.app.fragments.process.ProcessesFragment;
+import com.activiti.android.app.fragments.task.startform.StartFormFragment;
 import com.activiti.android.platform.EventBusManager;
 import com.activiti.android.platform.event.StartProcessEvent;
 import com.activiti.android.platform.integration.analytics.AnalyticsHelper;
@@ -45,6 +46,7 @@ import com.activiti.android.platform.integration.analytics.AnalyticsManager;
 import com.activiti.android.ui.fragments.AlfrescoFragment;
 import com.activiti.android.ui.fragments.builder.AlfrescoFragmentBuilder;
 import com.activiti.android.ui.utils.UIUtils;
+import com.activiti.client.api.model.editor.form.FormDefinitionRepresentation;
 import com.activiti.client.api.model.runtime.ProcessInstanceRepresentation;
 import com.activiti.client.api.model.runtime.request.CreateProcessInstanceRepresentation;
 import com.afollestad.materialdialogs.DialogAction;
@@ -53,6 +55,8 @@ import com.afollestad.materialdialogs.internal.MDButton;
 
 public class StartSimpleFormDialogFragment extends AlfrescoFragment
 {
+    private static final String ARGUMENT_PROCESS_ID = "processId";
+
     private static final String ARGUMENT_PROCESSDEF_ID = "processDefinitionId";
 
     private static final String ARGUMENT_PROCESSDEF_NAME = "processDefinitionName";
@@ -115,7 +119,7 @@ public class StartSimpleFormDialogFragment extends AlfrescoFragment
                         {
                             processName = nameView.getText().toString();
                         }
-                        createProcess(new CreateProcessInstanceRepresentation(processDefinitionId, processName));
+                        createStartForm(processDefinitionId, new CreateProcessInstanceRepresentation(processDefinitionId, processName));
                     }
                 });
         return builder.show();
@@ -150,6 +154,33 @@ public class StartSimpleFormDialogFragment extends AlfrescoFragment
         defaultName.append(" - ");
         defaultName.append(DateFormat.getLongDateFormat(getActivity()).format(new Date()));
         return defaultName.toString();
+    }
+
+    private void createStartForm(String processDefinitionId, final CreateProcessInstanceRepresentation rep) {
+        getAPI().getProcessDefinitionService().getProcessDefinitionStartForm(
+                processDefinitionId, new Callback<FormDefinitionRepresentation>() {
+            @Override
+            public void onResponse(Call<FormDefinitionRepresentation> call, Response<FormDefinitionRepresentation> response) {
+                if (!response.isSuccessful()) {
+                    onFailure(call, new Exception(response.message()));
+                    createProcess(rep);
+                    return;
+                }
+
+                StartFormFragment.with(getActivity())
+                        .startFormDefinitionId(response.body().getProcessDefinitionId())
+                        .processName(rep.getName())
+                        .display();
+
+                dismiss();
+            }
+
+            @Override
+            public void onFailure(Call<FormDefinitionRepresentation> call, Throwable t) {
+                Snackbar.make(getActivity().findViewById(R.id.left_panel), t.getMessage(), Snackbar.LENGTH_LONG)
+                        .show();
+            }
+        });
     }
 
     private void createProcess(final CreateProcessInstanceRepresentation rep)
@@ -229,6 +260,12 @@ public class StartSimpleFormDialogFragment extends AlfrescoFragment
         public Builder processDefinitionId(String processDefinitionId)
         {
             extraConfiguration.putString(ARGUMENT_PROCESSDEF_ID, processDefinitionId);
+            return this;
+        }
+
+        public Builder processId(String processId)
+        {
+            extraConfiguration.putString(ARGUMENT_PROCESS_ID, processId);
             return this;
         }
 
