@@ -712,4 +712,8 @@ public class FormManager
         return data.getTaskId();
     }
 
+    public String getProcessDefinitionId() {
+        return data.getProcessDefinitionId();
+    }
+
 }

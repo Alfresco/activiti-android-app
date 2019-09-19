@@ -23,18 +23,14 @@ import java.util.ArrayList;
 import java.util.Map;
 
 import android.app.Dialog;
-import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
-import android.view.View;
 
 import com.activiti.android.app.R;
-import com.activiti.android.app.fragments.task.TaskFormFragment;
 import com.activiti.android.platform.provider.processdefinition.ProcessDefinitionModel;
 import com.activiti.android.platform.provider.processdefinition.ProcessDefinitionModelManager;
 import com.activiti.android.ui.fragments.AlfrescoFragment;
-import com.activiti.android.ui.fragments.FragmentDisplayer;
 import com.activiti.android.ui.fragments.builder.AlfrescoFragmentBuilder;
 import com.activiti.android.ui.fragments.processDefinition.ProcessDefinitionModelAdapter;
 import com.afollestad.materialdialogs.MaterialDialog;
@@ -77,32 +73,16 @@ public class StartProcessDialogFragment extends AlfrescoFragment
                 models.values()));
 
         return new MaterialDialog.Builder(getActivity()).title(R.string.form_default_outcome_start_process)
-                .cancelListener(new DialogInterface.OnCancelListener()
-                {
-                    @Override
-                    public void onCancel(DialogInterface dialog)
-                    {
-                        dismiss();
-                    }
-                }).titleColor(getResources().getColor(R.color.accent))
-                .adapter(adapter, new MaterialDialog.ListCallback()
-                {
-                    @Override
-                    public void onSelection(MaterialDialog materialDialog, View view, int i, CharSequence charSequence)
-                    {
-                        ProcessDefinitionModel model = ((ProcessDefinitionModel) materialDialog.getListView()
-                                .getAdapter().getItem(i));
-                        if (model.hasStartForm())
-                        {
-                            TaskFormFragment.with(getActivity()).back(true).display(FragmentDisplayer.PANEL_CENTRAL);
-                        }
-                        else
-                        {
-                            StartSimpleFormDialogFragment.with(getActivity()).processDefinitionId(model.getId())
-                                    .processDefinitionName(model.getName()).displayAsDialog();
-                        }
-                        getDialog().dismiss();
-                    }
+                .cancelListener(dialog -> dismiss()).titleColor(getResources().getColor(R.color.accent))
+                .adapter(adapter, (materialDialog, view, i, charSequence) -> {
+                    ProcessDefinitionModel model = ((ProcessDefinitionModel) materialDialog.getListView()
+                            .getAdapter().getItem(i));
+                        StartSimpleFormDialogFragment.with(getActivity())
+                                .processDefinitionId(model.getId())
+                                .processDefinitionName(model.getName())
+                                .processId(String.valueOf(model.getProviderId()))
+                                .displayAsDialog();
+                    getDialog().dismiss();
                 }).show();
     }
 

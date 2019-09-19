@@ -247,6 +247,7 @@
     <!-- PROCESS SECTION -->
     <string name="process_section_active_task">Active tasks</string>
     <string name="process_section_completed_task">Completed tasks</string>
+    <string name="process_section_start_form">Start form</string>
     <string name="process_section_comments">Comments</string>
     <string name="process_section_contents">Related Content</string>
     <string name="process_section_fieldcontents">Field Content</string>
