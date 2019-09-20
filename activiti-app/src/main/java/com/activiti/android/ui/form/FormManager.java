@@ -276,6 +276,11 @@ public class FormManager
         {
             if (FormFieldTypes.GROUP.equals(fieldData.getType()))
             {
+                if (groupRoot != null)
+                {
+                    rootView.addView(groupRoot);
+                }
+
                 if (fieldData instanceof ContainerRepresentation)
                 {
                     // Create groupView
@@ -328,9 +333,6 @@ public class FormManager
                             }
                         }
                     }
-
-                    rootView.addView(groupRoot);
-                    groupRoot = null;
                 }
             }
             else if (FormFieldTypes.CONTAINER.equals(fieldData.getType()))
