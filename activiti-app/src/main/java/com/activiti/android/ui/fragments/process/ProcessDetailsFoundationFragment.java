@@ -734,6 +734,7 @@ public class ProcessDetailsFoundationFragment extends AbstractDetailsFragment
 
     protected void displayStartForm() {
         if (hasStartForm) {
+            viewById(R.id.process_details_start_form_card).setVisibility(View.VISIBLE);
             LinearLayout startFormContainer = (LinearLayout) viewById(R.id.process_details_start_form_container);
             startFormContainer.removeAllViews();
 
