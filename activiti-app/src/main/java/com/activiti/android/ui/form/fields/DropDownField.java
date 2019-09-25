@@ -187,9 +187,6 @@ public class DropDownField extends BaseField
     @Override
     public void setFragment(AlfrescoFragment fr)
     {
-        if (data instanceof RestFieldRepresentation
-                && ((RestFieldRepresentation) data).getEndpoint() == null) { return; }
-
         super.setFragment(fr);
         getFragment().getAPI().getTaskService().getFormFieldValues(getFormManager().getTaskId(), data.getId(),
                 new Callback<List<OptionRepresentation>>()
@@ -216,9 +213,7 @@ public class DropDownField extends BaseField
                     }
 
                     @Override
-                    public void onFailure(Call<List<OptionRepresentation>> call, Throwable error)
-                    {
-                    }
+                    public void onFailure(Call<List<OptionRepresentation>> call, Throwable error) {}
                 });
     }
 
