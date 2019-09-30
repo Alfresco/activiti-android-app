@@ -242,12 +242,9 @@ public class StartFormFragment extends AlfrescoFragment {
     private Callback<List<RestVariable>> variablesCallback = new Callback<List<RestVariable>>() {
         @Override
         public void onResponse(Call<List<RestVariable>> call, Response<List<RestVariable>> response) {
-            if (!response.isSuccessful()) {
-                onFailure(call, new Exception(response.message()));
-                return;
+            if (response.isSuccessful()) {
+                formManager.insertVariables(response.body());
             }
-
-            formManager.insertVariables(response.body());
 
             generateViews();
         }
