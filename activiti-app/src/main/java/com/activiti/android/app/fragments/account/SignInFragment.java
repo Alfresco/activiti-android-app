@@ -291,63 +291,55 @@ public class SignInFragment extends AlfrescoFragment
     {
         UIUtils.hideKeyboard(getActivity(), mEmailView);
 
-        session = new ActivitiSession.Builder().connect(endpoint.toString(), username, password).build();
-        session.getServiceRegistry().getProfileService().getProfile(new Callback<UserRepresentation>()
-        {
-            @Override
-            public void onResponse(Call<UserRepresentation> call, Response<UserRepresentation> response)
-            {
-                if (response.isSuccessful())
-                {
-                    user = response.body();
-                    retrieveServerInfo();
-                }
-                else if (response.code() == 401)
-                {
-                    mPasswordView.setError(getString(R.string.error_incorrect_password));
-                    View focusView = mPasswordView;
-                    UIUtils.showKeyboard(getActivity(), focusView);
-                }
-
-            }
-
-            @Override
-            public void onFailure(Call<UserRepresentation> call, Throwable error)
-            {
-                View focusView = null;
-
-                showProgress(false);
-                if (!ActivitiAPI.SERVER_URL_ENDPOINT.equals(endpoint.toString()))
-                {
-                    show(R.id.server_form);
-                }
-
-                if (focusView == null)
-                {
-                    int messageId = ExceptionMessageUtils.getSignInMessageId(getActivity(), error.getCause());
-                    if (messageId == R.string.error_session_creation)
-                    {
-                        Snackbar.make(getActivity().findViewById(R.id.left_panel), error.getMessage(),
-                                Snackbar.LENGTH_SHORT).show();
+        try {
+            session = new ActivitiSession.Builder().connect(endpoint.toString(), username, password).build();
+            session.getServiceRegistry().getProfileService().getProfile(new Callback<UserRepresentation>() {
+                @Override
+                public void onResponse(Call<UserRepresentation> call, Response<UserRepresentation> response) {
+                    if (response.isSuccessful()) {
+                        user = response.body();
+                        retrieveServerInfo();
+                    } else if (response.code() == 401) {
+                        mPasswordView.setError(getString(R.string.error_incorrect_password));
+                        View focusView = mPasswordView;
+                        UIUtils.showKeyboard(getActivity(), focusView);
                     }
-                    else
-                    {
-                        // Revert to Alfresco WebApp
-                        MaterialDialog.Builder builder = new MaterialDialog.Builder(getActivity())
-                                .title(R.string.error_session_creation_title)
-                                .cancelListener(new DialogInterface.OnCancelListener()
-                        {
-                            @Override
-                            public void onCancel(DialogInterface dialog)
-                            {
-                                dismiss();
-                            }
-                        }).content(Html.fromHtml(getString(messageId))).positiveText(R.string.ok);
-                        builder.show();
-                    }
+
                 }
-            }
-        });
+
+                @Override
+                public void onFailure(Call<UserRepresentation> call, Throwable error) {
+                    showConnectionFailure(error);
+                }
+            });
+        } catch(IllegalArgumentException illegalArgumentException) {
+            showConnectionFailure(illegalArgumentException);
+        }
+    }
+
+    private void showConnectionFailure(Throwable error) {
+
+        showProgress(false);
+        if (!ActivitiAPI.SERVER_URL_ENDPOINT.equals(endpoint.toString())) {
+            show(R.id.server_form);
+        }
+
+        int messageId = ExceptionMessageUtils.getSignInMessageId(getActivity(), error.getCause());
+        if (messageId == R.string.error_session_creation) {
+            Snackbar.make(getActivity().findViewById(R.id.left_panel), error.getMessage(),
+                    Snackbar.LENGTH_SHORT).show();
+        } else {
+            // Revert to Alfresco WebApp
+            MaterialDialog.Builder builder = new MaterialDialog.Builder(getActivity())
+                    .title(R.string.error_session_creation_title)
+                    .cancelListener(new DialogInterface.OnCancelListener() {
+                        @Override
+                        public void onCancel(DialogInterface dialog) {
+                            dismiss();
+                        }
+                    }).content(Html.fromHtml(getString(messageId))).positiveText(R.string.ok);
+            builder.show();
+        }
     }
 
     private void createAccount()
