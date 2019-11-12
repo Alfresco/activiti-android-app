@@ -19,6 +19,8 @@
 
 
 apply plugin: 'com.android.application'
+apply plugin: 'kotlin-android-extensions'
+apply plugin: 'kotlin-android'
 
 android {
     compileSdkVersion 28
@@ -33,6 +35,8 @@ android {
         targetSdkVersion 28
         versionCode 13
         versionName VERSION_NAME
+
+        multiDexEnabled true
 
         manifestPlaceholders = [PROVIDER_AUTHORITY: PROVIDER_AUTHORITY]
         resValue "string", "account_name", ACCOUNT_ID
@@ -53,6 +57,10 @@ android {
         buildConfigField "String", "ALFRESCO_PROVIDER_AUTHORITY", "\"" + ALFRESCO_PROVIDER_AUTHORITY + "\""
 
         resValue "string", "ga_trackingId", ACTIVITI_TRACKER_ID
+
+        manifestPlaceholders = [
+                'appAuthRedirectScheme': 'iosapp://fake.url.here/auth'
+        ]
     }
 
     lintOptions {
@@ -165,9 +173,14 @@ android {
             }
         }
     }
+    
     compileOptions {
         sourceCompatibility = '1.8'
         targetCompatibility = '1.8'
+    }
+
+    kotlinOptions {
+        jvmTarget = "1.8"
     }
 }
 
@@ -180,26 +193,30 @@ dependencies {
     implementation fileTree(dir: 'libs', include: '*.jar')
     //compile 'org.alfresco.client:client-android-bpm:1.0.0-beta1'
     implementation 'io.reactivex:rxandroid:1.1.0'
-    implementation 'io.reactivex:rxjava:1.1.0'
+    implementation 'io.reactivex:rxjava:1.1.1'
     implementation 'io.gsonfire:gson-fire:1.5.0'
 
     //Support
-    implementation "com.android.support:design:$support_library_version"
-    implementation "com.android.support:support-v4:$support_library_version"
-    implementation "com.android.support:appcompat-v7:$support_library_version"
-    implementation "com.android.support:cardview-v7:$support_library_version"
-    implementation "com.android.support:recyclerview-v7:$support_library_version"
+    implementation 'com.google.android.material:material:1.0.0'
+    implementation 'androidx.legacy:legacy-support-v4:1.0.0'
+    implementation 'androidx.appcompat:appcompat:1.1.0'
+    implementation 'androidx.cardview:cardview:1.0.0'
+    implementation 'androidx.recyclerview:recyclerview:1.0.0'
+    implementation 'androidx.multidex:multidex:2.0.1'
+    implementation "com.google.android.material:material:1.2.0-alpha01"
+    implementation 'androidx.navigation:navigation-fragment-ktx:2.2.0-rc01'
+    implementation 'androidx.navigation:navigation-ui-ktx:2.2.0-rc01'
 
     //Square
-    implementation 'com.squareup.retrofit2:retrofit:2.0.0'
-    implementation 'com.squareup.retrofit2:converter-gson:2.0.0'
+    implementation 'com.squareup.retrofit2:retrofit:2.6.1'
+    implementation 'com.squareup.retrofit2:converter-gson:2.6.1'
     implementation 'com.squareup.retrofit2:adapter-rxjava:2.0.0'
-    implementation 'com.squareup.okhttp3:okhttp:3.0.1'
-    implementation 'com.squareup.okhttp3:logging-interceptor:3.0.1'
+    implementation 'com.squareup.okhttp3:okhttp:4.1.0'
+    implementation 'com.squareup.okhttp3:logging-interceptor:3.10.0'
     implementation 'com.squareup:otto:1.3.7'
     implementation 'com.squareup.picasso:picasso:2.5.2'
     implementation 'com.jakewharton.picasso:picasso2-okhttp3-downloader:1.0.2'
-    implementation 'com.squareup.okio:okio:1.6.0'
+    implementation 'com.squareup.okio:okio:2.2.2'
 
 
     //3rd Party Lib
@@ -221,8 +238,11 @@ dependencies {
     //Debug
     debugImplementation 'net.hockeyapp.android:HockeySDK:3.5.0'
 
-    implementation "android.arch.work:work-runtime:1.0.1"
-    implementation "androidx.concurrent:concurrent-futures:1.0.0-alpha03"
+    implementation 'androidx.work:work-runtime:2.0.1'
+    implementation "androidx.concurrent:concurrent-futures:1.0.0"
+
+    implementation 'android-dbp-sdk:auth:0.2'
+    implementation 'android-dbp-sdk:core:0.1'
 
     implementation 'com.google.code.gson:gson:2.8.5'
 }

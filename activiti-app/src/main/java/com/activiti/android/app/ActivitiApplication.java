@@ -20,13 +20,11 @@
 
 package com.activiti.android.app;
 
-import android.app.Application;
+import androidx.multidex.MultiDexApplication;
 
-public class ActivitiApplication extends Application
-{
+public class ActivitiApplication extends MultiDexApplication {
     @Override
-    public void onCreate()
-    {
+    public void onCreate() {
         super.onCreate();
     }
 

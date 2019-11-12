@@ -20,7 +20,7 @@
 
 package com.activiti.android.ui.fragments.base;
 
-import android.support.design.widget.Snackbar;
+import com.google.android.material.snackbar.Snackbar;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;

@@ -2,7 +2,7 @@ package com.activiti.android.ui.form.fields;
 
 import java.lang.ref.WeakReference;
 
-import android.support.design.widget.TabLayout;
+import com.google.android.material.tabs.TabLayout;
 import android.view.ViewGroup;
 
 import com.activiti.client.api.model.editor.form.FormTabRepresentation;

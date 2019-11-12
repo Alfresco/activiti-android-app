@@ -71,7 +71,7 @@ public class WelcomePageFragment extends AlfrescoFragment
                 break;
         }
 
-        ((WelcomeActivity) getActivity()).getPicasso().load(imageId).into((ImageView) viewById(R.id.image));
+//        ((WelcomeActivity) getActivity()).getPicasso().load(imageId).into((ImageView) viewById(R.id.image));
         ((TextView) viewById(R.id.text)).setText(textId);
 
         return getRootView();

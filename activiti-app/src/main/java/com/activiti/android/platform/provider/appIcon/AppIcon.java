@@ -24,7 +24,7 @@ import java.io.Serializable;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 
-import android.support.annotation.StringDef;
+import androidx.annotation.StringDef;
 import android.text.Html;
 import android.text.Spanned;
 import android.text.TextUtils;

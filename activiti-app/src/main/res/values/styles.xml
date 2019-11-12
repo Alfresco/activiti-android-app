@@ -23,7 +23,7 @@
     <!-- =============================================================== -->
     <!-- THEME -->
     <!-- =============================================================== -->
-    <style name="__ActivitiTheme" parent="Theme.AppCompat.Light.NoActionBar">
+    <style name="__ActivitiTheme" parent="Theme.MaterialComponents.Light.NoActionBar">
         <item name="android:listChoiceBackgroundIndicator">
             @drawable/activititheme_list_selector_holo_light
         </item>
@@ -105,6 +105,54 @@
         <item name="android:gravity">center_vertical</item>
     </style>
 
+    <style name="ActivitiTheme.TextView.Headline" parent="Widget.MaterialComponents.TextView">
+        <item name="android:textSize">24sp</item>
+        <item name="android:fontFamily">@font/muli_regular</item>
+        <item name="android:textColor">@android:color/black</item>
+    </style>
+
+    <style name="ActivitiTheme.TextView.Title" parent="Widget.MaterialComponents.TextView">
+        <item name="android:textSize">20sp</item>
+        <item name="android:fontFamily">@font/muli_regular</item>
+        <item name="android:textColor">@android:color/black</item>
+    </style>
+
+    <style name="ActivitiTheme.TextView.SubTitle" parent="Widget.MaterialComponents.TextView">
+        <item name="android:textSize">16sp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:fontFamily">@font/muli_regular</item>
+        <item name="android:textColor">@android:color/black</item>
+    </style>
+
+    <style name="ActivitiTheme.EditText" parent="Widget.MaterialComponents.TextInputLayout.FilledBox">
+        <item name="boxBackgroundColor">@android:color/transparent</item>
+        <item name="boxStrokeColor">#359B34</item>
+    </style>
+
+    <style name="ActivitiTheme.Button.TextButton.Primary" parent="Widget.MaterialComponents.Button.TextButton">
+        <item name="android:textColor">#359B34</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:fontFamily">@font/muli_regular</item>
+    </style>
+
+    <style name="ActivitiTheme.Button.TextButton.Secondary" parent="Widget.MaterialComponents.Button.TextButton">
+        <item name="android:textColor">#2A7DE1</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:fontFamily">@font/muli_regular</item>
+    </style>
+
+    <style name="ActivitiTheme.Button.Primary" parent="Widget.MaterialComponents.Button">
+        <item name="backgroundTint">#359B34</item>
+        <item name="android:textSize">18sp</item>
+        <item name="android:fontFamily">@font/muli_regular</item>
+    </style>
+
+    <style name="ActivitiTheme.Button.OutlinedButton.Primary" parent="Widget.MaterialComponents.Button.OutlinedButton">
+        <item name="android:textColor">#359B34</item>
+        <item name="android:textSize">18sp</item>
+        <item name="android:fontFamily">@font/muli_regular</item>
+    </style>
+
     <!-- TEXT TITLE -->
     <style name="ActivitiTheme.Text.Title" parent="ActivitiTheme.Text">
         <item name="android:textAppearance">@style/TextAppearance.AppCompat.Title</item>
@@ -178,8 +226,7 @@
 
 
     <!-- ACTION BAR -->
-    <style name="ActivitiTheme.Container">
-    </style>
+    <style name="ActivitiTheme.Container"></style>
 
     <style name="ActivitiTheme.Container.Padding8">
         <item name="android:paddingLeft">@dimen/d_8</item>

@@ -24,8 +24,8 @@ import java.util.Map;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentActivity;
 import android.view.View;
 import android.widget.GridView;
 
@@ -65,7 +65,7 @@ public class AccountsFragment extends AccountsFoundationFragment
         if (item.getId() == AccountAdapter.ADD_ACCOUNT_ID)
         {
             Intent i = new Intent(getActivity(), WelcomeActivity.class);
-            i.putExtra(WelcomeActivity.EXTRA_ADD_ACCOUNT, true);
+            i.putExtra(WelcomeActivity.Companion.getEXTRA_ADD_ACCOUNT(), true);
             getActivity().startActivity(i);
         }
         else

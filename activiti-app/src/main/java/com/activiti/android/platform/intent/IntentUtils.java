@@ -28,8 +28,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Build;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.ShareCompat;
+import androidx.fragment.app.Fragment;
+import androidx.core.app.ShareCompat;
 import android.util.DisplayMetrics;
 import android.util.Log;
 

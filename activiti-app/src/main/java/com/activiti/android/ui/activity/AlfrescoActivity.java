@@ -26,8 +26,8 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
-import android.support.v7.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
+import androidx.appcompat.app.AppCompatActivity;
 import android.util.Log;
 
 import com.activiti.android.app.R;
@@ -66,7 +66,7 @@ public abstract class AlfrescoActivity extends AppCompatActivity
         // HockeyApp
         if (HockeyAppManager.getInstance(this) != null)
         {
-            HockeyAppManager.getInstance(this).checkForUpdates(this);
+//            HockeyAppManager.getInstance(this).checkForUpdates(this);
         }
     }
 
@@ -86,7 +86,7 @@ public abstract class AlfrescoActivity extends AppCompatActivity
         // HockeyApp
         if (HockeyAppManager.getInstance(this) != null)
         {
-            HockeyAppManager.getInstance(this).checkForCrashes(this);
+//            HockeyAppManager.getInstance(this).checkForCrashes(this);
         }
     }
 

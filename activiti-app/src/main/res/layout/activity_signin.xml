@@ -23,25 +23,6 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="?android:attr/actionBarSize"
-        android:background="@color/primary"
-        android:gravity="center"
-        android:orientation="vertical">
-
-        <ImageView
-            android:layout_width="200dip"
-            android:layout_height="match_parent"
-            android:src="@drawable/alfresco_banner_white" />
-
-    </LinearLayout>
-
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="2dip"
-        android:background="@color/divider" />
-
     <FrameLayout
         android:id="@+id/content_frame"
         android:layout_width="match_parent"

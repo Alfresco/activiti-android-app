@@ -28,8 +28,8 @@ import java.util.List;
 import java.util.Map;
 
 import android.content.DialogInterface;
-import android.support.design.widget.TabLayout;
-import android.support.v4.app.FragmentActivity;
+import com.google.android.material.tabs.TabLayout;
+import androidx.fragment.app.FragmentActivity;
 import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -237,23 +237,19 @@ public class FormManager
                 i++;
             }
 
-            tabLayout.setOnTabSelectedListener(new TabLayout.OnTabSelectedListener()
-            {
+            tabLayout.setOnTabSelectedListener(new TabLayout.BaseOnTabSelectedListener() {
                 @Override
-                public void onTabSelected(TabLayout.Tab tab)
-                {
+                public void onTabSelected(TabLayout.Tab tab) {
                     formTabFieldIndex.get(tab.getTag()).getHookView().setVisibility(View.VISIBLE);
                 }
 
                 @Override
-                public void onTabUnselected(TabLayout.Tab tab)
-                {
+                public void onTabUnselected(TabLayout.Tab tab) {
                     formTabFieldIndex.get(tab.getTag()).getHookView().setVisibility(View.GONE);
                 }
 
                 @Override
-                public void onTabReselected(TabLayout.Tab tab)
-                {
+                public void onTabReselected(TabLayout.Tab tab) {
                     formTabFieldIndex.get(tab.getTag()).getHookView().setVisibility(View.VISIBLE);
                 }
             });

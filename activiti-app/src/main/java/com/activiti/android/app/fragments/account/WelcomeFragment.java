@@ -25,12 +25,12 @@ import java.util.Map;
 import me.relex.circleindicator.CircleIndicator;
 
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentStatePagerAdapter;
-import android.support.v4.view.PagerAdapter;
-import android.support.v4.view.ViewPager;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentActivity;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentStatePagerAdapter;
+import androidx.viewpager.widget.PagerAdapter;
+import androidx.viewpager.widget.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -87,7 +87,7 @@ public class WelcomeFragment extends AlfrescoFragment
 
         // Instantiate a ViewPager and a PagerAdapter.
         Bundle extras = getArguments();
-        if (extras != null && extras.containsKey(WelcomeActivity.EXTRA_ADD_ACCOUNT))
+        if (extras != null && extras.containsKey(WelcomeActivity.Companion.getEXTRA_ADD_ACCOUNT()))
         {
             hide(R.id.welcome_title);
             hide(R.id.welcome_pager);
