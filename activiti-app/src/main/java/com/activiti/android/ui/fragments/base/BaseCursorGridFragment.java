@@ -21,10 +21,11 @@
 package com.activiti.android.ui.fragments.base;
 
 import android.database.Cursor;
-import android.support.v4.app.LoaderManager;
-import android.support.v4.content.Loader;
 import android.view.View;
 import android.widget.CursorAdapter;
+
+import androidx.loader.app.LoaderManager;
+import androidx.loader.content.Loader;
 
 import com.activiti.android.ui.utils.AccessibilityUtils;
 import com.activiti.android.ui.utils.UIUtils;

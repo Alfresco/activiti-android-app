@@ -26,9 +26,10 @@ import java.util.Map;
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
 import android.view.View;
+
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentActivity;
 
 import com.activiti.android.app.R;
 import com.activiti.android.platform.provider.processdefinition.ProcessDefinitionModel;

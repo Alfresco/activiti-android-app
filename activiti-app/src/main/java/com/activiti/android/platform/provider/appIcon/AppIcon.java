@@ -24,10 +24,11 @@ import java.io.Serializable;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 
-import android.support.annotation.StringDef;
 import android.text.Html;
 import android.text.Spanned;
 import android.text.TextUtils;
+
+import androidx.annotation.StringDef;
 
 import com.activiti.android.app.R;
 

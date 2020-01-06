@@ -2,10 +2,10 @@ package com.activiti.android.ui.form.fields;
 
 import java.lang.ref.WeakReference;
 
-import android.support.design.widget.TabLayout;
 import android.view.ViewGroup;
 
 import com.activiti.client.api.model.editor.form.FormTabRepresentation;
+import com.google.android.material.tabs.TabLayout;
 
 /**
  * Created by jpascal on 17/02/2016.

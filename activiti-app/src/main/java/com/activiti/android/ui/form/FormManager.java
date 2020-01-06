@@ -28,13 +28,13 @@ import java.util.List;
 import java.util.Map;
 
 import android.content.DialogInterface;
-import android.support.design.widget.TabLayout;
-import android.support.v4.app.FragmentActivity;
 import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+
+import androidx.fragment.app.FragmentActivity;
 
 import com.activiti.android.app.R;
 import com.activiti.android.sdk.model.runtime.AppVersion;
@@ -51,6 +51,7 @@ import com.activiti.client.api.model.editor.form.FormTabRepresentation;
 import com.activiti.client.api.model.editor.form.RestFieldRepresentation;
 import com.activiti.client.api.model.runtime.RestVariable;
 import com.afollestad.materialdialogs.MaterialDialog;
+import com.google.android.material.tabs.TabLayout;
 
 /**
  * Created by jpascal on 28/03/2015.
@@ -237,7 +238,7 @@ public class FormManager
                 i++;
             }
 
-            tabLayout.setOnTabSelectedListener(new TabLayout.OnTabSelectedListener()
+            tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener()
             {
                 @Override
                 public void onTabSelected(TabLayout.Tab tab)

@@ -23,12 +23,13 @@ package com.activiti.android.ui.utils;
 import android.app.Activity;
 import android.content.Context;
 import android.content.res.Resources;
-import android.support.v4.app.FragmentActivity;
 import android.util.DisplayMetrics;
 import android.util.TypedValue;
 import android.view.Display;
 import android.view.View;
 import android.widget.LinearLayout;
+
+import androidx.fragment.app.FragmentActivity;
 
 import com.activiti.android.app.R;
 

@@ -23,13 +23,14 @@ package com.activiti.android.app.fragments.process;
 import java.util.Map;
 
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.GridView;
+
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentActivity;
 
 import com.activiti.android.app.ActivitiVersionNumber;
 import com.activiti.android.app.R;

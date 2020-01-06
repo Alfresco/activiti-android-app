@@ -26,8 +26,9 @@ import android.app.TimePickerDialog;
 import android.app.TimePickerDialog.OnTimeSetListener;
 import android.content.DialogInterface;
 import android.os.Bundle;
-import android.support.v4.app.DialogFragment;
 import android.widget.TimePicker;
+
+import androidx.fragment.app.DialogFragment;
 
 import com.activiti.android.app.R;
 import com.activiti.android.ui.fragments.form.picker.DatePickerFragment.OnPickDateFragment;

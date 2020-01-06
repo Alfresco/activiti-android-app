@@ -23,8 +23,6 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.design.widget.Snackbar;
-import android.support.v4.app.Fragment;
 import android.text.Html;
 import android.text.TextUtils;
 import android.text.format.DateFormat;
@@ -36,6 +34,8 @@ import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+
+import androidx.fragment.app.Fragment;
 
 import com.activiti.android.app.ActivitiVersionNumber;
 import com.activiti.android.app.R;
@@ -81,6 +81,7 @@ import com.activiti.client.api.model.runtime.request.AttachFormTaskRepresentatio
 import com.activiti.client.api.model.runtime.request.InvolveTaskRepresentation;
 import com.activiti.client.api.model.runtime.request.UpdateTaskRepresentation;
 import com.daimajia.swipe.SwipeLayout;
+import com.google.android.material.snackbar.Snackbar;
 
 import java.util.ArrayList;
 import java.util.Calendar;

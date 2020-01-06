@@ -22,9 +22,6 @@ package com.activiti.android.ui.fragments.task.form;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.design.widget.Snackbar;
-import android.support.v4.app.Fragment;
-import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -33,6 +30,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
+
+import androidx.appcompat.widget.Toolbar;
+import androidx.fragment.app.Fragment;
 
 import com.activiti.android.app.ActivitiVersionNumber;
 import com.activiti.android.app.R;
@@ -64,6 +64,7 @@ import com.activiti.client.api.model.runtime.RelatedContentRepresentation;
 import com.activiti.client.api.model.runtime.RestVariable;
 import com.activiti.client.api.model.runtime.SaveFormRepresentation;
 import com.afollestad.materialdialogs.MaterialDialog;
+import com.google.android.material.snackbar.Snackbar;
 
 import java.util.Calendar;
 import java.util.HashMap;

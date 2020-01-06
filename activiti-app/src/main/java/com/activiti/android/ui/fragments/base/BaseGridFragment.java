@@ -21,7 +21,6 @@
 package com.activiti.android.ui.fragments.base;
 
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -32,6 +31,8 @@ import android.widget.BaseAdapter;
 import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.activiti.android.app.R;
 import com.activiti.android.ui.fragments.AlfrescoFragment;

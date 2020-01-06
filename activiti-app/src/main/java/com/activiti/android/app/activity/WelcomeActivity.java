@@ -21,8 +21,9 @@
 package com.activiti.android.app.activity;
 
 import android.os.Bundle;
-import android.support.v4.app.FragmentActivity;
 import android.view.View;
+
+import androidx.fragment.app.FragmentActivity;
 
 import com.activiti.android.app.R;
 import com.activiti.android.app.fragments.account.ServerFragment;

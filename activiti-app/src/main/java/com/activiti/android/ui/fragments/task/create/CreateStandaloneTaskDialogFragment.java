@@ -28,13 +28,13 @@ import retrofit2.Response;
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
-import android.support.design.widget.Snackbar;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.widget.EditText;
+
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentActivity;
 
 import com.activiti.android.app.R;
 import com.activiti.android.platform.EventBusManager;
@@ -50,6 +50,7 @@ import com.activiti.android.ui.utils.UIUtils;
 import com.activiti.client.api.model.runtime.TaskRepresentation;
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
+import com.google.android.material.snackbar.Snackbar;
 
 public class CreateStandaloneTaskDialogFragment extends AlfrescoFragment
 {

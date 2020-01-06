@@ -24,7 +24,7 @@
     android:layout_height="wrap_content"
     android:orientation="vertical">
 
-    <android.support.design.widget.TabLayout
+    <com.google.android.material.tabs.TabLayout
         android:id="@+id/task_form_tabs_container"
         android:background="@color/primary_background"
         style="@style/ActivitiTheme.Container.Padding8"

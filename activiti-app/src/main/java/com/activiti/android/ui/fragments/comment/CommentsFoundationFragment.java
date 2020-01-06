@@ -26,7 +26,6 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
@@ -39,6 +38,8 @@ import android.widget.BaseAdapter;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
+
+import androidx.fragment.app.Fragment;
 
 import com.activiti.android.app.R;
 import com.activiti.android.platform.integration.analytics.AnalyticsHelper;

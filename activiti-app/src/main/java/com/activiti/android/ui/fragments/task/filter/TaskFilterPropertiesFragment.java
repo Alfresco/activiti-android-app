@@ -26,15 +26,15 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 import android.os.Bundle;
-import android.support.design.widget.Snackbar;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentActivity;
 
 import com.activiti.android.app.R;
 import com.activiti.android.app.fragments.filters.FiltersFragment;
@@ -47,6 +47,7 @@ import com.activiti.android.ui.fragments.form.EditTextDialogFragment;
 import com.activiti.client.api.constant.RequestConstant;
 import com.activiti.client.api.model.runtime.TaskFilterRepresentation;
 import com.activiti.client.api.model.runtime.UserTaskFilterRepresentation;
+import com.google.android.material.snackbar.Snackbar;
 import com.rengwuxian.materialedittext.MaterialEditText;
 
 /**

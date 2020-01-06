@@ -30,7 +30,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.design.widget.Snackbar;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -54,6 +53,7 @@ import com.activiti.android.ui.holder.HolderUtils;
 import com.activiti.client.api.model.idm.GroupRepresentation;
 import com.activiti.client.api.model.idm.UserRepresentation;
 import com.activiti.client.api.model.idm.request.UpdateProfileRepresentation;
+import com.google.android.material.snackbar.Snackbar;
 
 /**
  * Created by jpascal on 07/03/2015.

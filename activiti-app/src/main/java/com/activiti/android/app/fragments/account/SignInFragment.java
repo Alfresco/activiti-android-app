@@ -44,6 +44,7 @@ import com.activiti.client.api.constant.ActivitiAPI;
 import com.activiti.client.api.model.idm.UserRepresentation;
 import com.activiti.client.api.model.runtime.AppVersionRepresentation;
 import com.afollestad.materialdialogs.MaterialDialog;
+import com.google.android.material.snackbar.Snackbar;
 import com.rengwuxian.materialedittext.MaterialAutoCompleteTextView;
 import com.rengwuxian.materialedittext.MaterialEditText;
 import com.squareup.otto.Subscribe;
@@ -55,9 +56,6 @@ import android.animation.AnimatorListenerAdapter;
 import android.content.DialogInterface;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.design.widget.Snackbar;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
 import android.text.Html;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
@@ -67,6 +65,9 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
+
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentActivity;
 
 import retrofit2.Call;
 import retrofit2.Callback;

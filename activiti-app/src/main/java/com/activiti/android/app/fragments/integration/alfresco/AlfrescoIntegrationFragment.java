@@ -31,15 +31,15 @@ import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.design.widget.Snackbar;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
 import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
+
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentActivity;
 
 import com.activiti.android.app.BuildConfig;
 import com.activiti.android.app.R;
@@ -56,6 +56,7 @@ import com.activiti.android.platform.utils.BundleUtils;
 import com.activiti.android.ui.fragments.AlfrescoFragment;
 import com.activiti.android.ui.fragments.builder.AlfrescoFragmentBuilder;
 import com.activiti.android.ui.utils.UIUtils;
+import com.google.android.material.snackbar.Snackbar;
 
 /**
  * Created by jpascal on 26/03/2015.

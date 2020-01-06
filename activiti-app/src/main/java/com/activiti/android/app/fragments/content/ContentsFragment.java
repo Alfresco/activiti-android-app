@@ -27,11 +27,11 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.design.widget.Snackbar;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
 import android.view.View;
 import android.widget.GridView;
+
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentActivity;
 
 import com.activiti.android.app.R;
 import com.activiti.android.app.activity.MainActivity;
@@ -47,6 +47,7 @@ import com.activiti.android.ui.utils.IntentUtils;
 import com.activiti.android.ui.utils.UIUtils;
 import com.activiti.client.api.model.runtime.RelatedContentRepresentation;
 import com.afollestad.materialdialogs.MaterialDialog;
+import com.google.android.material.snackbar.Snackbar;
 import com.squareup.otto.Subscribe;
 
 public class ContentsFragment extends ContentsFoundationFragment

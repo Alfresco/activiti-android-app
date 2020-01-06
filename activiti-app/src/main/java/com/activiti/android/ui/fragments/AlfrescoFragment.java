@@ -22,13 +22,14 @@ package com.activiti.android.ui.fragments;
 import java.lang.ref.WeakReference;
 
 import android.os.Bundle;
-import android.support.v4.app.DialogFragment;
-import android.support.v4.app.Fragment;
-import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
+import androidx.appcompat.widget.Toolbar;
+import androidx.fragment.app.DialogFragment;
+import androidx.fragment.app.Fragment;
 
 import com.activiti.android.app.R;
 import com.activiti.android.app.activity.MainActivity;

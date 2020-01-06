@@ -20,7 +20,6 @@
 
 package com.activiti.android.ui.fragments.base;
 
-import android.support.design.widget.Snackbar;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -30,6 +29,7 @@ import com.activiti.android.app.R;
 import com.activiti.android.platform.exception.ExceptionMessageUtils;
 import com.activiti.android.ui.utils.UIUtils;
 import com.activiti.client.api.model.common.ResultList;
+import com.google.android.material.snackbar.Snackbar;
 
 /**
  * Created by jpascal on 12/12/2014.

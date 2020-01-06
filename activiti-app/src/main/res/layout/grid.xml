@@ -27,7 +27,7 @@
     android:orientation="vertical"
     android:visibility="visible">
 
-    <android.support.v4.widget.SwipeRefreshLayout
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
         android:id="@+id/ptr_layout"
         xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
@@ -73,7 +73,7 @@
                 fab:fab_colorRipple="@color/accent_text"
                 fab:fab_size="mini" />
         </FrameLayout>
-    </android.support.v4.widget.SwipeRefreshLayout>
+    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
     <LinearLayout
         android:id="@+id/load_more"

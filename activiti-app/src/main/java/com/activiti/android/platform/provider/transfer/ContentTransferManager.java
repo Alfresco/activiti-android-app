@@ -37,10 +37,10 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.DocumentsContract;
-import android.support.design.widget.Snackbar;
-import android.support.v4.app.Fragment;
 import android.text.TextUtils;
 import android.util.Log;
+
+import androidx.fragment.app.Fragment;
 
 import com.activiti.android.app.R;
 import com.activiti.android.platform.EventBusManager;
@@ -60,6 +60,7 @@ import com.activiti.android.ui.fragments.AlfrescoFragment;
 import com.activiti.client.api.model.runtime.RelatedContentRepresentation;
 import com.activiti.client.api.model.runtime.request.AddContentRelatedRepresentation;
 import com.afollestad.materialdialogs.MaterialDialog;
+import com.google.android.material.snackbar.Snackbar;
 
 /**
  * @author Jean Marie Pascal

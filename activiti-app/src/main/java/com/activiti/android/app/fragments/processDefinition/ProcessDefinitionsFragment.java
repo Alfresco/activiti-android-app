@@ -25,8 +25,9 @@ import java.util.List;
 import java.util.Map;
 
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
+
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentActivity;
 
 import com.activiti.android.ui.fragments.builder.ListingFragmentBuilder;
 import com.activiti.android.ui.fragments.processDefinition.ProcessDefinitionFoundationFragment;

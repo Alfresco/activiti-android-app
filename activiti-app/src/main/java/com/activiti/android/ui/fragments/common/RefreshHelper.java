@@ -23,14 +23,14 @@ package com.activiti.android.ui.fragments.common;
 import java.lang.ref.WeakReference;
 
 import android.app.Activity;
-import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v4.widget.SwipeRefreshLayout.OnRefreshListener;
 import android.view.View;
+
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.activiti.android.app.R;
 import com.activiti.android.ui.utils.AccessibilityUtils;
 
-public class RefreshHelper implements OnRefreshListener
+public class RefreshHelper implements SwipeRefreshLayout.OnRefreshListener
 {
     private SwipeRefreshLayout swipeLayout;
 

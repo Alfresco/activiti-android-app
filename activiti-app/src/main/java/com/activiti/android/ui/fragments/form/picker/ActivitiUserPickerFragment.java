@@ -32,16 +32,16 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.ContactsContract;
-import android.support.design.widget.Snackbar;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
-import android.support.v4.content.CursorLoader;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.EditText;
 import android.widget.ImageButton;
+
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentActivity;
+import androidx.loader.content.CursorLoader;
 
 import com.activiti.android.app.R;
 import com.activiti.android.platform.intent.RequestCode;
@@ -50,6 +50,7 @@ import com.activiti.android.ui.fragments.builder.AlfrescoFragmentBuilder;
 import com.activiti.client.api.model.idm.LightUserRepresentation;
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
+import com.google.android.material.snackbar.Snackbar;
 
 /**
  * @author Jean Marie Pascal

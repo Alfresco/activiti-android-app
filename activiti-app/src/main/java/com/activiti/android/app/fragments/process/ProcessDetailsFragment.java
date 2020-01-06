@@ -25,13 +25,13 @@ import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.design.widget.Snackbar;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
-import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+
+import androidx.appcompat.widget.Toolbar;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentActivity;
 
 import com.activiti.android.app.R;
 import com.activiti.android.app.activity.MainActivity;
@@ -45,6 +45,7 @@ import com.activiti.android.ui.fragments.comment.FragmentWithComments;
 import com.activiti.android.ui.fragments.process.ProcessDetailsFoundationFragment;
 import com.activiti.android.ui.utils.DisplayUtils;
 import com.activiti.android.ui.utils.IntentUtils;
+import com.google.android.material.snackbar.Snackbar;
 import com.squareup.otto.Subscribe;
 
 /**

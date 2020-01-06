@@ -31,14 +31,14 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.design.widget.Snackbar;
-import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.BaseAdapter;
+
+import androidx.appcompat.widget.Toolbar;
 
 import com.activiti.android.app.R;
 import com.activiti.android.platform.integration.analytics.AnalyticsHelper;
@@ -55,6 +55,7 @@ import com.activiti.client.api.model.common.ResultList;
 import com.activiti.client.api.model.runtime.RelatedContentRepresentation;
 import com.activiti.client.api.model.runtime.request.AddContentRelatedRepresentation;
 import com.afollestad.materialdialogs.MaterialDialog;
+import com.google.android.material.snackbar.Snackbar;
 
 public class ContentsFoundationFragment extends BasePagingGridFragment implements RequestConstant
 {
