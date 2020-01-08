@@ -192,13 +192,13 @@ dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.3.50"
     implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-jdk8:1.3.3'
 
-    //Alfresco SDK
+    //Alfresco DBP SDK
     implementation 'android-dbp-sdk:auth:0.2'
     implementation 'android-dbp-sdk:core:0.1'
 
     //Temporary hardcoded dependencies until release to Maven.
     implementation fileTree(dir: 'libs', include: '*.jar')
-    //compile 'org.alfresco.client:client-android-bpm:1.0.0-beta1'
+    //implementation 'org.alfresco.client:client-android-bpm:1.0.0-beta1'
 
     implementation 'io.gsonfire:gson-fire:1.5.0'
 
@@ -221,6 +221,11 @@ dependencies {
 
 
     //3rd Party Lib
+    implementation 'io.reactivex.rxjava2:rxjava:2.2.16'
+    implementation 'io.reactivex.rxjava2:rxandroid:2.1.1'
+
+    implementation "com.google.android.material:material:1.2.0-alpha03"
+
     implementation 'com.cocosw:bottomsheet:1.1.1@aar'
     implementation 'com.mattprecious.telescope:telescope:1.4.0@aar'
     implementation 'com.rengwuxian.materialedittext:library:2.1.4'

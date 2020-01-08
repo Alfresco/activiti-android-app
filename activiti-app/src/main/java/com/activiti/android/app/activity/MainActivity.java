@@ -88,7 +88,7 @@ public class MainActivity extends AlfrescoActivity
         // Check if there's an account
         if (!ActivitiAccountManager.getInstance(this).hasAccount())
         {
-            startActivity(new Intent(this, WelcomeActivity.class));
+            startActivity(new Intent(this, AIMSWelcomeActivity.class));
             finish();
             return;
         }

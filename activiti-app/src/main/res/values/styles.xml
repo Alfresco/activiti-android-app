@@ -32,6 +32,13 @@
         </item>
     </style>
 
+    <style name="AIMSActivityTheme" parent="Theme.MaterialComponents.Light.NoActionBar">
+        <item name="colorPrimary">@color/aims_primary</item>
+        <item name="colorPrimaryDark">@color/aims_primary_dark</item>
+        <item name="colorAccent">@color/aims_accent</item>
+        <item name="android:textColorPrimary">@color/aims_primary_text</item>
+        <item name="android:textColorSecondary">@color/aims_secondary_text</item>
+    </style>
 
     <style name="_ActivitiTheme" parent="__ActivitiTheme">
         <item name="colorPrimary">@color/primary</item>
