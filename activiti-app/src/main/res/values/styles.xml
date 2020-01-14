@@ -33,6 +33,7 @@
     </style>
 
     <style name="AIMSActivityTheme" parent="Theme.MaterialComponents.Light.NoActionBar">
+        <item name="android:actionMenuTextColor">@android:color/white</item>
         <item name="colorPrimary">@color/aims_primary</item>
         <item name="colorPrimaryDark">@color/aims_primary_dark</item>
         <item name="colorAccent">@color/aims_accent</item>

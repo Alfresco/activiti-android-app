@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <ImageView
+        android:id="@+id/ivLogo"
+        android:layout_width="wrap_content"
+        android:layout_height="70dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="60dp"
+        android:src="@drawable/ic_alfresco_branding_mobile" />
+
+    <TextView
+        android:id="@+id/tvProcessServicesAppLbl"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/ivLogo"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:fontFamily="@font/muli_light"
+        android:text="Process Services App"
+        android:textColor="#FF000000"
+        android:textSize="24sp" />
+
+    <RelativeLayout
+        android:id="@+id/rlBasicAuthInfo"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/tvProcessServicesAppLbl"
+        android:layout_marginStart="32dp"
+        android:layout_marginTop="25dp"
+        android:layout_marginEnd="32dp">
+
+        <TextView
+            android:id="@+id/tvSigninTo"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/muli_regular"
+            android:gravity="start"
+            android:text="Signing in to"
+            android:textColor="#AFAFAF"
+            android:textSize="12sp" />
+
+        <TextView
+            android:id="@+id/tvConnectUrl"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/tvSigninTo"
+            android:layout_marginTop="2dp"
+            android:fontFamily="@font/muli_regular"
+            android:gravity="start"
+            android:text="Identity service URL"
+            android:textColor="#AFAFAF"
+            android:textSize="14sp" />
+
+        <TextView
+            android:id="@+id/tvBasicAuthInfoCloud"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/muli_regular"
+            android:gravity="start"
+            android:text="@string/info_basic_cloud"
+            android:textColor="#000000"
+            android:textSize="14sp" />
+
+    </RelativeLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/tilUsernameEmail"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/rlBasicAuthInfo"
+        android:layout_marginStart="32dp"
+        android:layout_marginTop="25dp"
+        android:layout_marginEnd="32dp"
+        android:hint="Username or Email"
+        app:boxBackgroundColor="@color/transparent"
+        app:endIconDrawable="@drawable/ic_person"
+        app:endIconMode="custom"
+        app:endIconTint="@color/text_input_icon_tint">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/etUsernameEmail"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="-10dp"
+            android:inputType="text"
+            android:maxLines="1" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/tilPassword"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tilUsernameEmail"
+        android:layout_marginStart="32dp"
+        android:layout_marginTop="25dp"
+        android:layout_marginEnd="32dp"
+        android:hint="Password"
+        app:boxBackgroundColor="@color/transparent"
+        app:endIconMode="password_toggle"
+        app:endIconTint="@color/text_input_icon_tint">¬
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/etPassword"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="-10dp"
+            android:inputType="textPassword"
+            android:maxLines="1" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btnSSOSignIn"
+        android:layout_width="match_parent"
+        android:layout_height="64dp"
+        android:layout_below="@id/tilPassword"
+        android:layout_marginStart="32dp"
+        android:layout_marginTop="30dp"
+        android:layout_marginEnd="32dp"
+        android:fontFamily="@font/muli_regular"
+        android:text="SIGN IN" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btnHelp"
+        style="@style/Widget.MaterialComponents.Button.TextButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/tvCopyright"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="30dp"
+        android:fontFamily="@font/muli_regular"
+        android:text="NEED HELP"
+        android:textColor="#2A7DE1" />
+
+    <TextView
+        android:id="@+id/tvCopyright"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="30dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="10dp"
+        android:fontFamily="@font/muli_light"
+        android:gravity="center_horizontal"
+        android:text="© 2017 - 2020 Alfresco Software, Inc. All rights reserved."
+        android:textColor="#AFAFAF"
+        android:textSize="12sp" />
+
+</RelativeLayout>
