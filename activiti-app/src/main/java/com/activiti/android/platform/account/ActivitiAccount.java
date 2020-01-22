@@ -25,6 +25,7 @@ import java.io.Serializable;
 import android.accounts.AccountManager;
 
 import com.activiti.android.app.BuildConfig;
+import com.alfresco.client.AuthorizationCredentials;
 
 public class ActivitiAccount implements Serializable
 {
@@ -117,6 +118,8 @@ public class ActivitiAccount implements Serializable
 
     private String password;
 
+    private AuthorizationCredentials authCredentials;
+
     private String tenantId;
 
     private boolean isAdmin = false;
@@ -148,6 +151,28 @@ public class ActivitiAccount implements Serializable
         this.tenantId = tenantId;
     }
 
+    public ActivitiAccount(long id, AuthorizationCredentials authCredentials, String serverUrl,
+                           String label, String serverType, String serverEdition,
+                           String serverVersion, String userId, String fullname, String tenantId) {
+        super();
+        this.id = id;
+        this.authCredentials = authCredentials;
+
+        this.label = label;
+        this.userId = userId;
+        this.fullname = fullname;
+
+        this.username = authCredentials.getUsername();
+        this.password = authCredentials.getPassword();
+
+        this.serverUrl = serverUrl;
+        this.serverType = serverType;
+        this.serverEdition = serverEdition;
+        this.serverVersion = serverVersion;
+        this.fullname = fullname;
+        this.tenantId = tenantId;
+    }
+
     public static ActivitiAccount parse(AccountManager mAccountManager, android.accounts.Account account)
     {
         ActivitiAccount acc = new ActivitiAccount();
@@ -169,6 +194,10 @@ public class ActivitiAccount implements Serializable
     // ///////////////////////////////////////////////////////////////////////////
     // GETTERS
     // ///////////////////////////////////////////////////////////////////////////
+    public AuthorizationCredentials getAuthCredentials() {
+        return authCredentials;
+    }
+
     public String getUsername()
     {
         return username;

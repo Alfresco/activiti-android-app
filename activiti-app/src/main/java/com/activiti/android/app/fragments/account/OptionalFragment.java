@@ -86,8 +86,8 @@ public class OptionalFragment extends AlfrescoFragment
 
         Long accountId = BundleUtils.getLong(getArguments(), ARGUMENT_ACCOUNT_ID);
         account = ActivitiAccountManager.getInstance(getActivity()).getByAccountId(accountId);
-        ActivitiSession session = new ActivitiSession.Builder().connect(account.getServerUrl(), account.getUsername(),
-                account.getPassword()).build();
+        ActivitiSession session = new ActivitiSession.Builder().connect(account.getServerUrl(),
+                account.getAuthCredentials()).build();
 
         accountView = ((MaterialEditText) viewById(R.id.account_name));
         accountView.setHint(account.getLabel());
