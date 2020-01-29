@@ -13,3 +13,6 @@ steps:
     publishJUnitResults: false
     testResultsFiles: '**/TEST-*.xml'
     tasks: 'assembleStoreRelease'
+  env:
+    NEXUS_USERNAME: $(nexus_username)
+    NEXUS_PASSWORD: $(nexus_password)

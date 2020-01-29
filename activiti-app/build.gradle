@@ -158,8 +158,8 @@ android {
                 maven {
                     url "https://artifacts.alfresco.com/nexus/content/repositories/internal-releases/"
                     credentials {
-                        username NEXUS_USERNAME
-                        password NEXUS_PASSWORD
+                        username System.getenv('NEXUS_USERNAME') ?: NEXUS_USERNAME
+                        password System.getenv('NEXUS_PASSWORD') ?: NEXUS_PASSWORD
                     }
                 }
             }
