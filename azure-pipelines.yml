@@ -24,10 +24,10 @@ steps:
     env:
       NEXUS_USERNAME: $(nexus_username)
       NEXUS_PASSWORD: $(nexus_password)
-      KEYSTORE_FILE: ${keystore.secureFilePath}
+      KEYSTORE_FILE: $(keystore.secureFilePath)
       KEYSTORE_PASSWORD: $(keystore_password)
-      KEY_ALIAS: ${key_alias}
-      KEY_PASSWORD: ${key_password}
+      KEY_ALIAS: $(key_alias)
+      KEY_PASSWORD: $(key_password)
   - task: CopyFiles@2
     inputs:
       contents: '**/*.apk'
