@@ -20,6 +20,7 @@
 
 apply plugin: 'com.android.application'
 
+def version_code      = System.getenv('VERSION_CODE')      ?: VERSION_CODE
 def nexus_username    = System.getenv('NEXUS_USERNAME')    ?: NEXUS_USERNAME
 def nexus_password    = System.getenv('NEXUS_PASSWORD')    ?: NEXUS_PASSWORD
 def keystore_file     = System.getenv('KEYSTORE_FILE')     ?: RELEASE_STORE_FILE
@@ -38,7 +39,7 @@ android {
 
         minSdkVersion 19
         targetSdkVersion 28
-        versionCode 13
+        versionCode version_code
         versionName VERSION_NAME
 
         manifestPlaceholders = [PROVIDER_AUTHORITY: PROVIDER_AUTHORITY]
