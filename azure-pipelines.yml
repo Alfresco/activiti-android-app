@@ -7,7 +7,8 @@ pool:
 variables:
   - group: nexus-credentials
   - group: android-signing
-    version_code: $[counter('versionCode', 14)]
+  - name: version_code
+    value: $[counter('versionCode', 14)]
 
 steps:
   - task: DownloadSecureFile@1
