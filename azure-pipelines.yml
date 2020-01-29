@@ -6,6 +6,7 @@ pool:
 
 variables:
   - group: nexus-credentials
+  - group: android-signing
 
 steps:
   - task: DownloadSecureFile@1
