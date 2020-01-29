@@ -21,7 +21,7 @@ steps:
     contents: '**/*.apk'
     targetFolder: '$(build.artifactStagingDirectory)'
 - task: PublishBuildArtifacts@1
-- task: GooglePlayRelease@2
+- task: GooglePlayRelease@3
   inputs:
     apkFile: '**/*.apk'
     serviceEndpoint: 'Play Store Publisher'
