@@ -1,5 +1,5 @@
 trigger:
-- master
+  - master
 
 pool:
   vmImage: 'macos-latest'
@@ -13,28 +13,28 @@ steps:
     name: keystore
     inputs:
       secureFile: alfresco-android-mobile-keystore
-- task: Gradle@2
-  inputs:
-    workingDirectory: ''
-    gradleWrapperFile: 'gradlew'
-    gradleOptions: '-Xmx3072m'
-    publishJUnitResults: false
-    testResultsFiles: '**/TEST-*.xml'
-    tasks: 'assembleStoreDebug'
-  env:
-    NEXUS_USERNAME: $(nexus_username)
-    NEXUS_PASSWORD: $(nexus_password)
-    KEYSTORE_FILE: ${keystore.secureFilePath}
-    KEYSTORE_PASSWORD: $(keystore_password)
-    KEY_ALIAS: ${key_alias}
-    KEY_PASSWORD: ${key_password}
-- task: CopyFiles@2
-  inputs:
-    contents: '**/*.apk'
-    targetFolder: '$(build.artifactStagingDirectory)'
-- task: PublishBuildArtifacts@1
-- task: GooglePlayRelease@3
-  inputs:
-    apkFile: '**/*.apk'
-    serviceEndpoint: 'Play Store Publisher'
-    track: 'internal'
+  - task: Gradle@2
+    inputs:
+      workingDirectory: ''
+      gradleWrapperFile: 'gradlew'
+      gradleOptions: '-Xmx3072m'
+      publishJUnitResults: false
+      testResultsFiles: '**/TEST-*.xml'
+      tasks: 'assembleStoreDebug'
+    env:
+      NEXUS_USERNAME: $(nexus_username)
+      NEXUS_PASSWORD: $(nexus_password)
+      KEYSTORE_FILE: ${keystore.secureFilePath}
+      KEYSTORE_PASSWORD: $(keystore_password)
+      KEY_ALIAS: ${key_alias}
+      KEY_PASSWORD: ${key_password}
+  - task: CopyFiles@2
+    inputs:
+      contents: '**/*.apk'
+      targetFolder: '$(build.artifactStagingDirectory)'
+  - task: PublishBuildArtifacts@1
+  - task: GooglePlayRelease@3
+    inputs:
+      apkFile: '**/*.apk'
+      serviceEndpoint: 'Play Store Publisher'
+      track: 'internal'
