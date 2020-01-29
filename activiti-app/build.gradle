@@ -20,6 +20,13 @@
 
 apply plugin: 'com.android.application'
 
+def nexus_username    = System.getenv('NEXUS_USERNAME')    ?: NEXUS_USERNAME
+def nexus_password    = System.getenv('NEXUS_PASSWORD')    ?: NEXUS_PASSWORD
+def keystore_file     = System.getenv('KEYSTORE_FILE')     ?: RELEASE_STORE_FILE
+def keystore_password = System.getenv('KEYSTORE_PASSWORD') ?: RELEASE_STORE_PASSWORD
+def key_alias         = System.getenv('KEY_ALIAS')         ?: RELEASE_KEY_ALIAS
+def key_password      = System.getenv('KEY_PASSWORD')      ?: RELEASE_KEY_PASSWORD
+
 android {
     compileSdkVersion 28
     buildToolsVersion "28.0.3"
@@ -66,10 +73,10 @@ android {
         }
 
         release {
-            storeFile file(RELEASE_STORE_FILE)
-            storePassword RELEASE_STORE_PASSWORD
-            keyAlias RELEASE_KEY_ALIAS
-            keyPassword RELEASE_KEY_PASSWORD
+            storeFile file(keystore_file)
+            storePassword keystore_password
+            keyAlias key_alias
+            keyPassword key_password
         }
     }
 
@@ -158,8 +165,8 @@ android {
                 maven {
                     url "https://artifacts.alfresco.com/nexus/content/repositories/internal-releases/"
                     credentials {
-                        username System.getenv('NEXUS_USERNAME') ?: NEXUS_USERNAME
-                        password System.getenv('NEXUS_PASSWORD') ?: NEXUS_PASSWORD
+                        username nexus_username
+                        password nexus_password
                     }
                 }
             }
