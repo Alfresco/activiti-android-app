@@ -43,7 +43,7 @@ android {
         minSdkVersion 19
         targetSdkVersion 28
         multiDexEnabled true
-        versionCode version_code
+        versionCode version_code as Integer
 
         versionName VERSION_NAME
 
