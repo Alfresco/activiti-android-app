@@ -204,8 +204,8 @@ dependencies {
     implementation "androidx.fragment:fragment-ktx:1.2.0-rc05"
 
     //Alfresco DBP SDK
-    implementation 'android-dbp-sdk:auth:0.2'
-    implementation 'android-dbp-sdk:core:0.1'
+    implementation 'com.alfresco.dbp.android:auth:0.2-SNAPSHOT'
+    implementation 'com.alfresco.dbp.android:core:0.1-SNAPSHOT'
 
     //Temporary hardcoded dependencies until release to Maven.
     implementation fileTree(dir: 'libs', include: '*.jar')
