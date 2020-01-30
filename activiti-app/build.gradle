@@ -19,12 +19,17 @@
 
 
 apply plugin: 'com.android.application'
-
+apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-android-extensions'
 apply plugin: 'kotlin-kapt'
 
-apply plugin: 'kotlin-android'
-
-apply plugin: 'kotlin-android-extensions'
+def version_code      = System.getenv('VERSION_CODE')      ?: VERSION_CODE
+def nexus_username    = System.getenv('NEXUS_USERNAME')    ?: NEXUS_USERNAME
+def nexus_password    = System.getenv('NEXUS_PASSWORD')    ?: NEXUS_PASSWORD
+def keystore_file     = System.getenv('KEYSTORE_FILE')     ?: RELEASE_STORE_FILE
+def keystore_password = System.getenv('KEYSTORE_PASSWORD') ?: RELEASE_STORE_PASSWORD
+def key_alias         = System.getenv('KEY_ALIAS')         ?: RELEASE_KEY_ALIAS
+def key_password      = System.getenv('KEY_PASSWORD')      ?: RELEASE_KEY_PASSWORD
 
 android {
     compileSdkVersion 28
@@ -37,8 +42,7 @@ android {
 
         minSdkVersion 19
         targetSdkVersion 28
-        multiDexEnabled true
-        versionCode 13
+
         versionName VERSION_NAME
 
         manifestPlaceholders = [PROVIDER_AUTHORITY: PROVIDER_AUTHORITY,
@@ -74,10 +78,10 @@ android {
         }
 
         release {
-            storeFile file(RELEASE_STORE_FILE)
-            storePassword RELEASE_STORE_PASSWORD
-            keyAlias RELEASE_KEY_ALIAS
-            keyPassword RELEASE_KEY_PASSWORD
+            storeFile file(keystore_file)
+            storePassword keystore_password
+            keyAlias key_alias
+            keyPassword key_password
         }
     }
 
@@ -166,8 +170,8 @@ android {
                 maven {
                     url "https://artifacts.alfresco.com/nexus/content/repositories/internal-releases/"
                     credentials {
-                        username NEXUS_USERNAME
-                        password NEXUS_PASSWORD
+                        username nexus_username
+                        password nexus_password
                     }
                 }
             }
