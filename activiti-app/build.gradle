@@ -40,8 +40,10 @@ android {
     defaultConfig {
         applicationId APPLICATION_ID
 
-        minSdkVersion 21
+        minSdkVersion 19
         targetSdkVersion 28
+        multiDexEnabled true
+        versionCode version_code
 
         versionName VERSION_NAME
 
