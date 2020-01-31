@@ -48,6 +48,8 @@
     <string name="general_login_account_added">Account added!</string>
     <string name="general_login_account_name">Give this account a name (optional)</string>
 
+    <string name="general_copyright_notice">© 2017 – 2020 Alfresco Software, Inc. All rights reserved</string>
+
 
     <!-- ACTION -->
     <string name="general_action_clear">Clear</string>
@@ -58,6 +60,21 @@
     <string name="general_action_confirm">Confirm</string>
     <string name="general_action_add_checklist">Add checklist</string>
     <string name="general_action_show_more">Show more</string>
+
+
+    <!-- LOGIN -->
+    <string name="login_settings_transport_section">Transport Protocol</string>
+    <string name="login_settings_transport_https">HTTPS</string>
+    <string name="login_settings_transport_port">Port</string>
+    <string name="login_settings_service_section">Alfresco Process Services Settings</string>
+    <string name="login_settings_service_document">Service Documents</string>
+    <string name="login_settings_auth_section">Authentication</string>
+    <string name="login_settings_auth_realm">Realm</string>
+    <string name="login_settings_auth_client_id">Client ID</string>
+    <string name="login_settings_auth_redirect_url">Redirect URL</string>
+    <string name="login_settings_reset">Reset to default</string>
+    <string name="login_settings_help">Need help</string>
+
 
     <!-- APP -->
     <string name="app_tasks_title">My tasks</string>

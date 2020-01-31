@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+<data>
+    <variable name="viewModel" type="com.activiti.android.app.activity.AIMSWelcomeViewModel" />
+</data>
+<ScrollView
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fillViewport="true">
@@ -8,199 +12,183 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginEnd="16dp">
+        android:padding="@dimen/aims_theme_default_padding">
 
         <TextView
             android:id="@+id/tvProtocolTitle"
+            style="@style/AimsTheme.SectionText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:fontFamily="@font/muli_regular"
-            android:text="Transport Protocol"
-            android:textColor="#000000"
-            android:textSize="16sp" />
+            android:text="@string/login_settings_transport_section" />
 
-        <TextView
+        <RelativeLayout
             android:id="@+id/tvProtocol"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/tvProtocolTitle"
-            android:layout_alignParentStart="true"
-            android:layout_marginTop="16dp"
-            android:fontFamily="@font/muli_regular"
-            android:text="HTTPS"
-            android:textColor="#C1C1C1"
-            android:textSize="16sp" />
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:layout_below="@id/tvProtocolTitle">
 
-        <Switch
-            android:id="@+id/tvProtocolSwitch"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/tvProtocolTitle"
-            android:layout_alignTop="@id/tvProtocol"
-            android:layout_alignBottom="@id/tvProtocol"
-            android:layout_alignParentEnd="true" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:layout_centerVertical="true"
+                android:fontFamily="@font/muli_regular"
+                android:text="@string/login_settings_transport_https"
+                android:textColor="#C1C1C1"
+                android:textSize="16sp" />
+
+            <Switch
+                android:id="@+id/tvProtocolSwitch"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true"
+                android:checked="@{viewModel.editAuthConfig.https}"/>
+        </RelativeLayout>
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/tilPort"
+            style="@style/AimsTheme.TextInputLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@id/tvProtocol"
-            android:hint="Port"
-            app:boxBackgroundColor="@color/transparent"
-            app:endIconDrawable="@drawable/ic_clear"
-            app:endIconMode="clear_text">
+            android:layout_marginTop="@dimen/aims_login_settings_field_spacing"
+            android:hint="@string/login_settings_transport_port">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/etPort"
+                style="@style/AimsTheme.TextInputEditText"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="-10dp"
                 android:inputType="text"
-                android:maxLines="1" />
+                android:maxLines="1"
+                android:text="@={viewModel.editAuthConfig.port}" />
 
         </com.google.android.material.textfield.TextInputLayout>
 
         <TextView
             android:id="@+id/tvServiceDocumentTitle"
+            style="@style/AimsTheme.SectionText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@+id/tilPort"
-            android:layout_marginTop="32dp"
-            android:fontFamily="@font/muli_regular"
-            android:text="Process Services App"
-            android:textColor="#000000"
-            android:textSize="16sp" />
+            android:layout_marginTop="@dimen/aims_login_settings_section_spacing"
+            android:text="@string/login_settings_service_section" />
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/tilServiceDocument"
+            style="@style/AimsTheme.TextInputLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@id/tvServiceDocumentTitle"
-            android:hint="Service Document"
-            app:boxBackgroundColor="@color/transparent"
-            app:endIconDrawable="@drawable/ic_clear"
-            app:endIconMode="clear_text">
+            android:hint="@string/login_settings_service_document">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/etServiceDocument"
+                style="@style/AimsTheme.TextInputEditText"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="-10dp"
                 android:inputType="text"
-                android:maxLines="1" />
-
+                android:maxLines="1"
+                android:text="@={viewModel.editAuthConfig.serviceDocuments}" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <TextView
             android:id="@+id/tvAuthentication"
+            style="@style/AimsTheme.SectionText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@+id/tilServiceDocument"
-            android:layout_marginTop="32dp"
-            android:fontFamily="@font/muli_regular"
-            android:text="Authentication"
-            android:textColor="#000000"
-            android:textSize="16sp" />
+            android:layout_marginTop="@dimen/aims_login_settings_section_spacing"
+            android:text="@string/login_settings_auth_section" />
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/tilRealm"
+            style="@style/AimsTheme.TextInputLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@id/tvAuthentication"
-            android:hint="Realm"
-            app:boxBackgroundColor="@color/transparent"
-            app:endIconDrawable="@drawable/ic_clear"
-            app:endIconMode="clear_text">
+            android:hint="@string/login_settings_auth_realm">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/etRealm"
+                style="@style/AimsTheme.TextInputEditText"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="-10dp"
                 android:inputType="text"
-                android:maxLines="1" />
-
+                android:maxLines="1"
+                android:text="@={viewModel.editAuthConfig.realm}" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/tilClientId"
+            style="@style/AimsTheme.TextInputLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@id/tilRealm"
-            android:layout_marginTop="16dp"
-            android:hint="Client ID"
-            app:boxBackgroundColor="@color/transparent"
-            app:endIconDrawable="@drawable/ic_clear"
-            app:endIconMode="clear_text">
+            android:layout_marginTop="@dimen/aims_login_settings_field_spacing"
+            android:hint="@string/login_settings_auth_client_id">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/etClientId"
+                style="@style/AimsTheme.TextInputEditText"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="-10dp"
                 android:inputType="text"
-                android:maxLines="1" />
-
+                android:maxLines="1"
+                android:text="@={viewModel.editAuthConfig.clientId}" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/tilRedirectURL"
+            style="@style/AimsTheme.TextInputLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@id/tilClientId"
-            android:layout_marginTop="16dp"
-            android:hint="Redirect URL"
-            app:boxBackgroundColor="@color/transparent"
-            app:endIconDrawable="@drawable/ic_clear"
-            app:endIconMode="clear_text">
+            android:layout_marginTop="@dimen/aims_login_settings_field_spacing"
+            android:hint="@string/login_settings_auth_redirect_url">
 
             <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/etRedirectUrl"
+                style="@style/AimsTheme.TextInputEditText"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="-10dp"
                 android:inputType="text"
-                android:maxLines="1" />
-
+                android:maxLines="1"
+                android:text="@={viewModel.editAuthConfig.redirectUrl}" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btnResetSettings"
-            style="@style/Widget.MaterialComponents.Button.TextButton"
+            style="@style/AimsTheme.PrimaryAction"
             android:layout_width="wrap_content"
             android:layout_height="64dp"
             android:layout_below="@id/tilRedirectURL"
             android:layout_centerHorizontal="true"
             android:layout_marginTop="32dp"
-            android:fontFamily="@font/muli_regular"
-            android:text="RESET TO DEFAULT" />
+            android:text="@string/login_settings_reset" />
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btnHelp"
-            style="@style/Widget.MaterialComponents.Button.TextButton"
+            style="@style/AimsTheme.SecondaryAction"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@id/btnResetSettings"
             android:layout_centerHorizontal="true"
             android:layout_marginTop="16dp"
             android:layout_marginBottom="30dp"
-            android:fontFamily="@font/muli_regular"
-            android:text="NEED HELP"
-            android:textColor="#2A7DE1" />
+            android:text="@string/login_settings_help" />
 
         <TextView
             android:id="@+id/tvCopyright"
+            style="@style/AimsTheme.FooterText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
-            android:fontFamily="@font/muli_light"
             android:gravity="center_horizontal"
-            android:text="© 2017 - 2020 Alfresco Software, Inc. All rights reserved."
-            android:textColor="#AFAFAF"
-            android:textSize="12sp" />
+            android:text="@string/general_copyright_notice" />
 
     </RelativeLayout>
 
 </ScrollView>
+</layout>

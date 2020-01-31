@@ -22,6 +22,8 @@ class AIMSWelcomeViewModel : BaseAuthViewModel() {
             serviceDocuments = AuthenticationConstants.SERVICE_DOCUMENT
     )
 
+    var editAuthConfig = globalAuthConfig
+
     private val _hasNavigation = MutableLiveData<Boolean>()
 
     val hasNavigation: LiveData<Boolean> get() = _hasNavigation

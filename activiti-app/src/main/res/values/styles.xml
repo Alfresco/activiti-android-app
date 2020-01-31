@@ -53,9 +53,54 @@
 
     </style>
 
+    <!-- =============================================================== -->
+    <!-- AIMS STYLE -->
+    <!-- =============================================================== -->
+    <style name="AimsTheme" parent="@style/AIMSActivityTheme"/>
+
+    <style name="AimsTheme.PrimaryButton" parent="@style/Widget.MaterialComponents.Button.TextButton">
+        <item name="android:fontFamily">@font/muli_regular</item>
+    </style>
+
+    <style name="AimsTheme.SecondaryButton" parent="@style/Widget.MaterialComponents.Button.TextButton">
+        <item name="android:fontFamily">@font/muli_regular</item>
+    </style>
+
+    <style name="AimsTheme.PrimaryAction" parent="@style/Widget.MaterialComponents.Button.TextButton">
+        <item name="android:fontFamily">@font/muli_regular</item>
+    </style>
+
+    <style name="AimsTheme.SecondaryAction" parent="@style/Widget.MaterialComponents.Button.TextButton">
+        <item name="android:fontFamily">@font/muli_regular</item>
+        <item name="android:textColor">#2981DF</item>
+        <item name="android:textSize">14sp</item>
+    </style>
+
+    <style name="AimsTheme.SectionText">
+        <item name="android:textColor">#000000</item>
+        <item name="android:textSize">16sp</item>
+        <item name="android:fontFamily">@font/muli_regular</item>
+    </style>
+
+    <style name="AimsTheme.FooterText">
+        <item name="android:textColor">#AFAFAF</item>
+        <item name="android:textSize">12sp</item>
+        <item name="android:fontFamily">@font/muli_light</item>
+    </style>
+
+    <style name="AimsTheme.TextInputLayout">
+        <item name="boxBackgroundColor">@color/transparent</item>
+        <item name="endIconDrawable">@drawable/ic_clear</item>
+        <item name="endIconMode">clear_text</item>
+    </style>
+    <style name="AimsTheme.TextInputEditText">
+        <item name="android:layout_marginStart">-10dp</item>
+        <item name="android:fontFamily">@font/muli_regular</item>
+    </style>
+
 
     <!-- =============================================================== -->
-    <!-- STYLE -->
+    <!-- ACTIVITI STYLE -->
     <!-- =============================================================== -->
     <style name="ActivitiTheme.Toolbar" parent="Base.ThemeOverlay.AppCompat.ActionBar">
         <item name="android:textColorPrimary">@color/primary_text</item>
