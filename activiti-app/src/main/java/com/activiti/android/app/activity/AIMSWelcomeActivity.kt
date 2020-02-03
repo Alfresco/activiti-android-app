@@ -7,10 +7,10 @@ import android.view.MenuItem
 import android.view.View
 import android.widget.RelativeLayout
 import android.widget.Toast
-import androidx.activity.viewModels
 import androidx.appcompat.widget.Toolbar
 import androidx.core.view.ViewCompat
 import com.activiti.android.app.R
+import com.activiti.android.app.common.getViewModel
 import com.activiti.android.app.fragments.account.OptionalFragment
 import com.activiti.android.app.fragments.account.aims.AIMSBasicAuthFragment
 import com.activiti.android.app.fragments.account.aims.AIMSSSOAuthFragment
@@ -44,7 +44,9 @@ import retrofit2.Response
 
 class AIMSWelcomeActivity : AlfrescoAuthActivity<AIMSWelcomeViewModel>() {
 
-    override val viewModel: AIMSWelcomeViewModel by viewModels()
+    override val viewModel: AIMSWelcomeViewModel by lazy {
+        getViewModel { AIMSWelcomeViewModel(applicationContext) }
+    }
 
     private lateinit var progressView: RelativeLayout
 

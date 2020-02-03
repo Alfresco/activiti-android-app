@@ -34,7 +34,7 @@
                 android:layout_centerVertical="true"
                 android:fontFamily="@font/muli_regular"
                 android:text="@string/login_settings_transport_https"
-                android:textColor="#C1C1C1"
+                app:textColorEnabled="@{viewModel.authConfigEditor.https}"
                 android:textSize="16sp" />
 
             <Switch
@@ -43,7 +43,7 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentEnd="true"
                 android:layout_centerVertical="true"
-                android:checked="@{viewModel.editAuthConfig.https}"/>
+                android:checked="@={viewModel.authConfigEditor.https}"/>
         </RelativeLayout>
 
         <com.google.android.material.textfield.TextInputLayout
@@ -62,7 +62,7 @@
                 android:layout_height="wrap_content"
                 android:inputType="text"
                 android:maxLines="1"
-                android:text="@={viewModel.editAuthConfig.port}" />
+                android:text="@={viewModel.authConfigEditor.port}" />
 
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -91,7 +91,7 @@
                 android:layout_marginStart="-10dp"
                 android:inputType="text"
                 android:maxLines="1"
-                android:text="@={viewModel.editAuthConfig.serviceDocuments}" />
+                android:text="@={viewModel.authConfigEditor.serviceDocuments}" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <TextView
@@ -118,7 +118,7 @@
                 android:layout_height="wrap_content"
                 android:inputType="text"
                 android:maxLines="1"
-                android:text="@={viewModel.editAuthConfig.realm}" />
+                android:text="@={viewModel.authConfigEditor.realm}" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
@@ -137,7 +137,7 @@
                 android:layout_height="wrap_content"
                 android:inputType="text"
                 android:maxLines="1"
-                android:text="@={viewModel.editAuthConfig.clientId}" />
+                android:text="@={viewModel.authConfigEditor.clientId}" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
@@ -155,7 +155,7 @@
                 android:layout_height="wrap_content"
                 android:inputType="text"
                 android:maxLines="1"
-                android:text="@={viewModel.editAuthConfig.redirectUrl}" />
+                android:text="@={viewModel.authConfigEditor.redirectUrl}" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.button.MaterialButton
@@ -166,7 +166,8 @@
             android:layout_below="@id/tilRedirectURL"
             android:layout_centerHorizontal="true"
             android:layout_marginTop="32dp"
-            android:text="@string/login_settings_reset" />
+            android:text="@string/login_settings_reset"
+            android:onClick="@{() -> viewModel.resetToDefaultConfig()}"/>
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btnHelp"

@@ -27,7 +27,9 @@ class AIMSAdvancedSettingsFragment : AlfrescoFragment() {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val binding = DataBindingUtil.inflate<FrAimsAdvancedSettingsBinding>(inflater, R.layout.fr_aims_advanced_settings, container, false)
-        binding.viewModel  = viewModel
+        binding.viewModel = viewModel
+        binding.lifecycleOwner = this
+        viewModel.startEditing()
         return binding.root
     }
 
@@ -44,7 +46,8 @@ class AIMSAdvancedSettingsFragment : AlfrescoFragment() {
         val action = item.actionView.findViewById<TextView>(R.id.tvSaveSettingsAction)
 
         action.setOnClickListener {
-            Toast.makeText(activity, "Tapped Save", Toast.LENGTH_LONG).show()
+            Toast.makeText(activity, "Settings Saved Successfully", Toast.LENGTH_LONG).show()
+            viewModel.saveConfigChanges()
         }
 
         super.onCreateOptionsMenu(menu, inflater)
