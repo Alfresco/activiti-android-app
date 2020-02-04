@@ -9,6 +9,8 @@ import com.alfresco.auth.AuthType
 import com.alfresco.auth.GlobalAuthConfig
 import com.alfresco.auth.ui.BaseAuthViewModel
 import com.alfresco.auth.ui.PkceAuthUiModel
+import com.google.gson.Gson
+import com.google.gson.JsonSyntaxException
 
 class AIMSWelcomeViewModel(private val applicationContext: Context) : BaseAuthViewModel() {
 
@@ -78,29 +80,28 @@ class AIMSWelcomeViewModel(private val applicationContext: Context) : BaseAuthVi
 
     @Suppress("NULLABILITY_MISMATCH_BASED_ON_JAVA_ANNOTATIONS")
     private fun loadSavedConfig() {
-        // TODO: improve shared prefs loading
         val sharedPrefs  = applicationContext.getSharedPreferences(SHARED_PREFS_NAME, Context.MODE_PRIVATE)
-        globalAuthConfig.https = sharedPrefs.getBoolean("https", defaultAuthConfig.https)
-        globalAuthConfig.port = sharedPrefs.getString("port", defaultAuthConfig.port)
-        globalAuthConfig.serviceDocuments = sharedPrefs.getString("serviceDocuments", defaultAuthConfig.serviceDocuments)
-        globalAuthConfig.realm = sharedPrefs.getString("realm", defaultAuthConfig.realm)
-        globalAuthConfig.clientId = sharedPrefs.getString("clientId", defaultAuthConfig.clientId)
-        globalAuthConfig.redirectUrl = sharedPrefs.getString("redirectUrl", defaultAuthConfig.redirectUrl)
+        val configJson = sharedPrefs.getString(SHARED_PREFS_CONFIG_KEY, null)
+
+        globalAuthConfig = try {
+            if (configJson != null)
+                Gson().fromJson(configJson, GlobalAuthConfig::class.java)
+            else
+                defaultAuthConfig
+        } catch (e: JsonSyntaxException) {
+            defaultAuthConfig
+        }
     }
 
     fun saveConfigChanges() {
+        val config = authConfigEditor.get()
+
         val sharedPrefs  = applicationContext.getSharedPreferences(SHARED_PREFS_NAME, Context.MODE_PRIVATE)
         val editor = sharedPrefs.edit()
-        editor.putBoolean("https", authConfigEditor.https.value!!)
-        editor.putString("port", authConfigEditor.port.value)
-        editor.putString("serviceDocuments", authConfigEditor.serviceDocuments.value)
-        editor.putString("realm", authConfigEditor.realm.value)
-        editor.putString("clientId", authConfigEditor.clientId.value)
-        editor.putString("redirectUrl", authConfigEditor.redirectUrl.value)
+        editor.putString(SHARED_PREFS_CONFIG_KEY, Gson().toJson(config))
         editor.apply()
 
-        //TODO: improve push changes to globalAuthConfig
-        loadSavedConfig()
+        globalAuthConfig = config
     }
 
     fun resetToDefaultConfig() {
@@ -108,7 +109,8 @@ class AIMSWelcomeViewModel(private val applicationContext: Context) : BaseAuthVi
     }
 
     companion object {
-        private const val SHARED_PREFS_NAME = "org.activiti.aims.android.config"
+        private const val SHARED_PREFS_NAME = "org.activiti.aims.android.auth"
+        private const val SHARED_PREFS_CONFIG_KEY = "config"
 
         private val defaultAuthConfig = GlobalAuthConfig(
                 https = AuthenticationConstants.USE_HTTPS,
@@ -132,7 +134,7 @@ class AIMSWelcomeViewModel(private val applicationContext: Context) : BaseAuthVi
 
         init {
             https.observeForever{
-                port.value = if(it == true) "443" else "80"
+                port.value = if(it == true) DEFAULT_HTTPS_PORT else DEFAULT_HTTP_PORT
             }
         }
 
@@ -143,6 +145,22 @@ class AIMSWelcomeViewModel(private val applicationContext: Context) : BaseAuthVi
             realm.value = config.realm
             clientId.value = config.clientId
             redirectUrl.value = config.redirectUrl
+        }
+
+        fun get(): GlobalAuthConfig {
+            return GlobalAuthConfig(
+                    https = https.value ?: false,
+                    port = port.value ?: "",
+                    serviceDocuments = serviceDocuments.value ?: "",
+                    realm = realm.value ?: "",
+                    clientId = clientId.value ?: "",
+                    redirectUrl = redirectUrl.value ?: ""
+            )
+        }
+
+        companion object {
+            private const val DEFAULT_HTTP_PORT = "80"
+            private const val DEFAULT_HTTPS_PORT = "443"
         }
     }
 }
