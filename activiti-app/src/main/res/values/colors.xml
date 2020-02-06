@@ -101,6 +101,7 @@
 
     <color name="primary_dark">#212121</color>
     <color name="aims_primary_dark">#00754A</color>
+    <color name="aims_disabled_text">#61000000</color>
 
     <color name="primary_light">#607D8B</color>
 

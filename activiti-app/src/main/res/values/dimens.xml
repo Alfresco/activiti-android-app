@@ -38,8 +38,8 @@
 
     <!-- LOGIN SETTINGS -->
     <dimen name="aims_theme_default_padding">34dp</dimen>
-    <dimen name="aims_login_settings_section_spacing">34dp</dimen>
-    <dimen name="aims_login_settings_field_spacing">3dp</dimen>
-    <dimen name="aims_login_settings_header_spacing">16dp</dimen>
+    <dimen name="aims_login_settings_section_spacing">40dp</dimen>
+    <dimen name="aims_login_settings_field_spacing">11dp</dimen>
+    <dimen name="aims_login_settings_header_spacing">6dp</dimen>
 
 </resources>

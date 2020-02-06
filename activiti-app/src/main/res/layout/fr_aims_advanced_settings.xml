@@ -24,18 +24,18 @@
         <RelativeLayout
             android:id="@+id/tvProtocol"
             android:layout_width="match_parent"
-            android:layout_height="48dp"
+            android:layout_height="50dp"
+            android:layout_marginTop="@dimen/aims_login_settings_header_spacing"
             android:layout_below="@id/tvProtocolTitle">
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
                 android:layout_centerVertical="true"
                 android:fontFamily="@font/muli_regular"
                 android:text="@string/login_settings_transport_https"
                 app:textColorEnabled="@{viewModel.authConfigEditor.https}"
-                android:textSize="16sp" />
+                android:textSize="17sp" />
 
             <Switch
                 android:id="@+id/tvProtocolSwitch"
@@ -80,6 +80,7 @@
             style="@style/AimsTheme.TextInputLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/aims_login_settings_header_spacing"
             android:layout_below="@id/tvServiceDocumentTitle"
             android:hint="@string/login_settings_service_document">
 
@@ -88,7 +89,6 @@
                 style="@style/AimsTheme.TextInputEditText"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="-10dp"
                 android:inputType="text"
                 android:maxLines="1"
                 android:text="@={viewModel.authConfigEditor.serviceDocuments}" />
@@ -109,6 +109,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@id/tvAuthentication"
+            android:layout_marginTop="@dimen/aims_login_settings_header_spacing"
             android:hint="@string/login_settings_auth_realm">
 
             <com.google.android.material.textfield.TextInputEditText
