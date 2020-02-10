@@ -97,25 +97,19 @@
 
     <!-- Palette Activiti Grey -->
     <color name="primary">#424242</color>
-    <color name="aims_primary">#359B34</color>
 
     <color name="primary_dark">#212121</color>
-    <color name="aims_primary_dark">#00754A</color>
-    <color name="aims_disabled_text">#61000000</color>
 
     <color name="primary_light">#607D8B</color>
 
     <color name="accent">#36A7C4</color>
-    <color name="aims_accent">@color/aims_primary</color>
 
     <color name="accent_disable">#94AEB4</color>
     <color name="accent_pressed">#298096</color>
 
     <color name="primary_text">#212121</color>
-    <color name="aims_primary_text">@android:color/black</color>
 
     <color name="secondary_text">#727272</color>
-    <color name="aims_secondary_text">#8C000000</color>
 
     <color name="accent_text">#36A7C8</color>
     <color name="icons">#FFFFFF</color>
@@ -142,6 +136,4 @@
     <!-- Theme DEFAULT colors -->
     <color name="colorPrimary">@color/primary</color>
     <color name="about_libraries_window_background">@color/primary_background</color>
-
-    <color name="transparent">#00000000</color>
 </resources>

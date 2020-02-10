@@ -1,3 +1,18 @@
 <resources>
     <string name="app_name">Auth Library</string>
+
+    <string name="general_copyright_notice">© 2017 – 2020 Alfresco Software, Inc. All rights reserved</string>
+
+    <!-- LOGIN -->
+    <string name="login_settings_transport_section">Transport Protocol</string>
+    <string name="login_settings_transport_https">HTTPS</string>
+    <string name="login_settings_transport_port">Port</string>
+    <string name="login_settings_service_section">Alfresco Process Services Settings</string>
+    <string name="login_settings_service_document">Service Documents</string>
+    <string name="login_settings_auth_section">Authentication</string>
+    <string name="login_settings_auth_realm">Realm</string>
+    <string name="login_settings_auth_client_id">Client ID</string>
+    <string name="login_settings_auth_redirect_url">Redirect URL</string>
+    <string name="login_settings_reset">Reset to default</string>
+    <string name="login_settings_help">Need help</string>
 </resources>

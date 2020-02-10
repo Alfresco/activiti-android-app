@@ -36,10 +36,4 @@
     <dimen name="process_diagram_width">400dp</dimen>
     <dimen name="process_diagram_height">400dp</dimen>
 
-    <!-- LOGIN SETTINGS -->
-    <dimen name="aims_theme_default_padding">34dp</dimen>
-    <dimen name="aims_login_settings_section_spacing">40dp</dimen>
-    <dimen name="aims_login_settings_field_spacing">11dp</dimen>
-    <dimen name="aims_login_settings_header_spacing">6dp</dimen>
-
 </resources>
