@@ -18,5 +18,4 @@
  *
  */
 
-
-include ':activiti-app'
+include ':activiti-app', ':auth-library'

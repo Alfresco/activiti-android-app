@@ -1,0 +1,195 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+<data>
+    <variable name="viewModel" type="com.alfresco.auth.activity.AIMSWelcomeViewModel" />
+</data>
+<ScrollView
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fillViewport="true">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="@dimen/aims_theme_default_padding">
+
+        <TextView
+            android:id="@+id/tvProtocolTitle"
+            style="@style/AimsTheme.SectionText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/login_settings_transport_section" />
+
+        <RelativeLayout
+            android:id="@+id/tvProtocol"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_marginTop="@dimen/aims_login_settings_header_spacing"
+            android:layout_below="@id/tvProtocolTitle">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:fontFamily="@font/muli_regular"
+                android:text="@string/login_settings_transport_https"
+                android:textSize="17sp" />
+
+            <Switch
+                android:id="@+id/tvProtocolSwitch"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true"
+                android:checked="@={viewModel.authConfigEditor.https}"/>
+        </RelativeLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/tilPort"
+            style="@style/AimsTheme.TextInputLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/tvProtocol"
+            android:layout_marginTop="@dimen/aims_login_settings_field_spacing"
+            android:hint="@string/login_settings_transport_port">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/etPort"
+                style="@style/AimsTheme.TextInputEditText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="text"
+                android:maxLines="1"
+                android:text="@={viewModel.authConfigEditor.port}" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <TextView
+            android:id="@+id/tvServiceDocumentTitle"
+            style="@style/AimsTheme.SectionText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/tilPort"
+            android:layout_marginTop="@dimen/aims_login_settings_section_spacing"
+            android:text="@string/login_settings_service_section" />
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/tilServiceDocument"
+            style="@style/AimsTheme.TextInputLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/aims_login_settings_header_spacing"
+            android:layout_below="@id/tvServiceDocumentTitle"
+            android:hint="@string/login_settings_service_document">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/etServiceDocument"
+                style="@style/AimsTheme.TextInputEditText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="text"
+                android:maxLines="1"
+                android:text="@={viewModel.authConfigEditor.serviceDocuments}" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <TextView
+            android:id="@+id/tvAuthentication"
+            style="@style/AimsTheme.SectionText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/tilServiceDocument"
+            android:layout_marginTop="@dimen/aims_login_settings_section_spacing"
+            android:text="@string/login_settings_auth_section" />
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/tilRealm"
+            style="@style/AimsTheme.TextInputLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/tvAuthentication"
+            android:layout_marginTop="@dimen/aims_login_settings_header_spacing"
+            android:hint="@string/login_settings_auth_realm">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/etRealm"
+                style="@style/AimsTheme.TextInputEditText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="text"
+                android:maxLines="1"
+                android:text="@={viewModel.authConfigEditor.realm}" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/tilClientId"
+            style="@style/AimsTheme.TextInputLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/tilRealm"
+            android:layout_marginTop="@dimen/aims_login_settings_field_spacing"
+            android:hint="@string/login_settings_auth_client_id">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/etClientId"
+                style="@style/AimsTheme.TextInputEditText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="text"
+                android:maxLines="1"
+                android:text="@={viewModel.authConfigEditor.clientId}" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/tilRedirectURL"
+            style="@style/AimsTheme.TextInputLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/tilClientId"
+            android:layout_marginTop="@dimen/aims_login_settings_field_spacing"
+            android:hint="@string/login_settings_auth_redirect_url">
+
+            <com.google.android.material.textfield.TextInputEditText
+                style="@style/AimsTheme.TextInputEditText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="text"
+                android:maxLines="1"
+                android:text="@={viewModel.authConfigEditor.redirectUrl}" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnResetSettings"
+            style="@style/AimsTheme.PrimaryAction"
+            android:layout_width="wrap_content"
+            android:layout_height="64dp"
+            android:layout_below="@id/tilRedirectURL"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="32dp"
+            android:text="@string/login_settings_reset"
+            android:onClick="@{() -> viewModel.resetToDefaultConfig()}"/>
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnHelp"
+            style="@style/AimsTheme.SecondaryAction"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/btnResetSettings"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="16dp"
+            android:layout_marginBottom="30dp"
+            android:text="@string/login_settings_help" />
+
+        <TextView
+            android:id="@+id/tvCopyright"
+            style="@style/AimsTheme.FooterText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:gravity="center_horizontal"
+            android:text="@string/general_copyright_notice" />
+
+    </RelativeLayout>
+
+</ScrollView>
+</layout>

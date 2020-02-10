@@ -32,17 +32,6 @@
         </item>
     </style>
 
-    <style name="AIMSActivityTheme" parent="Theme.MaterialComponents.Light.NoActionBar">
-        <item name="android:actionMenuTextColor">@android:color/black</item>
-        <item name="colorPrimary">@color/aims_primary</item>
-        <item name="colorPrimaryDark">@android:color/white</item>
-        <item name="android:windowLightStatusBar">true</item>
-        <item name="colorAccent">@color/aims_accent</item>
-        <item name="android:textColorPrimary">@color/aims_primary_text</item>
-        <item name="android:textColorSecondary">@color/aims_secondary_text</item>
-        <item name="actionBarSize">44dp</item>
-    </style>
-
     <style name="_ActivitiTheme" parent="__ActivitiTheme">
         <item name="colorPrimary">@color/primary</item>
         <item name="colorPrimaryDark">@color/primary_dark</item>
@@ -53,60 +42,6 @@
 
     <style name="ActivitiTheme" parent="@style/_ActivitiTheme">
 
-    </style>
-
-    <!-- =============================================================== -->
-    <!-- AIMS STYLE -->
-    <!-- =============================================================== -->
-    <style name="AimsTheme" parent="@style/AIMSActivityTheme"/>
-
-    <style name="AimsTheme.PrimaryButton" parent="@style/Widget.MaterialComponents.Button.TextButton">
-        <item name="android:fontFamily">@font/muli_regular</item>
-    </style>
-
-    <style name="AimsTheme.SecondaryButton" parent="@style/Widget.MaterialComponents.Button.TextButton">
-        <item name="android:fontFamily">@font/muli_regular</item>
-    </style>
-
-    <style name="AimsTheme.PrimaryAction" parent="@style/Widget.MaterialComponents.Button.TextButton">
-        <item name="android:fontFamily">@font/muli_regular</item>
-    </style>
-
-    <style name="AimsTheme.SecondaryAction" parent="@style/Widget.MaterialComponents.Button.TextButton">
-        <item name="android:fontFamily">@font/muli_regular</item>
-        <item name="android:textColor">#2981DF</item>
-        <item name="android:textSize">14sp</item>
-    </style>
-
-    <style name="AimsTheme.SectionText">
-        <item name="android:textColor">#000000</item>
-        <item name="android:textSize">16sp</item>
-        <item name="android:fontFamily">@font/muli_regular</item>
-    </style>
-
-    <style name="AimsTheme.FooterText">
-        <item name="android:textColor">#AFAFAF</item>
-        <item name="android:textSize">12sp</item>
-        <item name="android:fontFamily">@font/muli_light</item>
-    </style>
-
-    <style name="AimsTheme.TextInputLayout">
-        <item name="boxBackgroundColor">@color/transparent</item>
-<!--        <item name="endIconDrawable">@drawable/ic_clear_mini</item>-->
-        <item name="endIconMode">clear_text</item>
-    </style>
-    <style name="AimsTheme.TextInputEditText">
-        <item name="android:paddingLeft">0dp</item> <!-- removes implicit indentation -->
-        <item name="android:paddingBottom">4dp</item> <!-- distance to underline -->
-        <item name="android:layout_height">54dp</item>
-        <item name="android:fontFamily">@font/muli_regular</item>
-        <item name="android:textSize">16sp</item>
-        <item name="android:textColor">#505050</item>
-    </style>
-
-    <style name="AimsTheme.ActionBar" parent="Base.ThemeOverlay.AppCompat.ActionBar">
-        <item name="android:tint">@color/aims_primary_dark</item>
-        <item name="android:itemTextAppearance">@android:color/black</item>
     </style>
 
 
