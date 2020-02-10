@@ -177,13 +177,6 @@ android {
                         password nexus_password
                     }
                 }
-                maven {
-                    url "https://artifacts.alfresco.com/nexus/content/repositories/internal-snapshots/"
-                    credentials {
-                        username nexus_username
-                        password nexus_password
-                    }
-                }
             }
         }
     }
