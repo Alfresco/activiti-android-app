@@ -25,11 +25,10 @@
 
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar"
+        style="@style/Widget.Alfresco.ActionBar"
+        android:theme="@style/Theme.Alfresco.ActionBar"
         android:layout_width="match_parent"
-        android:layout_height="?attr/actionBarSize"
-        android:theme="@style/AimsTheme.ActionBar"
-        android:paddingLeft="14dp"
-        android:paddingRight="34dp"/>
+        android:layout_height="?attr/actionBarSize"/>
 
     <RelativeLayout
         android:id="@+id/rlProgress"

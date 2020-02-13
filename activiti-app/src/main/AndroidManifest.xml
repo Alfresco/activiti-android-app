@@ -80,7 +80,7 @@
 
         <activity
             android:name="com.activiti.android.app.activity.WelcomeSsoActivity"
-            android:theme="@style/AIMSActivityTheme"
+            android:theme="@style/Theme.Alfresco"
             android:label="@string/app_name"/>
 
         <!-- *************************************************************** -->

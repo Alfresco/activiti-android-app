@@ -1,15 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
+
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:paddingStart="@dimen/aims_theme_default_padding"
+    android:paddingEnd="@dimen/aims_theme_default_padding">
 
     <ImageView
         android:id="@+id/ivLogo"
         android:layout_width="wrap_content"
         android:layout_height="70dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="60dp"
+        android:layout_marginTop="40dp"
         android:src="@drawable/ic_alfresco_branding_mobile" />
 
     <TextView
@@ -17,8 +18,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/ivLogo"
-        android:layout_marginStart="16dp"
-        android:layout_marginEnd="16dp"
         android:fontFamily="@font/muli_light"
         android:text="Process Services App"
         android:textColor="#FF000000"
@@ -26,48 +25,38 @@
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/tilConnectUrl"
+        style="@style/Widget.Alfresco.TextField.Layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/tvProcessServicesAppLbl"
-        android:layout_marginStart="16dp"
         android:layout_marginTop="100dp"
-        android:layout_marginEnd="16dp"
-        android:hint="Connect to"
-        android:singleLine="true"
-        app:boxBackgroundColor="@color/transparent"
-        app:endIconDrawable="@drawable/ic_clear"
-        app:endIconMode="clear_text">
+        android:hint="@string/auth_connect_field_hint"
+        android:singleLine="true">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/etConnectUrl"
+            style="@style/Widget.Alfresco.TextField.Edit"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginStart="-10dp"
-            android:ellipsize="end"
-            android:inputType="text"
-            android:maxLines="1" />
+            android:ellipsize="end" />
 
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/btnConnect"
+        style="@style/Widget.Alfresco.Button.Primary"
         android:layout_width="match_parent"
-        android:layout_height="64dp"
         android:layout_below="@id/tilConnectUrl"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="10dp"
-        android:layout_marginEnd="16dp"
-        android:fontFamily="@font/muli_regular"
-        android:text="CONNECT" />
+        android:layout_marginTop="20dp"
+        android:text="@string/auth_connect_button" />
 
     <RelativeLayout
         android:id="@+id/rlSeparator"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/btnConnect"
-        android:layout_marginStart="16dp"
         android:layout_marginTop="10dp"
-        android:layout_marginEnd="16dp">
+        android:visibility="gone">
 
         <TextView
             android:id="@+id/tvSeparator"
@@ -76,9 +65,9 @@
             android:layout_centerHorizontal="true"
             android:layout_marginStart="8dp"
             android:layout_marginEnd="8dp"
-            android:fontFamily="@font/muli_regular"
-            android:text="OR"
-            android:textColor="#4B4749" />
+            android:fontFamily="@font/muli_light"
+            android:text="@string/auth_or_label"
+            android:textSize="16sp" />
 
         <View
             android:id="@+id/left_separator"
@@ -86,7 +75,7 @@
             android:layout_height="1dp"
             android:layout_centerVertical="true"
             android:layout_toStartOf="@+id/tvSeparator"
-            android:background="#DDDDDD" />
+            android:background="#1F000000" />
 
         <View
             android:id="@+id/right_separator"
@@ -94,61 +83,48 @@
             android:layout_height="1dp"
             android:layout_centerVertical="true"
             android:layout_toEndOf="@+id/tvSeparator"
-            android:background="#DDDDDD" />
+            android:background="#1F000000" />
 
     </RelativeLayout>
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/btnCloudSignIn"
-        style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+        style="@style/Widget.Alfresco.Button.Secondary"
         android:layout_width="match_parent"
-        android:layout_height="64dp"
         android:layout_below="@id/rlSeparator"
-        android:layout_marginStart="16dp"
         android:layout_marginTop="10dp"
-        android:layout_marginEnd="16dp"
-        android:fontFamily="@font/muli_regular"
-        android:text="CLOUD SIGN IN" />
+        android:text="@string/auth_cloud_sign_in_button"
+        android:visibility="gone" />
 
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/btnAdvancedSettings"
-        style="@style/Widget.MaterialComponents.Button.TextButton"
-        android:layout_width="match_parent"
-        android:layout_height="64dp"
-        android:layout_below="@id/btnCloudSignIn"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="10dp"
-        android:layout_marginEnd="16dp"
-        android:fontFamily="@font/muli_regular"
-        android:text="ADVANCED SETTINGS" />
-
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/btnHelp"
-        style="@style/Widget.MaterialComponents.Button.TextButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/btnAdvancedSettings"
-        android:layout_centerHorizontal="true"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="16dp"
-        android:fontFamily="@font/muli_regular"
-        android:text="HELP"
-        android:textColor="#2A7DE1" />
-
-    <TextView
-        android:id="@+id/tvCopyright"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="30dp"
-        android:layout_marginEnd="16dp"
-        android:layout_marginBottom="10dp"
-        android:fontFamily="@font/muli_light"
-        android:gravity="center_horizontal"
-        android:text="© 2017 - 2020 Alfresco Software, Inc. All rights reserved."
-        android:textColor="#AFAFAF"
-        android:textSize="12sp" />
+        android:gravity="center"
+        android:orientation="vertical">
 
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnAdvancedSettings"
+            style="@style/Widget.Alfresco.Action.Primary"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/auth_settings_button" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnHelp"
+            style="@style/Widget.Alfresco.Action.Secondary"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:text="@string/auth_help_button" />
+
+        <TextView
+            android:id="@+id/tvCopyright"
+            style="@style/Widget.Alfresco.FooterText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="30dp"
+            android:layout_marginBottom="10dp"
+            android:text="@string/general_copyright_notice" />
+    </LinearLayout>
 </RelativeLayout>

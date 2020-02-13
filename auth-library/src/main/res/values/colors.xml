@@ -20,10 +20,12 @@
   -->
 
 <resources>
-    <color name="aims_primary">#359B34</color>
-    <color name="aims_primary_dark">#00754A</color>
+    <color name="alfresco_primary">#359B34</color>
+    <color name="alfresco_primary_dark">#00754A</color>
+    <color name="alfresco_secondary">#0055B8</color>
+    <color name="alfresco_secondary_ripple">#1E2A7DE1</color>
     <color name="aims_disabled_text">#61000000</color>
-    <color name="aims_accent">@color/aims_primary</color>
+    <color name="aims_accent">@color/alfresco_primary</color>
     <color name="aims_primary_text">@android:color/black</color>
     <color name="aims_secondary_text">#8C000000</color>
     <color name="transparent">#00000000</color>

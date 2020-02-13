@@ -20,93 +20,106 @@
 
 <resources>
 
-    <style name="Alfresco" parent="Theme.MaterialComponents.Light.NoActionBar">
-        <item name="android:actionMenuTextColor">@android:color/white</item>
-        <item name="colorPrimary">@color/aims_primary</item>
-        <item name="colorPrimaryDark">@color/aims_primary_dark</item>
+    <style name="Theme.Alfresco" parent="Theme.MaterialComponents.Light.NoActionBar">
+        <item name="colorPrimary">@color/alfresco_primary</item>
+        <item name="colorPrimaryDark">@android:color/white</item>
         <item name="colorAccent">@color/aims_accent</item>
         <item name="android:textColorPrimary">@color/aims_primary_text</item>
         <item name="android:textColorSecondary">@color/aims_secondary_text</item>
+        
+        <!-- Action bar -->
+        <item name="actionBarSize">44dp</item>
+        <item name="actionBarPaddingLeft">14dp</item>
+        <item name="actionBarPaddingRight">34dp</item>
+
+        <!-- Status bar -->
+        <item name="android:windowLightStatusBar">true</item>
     </style>
 
-    <style name="Alfresco.Snackbar"/>
+    <style name="Widget"/>
+    <style name="Widget.Alfresco"/>
 
-    <style name="Alfresco.Snackbar.Title">
+    <style name="Widget.Alfresco.Snackbar"/>
+
+    <style name="Widget.Alfresco.Snackbar.Title">
         <item name="android:fontFamily">@font/muli_bold</item>
         <item name="android:textColor">#ffffff</item>
         <item name="android:textSize">16sp</item>
     </style>
 
-    <style name="Alfresco.Snackbar.Message">
+    <style name="Widget.Alfresco.Snackbar.Message">
         <item name="android:fontFamily">@font/muli_regular</item>
         <item name="android:textColor">#ffffff</item>
         <item name="android:textSize">14sp</item>
     </style>
 
-
-    <style name="AIMSActivityTheme" parent="Theme.MaterialComponents.Light.NoActionBar">
-        <item name="android:actionMenuTextColor">@android:color/black</item>
-        <item name="colorPrimary">@color/aims_primary</item>
-        <item name="colorPrimaryDark">@android:color/white</item>
-        <item name="android:windowLightStatusBar">true</item>
-        <item name="colorAccent">@color/aims_accent</item>
-        <item name="android:textColorPrimary">@color/aims_primary_text</item>
-        <item name="android:textColorSecondary">@color/aims_secondary_text</item>
-        <item name="actionBarSize">44dp</item>
+    <style name="Widget.Alfresco.Button.Primary" parent="@style/Widget.MaterialComponents.Button">
+        <item name="android:fontFamily">@font/muli_regular</item>
+        <item name="android:textSize">22sp</item>
+        <item name="android:layout_height">64dp</item>
+        <item name="android:letterSpacing">0</item>
     </style>
 
-    <!-- =============================================================== -->
-    <!-- AIMS STYLE -->
-    <!-- =============================================================== -->
-    <style name="AimsTheme" parent="@style/AIMSActivityTheme"/>
-
-    <style name="AimsTheme.PrimaryButton" parent="@style/Widget.MaterialComponents.Button.TextButton">
+    <style name="Widget.Alfresco.Button.Secondary" parent="@style/Widget.MaterialComponents.Button.OutlinedButton">
         <item name="android:fontFamily">@font/muli_regular</item>
+        <item name="android:textSize">22sp</item>
+        <item name="android:layout_height">64dp</item>
+        <item name="android:letterSpacing">0</item>
+        <item name="android:textColor">@color/alfresco_primary_dark</item>
     </style>
 
-    <style name="AimsTheme.SecondaryButton" parent="@style/Widget.MaterialComponents.Button.TextButton">
+    <style name="Widget.Alfresco.Action.Primary" parent="@style/Widget.MaterialComponents.Button.TextButton">
         <item name="android:fontFamily">@font/muli_regular</item>
-    </style>
-
-    <style name="AimsTheme.PrimaryAction" parent="@style/Widget.MaterialComponents.Button.TextButton">
-        <item name="android:fontFamily">@font/muli_regular</item>
-    </style>
-
-    <style name="AimsTheme.SecondaryAction" parent="@style/Widget.MaterialComponents.Button.TextButton">
-        <item name="android:fontFamily">@font/muli_regular</item>
-        <item name="android:textColor">#2981DF</item>
         <item name="android:textSize">14sp</item>
+        <item name="android:textColor">@color/alfresco_primary_dark</item>
+        <item name="android:letterSpacing">0</item>
     </style>
 
-    <style name="AimsTheme.SectionText">
+    <style name="Widget.Alfresco.Action.Secondary" parent="@style/Widget.MaterialComponents.Button.TextButton">
+        <item name="android:fontFamily">@font/muli_regular</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:textColor">@color/alfresco_secondary</item>
+        <item name="android:letterSpacing">0</item>
+        <item name="rippleColor">@color/alfresco_secondary_ripple</item>
+    </style>
+
+    <style name="Widget.Alfresco.SectionText">
         <item name="android:textColor">#000000</item>
         <item name="android:textSize">16sp</item>
         <item name="android:fontFamily">@font/muli_regular</item>
     </style>
 
-    <style name="AimsTheme.FooterText">
+    <style name="Widget.Alfresco.FooterText">
         <item name="android:textColor">#AFAFAF</item>
-        <item name="android:textSize">12sp</item>
+        <item name="android:textSize">11sp</item>
         <item name="android:fontFamily">@font/muli_light</item>
     </style>
 
-    <style name="AimsTheme.TextInputLayout">
+    <style name="Widget.Alfresco.TextField"/>
+    <style name="Widget.Alfresco.TextField.Layout">
         <item name="boxBackgroundColor">@color/transparent</item>
         <!--        <item name="endIconDrawable">@drawable/ic_clear_mini</item>-->
         <item name="endIconMode">clear_text</item>
     </style>
-    <style name="AimsTheme.TextInputEditText">
+    <style name="Widget.Alfresco.TextField.Edit">
         <item name="android:paddingLeft">0dp</item> <!-- removes implicit indentation -->
         <item name="android:paddingBottom">4dp</item> <!-- distance to underline -->
         <item name="android:layout_height">54dp</item>
         <item name="android:fontFamily">@font/muli_regular</item>
         <item name="android:textSize">16sp</item>
         <item name="android:textColor">#505050</item>
+        <item name="android:inputType">text</item>
+        <item name="android:maxLines">1</item>
     </style>
 
-    <style name="AimsTheme.ActionBar" parent="Base.ThemeOverlay.AppCompat.ActionBar">
-        <item name="android:tint">@color/aims_primary_dark</item>
+    <style name="Theme.Alfresco.ActionBar">
+        <item name="android:tint">@color/alfresco_primary_dark</item>
+    </style>
+
+    <style name="Widget.Alfresco.ActionBar" parent="Widget.MaterialComponents.ActionBar.Surface">
         <item name="android:itemTextAppearance">@android:color/black</item>
+        <item name="android:paddingLeft">?attr/actionBarPaddingLeft</item>
+        <item name="android:paddingRight">?attr/actionBarPaddingRight</item>
     </style>
 
 </resources>
