@@ -6,7 +6,7 @@ import androidx.fragment.app.FragmentActivity
 import com.auth.fragments.SsoAuthFragment
 import com.alfresco.android.aims.R
 
-abstract class FragmentBuilder(private val parent: FragmentActivity) {
+abstract class FragmentBuilder(protected val parent: FragmentActivity) {
     val extraConfiguration = Bundle()
 
     abstract fun build(args: Bundle): Fragment;

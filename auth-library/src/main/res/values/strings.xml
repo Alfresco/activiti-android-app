@@ -11,6 +11,28 @@
     <string name="auth_help_button">Need Help</string>
     <string name="auth_settings_button">Advanced Settings</string>
 
+    <string name="auth_help_overlay_title">Help</string>
+    <string name="auth_help_identity_body">
+        <![CDATA[<h1>How to connect to Alfresco</h5>
+        <h6>Alfresco Process Services URL<h6>
+        <p>You can enter the URL of your Alfresco Process Services instance. This will require you to enter your username &amp; password to authenticate.</p>
+        <p>Talk to your Alfresco administrator if you require help.</p>]]>
+    </string>
+
+    <string name="auth_help_identity_with_sso_body">
+        <![CDATA[<h1>How to connect to Alfresco</h5>
+        <h6>Alfresco Process Services URL<h6>
+        <p>You can enter the URL of your Alfresco Process Services instance. This will require you to enter your username &amp; password to authenticate.</p>
+        <h6>Sign in with SSO</h6>
+        <p>You can enter the URL of your Alfresco Identity Management Service in order to authenticate with your organisations identity provider.</p><p>*You will have to provide the URL of your Alfresco Process Services instance afterwards</p><p>Talk to your Alfresco administrator if you require help.</p>]]>
+    </string>
+
+    <string name="auth_help_settings_body">
+        <![CDATA[<h6>Authenticating with Alfresco</h6>
+        <p>If you are not using the default SSO settings, your values can be set here.</p>
+        <p>If you need help please contact your Alfresco administrator.</p>]]>
+    </string>
+
     <string name="auth_settings_prompt_success_title">Success!</string>
     <string name="auth_settings_prompt_success_subtitle">Changes to the configuration have been saved</string>
 

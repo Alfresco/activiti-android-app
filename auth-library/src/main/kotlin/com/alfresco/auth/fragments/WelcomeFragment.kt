@@ -26,6 +26,8 @@ class WelcomeFragment : DialogFragment() {
 
     private lateinit var connectUrlTil: TextInputLayout
 
+    private lateinit var helpBtn: Button
+
     private val rootView: View get() = view!!
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -51,6 +53,9 @@ class WelcomeFragment : DialogFragment() {
 
         advancedSettings = rootView.findViewById(R.id.btnAdvancedSettings)
         advancedSettings.setOnClickListener { showAdvancedSettings() }
+
+        helpBtn = rootView.findViewById(R.id.btnHelp)
+        helpBtn.setOnClickListener { showHelp() }
     }
 
     fun checkConnectUrl() {
@@ -63,6 +68,10 @@ class WelcomeFragment : DialogFragment() {
 
     fun showAdvancedSettings() {
         AdvancedSettingsFragment.with(activity!!).display()
+    }
+
+    fun showHelp() {
+        HelpFragment.with(activity!!).message(R.string.auth_help_identity_body).show()
     }
 
     class Builder(parent: FragmentActivity) : FragmentBuilder(parent) {
