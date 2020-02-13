@@ -22,8 +22,6 @@ class SnackbarContentLayout @JvmOverloads constructor(context: Context, attrs: A
     lateinit var actionView: Button
         private set
 
-    var backgroundTint: Int = -1
-
     override fun onFinishInflate() {
         super.onFinishInflate()
 
@@ -49,12 +47,5 @@ class SnackbarContentLayout @JvmOverloads constructor(context: Context, attrs: A
             actionView.alpha = 1f
             actionView.animate().alpha(0f).setDuration(duration.toLong()).setStartDelay(delay.toLong()).start()
         }
-    }
-
-    init {
-        val a = context.obtainStyledAttributes(attrs, R.styleable.SnackbarContentLayout)
-        val confirmationTint = a.getColor(R.styleable.SnackbarContentLayout_tintConfirmation, -1)
-        backgroundTint = confirmationTint
-        a.recycle()
     }
 }
