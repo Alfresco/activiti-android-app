@@ -24,6 +24,12 @@
     <color name="alfresco_primary_dark">#00754A</color>
     <color name="alfresco_secondary">#0055B8</color>
     <color name="alfresco_secondary_ripple">#1E2A7DE1</color>
+
+    <color name="alfresco_success">@color/alfresco_primary</color>
+    <color name="alfresco_warning">#FAC31C</color>
+    <color name="alfresco_info">@color/alfresco_secondary</color>
+    <color name="alfresco_error">#B8082A</color>
+
     <color name="aims_disabled_text">#61000000</color>
     <color name="aims_accent">@color/alfresco_primary</color>
     <color name="aims_primary_text">@android:color/black</color>

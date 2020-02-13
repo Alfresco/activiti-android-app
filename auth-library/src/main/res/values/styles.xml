@@ -39,20 +39,7 @@
     <style name="Widget"/>
     <style name="Widget.Alfresco"/>
 
-    <style name="Widget.Alfresco.Snackbar"/>
-
-    <style name="Widget.Alfresco.Snackbar.Title">
-        <item name="android:fontFamily">@font/muli_bold</item>
-        <item name="android:textColor">#ffffff</item>
-        <item name="android:textSize">16sp</item>
-    </style>
-
-    <style name="Widget.Alfresco.Snackbar.Message">
-        <item name="android:fontFamily">@font/muli_regular</item>
-        <item name="android:textColor">#ffffff</item>
-        <item name="android:textSize">14sp</item>
-    </style>
-
+    <!-- Buttons -->
     <style name="Widget.Alfresco.Button.Primary" parent="@style/Widget.MaterialComponents.Button">
         <item name="android:fontFamily">@font/muli_regular</item>
         <item name="android:textSize">22sp</item>
@@ -83,6 +70,7 @@
         <item name="rippleColor">@color/alfresco_secondary_ripple</item>
     </style>
 
+    <!-- TextViews -->
     <style name="Widget.Alfresco.SectionText">
         <item name="android:textColor">#000000</item>
         <item name="android:textSize">16sp</item>
@@ -95,6 +83,7 @@
         <item name="android:fontFamily">@font/muli_light</item>
     </style>
 
+    <!-- TextInputFields -->
     <style name="Widget.Alfresco.TextField"/>
     <style name="Widget.Alfresco.TextField.Layout">
         <item name="boxBackgroundColor">@color/transparent</item>
@@ -112,6 +101,7 @@
         <item name="android:maxLines">1</item>
     </style>
 
+    <!-- ActionBar-->
     <style name="Theme.Alfresco.ActionBar">
         <item name="android:tint">@color/alfresco_primary_dark</item>
     </style>
@@ -120,6 +110,21 @@
         <item name="android:itemTextAppearance">@android:color/black</item>
         <item name="android:paddingLeft">?attr/actionBarPaddingLeft</item>
         <item name="android:paddingRight">?attr/actionBarPaddingRight</item>
+    </style>
+
+    <!-- SnackBar -->
+    <style name="Widget.Alfresco.Snackbar" />
+
+    <style name="Widget.Alfresco.Snackbar.Title">
+        <item name="android:fontFamily">@font/muli_bold</item>
+        <item name="android:textColor">#ffffff</item>
+        <item name="android:textSize">16sp</item>
+    </style>
+
+    <style name="Widget.Alfresco.Snackbar.Message">
+        <item name="android:fontFamily">@font/muli_regular</item>
+        <item name="android:textColor">#ffffff</item>
+        <item name="android:textSize">14sp</item>
     </style>
 
 </resources>

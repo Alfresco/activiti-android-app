@@ -3,7 +3,6 @@ package com.alfresco.auth.fragments
 import android.os.Bundle
 import android.view.*
 import android.widget.TextView
-import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.Fragment
@@ -13,10 +12,12 @@ import com.alfresco.android.aims.R
 import com.alfresco.android.aims.databinding.FrAimsAdvancedSettingsBinding
 import com.alfresco.auth.activity.AIMSWelcomeViewModel
 import com.alfresco.common.FragmentBuilder
+import com.alfresco.ui.components.Snackbar
 
 class AdvancedSettingsFragment : DialogFragment() {
 
     private val viewModel: AIMSWelcomeViewModel by activityViewModels()
+    private val rootView: View get() = view!!
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -45,7 +46,11 @@ class AdvancedSettingsFragment : DialogFragment() {
         val action = item.actionView.findViewById<TextView>(R.id.tvSaveSettingsAction)
 
         action.setOnClickListener {
-            Toast.makeText(activity, "Settings Saved Successfully", Toast.LENGTH_LONG).show()
+            Snackbar.make(rootView,
+                    Snackbar.STYLE_SUCCESS,
+                    R.string.auth_settings_prompt_success_title,
+                    R.string.auth_settings_prompt_success_subtitle,
+                    Snackbar.LENGTH_LONG).show()
             viewModel.saveConfigChanges()
         }
 

@@ -11,6 +11,9 @@
     <string name="auth_help_button">Need Help</string>
     <string name="auth_settings_button">Advanced Settings</string>
 
+    <string name="auth_settings_prompt_success_title">Success!</string>
+    <string name="auth_settings_prompt_success_subtitle">Changes to the configuration have been saved</string>
+
     <!-- LOGIN -->
     <string name="login_settings_transport_section">Transport Protocol</string>
     <string name="login_settings_transport_https">HTTPS</string>
