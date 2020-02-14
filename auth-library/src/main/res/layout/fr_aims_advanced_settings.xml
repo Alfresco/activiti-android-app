@@ -36,6 +36,7 @@
                 android:layout_centerVertical="true"
                 android:fontFamily="@font/muli_regular"
                 android:text="@string/login_settings_transport_https"
+                app:textColorEnabled="@{viewModel.authConfigEditor.https}"
                 android:textSize="17sp" />
 
             <Switch
