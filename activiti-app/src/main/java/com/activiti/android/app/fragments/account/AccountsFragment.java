@@ -32,6 +32,7 @@ import androidx.fragment.app.FragmentActivity;
 
 import com.activiti.android.app.activity.MainActivity;
 import com.activiti.android.app.activity.WelcomeActivity;
+import com.activiti.android.app.activity.WelcomeSsoActivity;
 import com.activiti.android.platform.account.ActivitiAccount;
 import com.activiti.android.ui.fragments.accounts.AccountAdapter;
 import com.activiti.android.ui.fragments.accounts.AccountsFoundationFragment;
@@ -65,7 +66,7 @@ public class AccountsFragment extends AccountsFoundationFragment
         ActivitiAccount item = (ActivitiAccount) l.getItemAtPosition(position);
         if (item.getId() == AccountAdapter.ADD_ACCOUNT_ID)
         {
-            Intent i = new Intent(getActivity(), WelcomeActivity.class);
+            Intent i = new Intent(getActivity(), WelcomeSsoActivity.class);
             i.putExtra(WelcomeActivity.EXTRA_ADD_ACCOUNT, true);
             getActivity().startActivity(i);
         }
