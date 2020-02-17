@@ -33,6 +33,4 @@
     <string name="error_incorrect_password">This password is incorrect</string>
     <string name="error_field_required">This field is required</string>
     <string name="error_invalid_url">This address is invalid</string>
-
-    <string name="info_basic_cloud">Helpful introduction and information text about Process Services Cloud.</string>
 </resources>

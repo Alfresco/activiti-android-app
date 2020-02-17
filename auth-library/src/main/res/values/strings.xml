@@ -49,6 +49,13 @@
     <string name="auth_settings_reset">Reset to default</string>
     <string name="auth_settings_help">Need help</string>
 
+    <!-- Basic Auth -->
+    <string name="auth_basic_connected_to">@string/auth_sso_connected_to</string>
+    <string name="auth_basic_sign_in_button">Sign In</string>
+    <string name="auth_basic_info_cloud">Helpful introduction and information text about Process Services Cloud.</string>
+    <string name="auth_basic_user_hint">Username or Email</string>
+    <string name="auth_basic_password_hint">Password</string>
+
     <!-- Sso -->
     <string name="auth_sso_connected_to">Connected to</string>
     <string name="auth_sso_info">To allow successful single sign on access, please provide the location of your Process Services environment.</string>
