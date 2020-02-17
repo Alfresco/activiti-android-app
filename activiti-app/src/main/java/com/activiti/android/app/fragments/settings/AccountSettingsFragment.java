@@ -44,7 +44,7 @@ import androidx.fragment.app.FragmentActivity;
 
 import com.activiti.android.app.R;
 import com.activiti.android.app.activity.MainActivity;
-import com.activiti.android.app.activity.WelcomeActivity;
+import com.activiti.android.app.activity.WelcomeSsoActivity;
 import com.activiti.android.app.fragments.account.AccountEditFragment;
 import com.activiti.android.app.fragments.integration.alfresco.AlfrescoIntegrationFragment;
 import com.activiti.android.platform.account.AccountsPreferences;
@@ -305,7 +305,7 @@ public class AccountSettingsFragment extends AlfrescoFragment implements EditTex
 
                         if (isLatest)
                         {
-                            getActivity().startActivity(new Intent(getActivity(), WelcomeActivity.class));
+                            getActivity().startActivity(new Intent(getActivity(), WelcomeSsoActivity.class));
                             getActivity().finish();
                         }
                         else

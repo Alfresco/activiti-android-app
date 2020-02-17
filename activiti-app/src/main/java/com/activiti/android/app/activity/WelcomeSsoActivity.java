@@ -1,5 +1,6 @@
 package com.activiti.android.app.activity;
 
+import android.content.Intent;
 import android.widget.Toast;
 
 import com.activiti.android.app.fragments.account.OptionalFragment;
@@ -54,6 +55,7 @@ public class WelcomeSsoActivity extends WelcomeActivity {
 
     private void connect(SSOAuthorizationCredentials credentials) {
         String endpoint = "http://alfresco-cs-repository.mobile.dev.alfresco.me/activiti-app/";
+        authCredentials = credentials;
 
         try {
             activitiSession = new ActivitiSession.Builder().connect(endpoint, credentials).build();
@@ -162,6 +164,7 @@ public class WelcomeSsoActivity extends WelcomeActivity {
         if (acc == null) { return; }
         sync();
 
-        OptionalFragment.with(this).acocuntId(acc.getId()).back(false).display();
+        startActivity(new Intent(this, MainActivity.class));
+//        OptionalFragment.with(this).acocuntId(acc.getId()).back(false).display();
     }
 }
