@@ -9,9 +9,9 @@ class DefaultAuthConfig {
             return GlobalAuthConfig(
                     https = false,
                     port = "80",
-                    clientId = "iosapsapp",
+                    clientId = "alfresco-android-aps-app",
                     realm = "alfresco",
-                    redirectUrl = "iosapsapp://aims/auth",
+                    redirectUrl = "androidapsapp://aims/auth",
                     serviceDocuments = "activiti-app"
             )
         }

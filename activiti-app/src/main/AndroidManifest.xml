@@ -248,7 +248,7 @@
                 <data
                     android:host="aims"
                     android:path="/auth"
-                    android:scheme="iosapsapp" />
+                    android:scheme="androidapsapp" />
             </intent-filter>
         </activity>
 
