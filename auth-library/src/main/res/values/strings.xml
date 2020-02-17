@@ -10,7 +10,6 @@
     <string name="auth_cloud_sign_in_button">Cloud Sign In</string>
     <string name="auth_help_button">Need Help</string>
     <string name="auth_settings_button">@string/auth_settings_title</string>
-    <string name="auth_settings_title">Advanced Settings</string>
 
     <string name="auth_help_overlay_title">Help</string>
     <string name="auth_help_identity_body">
@@ -34,19 +33,19 @@
         <p>If you need help please contact your Alfresco administrator.</p>]]>
     </string>
 
+    <!-- Settings -->
+    <string name="auth_settings_title">Advanced Settings</string>
     <string name="auth_settings_prompt_success_title">Success!</string>
     <string name="auth_settings_prompt_success_subtitle">Changes to the configuration have been saved</string>
-
-    <!-- LOGIN -->
-    <string name="login_settings_transport_section">Transport Protocol</string>
-    <string name="login_settings_transport_https">HTTPS</string>
-    <string name="login_settings_transport_port">Port</string>
-    <string name="login_settings_service_section">Alfresco Process Services Settings</string>
-    <string name="login_settings_service_document">Service Documents</string>
-    <string name="login_settings_auth_section">Authentication</string>
-    <string name="login_settings_auth_realm">Realm</string>
-    <string name="login_settings_auth_client_id">Client ID</string>
-    <string name="login_settings_auth_redirect_url">Redirect URL</string>
-    <string name="login_settings_reset">Reset to default</string>
-    <string name="login_settings_help">Need help</string>
+    <string name="auth_settings_transport_section">Transport Protocol</string>
+    <string name="auth_settings_transport_https">HTTPS</string>
+    <string name="auth_settings_transport_port">Port</string>
+    <string name="auth_settings_service_section">Alfresco Process Services Settings</string>
+    <string name="auth_settings_service_document">Service Documents</string>
+    <string name="auth_settings_auth_section">Authentication</string>
+    <string name="auth_settings_auth_realm">Realm</string>
+    <string name="auth_settings_auth_client_id">Client ID</string>
+    <string name="auth_settings_auth_redirect_url">Redirect URL</string>
+    <string name="auth_settings_reset">Reset to default</string>
+    <string name="auth_settings_help">Need help</string>
 </resources>

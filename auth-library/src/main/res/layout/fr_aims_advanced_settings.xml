@@ -21,7 +21,7 @@
             style="@style/Widget.Alfresco.SectionText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/login_settings_transport_section" />
+            android:text="@string/auth_settings_transport_section" />
 
         <RelativeLayout
             android:id="@+id/tvProtocol"
@@ -35,7 +35,7 @@
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
                 android:fontFamily="@font/muli_regular"
-                android:text="@string/login_settings_transport_https"
+                android:text="@string/auth_settings_transport_https"
                 app:textColorEnabled="@{viewModel.authConfigEditor.https}"
                 android:textSize="17sp" />
 
@@ -55,7 +55,7 @@
             android:layout_height="wrap_content"
             android:layout_below="@id/tvProtocol"
             android:layout_marginTop="@dimen/aims_login_settings_field_spacing"
-            android:hint="@string/login_settings_transport_port">
+            android:hint="@string/auth_settings_transport_port">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/etPort"
@@ -75,7 +75,7 @@
             android:layout_height="wrap_content"
             android:layout_below="@+id/tilPort"
             android:layout_marginTop="@dimen/aims_login_settings_section_spacing"
-            android:text="@string/login_settings_service_section" />
+            android:text="@string/auth_settings_service_section" />
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/tilServiceDocument"
@@ -84,7 +84,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/aims_login_settings_header_spacing"
             android:layout_below="@id/tvServiceDocumentTitle"
-            android:hint="@string/login_settings_service_document">
+            android:hint="@string/auth_settings_service_document">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/etServiceDocument"
@@ -103,7 +103,7 @@
             android:layout_height="wrap_content"
             android:layout_below="@+id/tilServiceDocument"
             android:layout_marginTop="@dimen/aims_login_settings_section_spacing"
-            android:text="@string/login_settings_auth_section" />
+            android:text="@string/auth_settings_auth_section" />
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/tilRealm"
@@ -112,7 +112,7 @@
             android:layout_height="wrap_content"
             android:layout_below="@id/tvAuthentication"
             android:layout_marginTop="@dimen/aims_login_settings_header_spacing"
-            android:hint="@string/login_settings_auth_realm">
+            android:hint="@string/auth_settings_auth_realm">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/etRealm"
@@ -131,7 +131,7 @@
             android:layout_height="wrap_content"
             android:layout_below="@id/tilRealm"
             android:layout_marginTop="@dimen/aims_login_settings_field_spacing"
-            android:hint="@string/login_settings_auth_client_id">
+            android:hint="@string/auth_settings_auth_client_id">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/etClientId"
@@ -150,7 +150,7 @@
             android:layout_height="wrap_content"
             android:layout_below="@id/tilClientId"
             android:layout_marginTop="@dimen/aims_login_settings_field_spacing"
-            android:hint="@string/login_settings_auth_redirect_url">
+            android:hint="@string/auth_settings_auth_redirect_url">
 
             <com.google.android.material.textfield.TextInputEditText
                 style="@style/Widget.Alfresco.TextField.Edit"
@@ -169,7 +169,7 @@
             android:layout_below="@id/tilRedirectURL"
             android:layout_centerHorizontal="true"
             android:layout_marginTop="32dp"
-            android:text="@string/login_settings_reset"
+            android:text="@string/auth_settings_reset"
             android:onClick="@{() -> viewModel.resetToDefaultConfig()}"/>
 
         <com.google.android.material.button.MaterialButton
@@ -180,7 +180,7 @@
             android:layout_below="@id/btnResetSettings"
             android:layout_centerHorizontal="true"
             android:layout_marginTop="16dp"
-            android:text="@string/login_settings_help" />
+            android:text="@string/auth_settings_help" />
 
         <TextView
             android:id="@+id/tvCopyright"
