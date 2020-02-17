@@ -120,6 +120,7 @@
     <!-- ActionBar-->
     <style name="Theme.Alfresco.ActionBar">
         <item name="android:tint">@color/alfresco_primary_dark</item>
+        <item name="android:fontFamily">@font/muli_semibold</item>
     </style>
 
     <style name="Widget.Alfresco.ActionBar" parent="Widget.MaterialComponents.ActionBar.Surface">

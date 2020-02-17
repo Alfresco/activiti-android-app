@@ -39,6 +39,11 @@ class AdvancedSettingsFragment : DialogFragment() {
         viewModel.setHasNavigation(true)
     }
 
+    override fun onStart() {
+        super.onStart()
+        activity?.title = resources.getString(R.string.auth_settings_title)
+    }
+
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         inflater.inflate(R.menu.aims_advanced_settings, menu)
 

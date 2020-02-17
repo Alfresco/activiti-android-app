@@ -56,9 +56,7 @@ abstract class WelcomeActivity : AlfrescoAuthActivity<AIMSWelcomeViewModel>() {
 
     private fun setupToolbar() {
         toolbar = findViewById(R.id.toolbar)
-
         setSupportActionBar(toolbar)
-        supportActionBar?.setDisplayShowTitleEnabled(false)
     }
 
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {

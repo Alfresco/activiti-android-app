@@ -58,6 +58,11 @@ class WelcomeFragment : DialogFragment() {
         helpBtn.setOnClickListener { showHelp() }
     }
 
+    override fun onStart() {
+        super.onStart()
+        activity?.title = ""
+    }
+
     fun checkConnectUrl() {
         viewModel.checkAuthType(connectUrlTil.editText?.text.toString())
     }
