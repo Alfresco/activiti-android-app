@@ -34,6 +34,5 @@
     <string name="error_field_required">This field is required</string>
     <string name="error_invalid_url">This address is invalid</string>
 
-    <string name="info_sso">To allow successful single sign on access, please provide the location of your Process Services environment.</string>
     <string name="info_basic_cloud">Helpful introduction and information text about Process Services Cloud.</string>
 </resources>

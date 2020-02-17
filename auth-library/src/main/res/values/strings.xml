@@ -48,4 +48,10 @@
     <string name="auth_settings_auth_redirect_url">Redirect URL</string>
     <string name="auth_settings_reset">Reset to default</string>
     <string name="auth_settings_help">Need help</string>
+
+    <!-- Sso -->
+    <string name="auth_sso_connected_to">Connected to</string>
+    <string name="auth_sso_info">To allow successful single sign on access, please provide the location of your Process Services environment.</string>
+    <string name="auth_sso_repo_hint">Process repository location</string>
+    <string name="auth_sso_sign_in_button">Sign In With SSO</string>
 </resources>

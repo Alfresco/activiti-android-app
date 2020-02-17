@@ -43,14 +43,14 @@
     <style name="Widget.Alfresco.Button.Primary" parent="@style/Widget.MaterialComponents.Button">
         <item name="android:fontFamily">@font/muli_regular</item>
         <item name="android:textSize">22sp</item>
-        <item name="android:layout_height">64dp</item>
+        <item name="android:layout_height">72dp</item>
         <item name="android:letterSpacing">0</item>
     </style>
 
     <style name="Widget.Alfresco.Button.Secondary" parent="@style/Widget.MaterialComponents.Button.OutlinedButton">
         <item name="android:fontFamily">@font/muli_regular</item>
         <item name="android:textSize">22sp</item>
-        <item name="android:layout_height">64dp</item>
+        <item name="android:layout_height">72dp</item>
         <item name="android:letterSpacing">0</item>
         <item name="android:textColor">@color/alfresco_primary_dark</item>
     </style>
