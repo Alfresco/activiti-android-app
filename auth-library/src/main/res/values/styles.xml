@@ -103,7 +103,7 @@
     <style name="Widget.Alfresco.TextField"/>
     <style name="Widget.Alfresco.TextField.Layout">
         <item name="boxBackgroundColor">@color/transparent</item>
-        <!--        <item name="endIconDrawable">@drawable/ic_clear_mini</item>-->
+        <item name="endIconDrawable">@drawable/ic_clear_mini</item>
         <item name="endIconMode">clear_text</item>
     </style>
     <style name="Widget.Alfresco.TextField.Edit">
