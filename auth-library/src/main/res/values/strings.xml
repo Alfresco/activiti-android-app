@@ -28,7 +28,7 @@
     </string>
 
     <string name="auth_help_settings_body">
-        <![CDATA[<h6>Authenticating with Alfresco</h6>
+        <![CDATA[<h1>Authenticating with Alfresco</h1>
         <p>If you are not using the default SSO settings, your values can be set here.</p>
         <p>If you need help please contact your Alfresco administrator.</p>]]>
     </string>

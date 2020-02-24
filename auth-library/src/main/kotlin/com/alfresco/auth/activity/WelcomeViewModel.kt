@@ -3,6 +3,8 @@ package com.alfresco.auth.activity
 import android.content.Context
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import com.alfresco.android.aims.BuildConfig
+import com.alfresco.android.aims.R
 import com.alfresco.auth.AuthType
 import com.alfresco.auth.GlobalAuthConfig
 import com.alfresco.auth.ui.BaseAuthViewModel
@@ -36,11 +38,24 @@ class AIMSWelcomeViewModel(private val applicationContext: Context) : BaseAuthVi
 
     val startSSO: LiveData<String> get() = _startSSO
 
+    private val _onShowHelp = SingleLiveEvent<Int>()
+    private val _onShowSettings = SingleLiveEvent<Int>()
+
+    val onShowHelp: SingleLiveEvent<Int> = _onShowHelp
+    val onShowSettings: SingleLiveEvent<Int> = _onShowSettings
+
+    val endpoint = MutableLiveData<String>()
+
     private var identityServiceUrl: String? = null
     private var processRepositoryUrl: String? = null
 
     init {
         loadSavedConfig()
+
+        if (BuildConfig.DEBUG) {
+            endpoint.value = "alfresco-identity-service.mobile.dev.alfresco.me"
+//            endpoint.value = "activiti.alfresco.com"
+        }
     }
 
     fun cloudAuthType() {
@@ -75,6 +90,28 @@ class AIMSWelcomeViewModel(private val applicationContext: Context) : BaseAuthVi
     fun startEditing() {
         _authConfigEditor = AuthConfigEditor()
         _authConfigEditor.reset(globalAuthConfig)
+    }
+
+    fun connect() {
+        endpoint.value?.let {
+            checkAuthType(it)
+        }
+    }
+
+    fun cloudConnect() {
+        cloudAuthType()
+    }
+
+    fun showSettings() {
+        onShowSettings.value = 0
+    }
+
+    fun showWelcomeHelp() {
+        onShowHelp.value = R.string.auth_help_identity_body
+    }
+
+    fun showSettingsHelp() {
+        onShowHelp.value = R.string.auth_help_settings_body
     }
 
     @Suppress("NULLABILITY_MISMATCH_BASED_ON_JAVA_ANNOTATIONS")

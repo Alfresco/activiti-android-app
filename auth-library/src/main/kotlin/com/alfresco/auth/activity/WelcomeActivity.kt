@@ -6,10 +6,13 @@ import android.view.MenuItem
 import android.view.View
 import android.widget.RelativeLayout
 import android.widget.Toast
+import androidx.annotation.StringRes
 import androidx.appcompat.widget.Toolbar
 import androidx.core.view.ViewCompat
 import com.alfresco.android.aims.R
+import com.alfresco.auth.fragments.AdvancedSettingsFragment
 import com.alfresco.auth.fragments.BasicAuthFragment
+import com.alfresco.auth.fragments.HelpFragment
 import com.alfresco.auth.fragments.WelcomeFragment
 import com.alfresco.common.getViewModel
 import com.alfresco.auth.ui.AlfrescoAuthActivity
@@ -52,6 +55,9 @@ abstract class WelcomeActivity : AlfrescoAuthActivity<AIMSWelcomeViewModel>() {
         observe(viewModel.hasNavigation, ::onNavigation)
 
         observe(viewModel.startSSO, ::aimsLogin)
+
+        observe(viewModel.onShowHelp, ::showHelp)
+        observe(viewModel.onShowSettings, ::showSettings)
     }
 
     private fun setupToolbar() {
@@ -113,5 +119,13 @@ abstract class WelcomeActivity : AlfrescoAuthActivity<AIMSWelcomeViewModel>() {
                 Toast.makeText(this, "Login Failed: " + authResult.error, Toast.LENGTH_LONG).show()
             }
         }
+    }
+
+    private fun showSettings(ignored: Int) {
+        AdvancedSettingsFragment.with(this).display()
+    }
+
+    private fun showHelp(@StringRes msgResId: Int) {
+        HelpFragment.with(this).message(msgResId).show()
     }
 }

@@ -1,6 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
+    <data>
+        <variable
+            name="viewModel"
+            type="com.alfresco.auth.activity.AIMSWelcomeViewModel" />
+    </data>
+
+<ScrollView
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fillViewport="true">
@@ -42,7 +49,7 @@
                 style="@style/Widget.Alfresco.TextField.Edit"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:ellipsize="end" />
+                android:text="@={viewModel.endpoint}"/>
 
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -51,7 +58,8 @@
             style="@style/Widget.Alfresco.Button.Primary"
             android:layout_width="match_parent"
             android:layout_marginTop="20dp"
-            android:text="@string/auth_connect_button" />
+            android:text="@string/auth_connect_button"
+            android:onClick="@{() -> viewModel.connect()}"/>
 
         <RelativeLayout
             android:id="@+id/rlSeparator"
@@ -95,6 +103,7 @@
             android:layout_width="match_parent"
             android:layout_marginTop="10dp"
             android:text="@string/auth_cloud_sign_in_button"
+            android:onClick="@{() -> viewModel.cloudConnect()}"
             android:visibility="gone" />
 
         <View
@@ -114,7 +123,8 @@
                 style="@style/Widget.Alfresco.Action.Primary"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/auth_settings_button" />
+                android:text="@string/auth_settings_button"
+                android:onClick="@{() -> viewModel.showSettings()}"/>
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/btnHelp"
@@ -122,7 +132,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
-                android:text="@string/auth_help_button" />
+                android:text="@string/auth_help_button"
+                android:onClick="@{() -> viewModel.showWelcomeHelp()}"/>
 
             <TextView
                 android:id="@+id/tvCopyright"
@@ -135,3 +146,4 @@
         </LinearLayout>
     </LinearLayout>
 </ScrollView>
+</layout>
