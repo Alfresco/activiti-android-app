@@ -35,6 +35,7 @@ class HelpFragment : BottomSheetDialogFragment() {
     }
 
     class Builder(parent: FragmentActivity) : FragmentBuilder(parent) {
+        override val fragmentTag = TAG
 
         override fun build(args: Bundle): Fragment {
             val fragment = HelpFragment()

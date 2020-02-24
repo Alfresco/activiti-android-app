@@ -44,7 +44,8 @@ class AIMSWelcomeViewModel(private val applicationContext: Context) : BaseAuthVi
     val onShowHelp: SingleLiveEvent<Int> = _onShowHelp
     val onShowSettings: SingleLiveEvent<Int> = _onShowSettings
 
-    val endpoint = MutableLiveData<String>()
+    val identityUrl = MutableLiveData<String>()
+    val applicationUrl = MutableLiveData<String>()
 
     private var identityServiceUrl: String? = null
     private var processRepositoryUrl: String? = null
@@ -53,8 +54,9 @@ class AIMSWelcomeViewModel(private val applicationContext: Context) : BaseAuthVi
         loadSavedConfig()
 
         if (BuildConfig.DEBUG) {
-            endpoint.value = "alfresco-identity-service.mobile.dev.alfresco.me"
+            identityUrl.value = "alfresco-identity-service.mobile.dev.alfresco.me"
 //            endpoint.value = "activiti.alfresco.com"
+            applicationUrl.value = "alfresco-cs-repository.mobile.dev.alfresco.me"
         }
     }
 
@@ -93,13 +95,17 @@ class AIMSWelcomeViewModel(private val applicationContext: Context) : BaseAuthVi
     }
 
     fun connect() {
-        endpoint.value?.let {
+        identityUrl.value?.let {
             checkAuthType(it)
         }
     }
 
     fun cloudConnect() {
         cloudAuthType()
+    }
+
+    fun ssoLogin() {
+        ssoLogin(identityUrl.value!!, applicationUrl.value!!)
     }
 
     fun showSettings() {
@@ -112,6 +118,10 @@ class AIMSWelcomeViewModel(private val applicationContext: Context) : BaseAuthVi
 
     fun showSettingsHelp() {
         onShowHelp.value = R.string.auth_help_settings_body
+    }
+
+    fun showSsoHelp() {
+        onShowHelp.value = R.string.auth_help_sso_body
     }
 
     @Suppress("NULLABILITY_MISMATCH_BASED_ON_JAVA_ANNOTATIONS")

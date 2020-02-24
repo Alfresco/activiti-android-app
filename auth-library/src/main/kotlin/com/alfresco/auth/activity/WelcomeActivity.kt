@@ -13,12 +13,12 @@ import com.alfresco.android.aims.R
 import com.alfresco.auth.fragments.AdvancedSettingsFragment
 import com.alfresco.auth.fragments.BasicAuthFragment
 import com.alfresco.auth.fragments.HelpFragment
+import com.alfresco.auth.fragments.SsoAuthFragment
 import com.alfresco.auth.fragments.WelcomeFragment
 import com.alfresco.common.getViewModel
 import com.alfresco.auth.ui.AlfrescoAuthActivity
 import com.alfresco.auth.ui.PkceAuthUiModel
 import com.alfresco.auth.ui.observe
-import com.auth.fragments.SsoAuthFragment
 
 
 abstract class WelcomeActivity : AlfrescoAuthActivity<AIMSWelcomeViewModel>() {
@@ -94,9 +94,7 @@ abstract class WelcomeActivity : AlfrescoAuthActivity<AIMSWelcomeViewModel>() {
     fun onAuthType(authType: AuthenticationType) {
         when (authType) {
             is AuthenticationType.SSO -> {
-                SsoAuthFragment.with(this)
-                        .identityServiceUrl(authType.endpoint)
-                        .processRepositoryLocation("alfresco-cs-repository.mobile.dev.alfresco.me").display()
+                SsoAuthFragment.with(this).display()
             }
 
             is AuthenticationType.Basic -> {

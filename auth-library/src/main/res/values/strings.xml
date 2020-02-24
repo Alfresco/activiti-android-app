@@ -27,6 +27,13 @@
         <p>You can enter the URL of your Alfresco Identity Management Service in order to authenticate with your organisations identity provider.</p><p>*You will have to provide the URL of your Alfresco Process Services instance afterwards</p><p>Talk to your Alfresco administrator if you require help.</p>]]>
     </string>
 
+    <string name="auth_help_sso_body">
+        <![CDATA[<h6>Process Repository Location</h6>
+        <p>Alfresco Process Services URL:</p>
+        <p>This is the URL of your Alfresco Process Services instance.</p>
+        <p>Talk to your Alfresco administrator if you require help.</p>]]>
+    </string>
+
     <string name="auth_help_settings_body">
         <![CDATA[<h1>Authenticating with Alfresco</h1>
         <p>If you are not using the default SSO settings, your values can be set here.</p>

@@ -58,6 +58,7 @@ class BasicAuthFragment : DialogFragment() {
     }
 
     class Builder(parent: FragmentActivity) : FragmentBuilder(parent) {
+        override val fragmentTag = TAG
 
         fun withHostname(hostname: String): Builder {
             extraConfiguration.putString(ARG_HOSTNAME, hostname)
