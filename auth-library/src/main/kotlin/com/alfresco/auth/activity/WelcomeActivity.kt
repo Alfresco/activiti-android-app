@@ -17,7 +17,6 @@ import com.alfresco.auth.fragments.SsoAuthFragment
 import com.alfresco.auth.fragments.WelcomeFragment
 import com.alfresco.common.getViewModel
 import com.alfresco.auth.ui.AlfrescoAuthActivity
-import com.alfresco.auth.ui.PkceAuthUiModel
 import com.alfresco.auth.ui.observe
 
 
@@ -49,12 +48,11 @@ abstract class WelcomeActivity : AlfrescoAuthActivity<AIMSWelcomeViewModel>() {
             WelcomeFragment.with(this).replace()
         }
 
-        observe(viewModel.authType, ::onAuthType)
-        observe(viewModel.authResult, ::onPkceAuthUiModel)
-
         observe(viewModel.hasNavigation, ::onNavigation)
 
+        observe(viewModel.onAuthType, ::onAuthType)
         observe(viewModel.startSSO, ::aimsLogin)
+        observe(viewModel.onCredentials, ::onCredentials)
 
         observe(viewModel.onShowHelp, ::showHelp)
         observe(viewModel.onShowSettings, ::showSettings)
@@ -89,9 +87,13 @@ abstract class WelcomeActivity : AlfrescoAuthActivity<AIMSWelcomeViewModel>() {
         }
     }
 
-    abstract fun onCredentials(user: String?, token: String?)
+    abstract fun onCredentials(credentials: Credentials, endpoint: String)
 
-    fun onAuthType(authType: AuthenticationType) {
+    private fun onCredentials(credentials: Credentials) {
+        onCredentials(credentials, viewModel.getApplicationServiceUrl())
+    }
+
+    private fun onAuthType(authType: AuthenticationType) {
         when (authType) {
             is AuthenticationType.SSO -> {
                 SsoAuthFragment.with(this).display()
@@ -103,18 +105,6 @@ abstract class WelcomeActivity : AlfrescoAuthActivity<AIMSWelcomeViewModel>() {
 
             is AuthenticationType.Unknown -> {
                 Toast.makeText(this, "Auth type: unknown", Toast.LENGTH_LONG).show()
-            }
-        }
-    }
-
-    fun onPkceAuthUiModel(authResult: PkceAuthUiModel) {
-        when (authResult.success) {
-            true -> {
-                onCredentials(authResult.userEmail, authResult.accessToken)
-            }
-
-            false -> {
-                Toast.makeText(this, "Login Failed: " + authResult.error, Toast.LENGTH_LONG).show()
             }
         }
     }

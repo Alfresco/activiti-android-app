@@ -5,11 +5,13 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.fragment.app.activityViewModels
 import com.alfresco.android.aims.R
+import com.alfresco.android.aims.databinding.FrAimsBasicAuthBinding
 import com.alfresco.auth.activity.AIMSWelcomeViewModel
 import com.alfresco.common.FragmentBuilder
 
@@ -24,7 +26,10 @@ class BasicAuthFragment : DialogFragment() {
     private val rootView: View get() = view!!
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.fr_aims_basic_auth, container, false)
+        val binding = DataBindingUtil.inflate<FrAimsBasicAuthBinding>(inflater, R.layout.fr_aims_basic_auth, container, false)
+        binding.viewModel = viewModel
+        binding.lifecycleOwner = this
+        return binding.root
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {

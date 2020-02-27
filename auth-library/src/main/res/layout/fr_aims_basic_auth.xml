@@ -1,139 +1,154 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:paddingStart="@dimen/aims_theme_default_padding"
-    android:paddingEnd="@dimen/aims_theme_default_padding">
+    xmlns:tools="http://schemas.android.com/tools">
 
-    <ImageView
-        android:id="@+id/ivLogo"
-        android:layout_width="wrap_content"
-        android:layout_height="70dp"
-        android:layout_marginTop="40dp"
-        android:src="@drawable/ic_alfresco_branding_mobile" />
+    <data>
 
-    <TextView
-        android:id="@+id/tvProcessServicesAppLbl"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/ivLogo"
-        android:fontFamily="@font/muli_light"
-        android:text="Process Services App"
-        android:textColor="#FF000000"
-        android:textSize="24sp" />
+        <variable
+            name="viewModel"
+            type="com.alfresco.auth.activity.AIMSWelcomeViewModel" />
+    </data>
 
     <RelativeLayout
-        android:id="@+id/rlBasicAuthInfo"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/tvProcessServicesAppLbl"
-        android:layout_marginTop="25dp">
+        android:layout_height="match_parent"
+        android:paddingStart="@dimen/aims_theme_default_padding"
+        android:paddingEnd="@dimen/aims_theme_default_padding">
+
+        <ImageView
+            android:id="@+id/ivLogo"
+            android:layout_width="wrap_content"
+            android:layout_height="70dp"
+            android:layout_marginTop="40dp"
+            android:src="@drawable/ic_alfresco_branding_mobile" />
 
         <TextView
-            android:id="@+id/tvSigninTo"
-            style="@style/Widget.Alfresco.BodyText"
+            android:id="@+id/tvProcessServicesAppLbl"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:gravity="start"
-            android:text="@string/auth_basic_connected_to"
-            android:textColor="#AFAFAF"
-            android:textSize="12sp" />
+            android:layout_below="@id/ivLogo"
+            android:fontFamily="@font/muli_light"
+            android:text="Process Services App"
+            android:textColor="#FF000000"
+            android:textSize="24sp" />
 
-        <TextView
-            android:id="@+id/tvConnectUrl"
-            style="@style/Widget.Alfresco.BodyText"
+        <RelativeLayout
+            android:id="@+id/rlBasicAuthInfo"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@id/tvSigninTo"
-            android:layout_marginTop="2dp"
-            android:gravity="start"
-            tools:text="Identity service URL"
-            android:textColor="#AFAFAF" />
+            android:layout_below="@id/tvProcessServicesAppLbl"
+            android:layout_marginTop="25dp">
 
-        <TextView
-            android:id="@+id/tvBasicAuthInfoCloud"
-            style="@style/Widget.Alfresco.BodyText"
+            <TextView
+                android:id="@+id/tvSigninTo"
+                style="@style/Widget.Alfresco.BodyText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="start"
+                android:text="@string/auth_basic_connected_to"
+                android:textColor="#AFAFAF"
+                android:textSize="12sp" />
+
+            <TextView
+                android:id="@+id/tvConnectUrl"
+                style="@style/Widget.Alfresco.BodyText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/tvSigninTo"
+                android:layout_marginTop="2dp"
+                android:gravity="start"
+                android:text="@{viewModel.identityUrl}"
+                android:textColor="#AFAFAF"
+                tools:text="Identity service URL" />
+
+            <TextView
+                android:id="@+id/tvBasicAuthInfoCloud"
+                style="@style/Widget.Alfresco.BodyText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="start"
+                android:text="@string/auth_basic_info_cloud" />
+        </RelativeLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/tilUsernameEmail"
+            style="@style/Widget.Alfresco.TextField.Layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:gravity="start"
-            android:text="@string/auth_basic_info_cloud" />
-    </RelativeLayout>
+            android:layout_below="@id/rlBasicAuthInfo"
+            android:layout_marginTop="10dp"
+            android:hint="@string/auth_basic_user_hint"
+            app:endIconDrawable="@drawable/ic_person"
+            app:endIconMode="custom"
+            app:endIconTint="@color/text_input_icon_tint">
 
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/tilUsernameEmail"
-        style="@style/Widget.Alfresco.TextField.Layout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/rlBasicAuthInfo"
-        android:layout_marginTop="10dp"
-        android:hint="@string/auth_basic_user_hint"
-        app:endIconDrawable="@drawable/ic_person"
-        app:endIconMode="custom"
-        app:endIconTint="@color/text_input_icon_tint">
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/etUsernameEmail"
+                style="@style/Widget.Alfresco.TextField.Edit"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@={viewModel.basicAuth.email}" />
 
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/etUsernameEmail"
-            style="@style/Widget.Alfresco.TextField.Edit"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+        </com.google.android.material.textfield.TextInputLayout>
 
-    </com.google.android.material.textfield.TextInputLayout>
-
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/tilPassword"
-        style="@style/Widget.Alfresco.TextField.Layout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/tilUsernameEmail"
-        android:layout_marginTop="10dp"
-        android:hint="@string/auth_basic_password_hint"
-        app:endIconMode="password_toggle"
-        app:endIconTint="@color/text_input_icon_tint">
-
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/etPassword"
-            style="@style/Widget.Alfresco.TextField.Edit"
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/tilPassword"
+            style="@style/Widget.Alfresco.TextField.Layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:inputType="textPassword" />
+            android:layout_below="@+id/tilUsernameEmail"
+            android:layout_marginTop="10dp"
+            android:hint="@string/auth_basic_password_hint"
+            app:endIconMode="password_toggle"
+            app:endIconTint="@color/text_input_icon_tint">
 
-    </com.google.android.material.textfield.TextInputLayout>
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/etPassword"
+                style="@style/Widget.Alfresco.TextField.Edit"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="textPassword"
+                android:text="@={viewModel.basicAuth.password}" />
 
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/btnSSOSignIn"
-        style="@style/Widget.Alfresco.Button.Primary"
-        android:layout_width="match_parent"
-        android:layout_below="@id/tilPassword"
-        android:layout_marginTop="20dp"
-        android:text="@string/auth_basic_sign_in_button"
-        app:icon="@drawable/ic_sign_in"
-        app:iconGravity="end" />
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:gravity="center"
-        android:orientation="vertical">
+        </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.button.MaterialButton
-            android:id="@+id/btnHelp"
-            style="@style/Widget.Alfresco.Action.Secondary"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:text="@string/auth_help_button" />
+            android:id="@+id/btnSSOSignIn"
+            style="@style/Widget.Alfresco.Button.Primary"
+            android:layout_width="match_parent"
+            android:layout_below="@id/tilPassword"
+            android:layout_marginTop="20dp"
+            android:onClick="@{() -> viewModel.basicAuth.login()}"
+            android:text="@string/auth_basic_sign_in_button"
+            app:icon="@drawable/ic_sign_in"
+            app:iconGravity="end" />
 
-        <TextView
-            android:id="@+id/tvCopyright"
-            style="@style/Widget.Alfresco.FooterText"
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="30dp"
-            android:layout_marginBottom="10dp"
-            android:text="@string/general_copyright_notice" />
-    </LinearLayout>
+            android:layout_alignParentBottom="true"
+            android:gravity="center"
+            android:orientation="vertical">
 
-</RelativeLayout>
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnHelp"
+                style="@style/Widget.Alfresco.Action.Secondary"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:text="@string/auth_help_button"
+                android:visibility="gone" />
+
+            <TextView
+                android:id="@+id/tvCopyright"
+                style="@style/Widget.Alfresco.FooterText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="30dp"
+                android:layout_marginBottom="10dp"
+                android:text="@string/general_copyright_notice" />
+        </LinearLayout>
+    </RelativeLayout>
+</layout>

@@ -26,56 +26,63 @@ class AIMSWelcomeViewModel(private val applicationContext: Context) : BaseAuthVi
 
     val hasNavigation: LiveData<Boolean> get() = _hasNavigation
 
-    private val _authType = MutableLiveData<AuthenticationType>()
-
-    val authType: LiveData<AuthenticationType> get() = _authType
-
-    private val _authResult = MutableLiveData<PkceAuthUiModel>()
-
-    val authResult: LiveData<PkceAuthUiModel> get() = _authResult
-
     private val _startSSO = SingleLiveEvent<String>()
 
     val startSSO: LiveData<String> get() = _startSSO
 
+    private val _onAuthType = SingleLiveEvent<AuthenticationType>()
+    private val _onCredentials = SingleLiveEvent<Credentials>()
     private val _onShowHelp = SingleLiveEvent<Int>()
     private val _onShowSettings = SingleLiveEvent<Int>()
 
+    val onAuthType: SingleLiveEvent<AuthenticationType> = _onAuthType
+    val onCredentials: SingleLiveEvent<Credentials> = _onCredentials
     val onShowHelp: SingleLiveEvent<Int> = _onShowHelp
     val onShowSettings: SingleLiveEvent<Int> = _onShowSettings
 
     val identityUrl = MutableLiveData<String>()
     val applicationUrl = MutableLiveData<String>()
 
-    private var identityServiceUrl: String? = null
-    private var processRepositoryUrl: String? = null
-
     init {
         loadSavedConfig()
 
         if (BuildConfig.DEBUG) {
             identityUrl.value = "alfresco-identity-service.mobile.dev.alfresco.me"
-//            endpoint.value = "activiti.alfresco.com"
+//            identityUrl.value = "activiti.alfresco.com"
             applicationUrl.value = "alfresco-cs-repository.mobile.dev.alfresco.me"
         }
     }
 
-    fun cloudAuthType() {
-        _authType.value = AuthenticationType.Basic(hostname = "activiti.alfresco.com", withCloud = true)
+    fun getApplicationServiceUrl(): String {
+        val protocol = if (globalAuthConfig.https) "https" else "http"
+        val port = if ((globalAuthConfig.https && globalAuthConfig.port == "443") ||
+                (!globalAuthConfig.https && globalAuthConfig.port == "80")) ""
+                else globalAuthConfig.port
+        return "${protocol}://${applicationUrl.value}:${port}/${globalAuthConfig.serviceDocuments}/"
     }
 
     override fun handleAuthType(endpoint: String, authType: AuthType) {
         when (authType) {
-            AuthType.SSO ->  _authType.value = AuthenticationType.SSO(endpoint)
+            AuthType.SSO ->  _onAuthType.value = AuthenticationType.SSO(endpoint)
 
-            AuthType.BASIC -> _authType.value = AuthenticationType.Basic(hostname = endpoint, withCloud = false)
+            AuthType.BASIC -> _onAuthType.value = AuthenticationType.Basic(hostname = endpoint, withCloud = false)
 
-            AuthType.UNKNOWN -> _authType.value = AuthenticationType.Unknown()
+            AuthType.UNKNOWN -> _onAuthType.value = AuthenticationType.Unknown()
         }
     }
 
     override fun handleSSOTokenResponse(model: PkceAuthUiModel) {
-        _authResult.value = model
+        when (model.success) {
+            true -> {
+                // TODO: nullability check
+                onCredentials.value = Credentials.Sso(model.userEmail!!, model.accessToken!!)
+            }
+
+            false -> {
+                // TODO: notify error
+//                Toast.makeText(this, "Login Failed: " + authResult.error, Toast.LENGTH_LONG).show()
+            }
+        }
     }
 
     fun setHasNavigation(enableNavigation: Boolean) {
@@ -83,9 +90,6 @@ class AIMSWelcomeViewModel(private val applicationContext: Context) : BaseAuthVi
     }
 
     fun ssoLogin(identityServiceUrl: String, processRepositoryUrl: String) {
-        this.identityServiceUrl = identityServiceUrl
-        this.processRepositoryUrl = processRepositoryUrl
-
         _startSSO.value = identityServiceUrl
     }
 
@@ -101,7 +105,7 @@ class AIMSWelcomeViewModel(private val applicationContext: Context) : BaseAuthVi
     }
 
     fun cloudConnect() {
-        cloudAuthType()
+        _onAuthType.value = AuthenticationType.Basic(hostname = "activiti.alfresco.com", withCloud = true)
     }
 
     fun ssoLogin() {
@@ -152,6 +156,20 @@ class AIMSWelcomeViewModel(private val applicationContext: Context) : BaseAuthVi
 
     fun resetToDefaultConfig() {
         authConfigEditor.reset(defaultAuthConfig)
+    }
+
+    val basicAuth = BasicAuth()
+    inner class BasicAuth {
+        val email = MutableLiveData<String>()
+        val password = MutableLiveData<String>()
+
+        fun login() {
+            // Assume application url is the same as identity for basic auth
+            applicationUrl.value = identityUrl.value
+
+            // TODO: nullability check
+            onCredentials.value = Credentials.Basic(email.value!!, password.value!!)
+        }
     }
 
     companion object {
@@ -211,3 +229,7 @@ sealed class AuthenticationType {
     class Unknown : AuthenticationType()
 }
 
+sealed class Credentials {
+    data class Basic(val username: String, val password: String) : Credentials()
+    data class Sso(val username: String, val token: String) : Credentials()
+}

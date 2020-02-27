@@ -3,7 +3,6 @@ package com.activiti.android.app.activity;
 import android.content.Intent;
 import android.widget.Toast;
 
-import com.activiti.android.app.fragments.account.OptionalFragment;
 import com.activiti.android.platform.EventBusManager;
 import com.activiti.android.platform.account.AccountsPreferences;
 import com.activiti.android.platform.account.ActivitiAccount;
@@ -19,10 +18,14 @@ import com.activiti.android.sdk.ActivitiSession;
 import com.activiti.android.sdk.model.runtime.AppVersion;
 import com.activiti.client.api.model.idm.UserRepresentation;
 import com.activiti.client.api.model.runtime.AppVersionRepresentation;
+import com.alfresco.auth.activity.Credentials;
 import com.alfresco.auth.activity.WelcomeActivity;
 import com.alfresco.client.AuthorizationCredentials;
+import com.alfresco.client.BasicAuthorizationCredentials;
 import com.alfresco.client.SSOAuthorizationCredentials;
 import com.squareup.otto.Subscribe;
+
+import org.jetbrains.annotations.NotNull;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -49,13 +52,19 @@ public class WelcomeSsoActivity extends WelcomeActivity {
     }
 
     @Override
-    public void onCredentials(String user, String token) {
-        connect(new SSOAuthorizationCredentials(user, token));
+    public void onCredentials(@NotNull Credentials credentials, @NotNull String endpoint) {
+        if (credentials instanceof Credentials.Basic) {
+            Credentials.Basic it = (Credentials.Basic) credentials;
+            connect(new BasicAuthorizationCredentials(it.getUsername(), it.getPassword()), endpoint);
+        } else if (credentials instanceof Credentials.Sso) {
+            Credentials.Sso it = (Credentials.Sso) credentials;
+            connect(new SSOAuthorizationCredentials(it.getUsername(), it.getToken()), endpoint);
+        }
     }
 
-    private void connect(SSOAuthorizationCredentials credentials) {
-        String endpoint = "http://alfresco-cs-repository.mobile.dev.alfresco.me/activiti-app/";
+    private void connect(AuthorizationCredentials credentials, String endpoint) {
         authCredentials = credentials;
+        onLoading(true);
 
         try {
             activitiSession = new ActivitiSession.Builder().connect(endpoint, credentials).build();
@@ -64,7 +73,7 @@ public class WelcomeSsoActivity extends WelcomeActivity {
                 public void onResponse(Call<UserRepresentation> call, Response<UserRepresentation> response) {
                     if (response.isSuccessful()) {
                         user = response.body();
-                        retrieveServerInfo();
+                        retrieveServerInfo(endpoint);
                     } else if (response.code() == 401) {
                         Toast.makeText(WelcomeSsoActivity.this, "Get Profile failed! 401", Toast.LENGTH_LONG).show();
                     }
@@ -80,29 +89,28 @@ public class WelcomeSsoActivity extends WelcomeActivity {
         }
     }
 
-    private void retrieveServerInfo() {
+    private void retrieveServerInfo(String endpoint) {
         activitiSession.getServiceRegistry().getInfoService().getInfo(new Callback<AppVersionRepresentation>() {
             @Override
             public void onResponse(Call<AppVersionRepresentation> call, Response<AppVersionRepresentation> response) {
                 if (response.isSuccessful()) {
                     version = new AppVersion(response.body());
-                    createAccount();
+                    createAccount(endpoint);
                 } else {
                     version = null;
-                    createAccount();
+                    createAccount(endpoint);
                 }
             }
 
             @Override
             public void onFailure(Call<AppVersionRepresentation> call, Throwable t) {
                 version = null;
-                createAccount();
+                createAccount(endpoint);
             }
         });
     }
 
-    private void createAccount() {
-        String endpoint = "http://alfresco-cs-repository.mobile.dev.alfresco.me/activiti-app/";
+    private void createAccount(String endpoint) {
         acc = null;
 
         if (user == null) {
@@ -164,6 +172,7 @@ public class WelcomeSsoActivity extends WelcomeActivity {
         if (acc == null) { return; }
         sync();
 
+        onLoading(false);
         startActivity(new Intent(this, MainActivity.class));
 //        OptionalFragment.with(this).acocuntId(acc.getId()).back(false).display();
     }
