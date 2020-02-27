@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar"
+        style="@style/Widget.Alfresco.ActionBar"
+        android:theme="@style/Theme.Alfresco.ActionBar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"/>
+
+    <RelativeLayout
+        android:id="@+id/rlProgress"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/toolbar"
+        android:visibility="invisible">
+
+        <View
+            android:id="@+id/progressBarBackground"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:alpha="0.87"
+            android:background="#FFFFFFFF"
+            android:clickable="true"
+            android:focusable="true" />
+
+        <ProgressBar
+            android:id="@+id/progressBar"
+            style="?android:attr/progressBarStyleLarge"
+            android:layout_width="match_parent"
+            android:layout_height="100dp"
+            android:layout_centerInParent="true" />
+
+        <TextView
+            android:id="@+id/progressBarStatus"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/progressBar"
+            android:layout_marginTop="16dp"
+            android:fontFamily="@font/muli_light"
+            android:gravity="center"
+            android:text="Connecting"
+            android:textColor="#919191"
+            android:textSize="16sp" />
+
+    </RelativeLayout>
+
+
+    <FrameLayout
+        android:id="@+id/frame_placeholder"
+        android:layout_width="456dp"
+        android:layout_height="562dp"
+        android:layout_centerInParent="true"
+        android:elevation="22dp"
+        android:background="@drawable/rounded_corner_back"/>
+
+</RelativeLayout>
