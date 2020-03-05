@@ -23,6 +23,18 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+    <com.alfresco.ui.components.BackgroundView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:contentDescription=""
+        android:src="@drawable/bg_alfresco"
+        android:visibility="@integer/auth_visibility_tablet_only"/>
+
+    <FrameLayout
+        android:id="@+id/frame_placeholder"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar"
         style="@style/Widget.Alfresco.ActionBar"
@@ -34,7 +46,6 @@
         android:id="@+id/rlProgress"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@id/toolbar"
         android:visibility="invisible">
 
         <View
@@ -66,11 +77,5 @@
             android:textSize="16sp" />
 
     </RelativeLayout>
-
-    <FrameLayout
-        android:id="@+id/frame_placeholder"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_below="@id/toolbar" />
 
 </RelativeLayout>

@@ -144,4 +144,15 @@
         <item name="android:textSize">14sp</item>
     </style>
 
+    <!-- Auth -->
+    <style name="Theme.Alfresco.Auth" />
+
+    <!-- Tablet Card -->
+    <style name="Theme.Alfresco.Auth.Card">
+        <item name="android:layout_width">456dp</item>
+        <item name="android:layout_height">562dp</item>
+        <item name="android:background">@drawable/rounded_corner_back</item>
+        <item name="android:elevation">@dimen/auth_box_elevation</item>
+    </style>
+
 </resources>

@@ -141,14 +141,13 @@
                 android:text="@string/auth_help_button"
                 android:visibility="gone" />
 
-            <TextView
-                android:id="@+id/tvCopyright"
-                style="@style/Widget.Alfresco.FooterText"
+            <include
+                layout="@layout/view_copyright"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="30dp"
                 android:layout_marginBottom="10dp"
-                android:text="@string/general_copyright_notice" />
+                android:visibility="@integer/auth_visibility_phone_only"/>
         </LinearLayout>
     </RelativeLayout>
 </layout>

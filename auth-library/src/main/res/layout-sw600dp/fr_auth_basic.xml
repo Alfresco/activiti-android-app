@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:bind="http://schemas.android.com/apk/res-auto">
+
+    <data>
+
+        <variable
+            name="viewModel"
+            type="com.alfresco.auth.activity.AIMSWelcomeViewModel" />
+    </data>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <FrameLayout
+            android:id="@+id/content"
+            style="@style/Theme.Alfresco.Auth.Card"
+            android:layout_centerInParent="true">
+
+            <include
+                layout="@layout/fr_aims_basic_auth"
+                bind:viewModel="@{viewModel}" />
+        </FrameLayout>
+
+        <include
+            layout="@layout/view_copyright"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/content"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="10dp" />
+
+    </RelativeLayout>
+</layout>

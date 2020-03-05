@@ -2,6 +2,10 @@
 <resources>
     <bool name="isTablet">false</bool>
 
+    <integer name="auth_visibility_phone_only">0</integer><!-- VISIBLE -->
+    <integer name="auth_visibility_tablet_only">2</integer><!-- GONE -->
+    <dimen name="auth_box_elevation">32dp</dimen>
+
     <!-- LOGIN SETTINGS -->
     <dimen name="aims_theme_default_padding">34dp</dimen>
     <dimen name="aims_login_settings_section_spacing">40dp</dimen>

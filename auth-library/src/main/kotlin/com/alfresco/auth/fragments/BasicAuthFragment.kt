@@ -11,7 +11,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.fragment.app.activityViewModels
 import com.alfresco.android.aims.R
-import com.alfresco.android.aims.databinding.FrAimsBasicAuthBinding
+import com.alfresco.android.aims.databinding.FrAuthBasicBinding
 import com.alfresco.auth.activity.AIMSWelcomeViewModel
 import com.alfresco.common.FragmentBuilder
 
@@ -26,7 +26,7 @@ class BasicAuthFragment : DialogFragment() {
     private val rootView: View get() = view!!
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        val binding = DataBindingUtil.inflate<FrAimsBasicAuthBinding>(inflater, R.layout.fr_aims_basic_auth, container, false)
+        val binding = DataBindingUtil.inflate<FrAuthBasicBinding>(inflater, R.layout.fr_auth_basic, container, false)
         binding.viewModel = viewModel
         binding.lifecycleOwner = this
         return binding.root

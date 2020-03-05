@@ -34,6 +34,8 @@
     <color name="aims_accent">@color/alfresco_primary</color>
     <color name="aims_primary_text">@android:color/black</color>
     <color name="aims_secondary_text">#8C000000</color>
-    <color name="transparent">#00000000</color>
     <color name="text_input_icon_tint">#bdbdbd</color>
+
+    <color name="transparent">#00000000</color>
+    <color name="white">#FFFFFF</color>
 </resources>

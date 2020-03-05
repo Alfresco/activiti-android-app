@@ -4,26 +4,22 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
-import android.widget.TextView
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.fragment.app.activityViewModels
 import com.alfresco.android.aims.R
-import com.alfresco.android.aims.databinding.FrAimsSsoAuthBinding
+import com.alfresco.android.aims.databinding.FrAuthSsoBinding
 import com.alfresco.auth.activity.AIMSWelcomeViewModel
 import com.alfresco.common.FragmentBuilder
-import com.alfresco.core.extension.isBlankOrEmpty
-import com.google.android.material.textfield.TextInputLayout
 
 class SsoAuthFragment : DialogFragment() {
 
     private val viewModel: AIMSWelcomeViewModel by activityViewModels()
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        val binding = DataBindingUtil.inflate<FrAimsSsoAuthBinding>(inflater, R.layout.fr_aims_sso_auth, container, false)
+        val binding = DataBindingUtil.inflate<FrAuthSsoBinding>(inflater, R.layout.fr_auth_sso, container, false)
         binding.viewModel = viewModel
         binding.lifecycleOwner = this
         return binding.root

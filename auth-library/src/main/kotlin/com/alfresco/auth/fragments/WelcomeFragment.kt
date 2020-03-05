@@ -11,7 +11,7 @@ import androidx.fragment.app.FragmentActivity
 import androidx.fragment.app.activityViewModels
 import com.alfresco.auth.activity.AIMSWelcomeViewModel
 import com.alfresco.android.aims.R
-import com.alfresco.android.aims.databinding.FrAimsWelcomeBinding
+import com.alfresco.android.aims.databinding.FrAuthWelcomeBinding
 import com.alfresco.common.FragmentBuilder
 
 class WelcomeFragment : DialogFragment() {
@@ -19,7 +19,7 @@ class WelcomeFragment : DialogFragment() {
     private val viewModel: AIMSWelcomeViewModel by activityViewModels()
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        val binding = DataBindingUtil.inflate<FrAimsWelcomeBinding>(inflater, R.layout.fr_aims_welcome, container, false)
+        val binding = DataBindingUtil.inflate<FrAuthWelcomeBinding>(inflater, R.layout.fr_auth_welcome, container, false)
         binding.viewModel = viewModel
         binding.lifecycleOwner = this
         return binding.root

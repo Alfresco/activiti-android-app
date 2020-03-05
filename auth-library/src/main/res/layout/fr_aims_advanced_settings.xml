@@ -9,6 +9,12 @@
             type="com.alfresco.auth.activity.AIMSWelcomeViewModel" />
     </data>
 
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:paddingTop="?attr/actionBarSize"
+        android:background="@android:color/white">
+
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -173,18 +179,16 @@
                     android:text="@string/auth_settings_help"
                     android:onClick="@{() -> viewModel.showSettingsHelp()}"/>
 
-                <TextView
-                    android:id="@+id/tvCopyright"
-                    style="@style/Widget.Alfresco.FooterText"
-                    android:layout_width="match_parent"
+                <include
+                    layout="@layout/view_copyright"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="30dp"
-                    android:layout_marginBottom="10dp"
-                    android:gravity="center_horizontal"
-                    android:text="@string/general_copyright_notice" />
+                    android:layout_marginBottom="10dp" />
             </LinearLayout>
 
         </LinearLayout>
 
     </ScrollView>
+    </FrameLayout>
 </layout>
