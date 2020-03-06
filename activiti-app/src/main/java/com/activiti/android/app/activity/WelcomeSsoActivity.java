@@ -173,7 +173,11 @@ public class WelcomeSsoActivity extends WelcomeActivity {
         sync();
 
         onLoading(false);
+
         startActivity(new Intent(this, MainActivity.class));
+
+        EventBusManager.getInstance().unregister(this);
+        finish();
 //        OptionalFragment.with(this).acocuntId(acc.getId()).back(false).display();
     }
 }
