@@ -20,9 +20,7 @@ import com.activiti.client.api.model.idm.UserRepresentation;
 import com.activiti.client.api.model.runtime.AppVersionRepresentation;
 import com.alfresco.auth.activity.Credentials;
 import com.alfresco.auth.activity.WelcomeActivity;
-import com.alfresco.client.AuthorizationCredentials;
-import com.alfresco.client.BasicAuthorizationCredentials;
-import com.alfresco.client.SSOAuthorizationCredentials;
+import com.alfresco.client.AbstractClient.AuthType;
 import com.squareup.otto.Subscribe;
 
 import org.jetbrains.annotations.NotNull;
@@ -35,9 +33,13 @@ public class WelcomeSsoActivity extends WelcomeActivity {
 
     private ActivitiAccount acc;
     private ActivitiSession activitiSession;
+    private String endpoint;
     private UserRepresentation user;
-    private AuthorizationCredentials authCredentials;
     private AppVersion version;
+
+    private String username;
+    private String password;
+    private AuthType authType;
 
     @Override
     protected void onStart() {
@@ -53,27 +55,34 @@ public class WelcomeSsoActivity extends WelcomeActivity {
 
     @Override
     public void onCredentials(@NotNull Credentials credentials, @NotNull String endpoint) {
+        this.endpoint = endpoint;
+
         if (credentials instanceof Credentials.Basic) {
             Credentials.Basic it = (Credentials.Basic) credentials;
-            connect(new BasicAuthorizationCredentials(it.getUsername(), it.getPassword()), endpoint);
+            username = it.getUsername();
+            password = it.getPassword();
+            authType = AuthType.BASIC;
         } else if (credentials instanceof Credentials.Sso) {
             Credentials.Sso it = (Credentials.Sso) credentials;
-            connect(new SSOAuthorizationCredentials(it.getUsername(), it.getToken()), endpoint);
+            username = it.getUsername();
+            password = it.getToken();
+            authType = AuthType.TOKEN;
         }
+
+        connect();
     }
 
-    private void connect(AuthorizationCredentials credentials, String endpoint) {
-        authCredentials = credentials;
+    private void connect() {
         onLoading(true);
 
         try {
-            activitiSession = new ActivitiSession.Builder().connect(endpoint, credentials).build();
+            activitiSession = new ActivitiSession.Builder().connect(endpoint, username, password, authType).build();
             activitiSession.getServiceRegistry().getProfileService().getProfile(new Callback<UserRepresentation>() {
                 @Override
                 public void onResponse(Call<UserRepresentation> call, Response<UserRepresentation> response) {
                     if (response.isSuccessful()) {
                         user = response.body();
-                        retrieveServerInfo(endpoint);
+                        retrieveServerInfo();
                     } else if (response.code() == 401) {
                         Toast.makeText(WelcomeSsoActivity.this, "Get Profile failed! 401", Toast.LENGTH_LONG).show();
                     }
@@ -89,28 +98,37 @@ public class WelcomeSsoActivity extends WelcomeActivity {
         }
     }
 
-    private void retrieveServerInfo(String endpoint) {
-        activitiSession.getServiceRegistry().getInfoService().getInfo(new Callback<AppVersionRepresentation>() {
+    private void retrieveServerInfo() {
+        activitiSession.getServiceRegistry().getInfoService().getInfo(new Callback<AppVersionRepresentation>()
+        {
             @Override
-            public void onResponse(Call<AppVersionRepresentation> call, Response<AppVersionRepresentation> response) {
-                if (response.isSuccessful()) {
+            public void onResponse(Call<AppVersionRepresentation> call, Response<AppVersionRepresentation> response)
+            {
+                if (response.isSuccessful())
+                {
+                    // BPM Suite 1.2
                     version = new AppVersion(response.body());
-                    createAccount(endpoint);
-                } else {
+                    createAccount();
+                }
+                else
+                {
+                    // BPM Suite 1.1
                     version = null;
-                    createAccount(endpoint);
+                    createAccount();
                 }
             }
 
             @Override
-            public void onFailure(Call<AppVersionRepresentation> call, Throwable t) {
+            public void onFailure(Call<AppVersionRepresentation> call, Throwable error)
+            {
+                // BPM Suite 1.1
                 version = null;
-                createAccount(endpoint);
+                createAccount();
             }
         });
     }
 
-    private void createAccount(String endpoint) {
+    private void createAccount() {
         acc = null;
 
         if (user == null) {
@@ -126,14 +144,14 @@ public class WelcomeSsoActivity extends WelcomeActivity {
         // If no version info it means Activiti pre 1.2
         if (version == null)
         {
-            acc = ActivitiAccountManager.getInstance(this).create(authCredentials, endpoint,
+            acc = ActivitiAccountManager.getInstance(this).create(username, password, authType.getValue(), endpoint,
                     "Activiti Server", "bpmSuite", "Alfresco Activiti Enterprise BPM Suite", "1.1.0",
                     Long.toString(user.getId()), user.getFullname(),
                     (user.getTenantId() != null) ? Long.toString(user.getTenantId()) : null);
         }
         else
         {
-            acc = ActivitiAccountManager.getInstance(this).create(authCredentials, endpoint,
+            acc = ActivitiAccountManager.getInstance(this).create(username, password, authType.getValue(), endpoint,
                     "Activiti Server", version.type, version.edition, version.getFullVersion(),
                     Long.toString(user.getId()), user.getFullname(),
                     (user.getTenantId() != null) ? Long.toString(user.getTenantId()) : null);

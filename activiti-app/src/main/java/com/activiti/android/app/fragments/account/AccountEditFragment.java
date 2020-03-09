@@ -68,6 +68,7 @@ import com.activiti.android.ui.utils.UIUtils;
 import com.activiti.client.api.constant.ActivitiAPI;
 import com.activiti.client.api.model.idm.UserRepresentation;
 import com.activiti.client.api.model.runtime.AppVersionRepresentation;
+import com.alfresco.client.AbstractClient.AuthType;
 import com.rengwuxian.materialedittext.MaterialAutoCompleteTextView;
 import com.rengwuxian.materialedittext.MaterialEditText;
 import com.squareup.otto.Subscribe;
@@ -351,7 +352,7 @@ public class AccountEditFragment extends AlfrescoFragment
     {
         UIUtils.hideKeyboard(getActivity(), mEmailView);
 
-        session = new ActivitiSession.Builder().connect(endpoint.toString(), username, password).build();
+        session = new ActivitiSession.Builder().connect(endpoint.toString(), username, password, AuthType.BASIC).build();
         session.getServiceRegistry().getProfileService().getProfile(new Callback<UserRepresentation>()
         {
             @Override
@@ -415,7 +416,7 @@ public class AccountEditFragment extends AlfrescoFragment
 
     private void updateAccount()
     {
-        ActivitiAccountManager.getInstance(getActivity()).update(acc.getId(), username, password, endpoint.toString(),
+        ActivitiAccountManager.getInstance(getActivity()).update(acc.getId(), username, endpoint.toString(),
                 acc.getLabel(), version.type, version.edition, version.getFullVersion(), Long.toString(user.getId()),
                 user.getFullname(), (user.getTenantId() != null) ? Long.toString(user.getTenantId()) : null);
 

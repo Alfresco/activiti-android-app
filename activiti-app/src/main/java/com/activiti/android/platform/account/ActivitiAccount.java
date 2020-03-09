@@ -25,7 +25,7 @@ import java.io.Serializable;
 import android.accounts.AccountManager;
 
 import com.activiti.android.app.BuildConfig;
-import com.alfresco.client.AuthorizationCredentials;
+import com.alfresco.client.AbstractClient.AuthType;
 
 public class ActivitiAccount implements Serializable
 {
@@ -46,6 +46,11 @@ public class ActivitiAccount implements Serializable
      * Name/Label (Description) of the account
      */
     public static final String ACCOUNT_TITLE = ACCOUNT_TYPE.concat(".title");
+
+    /**
+     * Type of credentials, either basic or bearer. Basic is assumed if missing.
+     */
+    public static final String ACCOUNT_AUTH_TYPE = ACCOUNT_TYPE.concat(".type");
 
     // ///////////////////////////////////////////////////////////////////////////
     // SERVER INFO
@@ -118,7 +123,7 @@ public class ActivitiAccount implements Serializable
 
     private String password;
 
-    private AuthorizationCredentials authCredentials;
+    private String type;
 
     private String tenantId;
 
@@ -132,7 +137,7 @@ public class ActivitiAccount implements Serializable
     }
 
     /** Create a Activiti account. */
-    public ActivitiAccount(long id, String username, String password, String serverUrl, String label,
+    public ActivitiAccount(long id, String username, String password, String type, String serverUrl, String label,
             String serverType, String serverEdition, String serverVersion, String userId, String fullname,
             String tenantId)
     {
@@ -143,28 +148,7 @@ public class ActivitiAccount implements Serializable
         this.fullname = fullname;
         this.username = username;
         this.password = password;
-        this.serverUrl = serverUrl;
-        this.serverType = serverType;
-        this.serverEdition = serverEdition;
-        this.serverVersion = serverVersion;
-        this.fullname = fullname;
-        this.tenantId = tenantId;
-    }
-
-    public ActivitiAccount(long id, AuthorizationCredentials authCredentials, String serverUrl,
-                           String label, String serverType, String serverEdition,
-                           String serverVersion, String userId, String fullname, String tenantId) {
-        super();
-        this.id = id;
-        this.authCredentials = authCredentials;
-
-        this.label = label;
-        this.userId = userId;
-        this.fullname = fullname;
-
-        this.username = authCredentials.getUsername();
-        this.password = authCredentials.getPassword();
-
+        this.type = type;
         this.serverUrl = serverUrl;
         this.serverType = serverType;
         this.serverEdition = serverEdition;
@@ -188,16 +172,18 @@ public class ActivitiAccount implements Serializable
         acc.label = mAccountManager.getUserData(account, ACCOUNT_TITLE);
         acc.fullname = mAccountManager.getUserData(account, ACCOUNT_USER_FULLNAME);
         acc.tenantId = mAccountManager.getUserData(account, ACCOUNT_TENANT_ID);
+        acc.type = mAccountManager.getUserData(account, ACCOUNT_AUTH_TYPE);
+
+        // Backwards compatibility: assume all accounts without type use basic auth
+        if (acc.type == null) {
+            acc.type = AuthType.BASIC.getValue();
+        }
         return acc;
     }
 
     // ///////////////////////////////////////////////////////////////////////////
     // GETTERS
     // ///////////////////////////////////////////////////////////////////////////
-    public AuthorizationCredentials getAuthCredentials() {
-        return authCredentials;
-    }
-
     public String getUsername()
     {
         return username;
@@ -206,6 +192,14 @@ public class ActivitiAccount implements Serializable
     public String getPassword()
     {
         return password;
+    }
+
+    public AuthType getAuthType()
+    {
+        if (type.equals(AuthType.TOKEN.getValue())) {
+            return AuthType.TOKEN;
+        }
+        return AuthType.BASIC;
     }
 
     public String getServerUrl()

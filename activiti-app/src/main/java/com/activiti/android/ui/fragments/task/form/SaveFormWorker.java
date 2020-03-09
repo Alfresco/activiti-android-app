@@ -13,6 +13,7 @@ import com.activiti.android.sdk.ActivitiSession;
 import com.activiti.android.sdk.services.TaskService;
 import com.activiti.android.ui.utils.WorkerManagerUtils;
 import com.activiti.client.api.model.runtime.SaveFormRepresentation;
+import com.alfresco.client.AbstractClient.AuthType;
 import com.google.common.util.concurrent.ListenableFuture;
 import com.google.gson.Gson;
 
@@ -43,7 +44,8 @@ public class SaveFormWorker extends ListenableWorker {
         ActivitiSession session = new ActivitiSession.Builder()
                 .connect(getInputData().getString(WorkerManagerUtils.FORM_SAVE_ENDPOINT),
                         getInputData().getString(WorkerManagerUtils.FORM_SAVE_USERNAME),
-                        getInputData().getString(WorkerManagerUtils.FORM_SAVE_PASSWORD)).build();
+                        getInputData().getString(WorkerManagerUtils.FORM_SAVE_PASSWORD),
+                        AuthType.BASIC).build();
 
         TaskService taskService = session.getServiceRegistry().getTaskService();
 

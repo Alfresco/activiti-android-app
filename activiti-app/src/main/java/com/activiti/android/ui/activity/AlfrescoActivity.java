@@ -145,7 +145,7 @@ public abstract class AlfrescoActivity extends AppCompatActivity
 
         if (account == null) { return; }
         session = new ActivitiSession.Builder()
-                .connect(account.getServerUrl(), account.getAuthCredentials())
+                .connect(account.getServerUrl(), account.getUsername(), account.getPassword(), account.getAuthType())
                 .httpLogging(HttpLoggingInterceptor.Level.HEADERS).build();
 
         // Analytics

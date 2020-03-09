@@ -53,6 +53,7 @@ import com.activiti.android.ui.holder.HolderUtils;
 import com.activiti.client.api.model.idm.GroupRepresentation;
 import com.activiti.client.api.model.idm.UserRepresentation;
 import com.activiti.client.api.model.idm.request.UpdateProfileRepresentation;
+import com.alfresco.client.AbstractClient.AuthType;
 import com.google.android.material.snackbar.Snackbar;
 
 /**
@@ -361,7 +362,7 @@ public class UserProfileFoundationFragment extends AlfrescoFragment implements E
                         if (TextUtils.isEmpty(userRepresentation.getExternalId()))
                         {
                             ActivitiSession.getInstance().updateCredentials(userRepresentation.getEmail(),
-                                    getAccount().getPassword());
+                                    getAccount().getPassword(), AuthType.BASIC);
                             ActivitiAccountManager.getInstance(getActivity()).update(getAccount().getId(),
                                     ActivitiAccount.ACCOUNT_USERNAME, userRepresentation.getEmail());
                         }

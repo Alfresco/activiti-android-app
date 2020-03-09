@@ -36,7 +36,6 @@ import com.activiti.android.platform.EventBusManager;
 import com.activiti.android.platform.Manager;
 import com.activiti.android.platform.utils.BundleUtils;
 import com.activiti.client.api.model.idm.LightUserRepresentation;
-import com.alfresco.client.AuthorizationCredentials;
 
 /**
  * Responsible to manage accounts.
@@ -289,42 +288,7 @@ public class ActivitiAccountManager extends Manager
     // ///////////////////////////////////////////////////////////////////////////
     // ACTIONS
     // ///////////////////////////////////////////////////////////////////////////
-    public ActivitiAccount create(AuthorizationCredentials authCredentials, String serverUrl, String label, String serverType,
-                                  String serverEdition, String serverVersion, String userId, String fullname, String tenantId) {
-        // Generate some properties
-        String accountName = createUniqueAccountName(authCredentials.getUsername());
-        long accountId = getAccountId();
-
-        // Prepare account
-        Account newAccount = new Account(accountName, ActivitiAccount.ACCOUNT_TYPE);
-        Bundle b = new Bundle();
-        b.putString(ActivitiAccount.ACCOUNT_ID, Long.toString(accountId));
-        BundleUtils.addIfNotEmpty(b, ActivitiAccount.ACCOUNT_TITLE, label);
-        BundleUtils.addIfNotEmpty(b, ActivitiAccount.ACCOUNT_SERVER_URL, serverUrl);
-        BundleUtils.addIfNotEmpty(b, ActivitiAccount.ACCOUNT_USERNAME, authCredentials.getUsername());
-        BundleUtils.addIfNotEmpty(b, ActivitiAccount.ACCOUNT_SERVER_TYPE, serverType);
-        BundleUtils.addIfNotEmpty(b, ActivitiAccount.ACCOUNT_SERVER_EDITION, serverEdition);
-        BundleUtils.addIfNotEmpty(b, ActivitiAccount.ACCOUNT_SERVER_VERSION, serverVersion);
-        BundleUtils.addIfNotEmpty(b, ActivitiAccount.ACCOUNT_USER_ID, userId);
-        BundleUtils.addIfNotEmpty(b, ActivitiAccount.ACCOUNT_USER_FULLNAME, fullname);
-        BundleUtils.addIfNotEmpty(b, ActivitiAccount.ACCOUNT_TENANT_ID, tenantId);
-
-        // Time to createNewTask.
-        if (AccountManager.get(appContext).addAccountExplicitly(newAccount, authCredentials.getPassword(), b))
-        {
-            // Create the Account data object
-            accountsSize++;
-            getCount();
-            return new ActivitiAccount(accountId, authCredentials, serverUrl, label, serverType, serverEdition,
-                    serverVersion, userId, fullname, tenantId);
-        }
-        else
-        {
-            return null;
-        }
-    }
-
-    public ActivitiAccount create(String username, String password, String serverUrl, String label, String serverType,
+    public ActivitiAccount create(String username, String password, String authType, String serverUrl, String label, String serverType,
             String serverEdition, String serverVersion, String userId, String fullname, String tenantId)
     {
         // Generate some properties
@@ -338,6 +302,7 @@ public class ActivitiAccountManager extends Manager
         BundleUtils.addIfNotEmpty(b, ActivitiAccount.ACCOUNT_TITLE, label);
         BundleUtils.addIfNotEmpty(b, ActivitiAccount.ACCOUNT_SERVER_URL, serverUrl);
         BundleUtils.addIfNotEmpty(b, ActivitiAccount.ACCOUNT_USERNAME, username);
+        BundleUtils.addIfNotEmpty(b, ActivitiAccount.ACCOUNT_AUTH_TYPE, authType);
         BundleUtils.addIfNotEmpty(b, ActivitiAccount.ACCOUNT_SERVER_TYPE, serverType);
         BundleUtils.addIfNotEmpty(b, ActivitiAccount.ACCOUNT_SERVER_EDITION, serverEdition);
         BundleUtils.addIfNotEmpty(b, ActivitiAccount.ACCOUNT_SERVER_VERSION, serverVersion);
@@ -351,7 +316,7 @@ public class ActivitiAccountManager extends Manager
             // Create the Account data object
             accountsSize++;
             getCount();
-            return new ActivitiAccount(accountId, username, password, serverUrl, label, serverType, serverEdition,
+            return new ActivitiAccount(accountId, username, password, authType, serverUrl, label, serverType, serverEdition,
                     serverVersion, userId, fullname, tenantId);
         }
         else
@@ -360,45 +325,15 @@ public class ActivitiAccountManager extends Manager
         }
     }
 
-    public ActivitiAccount update(long accountId, AuthorizationCredentials authCredentials,
-                                  String serverUrl, String label, String serverType,
-                                  String serverEdition, String serverVersion, String userId,
-                                  String fullname, String tenantId) {
-
-        return update(appContext, accountId, authCredentials, serverUrl, label, serverType,
-                serverEdition, serverVersion, userId, fullname, tenantId);
-    }
-
-    public ActivitiAccount update(Context context, long accountId,
-                                  AuthorizationCredentials authCredentials, String serverUrl,
-                                  String label, String serverType, String serverEdition,
-                                  String serverVersion, String userId, String fullname, String tenantId) {
-
-        Account acc = getAndroidAccount(accountId);
-        AccountManager manager = AccountManager.get(context);
-        manager.setUserData(acc, ActivitiAccount.ACCOUNT_ID, Long.toString(accountId));
-        manager.setUserData(acc, ActivitiAccount.ACCOUNT_TITLE, label);
-        manager.setUserData(acc, ActivitiAccount.ACCOUNT_SERVER_URL, serverUrl);
-        manager.setUserData(acc, ActivitiAccount.ACCOUNT_USERNAME, authCredentials.getUsername());
-        manager.setUserData(acc, ActivitiAccount.ACCOUNT_SERVER_TYPE, serverType);
-        manager.setUserData(acc, ActivitiAccount.ACCOUNT_SERVER_EDITION, serverEdition);
-        manager.setUserData(acc, ActivitiAccount.ACCOUNT_SERVER_VERSION, serverVersion);
-        manager.setUserData(acc, ActivitiAccount.ACCOUNT_USER_ID, userId);
-        manager.setUserData(acc, ActivitiAccount.ACCOUNT_USER_FULLNAME, fullname);
-        manager.setUserData(acc, ActivitiAccount.ACCOUNT_TENANT_ID, tenantId);
-
-        return getByAccountId(accountId);
-    }
-
-    public ActivitiAccount update(long accountId, String username, String password, String serverUrl, String label,
+    public ActivitiAccount update(long accountId, String username, String serverUrl, String label,
             String serverType, String serverEdition, String serverVersion, String userId, String fullname,
             String tenantId)
     {
-        return update(appContext, accountId, username, password, serverUrl, label, serverType, serverEdition,
+        return update(appContext, accountId, username, serverUrl, label, serverType, serverEdition,
                 serverVersion, userId, fullname, tenantId);
     }
 
-    public ActivitiAccount update(Context context, long accountId, String username, String password, String serverUrl,
+    public ActivitiAccount update(Context context, long accountId, String username, String serverUrl,
             String label, String serverType, String serverEdition, String serverVersion, String userId,
             String fullname, String tenantId)
     {

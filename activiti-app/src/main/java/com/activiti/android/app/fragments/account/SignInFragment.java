@@ -44,6 +44,7 @@ import com.activiti.client.api.constant.ActivitiAPI;
 import com.activiti.client.api.model.idm.UserRepresentation;
 import com.activiti.client.api.model.runtime.AppVersionRepresentation;
 import com.afollestad.materialdialogs.MaterialDialog;
+import com.alfresco.client.AbstractClient.AuthType;
 import com.google.android.material.snackbar.Snackbar;
 import com.rengwuxian.materialedittext.MaterialAutoCompleteTextView;
 import com.rengwuxian.materialedittext.MaterialEditText;
@@ -293,7 +294,7 @@ public class SignInFragment extends AlfrescoFragment
         UIUtils.hideKeyboard(getActivity(), mEmailView);
 
         try {
-            session = new ActivitiSession.Builder().connect(endpoint.toString(), username, password).build();
+            session = new ActivitiSession.Builder().connect(endpoint.toString(), username, password, AuthType.BASIC).build();
             session.getServiceRegistry().getProfileService().getProfile(new Callback<UserRepresentation>() {
                 @Override
                 public void onResponse(Call<UserRepresentation> call, Response<UserRepresentation> response) {
@@ -349,14 +350,14 @@ public class SignInFragment extends AlfrescoFragment
         // If no version info it means Activiti pre 1.2
         if (version == null)
         {
-            acc = ActivitiAccountManager.getInstance(getActivity()).create(username, password, endpoint.toString(),
+            acc = ActivitiAccountManager.getInstance(getActivity()).create(username, password, AuthType.BASIC.getValue(), endpoint.toString(),
                     "Activiti Server", "bpmSuite", "Alfresco Activiti Enterprise BPM Suite", "1.1.0",
                     Long.toString(user.getId()), user.getFullname(),
                     (user.getTenantId() != null) ? Long.toString(user.getTenantId()) : null);
         }
         else
         {
-            acc = ActivitiAccountManager.getInstance(getActivity()).create(username, password, endpoint.toString(),
+            acc = ActivitiAccountManager.getInstance(getActivity()).create(username, password, AuthType.BASIC.getValue(), endpoint.toString(),
                     "Activiti Server", version.type, version.edition, version.getFullVersion(),
                     Long.toString(user.getId()), user.getFullname(),
                     (user.getTenantId() != null) ? Long.toString(user.getTenantId()) : null);
