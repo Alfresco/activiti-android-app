@@ -36,6 +36,7 @@ import com.activiti.android.platform.EventBusManager;
 import com.activiti.android.platform.Manager;
 import com.activiti.android.platform.utils.BundleUtils;
 import com.activiti.client.api.model.idm.LightUserRepresentation;
+import com.alfresco.client.AbstractClient;
 
 /**
  * Responsible to manage accounts.
@@ -288,7 +289,13 @@ public class ActivitiAccountManager extends Manager
     // ///////////////////////////////////////////////////////////////////////////
     // ACTIONS
     // ///////////////////////////////////////////////////////////////////////////
-    public ActivitiAccount create(String username, String password, String authType, String serverUrl, String label, String serverType,
+    public ActivitiAccount create(String username, String password, String serverUrl, String label, String serverType,
+            String serverEdition, String serverVersion, String userId, String fullname, String tenantId)
+    {
+        return create(username, password, null, AbstractClient.AuthType.BASIC.getValue(), null, serverUrl, label, serverType, serverEdition, serverVersion, userId, fullname, tenantId);
+    }
+
+    public ActivitiAccount create(String username, String password, String authState, String authType, String authConfig, String serverUrl, String label, String serverType,
             String serverEdition, String serverVersion, String userId, String fullname, String tenantId)
     {
         // Generate some properties
@@ -303,6 +310,8 @@ public class ActivitiAccountManager extends Manager
         BundleUtils.addIfNotEmpty(b, ActivitiAccount.ACCOUNT_SERVER_URL, serverUrl);
         BundleUtils.addIfNotEmpty(b, ActivitiAccount.ACCOUNT_USERNAME, username);
         BundleUtils.addIfNotEmpty(b, ActivitiAccount.ACCOUNT_AUTH_TYPE, authType);
+        BundleUtils.addIfNotEmpty(b, ActivitiAccount.ACCOUNT_AUTH_STATE, authState);
+        BundleUtils.addIfNotEmpty(b, ActivitiAccount.ACCOUNT_AUTH_CONFIG, authConfig);
         BundleUtils.addIfNotEmpty(b, ActivitiAccount.ACCOUNT_SERVER_TYPE, serverType);
         BundleUtils.addIfNotEmpty(b, ActivitiAccount.ACCOUNT_SERVER_EDITION, serverEdition);
         BundleUtils.addIfNotEmpty(b, ActivitiAccount.ACCOUNT_SERVER_VERSION, serverVersion);
@@ -316,8 +325,8 @@ public class ActivitiAccountManager extends Manager
             // Create the Account data object
             accountsSize++;
             getCount();
-            return new ActivitiAccount(accountId, username, password, authType, serverUrl, label, serverType, serverEdition,
-                    serverVersion, userId, fullname, tenantId);
+            return new ActivitiAccount(accountId, username, password, authType, authState, authConfig, serverUrl, label,
+                    serverType, serverEdition, serverVersion, userId, fullname, tenantId);
         }
         else
         {

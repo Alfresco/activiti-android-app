@@ -6,7 +6,8 @@ import androidx.lifecycle.MutableLiveData
 import com.alfresco.android.aims.BuildConfig
 import com.alfresco.android.aims.R
 import com.alfresco.auth.AuthType
-import com.alfresco.auth.GlobalAuthConfig
+import com.alfresco.auth.AuthConfig
+import com.alfresco.auth.config.DefaultAuthConfig
 import com.alfresco.auth.ui.BaseAuthViewModel
 import com.alfresco.auth.ui.PkceAuthUiModel
 import com.alfresco.common.SingleLiveEvent
@@ -15,7 +16,8 @@ import com.google.gson.JsonSyntaxException
 
 class AIMSWelcomeViewModel(private val applicationContext: Context) : BaseAuthViewModel() {
 
-    override var globalAuthConfig = defaultAuthConfig.copy()
+    override var authConfig = defaultAuthConfig.copy()
+    override var context = applicationContext
 
     private var _authConfigEditor = AuthConfigEditor()
     val authConfigEditor : AuthConfigEditor get() {
@@ -54,11 +56,11 @@ class AIMSWelcomeViewModel(private val applicationContext: Context) : BaseAuthVi
     }
 
     fun getApplicationServiceUrl(): String {
-        val protocol = if (globalAuthConfig.https) "https" else "http"
-        val port = if ((globalAuthConfig.https && globalAuthConfig.port == "443") ||
-                (!globalAuthConfig.https && globalAuthConfig.port == "80")) ""
-                else globalAuthConfig.port
-        return "${protocol}://${applicationUrl.value}:${port}/${globalAuthConfig.serviceDocuments}/"
+        val protocol = if (authConfig.https) "https" else "http"
+        val port = if ((authConfig.https && authConfig.port == "443") ||
+                (!authConfig.https && authConfig.port == "80")) ""
+                else ":${authConfig.port}"
+        return "${protocol}://${applicationUrl.value}${port}/${authConfig.serviceDocuments}/"
     }
 
     override fun handleAuthType(endpoint: String, authType: AuthType) {
@@ -75,7 +77,7 @@ class AIMSWelcomeViewModel(private val applicationContext: Context) : BaseAuthVi
         when (model.success) {
             true -> {
                 // TODO: nullability check
-                onCredentials.value = Credentials.Sso(model.userEmail!!, model.accessToken!!)
+                onCredentials.value = Credentials.Sso(model.userEmail!!, model.authState!!)
             }
 
             false -> {
@@ -95,7 +97,7 @@ class AIMSWelcomeViewModel(private val applicationContext: Context) : BaseAuthVi
 
     fun startEditing() {
         _authConfigEditor = AuthConfigEditor()
-        _authConfigEditor.reset(globalAuthConfig)
+        _authConfigEditor.reset(authConfig)
     }
 
     fun connect() {
@@ -133,9 +135,9 @@ class AIMSWelcomeViewModel(private val applicationContext: Context) : BaseAuthVi
         val sharedPrefs  = applicationContext.getSharedPreferences(SHARED_PREFS_NAME, Context.MODE_PRIVATE)
         val configJson = sharedPrefs.getString(SHARED_PREFS_CONFIG_KEY, null)
 
-        globalAuthConfig = try {
+        authConfig = try {
             if (configJson != null)
-                Gson().fromJson(configJson, GlobalAuthConfig::class.java)
+                Gson().fromJson(configJson, authConfig::class.java)
             else
                 defaultAuthConfig
         } catch (e: JsonSyntaxException) {
@@ -151,7 +153,7 @@ class AIMSWelcomeViewModel(private val applicationContext: Context) : BaseAuthVi
         editor.putString(SHARED_PREFS_CONFIG_KEY, Gson().toJson(config))
         editor.apply()
 
-        globalAuthConfig = config
+        authConfig = config
     }
 
     fun resetToDefaultConfig() {
@@ -193,7 +195,7 @@ class AIMSWelcomeViewModel(private val applicationContext: Context) : BaseAuthVi
             }
         }
 
-        fun reset(config: GlobalAuthConfig) {
+        fun reset(config: AuthConfig) {
             https.value = config.https
             port.value = config.port
             serviceDocuments.value = config.serviceDocuments
@@ -202,8 +204,8 @@ class AIMSWelcomeViewModel(private val applicationContext: Context) : BaseAuthVi
             redirectUrl.value = config.redirectUrl
         }
 
-        fun get(): GlobalAuthConfig {
-            return GlobalAuthConfig(
+        fun get(): AuthConfig {
+            return AuthConfig(
                     https = https.value ?: false,
                     port = port.value ?: "",
                     serviceDocuments = serviceDocuments.value ?: "",
@@ -231,5 +233,5 @@ sealed class AuthenticationType {
 
 sealed class Credentials {
     data class Basic(val username: String, val password: String) : Credentials()
-    data class Sso(val username: String, val token: String) : Credentials()
+    data class Sso(val username: String, val authState: String) : Credentials()
 }

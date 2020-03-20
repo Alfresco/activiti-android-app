@@ -25,12 +25,16 @@ import java.io.Serializable;
 import android.accounts.AccountManager;
 
 import com.activiti.android.app.BuildConfig;
+import com.alfresco.auth.AuthConfig;
 import com.alfresco.client.AbstractClient.AuthType;
+import com.google.gson.Gson;
+
+import net.openid.appauth.AuthState;
 
 public class ActivitiAccount implements Serializable
 {
     /**
-     * Account Manager : Account type
+     * Account Manager : Account authType
      */
     public static final String ACCOUNT_TYPE = BuildConfig.ACCOUNT_ID;
 
@@ -50,7 +54,11 @@ public class ActivitiAccount implements Serializable
     /**
      * Type of credentials, either basic or bearer. Basic is assumed if missing.
      */
-    public static final String ACCOUNT_AUTH_TYPE = ACCOUNT_TYPE.concat(".type");
+    public static final String ACCOUNT_AUTH_TYPE = ACCOUNT_TYPE.concat(".authType");
+
+    public static final String ACCOUNT_AUTH_STATE = ACCOUNT_TYPE.concat(".authState");
+
+    public static final String ACCOUNT_AUTH_CONFIG = ACCOUNT_TYPE.concat(".authConfig");
 
     // ///////////////////////////////////////////////////////////////////////////
     // SERVER INFO
@@ -123,7 +131,11 @@ public class ActivitiAccount implements Serializable
 
     private String password;
 
-    private String type;
+    private String authType;
+
+    private String authState;
+
+    private String authConfig;
 
     private String tenantId;
 
@@ -137,7 +149,7 @@ public class ActivitiAccount implements Serializable
     }
 
     /** Create a Activiti account. */
-    public ActivitiAccount(long id, String username, String password, String type, String serverUrl, String label,
+    public ActivitiAccount(long id, String username, String password, String authType, String authState, String authConfig, String serverUrl, String label,
             String serverType, String serverEdition, String serverVersion, String userId, String fullname,
             String tenantId)
     {
@@ -148,7 +160,9 @@ public class ActivitiAccount implements Serializable
         this.fullname = fullname;
         this.username = username;
         this.password = password;
-        this.type = type;
+        this.authType = authType;
+        this.authState = authState;
+        this.authConfig = authConfig;
         this.serverUrl = serverUrl;
         this.serverType = serverType;
         this.serverEdition = serverEdition;
@@ -172,11 +186,13 @@ public class ActivitiAccount implements Serializable
         acc.label = mAccountManager.getUserData(account, ACCOUNT_TITLE);
         acc.fullname = mAccountManager.getUserData(account, ACCOUNT_USER_FULLNAME);
         acc.tenantId = mAccountManager.getUserData(account, ACCOUNT_TENANT_ID);
-        acc.type = mAccountManager.getUserData(account, ACCOUNT_AUTH_TYPE);
+        acc.authType = mAccountManager.getUserData(account, ACCOUNT_AUTH_TYPE);
+        acc.authState = mAccountManager.getUserData(account, ACCOUNT_AUTH_STATE);
+        acc.authConfig = mAccountManager.getUserData(account, ACCOUNT_AUTH_CONFIG);
 
-        // Backwards compatibility: assume all accounts without type use basic auth
-        if (acc.type == null) {
-            acc.type = AuthType.BASIC.getValue();
+        // Backwards compatibility: assume all accounts without authType use basic auth
+        if (acc.authType == null) {
+            acc.authType = AuthType.BASIC.getValue();
         }
         return acc;
     }
@@ -196,10 +212,18 @@ public class ActivitiAccount implements Serializable
 
     public AuthType getAuthType()
     {
-        if (type.equals(AuthType.TOKEN.getValue())) {
+        if (authType.equals(AuthType.TOKEN.getValue())) {
             return AuthType.TOKEN;
         }
         return AuthType.BASIC;
+    }
+
+    public AuthConfig getAuthConfig() {
+        return new Gson().fromJson(authConfig, AuthConfig.class);
+    }
+
+    public String getAuthState() {
+        return authState;
     }
 
     public String getServerUrl()

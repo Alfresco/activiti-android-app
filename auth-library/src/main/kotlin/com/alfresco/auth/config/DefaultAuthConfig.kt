@@ -1,12 +1,12 @@
-package com.alfresco.auth.activity
+package com.alfresco.auth.config
 
-import com.alfresco.auth.GlobalAuthConfig
+import com.alfresco.auth.AuthConfig
 
 class DefaultAuthConfig {
 
     companion object {
-        fun get(): GlobalAuthConfig {
-            return GlobalAuthConfig(
+        fun get(): AuthConfig {
+            return AuthConfig(
                     https = false,
                     port = "80",
                     clientId = "alfresco-android-aps-app",

@@ -350,14 +350,14 @@ public class SignInFragment extends AlfrescoFragment
         // If no version info it means Activiti pre 1.2
         if (version == null)
         {
-            acc = ActivitiAccountManager.getInstance(getActivity()).create(username, password, AuthType.BASIC.getValue(), endpoint.toString(),
+            acc = ActivitiAccountManager.getInstance(getActivity()).create(username, password, endpoint.toString(),
                     "Activiti Server", "bpmSuite", "Alfresco Activiti Enterprise BPM Suite", "1.1.0",
                     Long.toString(user.getId()), user.getFullname(),
                     (user.getTenantId() != null) ? Long.toString(user.getTenantId()) : null);
         }
         else
         {
-            acc = ActivitiAccountManager.getInstance(getActivity()).create(username, password, AuthType.BASIC.getValue(), endpoint.toString(),
+            acc = ActivitiAccountManager.getInstance(getActivity()).create(username, password, endpoint.toString(),
                     "Activiti Server", version.type, version.edition, version.getFullVersion(),
                     Long.toString(user.getId()), user.getFullname(),
                     (user.getTenantId() != null) ? Long.toString(user.getTenantId()) : null);

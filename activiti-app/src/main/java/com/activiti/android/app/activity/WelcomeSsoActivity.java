@@ -18,9 +18,12 @@ import com.activiti.android.sdk.ActivitiSession;
 import com.activiti.android.sdk.model.runtime.AppVersion;
 import com.activiti.client.api.model.idm.UserRepresentation;
 import com.activiti.client.api.model.runtime.AppVersionRepresentation;
+import com.alfresco.auth.AuthConfig;
+import com.alfresco.auth.AuthInterceptor;
 import com.alfresco.auth.activity.Credentials;
 import com.alfresco.auth.activity.WelcomeActivity;
 import com.alfresco.client.AbstractClient.AuthType;
+import com.google.gson.Gson;
 import com.squareup.otto.Subscribe;
 
 import org.jetbrains.annotations.NotNull;
@@ -40,6 +43,8 @@ public class WelcomeSsoActivity extends WelcomeActivity {
     private String username;
     private String password;
     private AuthType authType;
+    private AuthConfig authConfig;
+    private String authState;
 
     @Override
     protected void onStart() {
@@ -54,8 +59,13 @@ public class WelcomeSsoActivity extends WelcomeActivity {
     }
 
     @Override
-    public void onCredentials(@NotNull Credentials credentials, @NotNull String endpoint) {
+    public void onCredentials(
+            @NotNull Credentials credentials,
+            @NotNull String endpoint,
+            @NotNull AuthConfig authConfig)
+    {
         this.endpoint = endpoint;
+        this.authConfig = authConfig;
 
         if (credentials instanceof Credentials.Basic) {
             Credentials.Basic it = (Credentials.Basic) credentials;
@@ -65,7 +75,7 @@ public class WelcomeSsoActivity extends WelcomeActivity {
         } else if (credentials instanceof Credentials.Sso) {
             Credentials.Sso it = (Credentials.Sso) credentials;
             username = it.getUsername();
-            password = it.getToken();
+            authState = it.getAuthState();
             authType = AuthType.TOKEN;
         }
 
@@ -76,7 +86,10 @@ public class WelcomeSsoActivity extends WelcomeActivity {
         onLoading(true);
 
         try {
-            activitiSession = new ActivitiSession.Builder().connect(endpoint, username, password, authType).build();
+            activitiSession = new ActivitiSession.Builder()
+                    .connect(endpoint, username, password, authType)
+                    .interceptor(new AuthInterceptor(getApplicationContext(), authState, authConfig))
+                    .build();
             activitiSession.getServiceRegistry().getProfileService().getProfile(new Callback<UserRepresentation>() {
                 @Override
                 public void onResponse(Call<UserRepresentation> call, Response<UserRepresentation> response) {
@@ -139,19 +152,20 @@ public class WelcomeSsoActivity extends WelcomeActivity {
         String fullName = user.getFullname();
 
         String tenantId = (user.getTenantId() != null) ? user.getTenantId().toString() : null;
+        String authConfig = new Gson().toJson(this.authConfig);
 
 
         // If no version info it means Activiti pre 1.2
         if (version == null)
         {
-            acc = ActivitiAccountManager.getInstance(this).create(username, password, authType.getValue(), endpoint,
+            acc = ActivitiAccountManager.getInstance(this).create(username, password, authState, authType.getValue(), authConfig, endpoint,
                     "Activiti Server", "bpmSuite", "Alfresco Activiti Enterprise BPM Suite", "1.1.0",
                     Long.toString(user.getId()), user.getFullname(),
                     (user.getTenantId() != null) ? Long.toString(user.getTenantId()) : null);
         }
         else
         {
-            acc = ActivitiAccountManager.getInstance(this).create(username, password, authType.getValue(), endpoint,
+            acc = ActivitiAccountManager.getInstance(this).create(username, password, authState, authType.getValue(), authConfig, endpoint,
                     "Activiti Server", version.type, version.edition, version.getFullVersion(),
                     Long.toString(user.getId()), user.getFullname(),
                     (user.getTenantId() != null) ? Long.toString(user.getTenantId()) : null);
