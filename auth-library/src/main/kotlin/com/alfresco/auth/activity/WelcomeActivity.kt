@@ -10,6 +10,7 @@ import androidx.annotation.StringRes
 import androidx.appcompat.widget.Toolbar
 import androidx.core.view.ViewCompat
 import com.alfresco.android.aims.R
+import com.alfresco.auth.AuthConfig
 import com.alfresco.auth.fragments.AdvancedSettingsFragment
 import com.alfresco.auth.fragments.BasicAuthFragment
 import com.alfresco.auth.fragments.HelpFragment
@@ -87,10 +88,10 @@ abstract class WelcomeActivity : AlfrescoAuthActivity<AIMSWelcomeViewModel>() {
         }
     }
 
-    abstract fun onCredentials(credentials: Credentials, endpoint: String)
+    abstract fun onCredentials(credentials: Credentials, endpoint: String, authConfig: AuthConfig)
 
     private fun onCredentials(credentials: Credentials) {
-        onCredentials(credentials, viewModel.getApplicationServiceUrl())
+        onCredentials(credentials, viewModel.getApplicationServiceUrl(), viewModel.authConfig)
     }
 
     private fun onAuthType(authType: AuthenticationType) {
