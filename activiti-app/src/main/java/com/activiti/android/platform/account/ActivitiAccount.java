@@ -222,6 +222,9 @@ public class ActivitiAccount implements Serializable
         return new Gson().fromJson(authConfig, AuthConfig.class);
     }
 
+    public String getAuthConfigString() {
+        return authConfig;
+    }
     public String getAuthState() {
         return authState;
     }
