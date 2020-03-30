@@ -362,6 +362,16 @@ public class ActivitiAccountManager extends Manager
         return getByAccountId(accountId);
     }
 
+    public ActivitiAccount update(Context context, long accountId, String authState) {
+        Account acc = getAndroidAccount(accountId);
+        AccountManager manager = AccountManager.get(context);
+        manager.setUserData(acc, ActivitiAccount.ACCOUNT_AUTH_STATE, authState);
+
+        ActivitiAccount activitiAccount = getByAccountId(accountId);
+        accountIndex.put(accountId, activitiAccount);
+        return activitiAccount;
+    }
+
     protected void getCount()
     {
         AccountManager mAccountManager = AccountManager.get(appContext);

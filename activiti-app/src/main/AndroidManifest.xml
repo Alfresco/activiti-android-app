@@ -83,6 +83,10 @@
             android:theme="@style/Theme.Alfresco"
             android:label="@string/app_name"/>
 
+        <activity
+            android:name=".activity.ReloginSsoActivity"
+            android:theme="@style/Theme.Alfresco"/>
+
         <!-- *************************************************************** -->
         <!-- ACCOUNT SERVICES & AUTHENTICATION -->
         <!-- *************************************************************** -->

@@ -91,7 +91,7 @@ class AIMSWelcomeViewModel(private val applicationContext: Context) : BaseAuthVi
         _hasNavigation.value = enableNavigation
     }
 
-    fun ssoLogin(identityServiceUrl: String, processRepositoryUrl: String) {
+    fun ssoLogin(identityServiceUrl: String) {
         _startSSO.value = identityServiceUrl
     }
 
@@ -111,7 +111,7 @@ class AIMSWelcomeViewModel(private val applicationContext: Context) : BaseAuthVi
     }
 
     fun ssoLogin() {
-        ssoLogin(identityUrl.value!!, applicationUrl.value!!)
+        ssoLogin(identityUrl.value!!)
     }
 
     fun showSettings() {
