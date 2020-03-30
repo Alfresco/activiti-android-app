@@ -59,7 +59,7 @@ dependencies {
     implementation "androidx.fragment:fragment-ktx:1.2.0"
 
     // Alfresco DBP SDK
-    api 'com.alfresco.dbp.android:auth:0.2-SNAPSHOT'
+    api 'com.alfresco.dbp.android:auth:0.3-SNAPSHOT'
     api 'com.alfresco.dbp.android:core:0.1-SNAPSHOT'
 
     // Material Components

@@ -26,6 +26,7 @@ import android.accounts.Account;
 import android.accounts.AccountManager;
 import android.accounts.AccountManagerCallback;
 import android.accounts.AccountManagerFuture;
+import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
@@ -37,6 +38,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.widget.PopupMenu;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
@@ -68,6 +70,9 @@ import com.activiti.android.ui.holder.TwoLinesViewHolder;
 import com.activiti.android.ui.utils.DisplayUtils;
 import com.activiti.android.ui.utils.UIUtils;
 import com.afollestad.materialdialogs.MaterialDialog;
+import com.alfresco.auth.activity.LogoutActivity;
+import com.alfresco.auth.activity.LogoutViewModel;
+import com.alfresco.client.AbstractClient.AuthType;
 
 /**
  * Manage global application preferences.
@@ -247,7 +252,7 @@ public class AccountSettingsFragment extends AlfrescoFragment implements EditTex
                             @Override
                             public void onPositive(MaterialDialog dialog)
                             {
-                                deleteAccount();
+                                logout();
                             }
 
                             @Override
@@ -265,6 +270,40 @@ public class AccountSettingsFragment extends AlfrescoFragment implements EditTex
     // ///////////////////////////////////////////////////////////////////////////
     // UTILS
     // ///////////////////////////////////////////////////////////////////////////
+    private static final int REQUEST_CODE_LOGOUT = 9;
+
+    private void logout()
+    {
+        if (account.getAuthType() == AuthType.TOKEN) {
+            Intent i = new Intent(getContext(), LogoutActivity.class);
+            i.putExtra(LogoutViewModel.EXTRA_AUTH_CONFIG, account.getAuthConfigString());
+            i.putExtra(LogoutViewModel.EXTRA_AUTH_STATE, account.getAuthState());
+            startActivityForResult(i, REQUEST_CODE_LOGOUT);
+        } else {
+            deleteAccount();
+        }
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data)
+    {
+        if (requestCode == REQUEST_CODE_LOGOUT)
+        {
+            if (resultCode == Activity.RESULT_OK)
+            {
+                deleteAccount();
+            }
+            else
+            {
+                // no-op
+            }
+        }
+        else
+        {
+            super.onActivityResult(requestCode, resultCode, data);
+        }
+    }
+
     private void deleteAccount()
     {
         progressdialog = new MaterialDialog.Builder(getActivity()).title(R.string.account_remove_progress)
