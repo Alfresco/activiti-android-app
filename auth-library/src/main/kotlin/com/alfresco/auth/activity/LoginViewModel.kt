@@ -5,10 +5,9 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.alfresco.android.aims.BuildConfig
 import com.alfresco.android.aims.R
-import com.alfresco.auth.AuthType
 import com.alfresco.auth.AuthConfig
 import com.alfresco.auth.Credentials
-import com.alfresco.auth.config.DefaultAuthConfig
+import com.alfresco.auth.config.defaultConfig
 import com.alfresco.auth.ui.AuthenticationViewModel
 import com.alfresco.common.SingleLiveEvent
 import com.google.gson.Gson
@@ -16,7 +15,7 @@ import com.google.gson.JsonSyntaxException
 
 class LoginViewModel(private val applicationContext: Context) : AuthenticationViewModel() {
 
-    override var authConfig = defaultAuthConfig.copy()
+    override var authConfig = AuthConfig.defaultConfig.copy()
     override var context = applicationContext
 
     private var _authConfigEditor = AuthConfigEditor()
@@ -107,9 +106,9 @@ class LoginViewModel(private val applicationContext: Context) : AuthenticationVi
             if (configJson != null)
                 Gson().fromJson(configJson, authConfig::class.java)
             else
-                defaultAuthConfig
+                AuthConfig.defaultConfig
         } catch (e: JsonSyntaxException) {
-            defaultAuthConfig
+            AuthConfig.defaultConfig
         }
     }
 
@@ -125,7 +124,7 @@ class LoginViewModel(private val applicationContext: Context) : AuthenticationVi
     }
 
     fun resetToDefaultConfig() {
-        authConfigEditor.reset(defaultAuthConfig)
+        authConfigEditor.reset(AuthConfig.defaultConfig)
     }
 
     val basicAuth = BasicAuth()
@@ -145,8 +144,6 @@ class LoginViewModel(private val applicationContext: Context) : AuthenticationVi
     companion object {
         private const val SHARED_PREFS_NAME = "org.activiti.aims.android.auth"
         private const val SHARED_PREFS_CONFIG_KEY = "config"
-
-        private val defaultAuthConfig = DefaultAuthConfig.get()
 
         fun with(context: Context): LoginViewModel {
             return LoginViewModel(context)
