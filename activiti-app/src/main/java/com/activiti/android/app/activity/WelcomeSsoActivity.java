@@ -20,8 +20,8 @@ import com.activiti.client.api.model.idm.UserRepresentation;
 import com.activiti.client.api.model.runtime.AppVersionRepresentation;
 import com.alfresco.auth.AuthConfig;
 import com.alfresco.auth.AuthInterceptor;
-import com.alfresco.auth.activity.Credentials;
-import com.alfresco.auth.activity.WelcomeActivity;
+import com.alfresco.auth.Credentials;
+import com.alfresco.auth.activity.LoginActivity;
 import com.alfresco.client.AbstractClient.AuthType;
 import com.google.gson.Gson;
 import com.squareup.otto.Subscribe;
@@ -32,7 +32,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class WelcomeSsoActivity extends WelcomeActivity {
+public class WelcomeSsoActivity extends LoginActivity {
 
     private ActivitiAccount acc;
     private ActivitiSession activitiSession;

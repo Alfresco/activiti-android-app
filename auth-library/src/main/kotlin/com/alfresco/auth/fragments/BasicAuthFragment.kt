@@ -12,12 +12,12 @@ import androidx.fragment.app.FragmentActivity
 import androidx.fragment.app.activityViewModels
 import com.alfresco.android.aims.R
 import com.alfresco.android.aims.databinding.FrAuthBasicBinding
-import com.alfresco.auth.activity.AIMSWelcomeViewModel
+import com.alfresco.auth.activity.LoginViewModel
 import com.alfresco.common.FragmentBuilder
 
 class BasicAuthFragment : DialogFragment() {
 
-    private val viewModel: AIMSWelcomeViewModel by activityViewModels()
+    private val viewModel: LoginViewModel by activityViewModels()
 
     private var withCloud: Boolean = false
 

@@ -11,12 +11,12 @@ import androidx.fragment.app.FragmentActivity
 import androidx.fragment.app.activityViewModels
 import com.alfresco.android.aims.R
 import com.alfresco.android.aims.databinding.FrAuthSsoBinding
-import com.alfresco.auth.activity.AIMSWelcomeViewModel
+import com.alfresco.auth.activity.LoginViewModel
 import com.alfresco.common.FragmentBuilder
 
 class SsoAuthFragment : DialogFragment() {
 
-    private val viewModel: AIMSWelcomeViewModel by activityViewModels()
+    private val viewModel: LoginViewModel by activityViewModels()
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val binding = DataBindingUtil.inflate<FrAuthSsoBinding>(inflater, R.layout.fr_auth_sso, container, false)

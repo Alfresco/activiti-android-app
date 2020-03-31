@@ -6,7 +6,7 @@ xmlns:bind="http://schemas.android.com/apk/res-auto">
 
     <variable
         name="viewModel"
-        type="com.alfresco.auth.activity.AIMSWelcomeViewModel" />
+        type="com.alfresco.auth.activity.LoginViewModel" />
 </data>
 
 <RelativeLayout

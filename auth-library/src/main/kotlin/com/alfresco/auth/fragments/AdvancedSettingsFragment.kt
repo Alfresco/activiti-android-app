@@ -10,13 +10,13 @@ import androidx.fragment.app.FragmentActivity
 import androidx.fragment.app.activityViewModels
 import com.alfresco.android.aims.R
 import com.alfresco.android.aims.databinding.FrAimsAdvancedSettingsBinding
-import com.alfresco.auth.activity.AIMSWelcomeViewModel
+import com.alfresco.auth.activity.LoginViewModel
 import com.alfresco.common.FragmentBuilder
 import com.alfresco.ui.components.Snackbar
 
 class AdvancedSettingsFragment : DialogFragment() {
 
-    private val viewModel: AIMSWelcomeViewModel by activityViewModels()
+    private val viewModel: LoginViewModel by activityViewModels()
     private val rootView: View get() = view!!
 
     override fun onCreate(savedInstanceState: Bundle?) {

@@ -9,6 +9,7 @@ import com.alfresco.common.getViewModel
 import org.json.JSONException
 
 class LogoutViewModel(context: Context, authState: String, authConfig: AuthConfig) : EndSessionViewModel(context, authState, authConfig) {
+
     companion object {
         const val EXTRA_AUTH_STATE = "authState"
         const val EXTRA_AUTH_CONFIG = "authConfig"
@@ -37,10 +38,10 @@ class LogoutViewModel(context: Context, authState: String, authConfig: AuthConfi
 }
 
 class LogoutActivity : EndSessionActivity<LogoutViewModel>() {
-    override val viewModel:LogoutViewModel  by lazy {
+
+    override val viewModel: LogoutViewModel by lazy {
         getViewModel {
             LogoutViewModel.with(applicationContext, intent.extras)
         }
     }
-
 }

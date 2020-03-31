@@ -4,7 +4,7 @@
     <application>
 
         <activity
-            android:name="com.alfresco.auth.activity.WelcomeActivity"
+            android:name="com.alfresco.auth.activity.LoginActivity"
             android:label="@string/app_name"
             android:theme="@style/Theme.Alfresco"
             android:windowSoftInputMode="adjustPan">

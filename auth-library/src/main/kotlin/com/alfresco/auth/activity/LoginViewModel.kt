@@ -7,14 +7,14 @@ import com.alfresco.android.aims.BuildConfig
 import com.alfresco.android.aims.R
 import com.alfresco.auth.AuthType
 import com.alfresco.auth.AuthConfig
+import com.alfresco.auth.Credentials
 import com.alfresco.auth.config.DefaultAuthConfig
-import com.alfresco.auth.ui.BaseAuthViewModel
-import com.alfresco.auth.ui.PkceAuthUiModel
+import com.alfresco.auth.ui.AuthenticationViewModel
 import com.alfresco.common.SingleLiveEvent
 import com.google.gson.Gson
 import com.google.gson.JsonSyntaxException
 
-class AIMSWelcomeViewModel(private val applicationContext: Context) : BaseAuthViewModel() {
+class LoginViewModel(private val applicationContext: Context) : AuthenticationViewModel() {
 
     override var authConfig = defaultAuthConfig.copy()
     override var context = applicationContext
@@ -33,12 +33,10 @@ class AIMSWelcomeViewModel(private val applicationContext: Context) : BaseAuthVi
     val startSSO: LiveData<String> get() = _startSSO
 
     private val _onAuthType = SingleLiveEvent<AuthenticationType>()
-    private val _onCredentials = SingleLiveEvent<Credentials>()
     private val _onShowHelp = SingleLiveEvent<Int>()
     private val _onShowSettings = SingleLiveEvent<Int>()
 
     val onAuthType: SingleLiveEvent<AuthenticationType> = _onAuthType
-    val onCredentials: SingleLiveEvent<Credentials> = _onCredentials
     val onShowHelp: SingleLiveEvent<Int> = _onShowHelp
     val onShowSettings: SingleLiveEvent<Int> = _onShowSettings
 
@@ -70,20 +68,6 @@ class AIMSWelcomeViewModel(private val applicationContext: Context) : BaseAuthVi
             AuthType.BASIC -> _onAuthType.value = AuthenticationType.Basic(hostname = endpoint, withCloud = false)
 
             AuthType.UNKNOWN -> _onAuthType.value = AuthenticationType.Unknown()
-        }
-    }
-
-    override fun handleSSOTokenResponse(model: PkceAuthUiModel) {
-        when (model.success) {
-            true -> {
-                // TODO: nullability check
-                onCredentials.value = Credentials.Sso(model.userEmail!!, model.authState!!)
-            }
-
-            false -> {
-                // TODO: notify error
-//                Toast.makeText(this, "Login Failed: " + authResult.error, Toast.LENGTH_LONG).show()
-            }
         }
     }
 
@@ -170,7 +154,7 @@ class AIMSWelcomeViewModel(private val applicationContext: Context) : BaseAuthVi
             applicationUrl.value = identityUrl.value
 
             // TODO: nullability check
-            onCredentials.value = Credentials.Basic(email.value!!, password.value!!)
+            _onCredentials.setValue(Credentials.Basic(email.value!!, password.value!!))
         }
     }
 
@@ -179,6 +163,10 @@ class AIMSWelcomeViewModel(private val applicationContext: Context) : BaseAuthVi
         private const val SHARED_PREFS_CONFIG_KEY = "config"
 
         private val defaultAuthConfig = DefaultAuthConfig.get()
+
+        fun with(context: Context): LoginViewModel {
+            return LoginViewModel(context)
+        }
     }
 
     class AuthConfigEditor() {
@@ -229,9 +217,4 @@ sealed class AuthenticationType {
     data class SSO(val endpoint: String) : AuthenticationType()
 
     class Unknown : AuthenticationType()
-}
-
-sealed class Credentials {
-    data class Basic(val username: String, val password: String) : Credentials()
-    data class Sso(val username: String, val authState: String) : Credentials()
 }

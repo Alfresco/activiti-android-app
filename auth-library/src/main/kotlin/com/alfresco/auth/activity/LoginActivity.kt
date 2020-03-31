@@ -11,20 +11,23 @@ import androidx.appcompat.widget.Toolbar
 import androidx.core.view.ViewCompat
 import com.alfresco.android.aims.R
 import com.alfresco.auth.AuthConfig
+import com.alfresco.auth.Credentials
 import com.alfresco.auth.fragments.AdvancedSettingsFragment
 import com.alfresco.auth.fragments.BasicAuthFragment
 import com.alfresco.auth.fragments.HelpFragment
 import com.alfresco.auth.fragments.SsoAuthFragment
 import com.alfresco.auth.fragments.WelcomeFragment
 import com.alfresco.common.getViewModel
-import com.alfresco.auth.ui.AlfrescoAuthActivity
+import com.alfresco.auth.ui.AuthenticationActivity
 import com.alfresco.auth.ui.observe
 
 
-abstract class WelcomeActivity : AlfrescoAuthActivity<AIMSWelcomeViewModel>() {
+abstract class LoginActivity : AuthenticationActivity<LoginViewModel>() {
 
-    override val viewModel: AIMSWelcomeViewModel by lazy {
-        getViewModel { AIMSWelcomeViewModel(applicationContext) }
+    override val viewModel: LoginViewModel by lazy {
+        getViewModel {
+            LoginViewModel.with(applicationContext)
+        }
     }
 
     private lateinit var progressView: RelativeLayout
@@ -52,8 +55,7 @@ abstract class WelcomeActivity : AlfrescoAuthActivity<AIMSWelcomeViewModel>() {
         observe(viewModel.hasNavigation, ::onNavigation)
 
         observe(viewModel.onAuthType, ::onAuthType)
-        observe(viewModel.startSSO, ::aimsLogin)
-        observe(viewModel.onCredentials, ::onCredentials)
+        observe(viewModel.startSSO, ::login)
 
         observe(viewModel.onShowHelp, ::showHelp)
         observe(viewModel.onShowSettings, ::showSettings)
@@ -90,8 +92,12 @@ abstract class WelcomeActivity : AlfrescoAuthActivity<AIMSWelcomeViewModel>() {
 
     abstract fun onCredentials(credentials: Credentials, endpoint: String, authConfig: AuthConfig)
 
-    private fun onCredentials(credentials: Credentials) {
+    override fun onCredentials(credentials: Credentials) {
         onCredentials(credentials, viewModel.getApplicationServiceUrl(), viewModel.authConfig)
+    }
+
+    override fun onError(error: String) {
+        // TODO: not implemented
     }
 
     private fun onAuthType(authType: AuthenticationType) {
