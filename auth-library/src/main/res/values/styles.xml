@@ -106,6 +106,13 @@
         <item name="endIconDrawable">@drawable/ic_clear_mini</item>
         <item name="endIconMode">clear_text</item>
     </style>
+
+    <style name="Widget.Alfresco.PasswordField"/>
+    <style name="Widget.Alfresco.PasswordField.Layout">
+        <item name="boxBackgroundColor">@color/transparent</item>
+        <item name="endIconMode">clear_text</item>
+    </style>
+    
     <style name="Widget.Alfresco.TextField.Edit">
         <item name="android:paddingLeft">0dp</item> <!-- removes implicit indentation -->
         <item name="android:paddingBottom">4dp</item> <!-- distance to underline -->
