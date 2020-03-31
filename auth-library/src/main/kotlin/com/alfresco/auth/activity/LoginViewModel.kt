@@ -18,10 +18,8 @@ class LoginViewModel(private val applicationContext: Context) : AuthenticationVi
     override var authConfig = AuthConfig.defaultConfig.copy()
     override var context = applicationContext
 
-    private var _authConfigEditor = AuthConfigEditor()
-    val authConfigEditor : AuthConfigEditor get() {
-        return _authConfigEditor
-    }
+    lateinit var authConfigEditor: AuthConfigEditor
+        private set
 
     private val _hasNavigation = MutableLiveData<Boolean>()
 
@@ -67,8 +65,8 @@ class LoginViewModel(private val applicationContext: Context) : AuthenticationVi
     }
 
     fun startEditing() {
-        _authConfigEditor = AuthConfigEditor()
-        _authConfigEditor.reset(authConfig)
+        authConfigEditor = AuthConfigEditor()
+        authConfigEditor.reset(authConfig)
     }
 
     fun connect() {
