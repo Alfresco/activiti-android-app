@@ -9,7 +9,8 @@ import com.alfresco.auth.AuthConfig
 import com.alfresco.auth.Credentials
 import com.alfresco.auth.config.defaultConfig
 import com.alfresco.auth.ui.AuthenticationViewModel
-import com.alfresco.common.SingleLiveEvent
+import com.alfresco.core.data.LiveEvent
+import com.alfresco.core.data.MutableLiveEvent
 import com.google.gson.Gson
 import com.google.gson.JsonSyntaxException
 
@@ -18,25 +19,20 @@ class LoginViewModel(private val applicationContext: Context) : AuthenticationVi
     override var authConfig = AuthConfig.defaultConfig.copy()
     override var context = applicationContext
 
-    lateinit var authConfigEditor: AuthConfigEditor
-        private set
-
     private val _hasNavigation = MutableLiveData<Boolean>()
+    private val _onShowHelp = MutableLiveEvent<Int>()
+    private val _onShowSettings = MutableLiveEvent<Int>()
+    private val _startSSO = MutableLiveEvent<String>()
 
     val hasNavigation: LiveData<Boolean> get() = _hasNavigation
-
-    private val _startSSO = SingleLiveEvent<String>()
-
-    val startSSO: LiveData<String> get() = _startSSO
-
-    private val _onShowHelp = SingleLiveEvent<Int>()
-    private val _onShowSettings = SingleLiveEvent<Int>()
-
-    val onShowHelp: SingleLiveEvent<Int> = _onShowHelp
-    val onShowSettings: SingleLiveEvent<Int> = _onShowSettings
-
+    val onShowHelp: LiveEvent<Int> = _onShowHelp
+    val onShowSettings: LiveEvent<Int> = _onShowSettings
     val identityUrl = MutableLiveData<String>()
     val applicationUrl = MutableLiveData<String>()
+    val startSSO: LiveEvent<String> get() = _startSSO
+
+    lateinit var authConfigEditor: AuthConfigEditor
+        private set
 
     init {
         loadSavedConfig()
@@ -80,19 +76,19 @@ class LoginViewModel(private val applicationContext: Context) : AuthenticationVi
     }
 
     fun showSettings() {
-        onShowSettings.value = 0
+        _onShowSettings.value = 0
     }
 
     fun showWelcomeHelp() {
-        onShowHelp.value = R.string.auth_help_identity_body
+        _onShowHelp.value = R.string.auth_help_identity_body
     }
 
     fun showSettingsHelp() {
-        onShowHelp.value = R.string.auth_help_settings_body
+        _onShowHelp.value = R.string.auth_help_settings_body
     }
 
     fun showSsoHelp() {
-        onShowHelp.value = R.string.auth_help_sso_body
+        _onShowHelp.value = R.string.auth_help_sso_body
     }
 
     @Suppress("NULLABILITY_MISMATCH_BASED_ON_JAVA_ANNOTATIONS")
@@ -135,7 +131,7 @@ class LoginViewModel(private val applicationContext: Context) : AuthenticationVi
             applicationUrl.value = identityUrl.value
 
             // TODO: nullability check
-            _onCredentials.setValue(Credentials.Basic(email.value!!, password.value!!))
+            _onCredentials.value = Credentials.Basic(email.value!!, password.value!!)
         }
     }
 
