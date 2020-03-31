@@ -99,15 +99,6 @@
 
             </RelativeLayout>
 
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/btnCloudSignIn"
-                style="@style/Widget.Alfresco.Button.Secondary"
-                android:layout_width="match_parent"
-                android:layout_marginTop="10dp"
-                android:onClick="@{() -> viewModel.cloudConnect()}"
-                android:text="@string/auth_cloud_sign_in_button"
-                android:visibility="gone" />
-
             <View
                 android:layout_width="match_parent"
                 android:layout_height="0dp"

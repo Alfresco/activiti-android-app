@@ -11,6 +11,7 @@ import androidx.appcompat.widget.Toolbar
 import androidx.core.view.ViewCompat
 import com.alfresco.android.aims.R
 import com.alfresco.auth.AuthConfig
+import com.alfresco.auth.AuthType
 import com.alfresco.auth.Credentials
 import com.alfresco.auth.fragments.AdvancedSettingsFragment
 import com.alfresco.auth.fragments.BasicAuthFragment
@@ -100,17 +101,17 @@ abstract class LoginActivity : AuthenticationActivity<LoginViewModel>() {
         // TODO: not implemented
     }
 
-    private fun onAuthType(authType: AuthenticationType) {
-        when (authType) {
-            is AuthenticationType.SSO -> {
+    override fun onAuthType(type: AuthType) {
+        when (type) {
+            AuthType.SSO -> {
                 SsoAuthFragment.with(this).display()
             }
 
-            is AuthenticationType.Basic -> {
-                BasicAuthFragment.with(this).withHostname(authType.hostname).withCloud(authType.withCloud).display()
+            AuthType.BASIC -> {
+                BasicAuthFragment.with(this).display()
             }
 
-            is AuthenticationType.Unknown -> {
+            AuthType.UNKNOWN -> {
                 Toast.makeText(this, "Auth type: unknown", Toast.LENGTH_LONG).show()
             }
         }

@@ -37,12 +37,7 @@ class BasicAuthFragment : DialogFragment() {
 
         viewModel.setHasNavigation(true)
 
-        arguments?.let {
-            withCloud = it.getBoolean(ARG_WITH_CLOUD, false)
-            hostname = it.getString(ARG_HOSTNAME)
-
-            updateUi()
-        }
+        updateUi()
     }
 
     private fun updateUi() {
@@ -65,18 +60,6 @@ class BasicAuthFragment : DialogFragment() {
     class Builder(parent: FragmentActivity) : FragmentBuilder(parent) {
         override val fragmentTag = TAG
 
-        fun withHostname(hostname: String): Builder {
-            extraConfiguration.putString(ARG_HOSTNAME, hostname)
-
-            return this
-        }
-
-        fun withCloud(withCloud: Boolean): Builder {
-            extraConfiguration.putBoolean(ARG_WITH_CLOUD, withCloud)
-
-            return this
-        }
-
         override fun build(args: Bundle): Fragment {
             val fragment = BasicAuthFragment()
             fragment.arguments = args
@@ -87,9 +70,6 @@ class BasicAuthFragment : DialogFragment() {
     companion object {
 
         val TAG = BasicAuthFragment::class.java.name
-
-        val ARG_HOSTNAME = "arg_hostname"
-        val ARG_WITH_CLOUD = "arg_auth_with_cloud"
 
         fun with(activity: FragmentActivity): Builder = Builder(activity)
     }

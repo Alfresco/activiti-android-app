@@ -32,11 +32,9 @@ class LoginViewModel(private val applicationContext: Context) : AuthenticationVi
 
     val startSSO: LiveData<String> get() = _startSSO
 
-    private val _onAuthType = SingleLiveEvent<AuthenticationType>()
     private val _onShowHelp = SingleLiveEvent<Int>()
     private val _onShowSettings = SingleLiveEvent<Int>()
 
-    val onAuthType: SingleLiveEvent<AuthenticationType> = _onAuthType
     val onShowHelp: SingleLiveEvent<Int> = _onShowHelp
     val onShowSettings: SingleLiveEvent<Int> = _onShowSettings
 
@@ -61,16 +59,6 @@ class LoginViewModel(private val applicationContext: Context) : AuthenticationVi
         return "${protocol}://${applicationUrl.value}${port}/${authConfig.serviceDocuments}/"
     }
 
-    override fun handleAuthType(endpoint: String, authType: AuthType) {
-        when (authType) {
-            AuthType.SSO ->  _onAuthType.value = AuthenticationType.SSO(endpoint)
-
-            AuthType.BASIC -> _onAuthType.value = AuthenticationType.Basic(hostname = endpoint, withCloud = false)
-
-            AuthType.UNKNOWN -> _onAuthType.value = AuthenticationType.Unknown()
-        }
-    }
-
     fun setHasNavigation(enableNavigation: Boolean) {
         _hasNavigation.value = enableNavigation
     }
@@ -88,10 +76,6 @@ class LoginViewModel(private val applicationContext: Context) : AuthenticationVi
         identityUrl.value?.let {
             checkAuthType(it)
         }
-    }
-
-    fun cloudConnect() {
-        _onAuthType.value = AuthenticationType.Basic(hostname = "activiti.alfresco.com", withCloud = true)
     }
 
     fun ssoLogin() {
@@ -208,13 +192,4 @@ class LoginViewModel(private val applicationContext: Context) : AuthenticationVi
             private const val DEFAULT_HTTPS_PORT = "443"
         }
     }
-}
-
-sealed class AuthenticationType {
-
-    data class Basic(val hostname: String, val withCloud: Boolean) : AuthenticationType()
-
-    data class SSO(val endpoint: String) : AuthenticationType()
-
-    class Unknown : AuthenticationType()
 }
