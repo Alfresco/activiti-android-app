@@ -21,8 +21,6 @@ class BasicAuthFragment : DialogFragment() {
 
     private var withCloud: Boolean = false
 
-    private var hostname: String? = null
-
     private val rootView: View get() = view!!
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -50,8 +48,6 @@ class BasicAuthFragment : DialogFragment() {
         } else {
             rootView.findViewById<View>(R.id.tvSigninTo).visibility = View.VISIBLE
             rootView.findViewById<View>(R.id.tvConnectUrl).visibility = View.VISIBLE
-
-            rootView.findViewById<TextView>(R.id.tvConnectUrl).setText(hostname)
 
             rootView.findViewById<View>(R.id.tvBasicAuthInfoCloud).visibility = View.GONE
         }
