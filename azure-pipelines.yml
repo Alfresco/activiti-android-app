@@ -1,6 +1,7 @@
 trigger:
   - master
-  - feature*
+
+pr: none
 
 pool:
   vmImage: 'macos-latest'
