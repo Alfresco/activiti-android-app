@@ -27,6 +27,7 @@ class LoginViewModel(private val applicationContext: Context) : AuthenticationVi
     val hasNavigation: LiveData<Boolean> get() = _hasNavigation
     val onShowHelp: LiveEvent<Int> = _onShowHelp
     val onShowSettings: LiveEvent<Int> = _onShowSettings
+    val isLoading = MutableLiveData<Boolean>()
     val identityUrl = MutableLiveData<String>()
     val applicationUrl = MutableLiveData<String>()
     val startSSO: LiveEvent<String> get() = _startSSO
@@ -56,16 +57,14 @@ class LoginViewModel(private val applicationContext: Context) : AuthenticationVi
         _hasNavigation.value = enableNavigation
     }
 
-    fun ssoLogin(identityServiceUrl: String) {
-        _startSSO.value = identityServiceUrl
-    }
-
     fun startEditing() {
         authConfigEditor = AuthConfigEditor()
         authConfigEditor.reset(authConfig)
     }
 
     fun connect() {
+        isLoading.value = true
+
         initServiceWith(authConfig)
         identityUrl.value?.let {
             checkAuthType(it)
@@ -73,7 +72,9 @@ class LoginViewModel(private val applicationContext: Context) : AuthenticationVi
     }
 
     fun ssoLogin() {
-        ssoLogin(identityUrl.value!!)
+        isLoading.value = true
+
+        _startSSO.value = identityUrl.value!!
     }
 
     fun showSettings() {
@@ -128,11 +129,12 @@ class LoginViewModel(private val applicationContext: Context) : AuthenticationVi
         val password = MutableLiveData<String>()
 
         fun login() {
+            isLoading.value = true
+
             // Assume application url is the same as identity for basic auth
             applicationUrl.value = identityUrl.value
 
-            // TODO: nullability check
-            _onCredentials.value = Credentials.Basic(email.value!!, password.value!!)
+            _onCredentials.value = Credentials.Basic(email.value ?: "", password.value ?: "")
         }
     }
 

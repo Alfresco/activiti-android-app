@@ -5,7 +5,6 @@ import android.os.Bundle
 import android.view.MenuItem
 import android.view.View
 import android.widget.RelativeLayout
-import android.widget.Toast
 import androidx.annotation.StringRes
 import androidx.appcompat.widget.Toolbar
 import androidx.core.view.ViewCompat
@@ -21,6 +20,7 @@ import com.alfresco.auth.fragments.WelcomeFragment
 import com.alfresco.common.getViewModel
 import com.alfresco.auth.ui.AuthenticationActivity
 import com.alfresco.auth.ui.observe
+import com.alfresco.ui.components.Snackbar
 
 
 abstract class LoginActivity : AuthenticationActivity<LoginViewModel>() {
@@ -54,6 +54,7 @@ abstract class LoginActivity : AuthenticationActivity<LoginViewModel>() {
         }
 
         observe(viewModel.hasNavigation, ::onNavigation)
+        observe(viewModel.isLoading, ::onLoading)
 
         observe(viewModel.onAuthType, ::onAuthType)
         observe(viewModel.startSSO, ::login)
@@ -76,7 +77,7 @@ abstract class LoginActivity : AuthenticationActivity<LoginViewModel>() {
         }
     }
 
-    override fun onLoading(isLoading: Boolean) {
+    private fun onLoading(isLoading: Boolean) {
         progressView.visibility = if (isLoading) View.VISIBLE else View.GONE
     }
 
@@ -98,10 +99,24 @@ abstract class LoginActivity : AuthenticationActivity<LoginViewModel>() {
     }
 
     override fun onError(error: String) {
-        // TODO: not implemented
+        // Hide progress view on error
+        viewModel.isLoading.value = false
+
+        val parentLayout: View = findViewById(android.R.id.content);
+        Snackbar.make(parentLayout,
+                Snackbar.STYLE_ERROR,
+                resources.getString(R.string.auth_error_title),
+                error,
+                Snackbar.LENGTH_LONG).show()
+    }
+
+    protected fun onError(@StringRes messageResId: Int) {
+        onError(resources.getString(messageResId))
     }
 
     override fun onAuthType(type: AuthType) {
+        viewModel.isLoading.value = false
+
         when (type) {
             AuthType.SSO -> {
                 SsoAuthFragment.with(this).display()
@@ -112,7 +127,7 @@ abstract class LoginActivity : AuthenticationActivity<LoginViewModel>() {
             }
 
             AuthType.UNKNOWN -> {
-                Toast.makeText(this, "Auth type: unknown", Toast.LENGTH_LONG).show()
+                onError(R.string.auth_error_check_connect_url)
             }
         }
     }

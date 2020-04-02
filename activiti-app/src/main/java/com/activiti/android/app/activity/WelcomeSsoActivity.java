@@ -1,8 +1,8 @@
 package com.activiti.android.app.activity;
 
 import android.content.Intent;
-import android.widget.Toast;
 
+import com.activiti.android.app.R;
 import com.activiti.android.platform.EventBusManager;
 import com.activiti.android.platform.account.AccountsPreferences;
 import com.activiti.android.platform.account.ActivitiAccount;
@@ -22,6 +22,7 @@ import com.alfresco.auth.AuthConfig;
 import com.alfresco.auth.AuthInterceptor;
 import com.alfresco.auth.Credentials;
 import com.alfresco.auth.activity.LoginActivity;
+import com.alfresco.client.AbstractClient;
 import com.alfresco.client.AbstractClient.AuthType;
 import com.google.gson.Gson;
 import com.squareup.otto.Subscribe;
@@ -83,7 +84,7 @@ public class WelcomeSsoActivity extends LoginActivity {
     }
 
     private void connect() {
-        onLoading(true);
+        getViewModel().isLoading().setValue(false);
 
         try {
             AbstractClient.Builder<ActivitiSession> sessionBuilder =
@@ -93,6 +94,7 @@ public class WelcomeSsoActivity extends LoginActivity {
                 sessionBuilder = sessionBuilder.interceptor(interceptor);
             }
             activitiSession = sessionBuilder.build();
+
             activitiSession.getServiceRegistry().getProfileService().getProfile(new Callback<UserRepresentation>() {
                 @Override
                 public void onResponse(Call<UserRepresentation> call, Response<UserRepresentation> response) {
@@ -100,17 +102,17 @@ public class WelcomeSsoActivity extends LoginActivity {
                         user = response.body();
                         retrieveServerInfo();
                     } else if (response.code() == 401) {
-                        Toast.makeText(WelcomeSsoActivity.this, "Get Profile failed! 401", Toast.LENGTH_LONG).show();
+                        onError(R.string.auth_error_wrong_credentials);
                     }
                 }
 
                 @Override
                 public void onFailure(Call<UserRepresentation> call, Throwable t) {
-                    Toast.makeText(WelcomeSsoActivity.this, "Get Profile failed!", Toast.LENGTH_LONG).show();
+                    onError(R.string.auth_error_unreachable);
                 }
             });
         } catch(IllegalArgumentException illegalArgumentException) {
-            Toast.makeText(WelcomeSsoActivity.this, "Get Profile failed!", Toast.LENGTH_LONG).show();
+            onError(R.string.auth_error_wrong_credentials);
         }
     }
 
@@ -207,7 +209,7 @@ public class WelcomeSsoActivity extends LoginActivity {
         if (acc == null) { return; }
         sync();
 
-        onLoading(false);
+        getViewModel().isLoading().setValue(false);
 
         Intent i = new Intent(this, MainActivity.class);
         i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
@@ -215,6 +217,5 @@ public class WelcomeSsoActivity extends LoginActivity {
 
         EventBusManager.getInstance().unregister(this);
         finish();
-//        OptionalFragment.with(this).acocuntId(acc.getId()).back(false).display();
     }
 }
