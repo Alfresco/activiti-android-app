@@ -84,8 +84,6 @@ public class WelcomeSsoActivity extends LoginActivity {
     }
 
     private void connect() {
-        getViewModel().isLoading().setValue(false);
-
         try {
             AbstractClient.Builder<ActivitiSession> sessionBuilder =
                     new ActivitiSession.Builder().connect(endpoint, username, password, authType);
