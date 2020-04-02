@@ -16,7 +16,7 @@ import com.google.gson.JsonSyntaxException
 
 class LoginViewModel(private val applicationContext: Context) : AuthenticationViewModel() {
 
-    override var authConfig = AuthConfig.defaultConfig.copy()
+    lateinit var authConfig: AuthConfig
     override var context = applicationContext
 
     private val _hasNavigation = MutableLiveData<Boolean>()
@@ -66,6 +66,7 @@ class LoginViewModel(private val applicationContext: Context) : AuthenticationVi
     }
 
     fun connect() {
+        initServiceWith(authConfig)
         identityUrl.value?.let {
             checkAuthType(it)
         }
@@ -98,7 +99,7 @@ class LoginViewModel(private val applicationContext: Context) : AuthenticationVi
 
         authConfig = try {
             if (configJson != null)
-                Gson().fromJson(configJson, authConfig::class.java)
+                Gson().fromJson(configJson, AuthConfig::class.java)
             else
                 AuthConfig.defaultConfig
         } catch (e: JsonSyntaxException) {
