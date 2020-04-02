@@ -1,6 +1,7 @@
 package com.activiti.android.app.activity;
 
 import android.app.Activity;
+import android.content.Intent;
 
 import com.activiti.android.platform.EventBusManager;
 import com.activiti.android.platform.account.ActivitiAccount;
@@ -51,7 +52,6 @@ public class ReloginSsoActivity extends ReloginActivity {
 
     @Override
     public void onError(@NotNull String s) {
-        setResult(Activity.RESULT_OK);
         finish();
     }
 
@@ -74,7 +74,11 @@ public class ReloginSsoActivity extends ReloginActivity {
         onLoading(false);
 
         EventBusManager.getInstance().unregister(this);
-        setResult(Activity.RESULT_OK);
+
+        Intent i = new Intent(this, MainActivity.class);
+        i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        startActivity(i);
+
         finish();
     }
 }

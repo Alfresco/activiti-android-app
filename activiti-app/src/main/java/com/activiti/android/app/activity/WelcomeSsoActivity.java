@@ -206,7 +206,9 @@ public class WelcomeSsoActivity extends LoginActivity {
 
         onLoading(false);
 
-        startActivity(new Intent(this, MainActivity.class));
+        Intent i = new Intent(this, MainActivity.class);
+        i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        startActivity(i);
 
         EventBusManager.getInstance().unregister(this);
         finish();
