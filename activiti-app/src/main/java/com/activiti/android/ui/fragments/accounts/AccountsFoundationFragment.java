@@ -59,8 +59,7 @@ public class AccountsFoundationFragment extends BasePagingGridFragment implement
         setListShown(true);
         List<ActivitiAccount> accounts = ActivitiAccountManager.getInstance(getActivity()).retrieveAccounts(
                 getActivity());
-        accounts.add(new ActivitiAccount(AccountAdapter.ADD_ACCOUNT_ID, null, null, null, null, null, null, null, null, null,
-                null, null, null, null));
+        accounts.add(AccountAdapter.makeAddAccountItem());
         refreshHelper.setRefreshComplete();
         isFullLoad = true;
         return new AccountAdapter(getActivity(), R.layout.row_two_lines, new ArrayList<>(accounts));

@@ -24,6 +24,8 @@ import java.io.Serializable;
 
 import android.accounts.AccountManager;
 
+import androidx.annotation.Nullable;
+
 import com.activiti.android.app.BuildConfig;
 import com.alfresco.auth.AuthConfig;
 import com.alfresco.client.AbstractClient.AuthType;
@@ -282,5 +284,23 @@ public class ActivitiAccount implements Serializable
     public void setIsAdmin(boolean isAdmin)
     {
         this.isAdmin = isAdmin;
+    }
+
+    @Override
+    public boolean equals(@Nullable Object obj) {
+        if (this == obj)
+        {
+            return true;
+        }
+        if (obj == null)
+        {
+            return false;
+        }
+        if (getClass() != obj.getClass())
+        {
+            return false;
+        }
+        ActivitiAccount acc = (ActivitiAccount) obj;
+        return getId() == acc.getId();
     }
 }

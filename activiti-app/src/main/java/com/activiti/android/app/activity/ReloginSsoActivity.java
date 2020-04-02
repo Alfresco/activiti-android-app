@@ -1,5 +1,7 @@
 package com.activiti.android.app.activity;
 
+import android.app.Activity;
+
 import com.activiti.android.platform.EventBusManager;
 import com.activiti.android.platform.account.ActivitiAccount;
 import com.activiti.android.platform.account.ActivitiAccountManager;
@@ -31,14 +33,16 @@ public class ReloginSsoActivity extends ReloginActivity {
     @Override
     public void onCredentials(@NotNull Credentials credentials) {
         String authState = null;
+        String username = null;
         if (credentials instanceof Credentials.Sso) {
             Credentials.Sso t = (Credentials.Sso) credentials;
+            username = t.getUsername();
             authState = t.getAuthState();
         }
 
         ActivitiAccount acc = ActivitiAccountManager.getInstance(this).getCurrentAccount();
         if (acc != null && authState != null) {
-            ActivitiAccountManager.getInstance(this).update(this, acc.getId(), authState);
+            ActivitiAccountManager.getInstance(this).update(this, acc.getId(), username, authState);
             IntegrationManager.sync(this);
         } else {
             onError("Illegal argument");
@@ -47,6 +51,7 @@ public class ReloginSsoActivity extends ReloginActivity {
 
     @Override
     public void onError(@NotNull String s) {
+        setResult(Activity.RESULT_OK);
         finish();
     }
 
@@ -69,6 +74,7 @@ public class ReloginSsoActivity extends ReloginActivity {
         onLoading(false);
 
         EventBusManager.getInstance().unregister(this);
+        setResult(Activity.RESULT_OK);
         finish();
     }
 }

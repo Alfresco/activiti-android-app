@@ -83,4 +83,13 @@ public class AccountAdapter extends BaseListAdapter<ActivitiAccount, TwoLinesVie
     protected void updateIcon(TwoLinesViewHolder vh, ActivitiAccount item)
     {
     }
+
+    public static ActivitiAccount makeAddAccountItem()
+    {
+        return new ActivitiAccount(
+                AccountAdapter.ADD_ACCOUNT_ID,
+                null, null, null, null, null,
+                null, null, null, null, null,
+                null, null, null);
+    }
 }

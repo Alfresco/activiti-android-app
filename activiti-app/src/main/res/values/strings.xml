@@ -47,8 +47,8 @@
     <string name="general_login_credentials_connect">Process Services</string>
     <string name="general_login_account_added">Account added!</string>
     <string name="general_login_account_name">Give this account a name (optional)</string>
-    <string name="general_login_unauthorized_title">You are no longer authenticated, please log in again.</string>
-    <string name="general_login_unauthorized_button">OK</string>
+    <string name="general_login_signed_out_message">You are no longer authenticated, please sign in again.</string>
+    <string name="general_login_signed_out_alt_message">Or use another account.</string>
 
     <!-- ACTION -->
     <string name="general_action_clear">Clear</string>

@@ -26,16 +26,15 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 
-import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 
 import com.activiti.android.app.R;
-import com.activiti.android.app.activity.ReloginSsoActivity;
+import com.activiti.android.app.fragments.account.SignedOutDialogFragment;
 import com.activiti.android.app.fragments.app.AppInstancesFragment;
 import com.activiti.android.platform.EventBusManager;
 import com.activiti.android.platform.account.AccountsPreferences;
@@ -46,14 +45,11 @@ import com.activiti.android.platform.integration.hockeyapp.HockeyAppManager;
 import com.activiti.android.sdk.ActivitiSession;
 import com.activiti.android.sdk.services.ServiceRegistry;
 import com.alfresco.auth.AuthInterceptor;
-import com.alfresco.auth.activity.ReloginViewModel;
 import com.alfresco.client.AbstractClient;
 import com.mattprecious.telescope.EmailDeviceInfoLens;
 import com.mattprecious.telescope.TelescopeLayout;
 
 import org.jetbrains.annotations.NotNull;
-
-import java.lang.ref.WeakReference;
 
 /**
  * Base class for all activities.
@@ -171,7 +167,7 @@ public abstract class AlfrescoActivity extends AppCompatActivity
 
                 @Override
                 public void onAuthFailure() {
-                    runOnUiThread(() -> showSignedOutAlert());
+                    runOnUiThread(() -> showSignedOutPrompt());
                 }
             });
             sessionBuilder = sessionBuilder.interceptor(interceptor);
@@ -189,23 +185,12 @@ public abstract class AlfrescoActivity extends AppCompatActivity
         checkIsAdmin();
     }
 
-    static WeakReference<AlertDialog> unauthorizedAlert = null;
-    private void showSignedOutAlert() {
-        if (unauthorizedAlert != null && unauthorizedAlert.get() != null && unauthorizedAlert.get().isShowing()) return;
-        AlertDialog alert = new AlertDialog.Builder(this)
-                    .setMessage(R.string.general_login_unauthorized_title)
-                    .setPositiveButton(R.string.general_login_unauthorized_button, (dialogInterface, i) -> {
-                        showReLoginPrompt();
-//                        finish();
-                    }).show();
-        unauthorizedAlert = new WeakReference<>(alert);
-    }
-
-    private void showReLoginPrompt() {
-        Intent i = new Intent(this, ReloginSsoActivity.class);
-        i.putExtra(ReloginViewModel.EXTRA_AUTH_CONFIG, account.getAuthConfigString());
-        i.putExtra(ReloginViewModel.EXTRA_AUTH_STATE, account.getAuthState());
-        startActivity(i);
+    private void showSignedOutPrompt() {
+        FragmentManager fm = getSupportFragmentManager();
+        String tag = SignedOutDialogFragment.TAG;
+        if (fm.findFragmentByTag(tag) == null) {
+            new SignedOutDialogFragment().show(fm, tag);
+        }
     }
 
     // ///////////////////////////////////////////////////////////////////////////
