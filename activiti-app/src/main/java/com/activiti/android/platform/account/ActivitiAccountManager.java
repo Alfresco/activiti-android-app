@@ -232,6 +232,9 @@ public class ActivitiAccountManager extends Manager
 
     public void delete(Context context, long accountId, AccountManagerCallback<Boolean> callback)
     {
+        // Delete account from cache
+        accountIndex.remove(accountId);
+
         // Delete Account from AccountManager
         AccountManager.get(context).removeAccount(getAndroidAccount(accountId), callback, null);
     }
@@ -359,7 +362,9 @@ public class ActivitiAccountManager extends Manager
         manager.setUserData(acc, ActivitiAccount.ACCOUNT_USER_FULLNAME, fullname);
         manager.setUserData(acc, ActivitiAccount.ACCOUNT_TENANT_ID, tenantId);
 
-        return getByAccountId(accountId);
+        ActivitiAccount activitiAccount = getByAccountId(accountId);
+        accountIndex.put(accountId, activitiAccount);
+        return activitiAccount;
     }
 
     public ActivitiAccount update(Context context, long accountId, String username, String authState) {
