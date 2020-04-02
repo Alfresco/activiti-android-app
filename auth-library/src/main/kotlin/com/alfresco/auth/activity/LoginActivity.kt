@@ -1,9 +1,14 @@
 package com.alfresco.auth.activity
 
+import android.content.Context
 import android.content.pm.ActivityInfo
+import android.graphics.Rect
 import android.os.Bundle
 import android.view.MenuItem
+import android.view.MotionEvent
 import android.view.View
+import android.view.inputmethod.InputMethodManager
+import android.widget.EditText
 import android.widget.RelativeLayout
 import androidx.annotation.StringRes
 import androidx.appcompat.widget.Toolbar
@@ -12,14 +17,10 @@ import com.alfresco.android.aims.R
 import com.alfresco.auth.AuthConfig
 import com.alfresco.auth.AuthType
 import com.alfresco.auth.Credentials
-import com.alfresco.auth.fragments.AdvancedSettingsFragment
-import com.alfresco.auth.fragments.BasicAuthFragment
-import com.alfresco.auth.fragments.HelpFragment
-import com.alfresco.auth.fragments.SsoAuthFragment
-import com.alfresco.auth.fragments.WelcomeFragment
-import com.alfresco.common.getViewModel
+import com.alfresco.auth.fragments.*
 import com.alfresco.auth.ui.AuthenticationActivity
 import com.alfresco.auth.ui.observe
+import com.alfresco.common.getViewModel
 import com.alfresco.ui.components.Snackbar
 
 
@@ -138,5 +139,22 @@ abstract class LoginActivity : AuthenticationActivity<LoginViewModel>() {
 
     private fun showHelp(@StringRes msgResId: Int) {
         HelpFragment.with(this).message(msgResId).show()
+    }
+
+    override fun dispatchTouchEvent(event: MotionEvent): Boolean {
+        // Dismiss keyboard on touches outside editable fields
+        if (event.action == MotionEvent.ACTION_DOWN) {
+            val v = currentFocus
+            if (v is EditText) {
+                val outRect = Rect()
+                v.getGlobalVisibleRect(outRect)
+                if (!outRect.contains(event.rawX.toInt(), event.rawY.toInt())) {
+                    v.clearFocus()
+                    val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+                    imm.hideSoftInputFromWindow(v.windowToken, 0)
+                }
+            }
+        }
+        return super.dispatchTouchEvent(event)
     }
 }
