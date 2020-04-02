@@ -86,10 +86,13 @@ public class WelcomeSsoActivity extends LoginActivity {
         onLoading(true);
 
         try {
-            activitiSession = new ActivitiSession.Builder()
-                    .connect(endpoint, username, password, authType)
-                    .interceptor(new AuthInterceptor(getApplicationContext(), authState, authConfig))
-                    .build();
+            AbstractClient.Builder<ActivitiSession> sessionBuilder =
+                    new ActivitiSession.Builder().connect(endpoint, username, password, authType);
+            if (authType == AuthType.TOKEN) {
+                AuthInterceptor interceptor = new AuthInterceptor(getApplicationContext(), authState, authConfig);
+                sessionBuilder = sessionBuilder.interceptor(interceptor);
+            }
+            activitiSession = sessionBuilder.build();
             activitiSession.getServiceRegistry().getProfileService().getProfile(new Callback<UserRepresentation>() {
                 @Override
                 public void onResponse(Call<UserRepresentation> call, Response<UserRepresentation> response) {
