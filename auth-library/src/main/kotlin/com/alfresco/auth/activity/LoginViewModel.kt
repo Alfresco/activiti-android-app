@@ -3,6 +3,7 @@ package com.alfresco.auth.activity
 import android.content.Context
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.Observer
 import com.alfresco.android.aims.BuildConfig
 import com.alfresco.android.aims.R
 import com.alfresco.auth.AuthConfig
@@ -111,16 +112,17 @@ class LoginViewModel(private val applicationContext: Context) : AuthenticationVi
     fun saveConfigChanges() {
         val config = authConfigEditor.get()
 
+        // Save state to persistent storage
         val sharedPrefs  = applicationContext.getSharedPreferences(SHARED_PREFS_NAME, Context.MODE_PRIVATE)
         val editor = sharedPrefs.edit()
         editor.putString(SHARED_PREFS_CONFIG_KEY, Gson().toJson(config))
         editor.apply()
 
+        // Update local field
         authConfig = config
-    }
 
-    fun resetToDefaultConfig() {
-        authConfigEditor.reset(AuthConfig.defaultConfig)
+        // Reset the editor (will update changed state)
+        authConfigEditor.reset(config)
     }
 
     val basicAuth = BasicAuth()
@@ -148,26 +150,56 @@ class LoginViewModel(private val applicationContext: Context) : AuthenticationVi
     }
 
     class AuthConfigEditor() {
+        private lateinit var source: AuthConfig
         val https = MutableLiveData<Boolean>()
         val port = MutableLiveData<String>()
         val serviceDocuments = MutableLiveData<String>()
         val realm = MutableLiveData<String>()
         val clientId = MutableLiveData<String>()
         val redirectUrl = MutableLiveData<String>()
+        val changed = MutableLiveData<Boolean>()
 
         init {
             https.observeForever{
                 port.value = if(it == true) DEFAULT_HTTPS_PORT else DEFAULT_HTTP_PORT
+                onChange(it)
             }
+            port.observeForever(this::onChange)
+            serviceDocuments.observeForever(this::onChange)
+            realm.observeForever(this::onChange)
+            clientId.observeForever(this::onChange)
+        }
+
+        private fun onChange(ignored: Boolean) {
+            onChange()
+        }
+
+        private fun onChange(ignored: String) {
+            onChange()
+        }
+
+        private fun onChange() {
+            changed.value = get() != source
         }
 
         fun reset(config: AuthConfig) {
+            source = config
+            load(config)
+        }
+
+        fun resetToDefaultConfig() {
+            // Source is not changed as resetting to default does not commit changes
+            load(AuthConfig.defaultConfig)
+        }
+
+        private fun load(config: AuthConfig) {
             https.value = config.https
             port.value = config.port
             serviceDocuments.value = config.serviceDocuments
             realm.value = config.realm
             clientId.value = config.clientId
             redirectUrl.value = config.redirectUrl
+            onChange()
         }
 
         fun get(): AuthConfig {

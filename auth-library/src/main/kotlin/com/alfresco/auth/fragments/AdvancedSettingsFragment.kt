@@ -11,6 +11,7 @@ import androidx.fragment.app.activityViewModels
 import com.alfresco.android.aims.R
 import com.alfresco.android.aims.databinding.FrAimsAdvancedSettingsBinding
 import com.alfresco.auth.activity.LoginViewModel
+import com.alfresco.auth.ui.observe
 import com.alfresco.common.FragmentBuilder
 import com.alfresco.ui.components.Snackbar
 
@@ -18,6 +19,7 @@ class AdvancedSettingsFragment : DialogFragment() {
 
     private val viewModel: LoginViewModel by activityViewModels()
     private val rootView: View get() = view!!
+    private lateinit var saveTextView: TextView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -49,6 +51,9 @@ class AdvancedSettingsFragment : DialogFragment() {
 
         val item = menu.findItem(R.id.aims_save_settings)
         val action = item.actionView.findViewById<TextView>(R.id.tvSaveSettingsAction)
+        saveTextView = action
+
+        observe(viewModel.authConfigEditor.changed, this::onChanges)
 
         action.setOnClickListener {
             Snackbar.make(rootView,
@@ -60,6 +65,10 @@ class AdvancedSettingsFragment : DialogFragment() {
         }
 
         super.onCreateOptionsMenu(menu, inflater)
+    }
+
+    private fun onChanges(changed: Boolean) {
+        saveTextView.isEnabled = changed
     }
 
     class Builder(parent: FragmentActivity) : FragmentBuilder(parent) {
