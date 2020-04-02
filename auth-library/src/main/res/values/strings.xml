@@ -1,9 +1,8 @@
 <resources>
     <string name="app_name">Auth Library</string>
 
-    <string name="general_copyright_notice">© 2017 – 2020 Alfresco Software, Inc. All rights reserved</string>
-    
-    
+    <string name="general_copyright_notice">© 2017 – 2020 Alfresco Software, Inc. All rights reserved.</string>
+
     <string name="auth_connect_field_hint">Connect to</string>
     <string name="auth_connect_button">Connect</string>
     <string name="auth_or_label">OR</string>
