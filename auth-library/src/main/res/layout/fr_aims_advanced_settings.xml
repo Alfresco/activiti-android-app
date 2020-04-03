@@ -48,7 +48,7 @@
                     android:fontFamily="@font/muli_regular"
                     android:text="@string/auth_settings_transport_https"
                     android:textSize="17sp"
-                    app:textColorEnabled="@{viewModel.authConfigEditor.https}" />
+                    android:enabled="@{viewModel.authConfigEditor.https}" />
 
                 <Switch
                     android:id="@+id/tvProtocolSwitch"
