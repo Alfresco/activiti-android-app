@@ -72,7 +72,7 @@
                 android:text="@string/auth_basic_info_cloud" />
         </RelativeLayout>
 
-        <com.google.android.material.textfield.TextInputLayout
+        <com.alfresco.ui.components.TextInputLayout
             android:id="@+id/tilUsernameEmail"
             style="@style/Widget.Alfresco.TextField.Layout"
             android:layout_width="match_parent"
@@ -91,9 +91,9 @@
                 android:layout_height="wrap_content"
                 android:text="@={viewModel.basicAuth.email}" />
 
-        </com.google.android.material.textfield.TextInputLayout>
+        </com.alfresco.ui.components.TextInputLayout>
 
-        <com.google.android.material.textfield.TextInputLayout
+        <com.alfresco.ui.components.TextInputLayout
             android:id="@+id/tilPassword"
             style="@style/Widget.Alfresco.PasswordField.Layout"
             android:layout_width="match_parent"
@@ -112,7 +112,7 @@
                 android:inputType="textPassword"
                 android:text="@={viewModel.basicAuth.password}" />
 
-        </com.google.android.material.textfield.TextInputLayout>
+        </com.alfresco.ui.components.TextInputLayout>
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btnSSOSignIn"

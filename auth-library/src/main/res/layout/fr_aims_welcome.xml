@@ -37,7 +37,7 @@
                 android:textColor="#FF000000"
                 android:textSize="24sp" />
 
-            <com.google.android.material.textfield.TextInputLayout
+            <com.alfresco.ui.components.TextInputLayout
                 android:id="@+id/tilConnectUrl"
                 style="@style/Widget.Alfresco.TextField.Layout"
                 android:layout_width="match_parent"
@@ -53,7 +53,7 @@
                     android:layout_height="wrap_content"
                     android:text="@={viewModel.identityUrl}" />
 
-            </com.google.android.material.textfield.TextInputLayout>
+            </com.alfresco.ui.components.TextInputLayout>
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/btnConnect"

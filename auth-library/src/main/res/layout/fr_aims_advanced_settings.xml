@@ -3,7 +3,6 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
-
         <variable
             name="viewModel"
             type="com.alfresco.auth.activity.LoginViewModel" />
@@ -59,7 +58,7 @@
                     android:checked="@={viewModel.authConfigEditor.https}" />
             </RelativeLayout>
 
-            <com.google.android.material.textfield.TextInputLayout
+            <com.alfresco.ui.components.TextInputLayout
                 android:id="@+id/tilPort"
                 style="@style/Widget.Alfresco.TextField.Layout"
                 android:layout_width="match_parent"
@@ -76,7 +75,7 @@
                     android:maxLines="1"
                     android:text="@={viewModel.authConfigEditor.port}" />
 
-            </com.google.android.material.textfield.TextInputLayout>
+            </com.alfresco.ui.components.TextInputLayout>
 
             <TextView
                 android:id="@+id/tvServiceDocumentTitle"
@@ -86,7 +85,7 @@
                 android:layout_marginTop="@dimen/aims_login_settings_section_spacing"
                 android:text="@string/auth_settings_service_section" />
 
-            <com.google.android.material.textfield.TextInputLayout
+            <com.alfresco.ui.components.TextInputLayout
                 android:id="@+id/tilServiceDocument"
                 style="@style/Widget.Alfresco.TextField.Layout"
                 android:layout_width="match_parent"
@@ -102,7 +101,7 @@
                     android:inputType="text"
                     android:maxLines="1"
                     android:text="@={viewModel.authConfigEditor.serviceDocuments}" />
-            </com.google.android.material.textfield.TextInputLayout>
+            </com.alfresco.ui.components.TextInputLayout>
 
             <TextView
                 android:id="@+id/tvAuthentication"
@@ -112,7 +111,7 @@
                 android:layout_marginTop="@dimen/aims_login_settings_section_spacing"
                 android:text="@string/auth_settings_auth_section" />
 
-            <com.google.android.material.textfield.TextInputLayout
+            <com.alfresco.ui.components.TextInputLayout
                 android:id="@+id/tilRealm"
                 style="@style/Widget.Alfresco.TextField.Layout"
                 android:layout_width="match_parent"
@@ -128,9 +127,9 @@
                     android:inputType="text"
                     android:maxLines="1"
                     android:text="@={viewModel.authConfigEditor.realm}" />
-            </com.google.android.material.textfield.TextInputLayout>
+            </com.alfresco.ui.components.TextInputLayout>
 
-            <com.google.android.material.textfield.TextInputLayout
+            <com.alfresco.ui.components.TextInputLayout
                 android:id="@+id/tilClientId"
                 style="@style/Widget.Alfresco.TextField.Layout"
                 android:layout_width="match_parent"
@@ -147,7 +146,7 @@
                     android:inputType="text"
                     android:maxLines="1"
                     android:text="@={viewModel.authConfigEditor.clientId}" />
-            </com.google.android.material.textfield.TextInputLayout>
+            </com.alfresco.ui.components.TextInputLayout>
 
             <View
                 android:layout_width="match_parent"

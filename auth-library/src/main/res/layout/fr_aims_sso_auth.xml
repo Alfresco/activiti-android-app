@@ -80,7 +80,7 @@
                 android:gravity="start"
                 android:text="@string/auth_sso_info" />
 
-            <com.google.android.material.textfield.TextInputLayout
+            <com.alfresco.ui.components.TextInputLayout
                 android:id="@+id/tilProcessUrl"
                 style="@style/Widget.Alfresco.TextField.Layout"
                 android:layout_width="match_parent"
@@ -96,7 +96,7 @@
                     android:layout_height="wrap_content"
                     android:text="@={viewModel.applicationUrl}" />
 
-            </com.google.android.material.textfield.TextInputLayout>
+            </com.alfresco.ui.components.TextInputLayout>
         </RelativeLayout>
 
         <com.google.android.material.button.MaterialButton
