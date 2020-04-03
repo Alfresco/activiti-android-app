@@ -2,6 +2,7 @@ package com.alfresco.auth.activity
 
 import android.content.Context
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Transformations
 import com.alfresco.android.aims.BuildConfig
@@ -136,17 +137,19 @@ class LoginViewModel(private val applicationContext: Context) : AuthenticationVi
 
     val basicAuth = BasicAuth()
     inner class BasicAuth {
+        private val _enabled = MediatorLiveData<Boolean>()
+
         val email = MutableLiveData<String>()
         val password = MutableLiveData<String>()
-        val enabled = MutableLiveData<Boolean>()
+        val enabled: LiveData<Boolean> get() = _enabled
 
         init {
-            email.observeForever(this::onInputChange)
-            password.observeForever(this::onInputChange)
+            _enabled.addSource(email, this::onFieldChange)
+            _enabled.addSource(password, this::onFieldChange)
         }
 
-        private fun onInputChange(ignored: String) {
-            enabled.value = !email.value.isNullOrEmpty() && !password.value.isNullOrEmpty()
+        private fun onFieldChange(ignored: String) {
+            _enabled.value = !email.value.isNullOrEmpty() && !password.value.isNullOrEmpty()
         }
 
         fun login() {
@@ -170,23 +173,26 @@ class LoginViewModel(private val applicationContext: Context) : AuthenticationVi
 
     class AuthConfigEditor() {
         private lateinit var source: AuthConfig
+        private val _changed = MediatorLiveData<Boolean>()
+
         val https = MutableLiveData<Boolean>()
-        val port = MutableLiveData<String>()
+        val port = MediatorLiveData<String>()
         val serviceDocuments = MutableLiveData<String>()
         val realm = MutableLiveData<String>()
         val clientId = MutableLiveData<String>()
         val redirectUrl = MutableLiveData<String>()
-        val changed = MutableLiveData<Boolean>()
+
+        val changed: LiveData<Boolean> get() = _changed
 
         init {
-            https.observeForever{
+            port.addSource(https) {
                 port.value = if(it == true) DEFAULT_HTTPS_PORT else DEFAULT_HTTP_PORT
-                onChange(it)
             }
-            port.observeForever(this::onChange)
-            serviceDocuments.observeForever(this::onChange)
-            realm.observeForever(this::onChange)
-            clientId.observeForever(this::onChange)
+
+            _changed.addSource(port, this::onChange)
+            _changed.addSource(serviceDocuments, this::onChange)
+            _changed.addSource(realm, this::onChange)
+            _changed.addSource(clientId, this::onChange)
         }
 
         private fun onChange(ignored: Boolean) {
@@ -198,7 +204,7 @@ class LoginViewModel(private val applicationContext: Context) : AuthenticationVi
         }
 
         private fun onChange() {
-            changed.value = get() != source
+            _changed.value = get() != source
         }
 
         fun reset(config: AuthConfig) {
