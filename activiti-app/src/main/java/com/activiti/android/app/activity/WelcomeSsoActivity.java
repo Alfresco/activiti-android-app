@@ -65,6 +65,11 @@ public class WelcomeSsoActivity extends LoginActivity {
             @NotNull String endpoint,
             @NotNull AuthConfig authConfig)
     {
+        // ActivitiSession requires the endpoint to end in /
+        if (!endpoint.endsWith("/"))
+        {
+            endpoint = endpoint.concat("/");
+        }
         this.endpoint = endpoint;
         this.authConfig = authConfig;
 
