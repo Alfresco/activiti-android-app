@@ -5,6 +5,7 @@
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:fontFamily="@font/muli_regular"
-    android:text="SAVE"
-    android:textColor="@drawable/aims_save_settings_bg"
+    android:text="@string/auth_settings_save"
+    android:textAllCaps="true"
+    android:textColor="@drawable/alfresco_primary_action_color"
     android:textSize="17sp" />

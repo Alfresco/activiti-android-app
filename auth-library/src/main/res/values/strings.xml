@@ -60,6 +60,7 @@
     <string name="auth_settings_auth_redirect_url">Redirect URL</string>
     <string name="auth_settings_reset">Reset to default</string>
     <string name="auth_settings_help">Need help</string>
+    <string name="auth_settings_save">Save</string>
 
     <!-- Basic Auth -->
     <string name="auth_basic_connected_to">@string/auth_sso_connected_to</string>
