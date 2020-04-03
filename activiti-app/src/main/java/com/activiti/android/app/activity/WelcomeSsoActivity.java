@@ -1,3 +1,23 @@
+/*
+ *  Copyright (C) 2005-2020 Alfresco Software Limited.
+ *
+ * This file is part of Alfresco Activiti Mobile for Android.
+ *
+ * Alfresco Activiti Mobile for Android is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * Alfresco Activiti Mobile for Android is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with Alfresco. If not, see <http://www.gnu.org/licenses/>.
+ *
+ */
+
 package com.activiti.android.app.activity;
 
 import android.content.Intent;
@@ -33,7 +53,8 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class WelcomeSsoActivity extends LoginActivity {
+public class WelcomeSsoActivity extends LoginActivity
+{
 
     private ActivitiAccount acc;
     private ActivitiSession activitiSession;
@@ -48,13 +69,15 @@ public class WelcomeSsoActivity extends LoginActivity {
     private String authState;
 
     @Override
-    protected void onStart() {
+    protected void onStart()
+    {
         super.onStart();
         EventBusManager.getInstance().register(this);
     }
 
     @Override
-    protected void onStop() {
+    protected void onStop()
+    {
         super.onStop();
         EventBusManager.getInstance().unregister(this);
     }
@@ -70,15 +93,19 @@ public class WelcomeSsoActivity extends LoginActivity {
         {
             endpoint = endpoint.concat("/");
         }
+
         this.endpoint = endpoint;
         this.authConfig = authConfig;
 
-        if (credentials instanceof Credentials.Basic) {
+        if (credentials instanceof Credentials.Basic)
+        {
             Credentials.Basic it = (Credentials.Basic) credentials;
             username = it.getUsername();
             password = it.getPassword();
             authType = AuthType.BASIC;
-        } else if (credentials instanceof Credentials.Sso) {
+        }
+        else if (credentials instanceof Credentials.Sso)
+        {
             Credentials.Sso it = (Credentials.Sso) credentials;
             username = it.getUsername();
             authState = it.getAuthState();
@@ -92,7 +119,8 @@ public class WelcomeSsoActivity extends LoginActivity {
         try {
             AbstractClient.Builder<ActivitiSession> sessionBuilder =
                     new ActivitiSession.Builder().connect(endpoint, username, password, authType);
-            if (authType == AuthType.TOKEN) {
+            if (authType == AuthType.TOKEN)
+            {
                 AuthInterceptor interceptor = new AuthInterceptor(getApplicationContext(), authState, authConfig);
                 sessionBuilder = sessionBuilder.interceptor(interceptor);
             }
@@ -100,17 +128,22 @@ public class WelcomeSsoActivity extends LoginActivity {
 
             activitiSession.getServiceRegistry().getProfileService().getProfile(new Callback<UserRepresentation>() {
                 @Override
-                public void onResponse(Call<UserRepresentation> call, Response<UserRepresentation> response) {
-                    if (response.isSuccessful()) {
+                public void onResponse(Call<UserRepresentation> call, Response<UserRepresentation> response)
+                {
+                    if (response.isSuccessful())
+                    {
                         user = response.body();
                         retrieveServerInfo();
-                    } else if (response.code() == 401) {
+                    }
+                    else if (response.code() == 401)
+                    {
                         onError(R.string.auth_error_wrong_credentials);
                     }
                 }
 
                 @Override
-                public void onFailure(Call<UserRepresentation> call, Throwable t) {
+                public void onFailure(Call<UserRepresentation> call, Throwable t)
+                {
                     onError(R.string.auth_error_unreachable);
                 }
             });
@@ -119,7 +152,8 @@ public class WelcomeSsoActivity extends LoginActivity {
         }
     }
 
-    private void retrieveServerInfo() {
+    private void retrieveServerInfo()
+    {
         activitiSession.getServiceRegistry().getInfoService().getInfo(new Callback<AppVersionRepresentation>()
         {
             @Override
@@ -149,10 +183,12 @@ public class WelcomeSsoActivity extends LoginActivity {
         });
     }
 
-    private void createAccount() {
+    private void createAccount()
+    {
         acc = null;
 
-        if (user == null) {
+        if (user == null)
+        {
             return;
         }
 

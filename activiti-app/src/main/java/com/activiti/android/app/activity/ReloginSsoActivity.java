@@ -1,3 +1,23 @@
+/*
+ *  Copyright (C) 2005-2020 Alfresco Software Limited.
+ *
+ * This file is part of Alfresco Activiti Mobile for Android.
+ *
+ * Alfresco Activiti Mobile for Android is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * Alfresco Activiti Mobile for Android is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with Alfresco. If not, see <http://www.gnu.org/licenses/>.
+ *
+ */
+
 package com.activiti.android.app.activity;
 
 import android.app.Activity;
@@ -17,41 +37,50 @@ import com.squareup.otto.Subscribe;
 
 import org.jetbrains.annotations.NotNull;
 
-public class ReloginSsoActivity extends ReloginActivity {
+public class ReloginSsoActivity extends ReloginActivity
+{
 
     @Override
-    protected void onStart() {
+    protected void onStart()
+    {
         super.onStart();
         EventBusManager.getInstance().register(this);
     }
 
     @Override
-    protected void onStop() {
+    protected void onStop()
+    {
         super.onStop();
         EventBusManager.getInstance().unregister(this);
     }
 
     @Override
-    public void onCredentials(@NotNull Credentials credentials) {
+    public void onCredentials(@NotNull Credentials credentials)
+    {
         String authState = null;
         String username = null;
-        if (credentials instanceof Credentials.Sso) {
+        if (credentials instanceof Credentials.Sso)
+        {
             Credentials.Sso t = (Credentials.Sso) credentials;
             username = t.getUsername();
             authState = t.getAuthState();
         }
 
         ActivitiAccount acc = ActivitiAccountManager.getInstance(this).getCurrentAccount();
-        if (acc != null && authState != null) {
+        if (acc != null && authState != null)
+        {
             ActivitiAccountManager.getInstance(this).update(this, acc.getId(), username, authState);
             IntegrationManager.sync(this);
-        } else {
+        }
+        else
+        {
             onError("Illegal argument");
         }
     }
 
     @Override
-    public void onError(@NotNull String s) {
+    public void onError(@NotNull String s)
+    {
         finish();
     }
 
