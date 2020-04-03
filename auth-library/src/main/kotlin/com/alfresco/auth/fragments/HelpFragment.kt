@@ -12,6 +12,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import com.alfresco.android.aims.R
 import com.alfresco.common.FragmentBuilder
+import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 
 class HelpFragment : BottomSheetDialogFragment() {
@@ -22,16 +23,23 @@ class HelpFragment : BottomSheetDialogFragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
+        val view = view ?: return
 
         arguments?.let {
             val messageResId = it.getInt(ARG_MESSAGE_RES_ID, -1)
-            val bodyTv: TextView = view!!.findViewById(R.id.bodyTxt)
+            val bodyTv: TextView = view.findViewById(R.id.bodyTxt)
             val value = resources.getString(messageResId)
             bodyTv.setText(Html.fromHtml(value, Html.FROM_HTML_MODE_LEGACY), TextView.BufferType.SPANNABLE)
         }
 
-        val closeBtn: Button = view!!.findViewById(R.id.btnClose)
+        val closeBtn: Button = view.findViewById(R.id.btnClose)
         closeBtn.setOnClickListener { dismiss() }
+
+        // Fix for https://issuetracker.google.com/issues/37132390
+        val parent = view.parent as? View ?: return
+        val behavior = BottomSheetBehavior.from(parent)
+        view.measure(parent.width,0)
+        behavior.peekHeight = view.measuredHeight
     }
 
     class Builder(parent: FragmentActivity) : FragmentBuilder(parent) {
