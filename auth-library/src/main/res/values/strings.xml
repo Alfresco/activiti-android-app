@@ -15,6 +15,7 @@
         <![CDATA[<h1>How to connect to Alfresco</h5>
         <h6>Alfresco Process Services URL<h6>
         <p>You can enter the URL of your Alfresco Process Services instance. This will require you to enter your username &amp; password to authenticate.</p>
+        <p>*You will have to provide the URL of your Alfresco Process Services instance afterwards</p>
         <p>Talk to your Alfresco administrator if you require help.</p>]]>
     </string>
 
