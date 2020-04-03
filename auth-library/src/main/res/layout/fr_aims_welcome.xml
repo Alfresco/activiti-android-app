@@ -61,6 +61,7 @@
                 android:layout_width="match_parent"
                 android:layout_marginTop="20dp"
                 android:onClick="@{() -> viewModel.connect()}"
+                android:enabled="@{viewModel.connectEnabled}"
                 android:text="@string/auth_connect_button" />
 
             <RelativeLayout

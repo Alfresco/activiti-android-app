@@ -106,6 +106,7 @@
             android:layout_below="@id/rlConnectInfo"
             android:layout_marginTop="20dp"
             android:onClick="@{() -> viewModel.ssoLogin()}"
+            android:enabled="@{viewModel.ssoLoginEnabled}"
             android:text="@string/auth_sso_sign_in_button"
             app:icon="@drawable/ic_sign_in"
             app:iconGravity="end" />

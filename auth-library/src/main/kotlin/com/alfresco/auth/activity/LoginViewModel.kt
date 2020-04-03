@@ -3,7 +3,7 @@ package com.alfresco.auth.activity
 import android.content.Context
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.Observer
+import androidx.lifecycle.Transformations
 import com.alfresco.android.aims.BuildConfig
 import com.alfresco.android.aims.R
 import com.alfresco.auth.AuthConfig
@@ -12,6 +12,7 @@ import com.alfresco.auth.config.defaultConfig
 import com.alfresco.auth.ui.AuthenticationViewModel
 import com.alfresco.core.data.LiveEvent
 import com.alfresco.core.data.MutableLiveEvent
+import com.alfresco.core.extension.isNotBlankNorEmpty
 import com.google.gson.Gson
 import com.google.gson.JsonSyntaxException
 
@@ -33,11 +34,17 @@ class LoginViewModel(private val applicationContext: Context) : AuthenticationVi
     val applicationUrl = MutableLiveData<String>("")
     val startSSO: LiveEvent<String> get() = _startSSO
 
+    val connectEnabled: LiveData<Boolean>
+    val ssoLoginEnabled: LiveData<Boolean>
+
     lateinit var authConfigEditor: AuthConfigEditor
         private set
 
     init {
         loadSavedConfig()
+
+        connectEnabled = Transformations.map(identityUrl) { it.isNotBlankNorEmpty() }
+        ssoLoginEnabled = Transformations.map(applicationUrl) { it.isNotBlankNorEmpty() }
 
         if (BuildConfig.DEBUG) {
             identityUrl.value = "alfresco-identity-service.mobile.dev.alfresco.me"
