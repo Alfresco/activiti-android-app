@@ -47,11 +47,7 @@ class LoginViewModel(private val applicationContext: Context) : AuthenticationVi
     }
 
     fun getApplicationServiceUrl(): String {
-        val protocol = if (authConfig.https) "https" else "http"
-        val port = if ((authConfig.https && authConfig.port == "443") ||
-                (!authConfig.https && authConfig.port == "80")) ""
-                else ":${authConfig.port}"
-        return "${protocol}://${applicationUrl.value}${port}/${authConfig.serviceDocuments}/"
+        return authService.serviceDocumentsEndpoint(applicationUrl.value!!).toString()
     }
 
     fun setHasNavigation(enableNavigation: Boolean) {
@@ -77,7 +73,11 @@ class LoginViewModel(private val applicationContext: Context) : AuthenticationVi
     fun ssoLogin() {
         isLoading.value = true
 
-        _startSSO.value = identityUrl.value!!
+        try {
+            _startSSO.value = identityUrl.value!!
+        } catch (ex: Exception) {
+            _onError.value = ex.message
+        }
     }
 
     fun showSettings() {
