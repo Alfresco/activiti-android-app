@@ -29,8 +29,8 @@ class LoginViewModel(private val applicationContext: Context) : AuthenticationVi
     val onShowHelp: LiveEvent<Int> = _onShowHelp
     val onShowSettings: LiveEvent<Int> = _onShowSettings
     val isLoading = MutableLiveData<Boolean>()
-    val identityUrl = MutableLiveData<String>()
-    val applicationUrl = MutableLiveData<String>()
+    val identityUrl = MutableLiveData<String>("")
+    val applicationUrl = MutableLiveData<String>("")
     val startSSO: LiveEvent<String> get() = _startSSO
 
     lateinit var authConfigEditor: AuthConfigEditor
@@ -66,9 +66,11 @@ class LoginViewModel(private val applicationContext: Context) : AuthenticationVi
     fun connect() {
         isLoading.value = true
 
-        initServiceWith(authConfig)
-        identityUrl.value?.let {
-            checkAuthType(it)
+        try {
+            initServiceWith(authConfig)
+            checkAuthType(identityUrl.value!!)
+        } catch (ex: Exception) {
+            _onError.value = ex.message
         }
     }
 
