@@ -131,6 +131,16 @@ class LoginViewModel(private val applicationContext: Context) : AuthenticationVi
     inner class BasicAuth {
         val email = MutableLiveData<String>()
         val password = MutableLiveData<String>()
+        val enabled = MutableLiveData<Boolean>()
+
+        init {
+            email.observeForever(this::onInputChange)
+            password.observeForever(this::onInputChange)
+        }
+
+        private fun onInputChange(ignored: String) {
+            enabled.value = !email.value.isNullOrEmpty() && !password.value.isNullOrEmpty()
+        }
 
         fun login() {
             isLoading.value = true
