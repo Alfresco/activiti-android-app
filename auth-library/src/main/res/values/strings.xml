@@ -44,7 +44,8 @@
     <string name="auth_error_title">Error</string>
     <string name="auth_error_check_connect_url">Check your Connect to URL.</string>
     <string name="auth_error_wrong_credentials">Wrong username or password provided.</string>
-    <string name="auth_error_unreachable">Authentication service is currently unreachable.</string>
+    <string name="auth_error_app_unreachable">Authentication service is currently unreachable.</string>
+    <string name="auth_error_app_incorrect">Service incorrectly configured.</string>
 
     <!-- Settings -->
     <string name="auth_settings_title">Advanced Settings</string>

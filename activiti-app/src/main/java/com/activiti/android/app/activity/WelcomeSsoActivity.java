@@ -139,12 +139,16 @@ public class WelcomeSsoActivity extends LoginActivity
                     {
                         onError(R.string.auth_error_wrong_credentials);
                     }
+                    else
+                    {
+                        onError(R.string.auth_error_app_incorrect);
+                    }
                 }
 
                 @Override
                 public void onFailure(Call<UserRepresentation> call, Throwable t)
                 {
-                    onError(R.string.auth_error_unreachable);
+                    onError(R.string.auth_error_app_unreachable);
                 }
             });
         } catch(IllegalArgumentException illegalArgumentException) {
