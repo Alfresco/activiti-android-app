@@ -176,7 +176,7 @@ class LoginViewModel(private val applicationContext: Context) : AuthenticationVi
         private val _changed = MediatorLiveData<Boolean>()
 
         val https = MutableLiveData<Boolean>()
-        val port = MediatorLiveData<String>()
+        val port = MutableLiveData<String>()
         val serviceDocuments = MutableLiveData<String>()
         val realm = MutableLiveData<String>()
         val clientId = MutableLiveData<String>()
@@ -185,14 +185,23 @@ class LoginViewModel(private val applicationContext: Context) : AuthenticationVi
         val changed: LiveData<Boolean> get() = _changed
 
         init {
-            port.addSource(https) {
-                port.value = if(it == true) DEFAULT_HTTPS_PORT else DEFAULT_HTTP_PORT
-            }
-
+            _changed.addSource(https, this::onChange)
             _changed.addSource(port, this::onChange)
             _changed.addSource(serviceDocuments, this::onChange)
             _changed.addSource(realm, this::onChange)
             _changed.addSource(clientId, this::onChange)
+        }
+
+        /**
+         * This function is meant to change the port when the user interacts with it.
+         *
+         * It is important that this function is bound [android.view.View.OnClickListener]
+         * instead of [android.widget.CompoundButton.setOnCheckedChangeListener] or as
+         * a [MediatorLiveData]  object as it will change the [port] incorrectly when
+         * loading the bindings.
+         */
+        fun onHttpsToggle() {
+            port.value = if(https.value == true) DEFAULT_HTTPS_PORT else DEFAULT_HTTP_PORT
         }
 
         private fun onChange(ignored: Boolean) {
