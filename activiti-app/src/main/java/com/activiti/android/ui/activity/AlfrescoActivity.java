@@ -51,6 +51,8 @@ import com.mattprecious.telescope.TelescopeLayout;
 
 import org.jetbrains.annotations.NotNull;
 
+import java.lang.ref.WeakReference;
+
 /**
  * Base class for all activities.
  *
@@ -159,17 +161,7 @@ public abstract class AlfrescoActivity extends AppCompatActivity
         if (account.getAuthType() == AbstractClient.AuthType.TOKEN) {
             Context context = getApplicationContext();
             AuthInterceptor interceptor = new AuthInterceptor(context, account.getAuthState(), account.getAuthConfig());
-            interceptor.setListener(new AuthInterceptor.Listener() {
-                @Override
-                public void onAuthStateChange(@NotNull String s) {
-                    runOnUiThread(() -> ActivitiAccountManager.getInstance(context).update(account.getId(), ActivitiAccount.ACCOUNT_AUTH_STATE, s));
-                }
-
-                @Override
-                public void onAuthFailure() {
-                    runOnUiThread(() -> showSignedOutPrompt());
-                }
-            });
+            interceptor.setListener(new AuthListener(this));
             sessionBuilder = sessionBuilder.interceptor(interceptor);
         }
         session = sessionBuilder.build();
@@ -188,8 +180,40 @@ public abstract class AlfrescoActivity extends AppCompatActivity
     private void showSignedOutPrompt() {
         FragmentManager fm = getSupportFragmentManager();
         String tag = SignedOutDialogFragment.TAG;
-        if (fm.findFragmentByTag(tag) == null) {
+        if (!fm.isDestroyed() && fm.findFragmentByTag(tag) == null) {
             new SignedOutDialogFragment().show(fm, tag);
+        }
+    }
+
+    private static class AuthListener implements AuthInterceptor.Listener {
+        private WeakReference<AlfrescoActivity> activity;
+
+        AuthListener(AlfrescoActivity activity)
+        {
+            this.activity = new WeakReference<>(activity);
+        }
+
+        @Override
+        public void onAuthStateChange(@NotNull String s)
+        {
+            AlfrescoActivity activity = this.activity.get();
+            if (activity == null) return;
+
+            activity.runOnUiThread(() ->
+            {
+                ActivitiAccountManager
+                        .getInstance(activity.getApplicationContext())
+                        .update(activity.account.getId(), ActivitiAccount.ACCOUNT_AUTH_STATE, s);
+            });
+        }
+
+        @Override
+        public void onAuthFailure()
+        {
+            AlfrescoActivity activity = this.activity.get();
+            if (activity == null) return;
+
+            activity.runOnUiThread(activity::showSignedOutPrompt);
         }
     }
 
