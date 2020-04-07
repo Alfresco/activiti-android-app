@@ -5,6 +5,7 @@ import android.text.Html
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.ViewTreeObserver
 import android.widget.Button
 import android.widget.TextView
 import androidx.annotation.StringRes
@@ -13,6 +14,7 @@ import androidx.fragment.app.FragmentActivity
 import com.alfresco.android.aims.R
 import com.alfresco.common.FragmentBuilder
 import com.google.android.material.bottomsheet.BottomSheetBehavior
+import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 
 class HelpFragment : BottomSheetDialogFragment() {
@@ -36,10 +38,18 @@ class HelpFragment : BottomSheetDialogFragment() {
         closeBtn.setOnClickListener { dismiss() }
 
         // Fix for https://issuetracker.google.com/issues/37132390
-        val parent = view.parent as? View ?: return
-        val behavior = BottomSheetBehavior.from(parent)
-        view.measure(parent.width,0)
-        behavior.peekHeight = view.measuredHeight
+        view.viewTreeObserver.addOnGlobalLayoutListener(object : ViewTreeObserver.OnGlobalLayoutListener {
+            override fun onGlobalLayout() {
+                val bottomSheet = (dialog as BottomSheetDialog).findViewById<View>(com.google.android.material.R.id.design_bottom_sheet)
+                bottomSheet?.let {
+                    BottomSheetBehavior.from<View>(it).apply {
+                        state = BottomSheetBehavior.STATE_EXPANDED
+                        peekHeight = bottomSheet.height
+                    }
+                }
+                view.viewTreeObserver.removeOnGlobalLayoutListener(this)
+            }
+        })
     }
 
     class Builder(parent: FragmentActivity) : FragmentBuilder(parent) {
