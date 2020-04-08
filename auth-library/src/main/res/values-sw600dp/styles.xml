@@ -1,0 +1,22 @@
+<resources>
+
+    <style name="Theme.Alfresco" parent="Theme.MaterialComponents.Light.NoActionBar">
+        <item name="colorPrimary">@color/alfresco_primary</item>
+        <item name="colorPrimaryDark">@android:color/white</item>
+        <item name="colorAccent">@color/aims_accent</item>
+        <item name="android:textColorPrimary">@color/aims_primary_text</item>
+        <item name="android:textColorSecondary">@color/aims_secondary_text</item>
+
+        <!-- Action bar -->
+        <item name="actionBarSize">44dp</item>
+        <item name="actionBarPaddingLeft">14dp</item>
+        <item name="actionBarPaddingRight">34dp</item>
+
+        <!-- Status bar -->
+        <item name="android:windowLightStatusBar">true</item>
+
+        <!-- (*) Background -->
+        <item name="android:windowBackground">@drawable/bg_alfresco_splash</item>
+    </style>
+
+</resources>
