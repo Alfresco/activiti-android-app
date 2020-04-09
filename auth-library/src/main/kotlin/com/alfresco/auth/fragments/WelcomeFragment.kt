@@ -33,6 +33,8 @@ class WelcomeFragment : DialogFragment() {
 
     override fun onStart() {
         super.onStart()
+
+        // Reset action bar title
         activity?.title = ""
     }
 

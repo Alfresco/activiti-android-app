@@ -31,6 +31,13 @@ class SsoAuthFragment : DialogFragment() {
         viewModel.setHasNavigation(true)
     }
 
+    override fun onStart() {
+        super.onStart()
+
+        // Reset action bar title
+        activity?.title = ""
+    }
+
     class Builder(parent: FragmentActivity) : FragmentBuilder(parent) {
         override val fragmentTag = TAG
 

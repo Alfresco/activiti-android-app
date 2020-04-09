@@ -84,8 +84,7 @@
 
         <activity
             android:name="com.activiti.android.app.activity.WelcomeSsoActivity"
-            android:theme="@style/Theme.Alfresco"
-            android:label="@string/app_name"/>
+            android:theme="@style/Theme.Alfresco" />
 
         <activity
             android:name=".activity.ReloginSsoActivity"
