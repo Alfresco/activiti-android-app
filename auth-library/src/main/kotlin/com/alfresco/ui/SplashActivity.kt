@@ -21,6 +21,13 @@ abstract class SplashActivity: AppCompatActivity() {
         logoImageView = findViewById(R.id.ivLogo)
     }
 
+    override fun onDestroy() {
+        super.onDestroy()
+
+        // On configuration change cancel previous handler
+        handler.removeCallbacksAndMessages(null)
+    }
+
     override fun onResume() {
         super.onResume()
 
@@ -36,6 +43,7 @@ abstract class SplashActivity: AppCompatActivity() {
                     .setListener(null)
         }
 
+        // Transition after delay
         handler.postDelayed({
             goToMain()
         }, DISPLAY_TIMEOUT)
@@ -45,6 +53,7 @@ abstract class SplashActivity: AppCompatActivity() {
         val i = getMainIntent()
         startActivity(i)
         overridePendingTransition(R.anim.anim_fade_in, R.anim.anim_fade_out)
+        finish()
     }
 
     abstract fun getMainIntent(): Intent
