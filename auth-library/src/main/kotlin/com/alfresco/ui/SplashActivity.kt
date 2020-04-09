@@ -24,10 +24,13 @@ abstract class SplashActivity: AppCompatActivity() {
     override fun onResume() {
         super.onResume()
 
+        logoImageView.scaleX = 0.8f
+        logoImageView.scaleY = 0.8f
+
         logoImageView.apply {
             animate()
-                    .scaleX(1.16f)
-                    .scaleY(1.16f)
+                    .scaleX(1f)
+                    .scaleY(1f)
                     .setDuration(ANIMATION_DURATION)
                     .setInterpolator(DecelerateInterpolator())
                     .setListener(null)
