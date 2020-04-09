@@ -31,6 +31,8 @@
     <string name="general_navigation_applications">Applications</string>
     <string name="general_navigation_groups">Groups</string>
 
+    <!-- Login -->
+    <string name="auth_app_name">@string/general_main_title</string>
 
     <string name="general_login_title">Get started</string>
     <string name="general_login_title_sign_in">Sign in</string>
