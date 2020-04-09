@@ -85,6 +85,13 @@
     </style>
 
     <!-- TextViews -->
+    <style name="Widget.Alfresco.LogoText">
+        <item name="android:fontFamily">@font/muli_light</item>
+        <item name="android:textColor">#222222</item> <!-- 87% black -->
+        <item name="android:textSize">24sp</item>
+        <item name="android:letterSpacing">-0.08</item>
+    </style>
+
     <style name="Widget.Alfresco.BodyText">
         <item name="android:textColor">#000000</item>
         <item name="android:textSize">14sp</item>

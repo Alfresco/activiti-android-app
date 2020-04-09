@@ -21,21 +21,11 @@
             android:paddingStart="@dimen/aims_theme_default_padding"
             android:paddingEnd="@dimen/aims_theme_default_padding">
 
-            <ImageView
-                android:id="@+id/ivLogo"
+            <include
+                layout="@layout/layout_auth_logo"
                 android:layout_width="wrap_content"
-                android:layout_height="70dp"
-                android:layout_marginTop="40dp"
-                android:src="@drawable/ic_alfresco_branding_mobile" />
-
-            <TextView
-                android:id="@+id/tvProcessServicesAppLbl"
-                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:fontFamily="@font/muli_light"
-                android:text="Process Services App"
-                android:textColor="#FF000000"
-                android:textSize="24sp" />
+                android:layout_marginTop="40dp" />
 
             <com.alfresco.ui.components.TextInputLayout
                 android:id="@+id/tilConnectUrl"
