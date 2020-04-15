@@ -12,6 +12,14 @@ abstract class FragmentBuilder(protected val parent: FragmentActivity) {
     abstract fun build(args: Bundle): Fragment;
 
     fun display() {
+        if (parent.supportFragmentManager.findFragmentById(R.id.frame_placeholder) != null) {
+            internalDisplay()
+        } else {
+            replace()
+        }
+    }
+
+    private fun internalDisplay() {
         parent.supportFragmentManager.beginTransaction()
                 .setCustomAnimations(
                         R.anim.anim_slide_in_right,

@@ -361,6 +361,11 @@ public class MainActivity extends AlfrescoActivity
             ((TextView) findViewById(R.id.drawer_account_name)).setVisibility(View.VISIBLE);
             ((TextView) findViewById(R.id.drawer_account_name)).setText(account.getUserFullname());
 
+            // Properly shutdown previous instance
+            if (picasso != null) {
+                picasso.shutdown();
+            }
+
             // TODO Offline icon access
             picasso = new RenditionManager(MainActivity.this, session).getPicasso();
             picasso.load(getAPI().getProfileService().getProfilePictureURL()).fit()

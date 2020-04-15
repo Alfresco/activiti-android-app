@@ -292,13 +292,20 @@ public class ActivitiAccountManager extends Manager
     // ///////////////////////////////////////////////////////////////////////////
     // ACTIONS
     // ///////////////////////////////////////////////////////////////////////////
+    @Deprecated
     public ActivitiAccount create(String username, String password, String serverUrl, String label, String serverType,
             String serverEdition, String serverVersion, String userId, String fullname, String tenantId)
     {
-        return create(username, password, null, AbstractClient.AuthType.BASIC.getValue(), null, serverUrl, label, serverType, serverEdition, serverVersion, userId, fullname, tenantId);
+        return create(username, password, null, null, null, serverUrl, label, serverType, serverEdition, serverVersion, userId, fullname, tenantId);
     }
 
-    public ActivitiAccount create(String username, String password, String authState, String authType, String authConfig, String serverUrl, String label, String serverType,
+    public ActivitiAccount create(String username, String authState, String authType, String authConfig, String serverUrl, String label, String serverType,
+            String serverEdition, String serverVersion, String userId, String fullname, String tenantId)
+    {
+        return create(username, null, authState, authType, authConfig, serverUrl, label, serverType, serverEdition, serverVersion, userId, fullname, tenantId);
+    }
+
+    private ActivitiAccount create(String username, String password, String authState, String authType, String authConfig, String serverUrl, String label, String serverType,
             String serverEdition, String serverVersion, String userId, String fullname, String tenantId)
     {
         // Generate some properties
@@ -328,7 +335,7 @@ public class ActivitiAccountManager extends Manager
             // Create the Account data object
             accountsSize++;
             getCount();
-            return new ActivitiAccount(accountId, username, password, authType, authState, authConfig, serverUrl, label,
+            return new ActivitiAccount(accountId, username, authType, authState, authConfig, serverUrl, label,
                     serverType, serverEdition, serverVersion, userId, fullname, tenantId);
         }
         else

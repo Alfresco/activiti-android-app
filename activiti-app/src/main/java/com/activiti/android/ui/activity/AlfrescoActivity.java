@@ -33,6 +33,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 
+import com.activiti.android.app.BuildConfig;
 import com.activiti.android.app.R;
 import com.activiti.android.app.fragments.account.SignedOutDialogFragment;
 import com.activiti.android.app.fragments.app.AppInstancesFragment;
@@ -45,7 +46,6 @@ import com.activiti.android.platform.integration.hockeyapp.HockeyAppManager;
 import com.activiti.android.sdk.ActivitiSession;
 import com.activiti.android.sdk.services.ServiceRegistry;
 import com.alfresco.auth.AuthInterceptor;
-import com.alfresco.client.AbstractClient;
 import com.mattprecious.telescope.EmailDeviceInfoLens;
 import com.mattprecious.telescope.TelescopeLayout;
 
@@ -154,17 +154,15 @@ public abstract class AlfrescoActivity extends AppCompatActivity
 
         if (account == null) { return; }
 
-        AbstractClient.Builder<ActivitiSession> sessionBuilder = new ActivitiSession.Builder()
-                .connect(account.getServerUrl(), account.getUsername(), account.getPassword(), account.getAuthType())
-                .httpLogging(HttpLoggingInterceptor.Level.HEADERS);
+        Context context = getApplicationContext();
+        AuthInterceptor authInterceptor = new AuthInterceptor(context, String.valueOf(account.getId()), account.getAuthType(), account.getAuthState(), account.getAuthConfig());
+        authInterceptor.setListener(new AuthListener(this));
 
-        if (account.getAuthType() == AbstractClient.AuthType.TOKEN) {
-            Context context = getApplicationContext();
-            AuthInterceptor interceptor = new AuthInterceptor(context, account.getAuthState(), account.getAuthConfig());
-            interceptor.setListener(new AuthListener(this));
-            sessionBuilder = sessionBuilder.interceptor(interceptor);
-        }
-        session = sessionBuilder.build();
+        session = new ActivitiSession.Builder()
+                .connect(account.getServerUrl())
+                .authInterceptor(authInterceptor)
+                .httpLogging(BuildConfig.DEBUG ? HttpLoggingInterceptor.Level.HEADERS : HttpLoggingInterceptor.Level.NONE)
+                .build();
 
         // Analytics
         AnalyticsHelper.analyzeAccount(this, account);
@@ -194,7 +192,7 @@ public abstract class AlfrescoActivity extends AppCompatActivity
         }
 
         @Override
-        public void onAuthStateChange(@NotNull String s)
+        public void onAuthStateChange(@NotNull String accountId, @NotNull String state)
         {
             AlfrescoActivity activity = this.activity.get();
             if (activity == null) return;
@@ -203,12 +201,12 @@ public abstract class AlfrescoActivity extends AppCompatActivity
             {
                 ActivitiAccountManager
                         .getInstance(activity.getApplicationContext())
-                        .update(activity.account.getId(), ActivitiAccount.ACCOUNT_AUTH_STATE, s);
+                        .update(Long.parseLong(accountId), ActivitiAccount.ACCOUNT_AUTH_STATE, state);
             });
         }
 
         @Override
-        public void onAuthFailure()
+        public void onAuthFailure(@NotNull String accountId)
         {
             AlfrescoActivity activity = this.activity.get();
             if (activity == null) return;

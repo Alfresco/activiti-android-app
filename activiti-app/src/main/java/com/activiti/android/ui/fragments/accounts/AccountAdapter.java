@@ -88,7 +88,7 @@ public class AccountAdapter extends BaseListAdapter<ActivitiAccount, TwoLinesVie
     {
         return new ActivitiAccount(
                 AccountAdapter.ADD_ACCOUNT_ID,
-                null, null, null, null, null,
+                null, null, null, null,
                 null, null, null, null, null,
                 null, null, null);
     }

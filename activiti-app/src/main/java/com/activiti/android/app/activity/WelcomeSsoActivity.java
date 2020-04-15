@@ -42,9 +42,6 @@ import com.alfresco.auth.AuthConfig;
 import com.alfresco.auth.AuthInterceptor;
 import com.alfresco.auth.Credentials;
 import com.alfresco.auth.activity.LoginActivity;
-import com.alfresco.client.AbstractClient;
-import com.alfresco.client.AbstractClient.AuthType;
-import com.google.gson.Gson;
 import com.squareup.otto.Subscribe;
 
 import org.jetbrains.annotations.NotNull;
@@ -63,8 +60,7 @@ public class WelcomeSsoActivity extends LoginActivity
     private AppVersion version;
 
     private String username;
-    private String password;
-    private AuthType authType;
+    private String authType;
     private AuthConfig authConfig;
     private String authState;
 
@@ -96,35 +92,20 @@ public class WelcomeSsoActivity extends LoginActivity
 
         this.endpoint = endpoint;
         this.authConfig = authConfig;
-
-        if (credentials instanceof Credentials.Basic)
-        {
-            Credentials.Basic it = (Credentials.Basic) credentials;
-            username = it.getUsername();
-            password = it.getPassword();
-            authType = AuthType.BASIC;
-        }
-        else if (credentials instanceof Credentials.Sso)
-        {
-            Credentials.Sso it = (Credentials.Sso) credentials;
-            username = it.getUsername();
-            authState = it.getAuthState();
-            authType = AuthType.TOKEN;
-        }
+        this.authType = credentials.getAuthType();
+        this.username = credentials.getUsername();
+        this.authState = credentials.getAuthState();
 
         connect();
     }
 
     private void connect() {
         try {
-            AbstractClient.Builder<ActivitiSession> sessionBuilder =
-                    new ActivitiSession.Builder().connect(endpoint, username, password, authType);
-            if (authType == AuthType.TOKEN)
-            {
-                AuthInterceptor interceptor = new AuthInterceptor(getApplicationContext(), authState, authConfig);
-                sessionBuilder = sessionBuilder.interceptor(interceptor);
-            }
-            activitiSession = sessionBuilder.build();
+            AuthInterceptor authInterceptor = new AuthInterceptor(getApplicationContext(), "", authType , authState, authConfig.jsonSerialize());
+            activitiSession = new ActivitiSession.Builder()
+                    .connect(endpoint)
+                    .authInterceptor(authInterceptor)
+                    .build();
 
             activitiSession.getServiceRegistry().getProfileService().getProfile(new Callback<UserRepresentation>() {
                 @Override
@@ -133,7 +114,7 @@ public class WelcomeSsoActivity extends LoginActivity
                     if (response.isSuccessful())
                     {
                         user = response.body();
-                        retrieveServerInfo();
+                        retrieveServerInfoIfNecessary();
                     }
                     else if (response.code() == 401)
                     {
@@ -153,6 +134,15 @@ public class WelcomeSsoActivity extends LoginActivity
             });
         } catch(IllegalArgumentException illegalArgumentException) {
             onError(R.string.auth_error_wrong_credentials);
+        }
+    }
+
+    private void retrieveServerInfoIfNecessary()
+    {
+        if (!getViewModel().isReLogin()) {
+            retrieveServerInfo();
+        } else {
+            updateCurrentAccount();
         }
     }
 
@@ -200,20 +190,20 @@ public class WelcomeSsoActivity extends LoginActivity
         String fullName = user.getFullname();
 
         String tenantId = (user.getTenantId() != null) ? user.getTenantId().toString() : null;
-        String authConfig = new Gson().toJson(this.authConfig);
+        String authConfig = this.authConfig.jsonSerialize();
 
 
         // If no version info it means Activiti pre 1.2
         if (version == null)
         {
-            acc = ActivitiAccountManager.getInstance(this).create(username, password, authState, authType.getValue(), authConfig, endpoint,
+            acc = ActivitiAccountManager.getInstance(this).create(username, authState, authType, authConfig, endpoint,
                     "Activiti Server", "bpmSuite", "Alfresco Activiti Enterprise BPM Suite", "1.1.0",
                     Long.toString(user.getId()), user.getFullname(),
                     (user.getTenantId() != null) ? Long.toString(user.getTenantId()) : null);
         }
         else
         {
-            acc = ActivitiAccountManager.getInstance(this).create(username, password, authState, authType.getValue(), authConfig, endpoint,
+            acc = ActivitiAccountManager.getInstance(this).create(username, authState, authType, authConfig, endpoint,
                     "Activiti Server", version.type, version.edition, version.getFullVersion(),
                     Long.toString(user.getId()), user.getFullname(),
                     (user.getTenantId() != null) ? Long.toString(user.getTenantId()) : null);
@@ -233,6 +223,20 @@ public class WelcomeSsoActivity extends LoginActivity
         // Analytics
         AnalyticsHelper.reportOperationEvent(this, AnalyticsManager.CATEGORY_ACCOUNT,
                 AnalyticsManager.ACTION_CREATE, acc.getServerType(), 1, false);
+    }
+
+    private void updateCurrentAccount()
+    {
+        acc = ActivitiAccountManager.getInstance(this).getCurrentAccount();
+        if (acc != null)
+        {
+            ActivitiAccountManager.getInstance(this).update(this, acc.getId(), username, authState);
+            IntegrationManager.sync(this);
+        }
+        else
+        {
+            onError("Illegal argument");
+        }
     }
 
     private void sync()

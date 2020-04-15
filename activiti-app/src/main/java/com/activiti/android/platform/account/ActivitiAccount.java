@@ -27,11 +27,8 @@ import android.accounts.AccountManager;
 import androidx.annotation.Nullable;
 
 import com.activiti.android.app.BuildConfig;
-import com.alfresco.auth.AuthConfig;
-import com.alfresco.client.AbstractClient.AuthType;
-import com.google.gson.Gson;
-
-import net.openid.appauth.AuthState;
+import com.alfresco.auth.AuthInterceptor;
+import com.alfresco.auth.AuthType;
 
 public class ActivitiAccount implements Serializable
 {
@@ -151,7 +148,7 @@ public class ActivitiAccount implements Serializable
     }
 
     /** Create a Activiti account. */
-    public ActivitiAccount(long id, String username, String password, String authType, String authState, String authConfig, String serverUrl, String label,
+    public ActivitiAccount(long id, String username, String authType, String authState, String authConfig, String serverUrl, String label,
             String serverType, String serverEdition, String serverVersion, String userId, String fullname,
             String tenantId)
     {
@@ -161,7 +158,7 @@ public class ActivitiAccount implements Serializable
         this.userId = userId;
         this.fullname = fullname;
         this.username = username;
-        this.password = password;
+        this.password = null;
         this.authType = authType;
         this.authState = authState;
         this.authConfig = authConfig;
@@ -193,9 +190,16 @@ public class ActivitiAccount implements Serializable
         acc.authConfig = mAccountManager.getUserData(account, ACCOUNT_AUTH_CONFIG);
 
         // Backwards compatibility: assume all accounts without authType use basic auth
-        if (acc.authType == null) {
+        if (acc.authType == null || acc.authState == null) {
             acc.authType = AuthType.BASIC.getValue();
+            acc.authState = AuthInterceptor.Companion.basicState(acc.username, acc.password);
         }
+
+        // Internal build backwards compatibility. Should be removed in the future.
+        if (acc.authType.equals("token")) {
+            acc.authType = "pkce";
+        }
+
         return acc;
     }
 
@@ -212,21 +216,16 @@ public class ActivitiAccount implements Serializable
         return password;
     }
 
-    public AuthType getAuthType()
+    public String getAuthType()
     {
-        if (authType.equals(AuthType.TOKEN.getValue())) {
-            return AuthType.TOKEN;
-        }
-        return AuthType.BASIC;
+        return authType;
     }
 
-    public AuthConfig getAuthConfig() {
-        return new Gson().fromJson(authConfig, AuthConfig.class);
-    }
-
-    public String getAuthConfigString() {
+    public String getAuthConfig()
+    {
         return authConfig;
     }
+
     public String getAuthState() {
         return authState;
     }

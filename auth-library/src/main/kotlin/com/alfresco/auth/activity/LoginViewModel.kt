@@ -1,14 +1,13 @@
 package com.alfresco.auth.activity
 
 import android.content.Context
+import android.content.Intent
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Transformations
-import com.alfresco.android.aims.BuildConfig
 import com.alfresco.android.aims.R
-import com.alfresco.auth.AuthConfig
-import com.alfresco.auth.Credentials
+import com.alfresco.auth.*
 import com.alfresco.auth.config.defaultConfig
 import com.alfresco.auth.ui.AuthenticationViewModel
 import com.alfresco.core.data.LiveEvent
@@ -17,23 +16,25 @@ import com.alfresco.core.extension.isNotBlankNorEmpty
 import com.google.gson.Gson
 import com.google.gson.JsonSyntaxException
 
-class LoginViewModel(private val applicationContext: Context) : AuthenticationViewModel() {
+class LoginViewModel(private val applicationContext: Context, authType: AuthType?, authState: String?, authConfig: AuthConfig?, endpoint: String?) : AuthenticationViewModel() {
 
     lateinit var authConfig: AuthConfig
     override var context = applicationContext
 
     private val _hasNavigation = MutableLiveData<Boolean>()
+    private val _step = MutableLiveData<Step>()
     private val _onShowHelp = MutableLiveEvent<Int>()
     private val _onShowSettings = MutableLiveEvent<Int>()
-    private val _startSSO = MutableLiveEvent<String>()
+    private val _onSsoLogin = MutableLiveEvent<String>()
 
     val hasNavigation: LiveData<Boolean> get() = _hasNavigation
+    val step: LiveData<Step> get () =  _step
     val onShowHelp: LiveEvent<Int> = _onShowHelp
     val onShowSettings: LiveEvent<Int> = _onShowSettings
+    val onSsoLogin: LiveEvent<String> get() = _onSsoLogin
     val isLoading = MutableLiveData<Boolean>()
     val identityUrl = MutableLiveData<String>("")
     val applicationUrl = MutableLiveData<String>("")
-    val startSSO: LiveEvent<String> get() = _startSSO
 
     val connectEnabled: LiveData<Boolean>
     val ssoLoginEnabled: LiveData<Boolean>
@@ -41,25 +42,60 @@ class LoginViewModel(private val applicationContext: Context) : AuthenticationVi
     lateinit var authConfigEditor: AuthConfigEditor
         private set
 
+    private val previousAppEndpoint: String? = endpoint
+    private val previousAuthState: String? = authState
+
     init {
-        loadSavedConfig()
+        if (previousAuthState != null) {
+            isReLogin = true
+
+            if (authType == AuthType.PKCE) {
+                moveToStep(Step.EnterPkceCredentials)
+            } else {
+                moveToStep(Step.EnterBasicCredentials)
+            }
+        } else {
+            moveToStep(Step.InputIdentityServer)
+        }
+
+        if (authConfig != null) {
+            this.authConfig = authConfig
+        } else {
+            loadSavedConfig()
+        }
 
         connectEnabled = Transformations.map(identityUrl) { it.isNotBlankNorEmpty() }
         ssoLoginEnabled = Transformations.map(applicationUrl) { it.isNotBlankNorEmpty() }
-
-        if (BuildConfig.DEBUG) {
-            identityUrl.value = "alfresco-identity-service.mobile.dev.alfresco.me"
-//            identityUrl.value = "activiti.alfresco.com"
-            applicationUrl.value = "alfresco-cs-repository.mobile.dev.alfresco.me"
-        }
     }
 
     fun getApplicationServiceUrl(): String {
-        return authService.serviceDocumentsEndpoint(applicationUrl.value!!).toString()
+        return previousAppEndpoint
+                ?: discoveryService.serviceDocumentsEndpoint(applicationUrl.value!!).toString()
     }
 
     fun setHasNavigation(enableNavigation: Boolean) {
         _hasNavigation.value = enableNavigation
+    }
+
+    override fun onAuthType(authType: AuthType) {
+        when (authType) {
+            AuthType.PKCE -> {
+                moveToStep(Step.InputAppServer)
+            }
+
+            AuthType.BASIC -> {
+                moveToStep(Step.EnterBasicCredentials)
+            }
+
+            AuthType.UNKNOWN -> {
+                _onError.value = context.getString(R.string.auth_error_check_connect_url)
+            }
+        }
+    }
+
+    private fun moveToStep(state: Step) {
+        this.isLoading.value = false
+        _step.value = state
     }
 
     fun startEditing() {
@@ -71,8 +107,7 @@ class LoginViewModel(private val applicationContext: Context) : AuthenticationVi
         isLoading.value = true
 
         try {
-            initServiceWith(authConfig)
-            checkAuthType(identityUrl.value!!)
+            checkAuthType(identityUrl.value!!, authConfig)
         } catch (ex: Exception) {
             _onError.value = ex.message
         }
@@ -81,10 +116,20 @@ class LoginViewModel(private val applicationContext: Context) : AuthenticationVi
     fun ssoLogin() {
         isLoading.value = true
 
+        pkceAuth.initServiceWith(authConfig, previousAuthState)
+
         try {
-            _startSSO.value = identityUrl.value!!
+            _onSsoLogin.value = identityUrl.value!!
         } catch (ex: Exception) {
             _onError.value = ex.message
+        }
+    }
+
+    override fun onPkceAuthCancelled() {
+        if (isReLogin) {
+            moveToStep(Step.Cancelled)
+        } else {
+            isLoading.value = false
         }
     }
 
@@ -135,6 +180,14 @@ class LoginViewModel(private val applicationContext: Context) : AuthenticationVi
         authConfigEditor.reset(config)
     }
 
+    enum class Step {
+        InputIdentityServer,
+        InputAppServer,
+        EnterBasicCredentials,
+        EnterPkceCredentials,
+        Cancelled;
+    }
+
     val basicAuth = BasicAuth()
     inner class BasicAuth {
         private val _enabled = MediatorLiveData<Boolean>()
@@ -158,7 +211,9 @@ class LoginViewModel(private val applicationContext: Context) : AuthenticationVi
             // Assume application url is the same as identity for basic auth
             applicationUrl.value = identityUrl.value
 
-            _onCredentials.value = Credentials.Basic(email.value ?: "", password.value ?: "")
+            val username = email.value ?: ""
+            val state = AuthInterceptor.basicState(username, password.value ?: "")
+            _onCredentials.value = Credentials(username, state, AuthType.BASIC.value)
         }
     }
 
@@ -166,8 +221,29 @@ class LoginViewModel(private val applicationContext: Context) : AuthenticationVi
         private const val SHARED_PREFS_NAME = "org.activiti.aims.android.auth"
         private const val SHARED_PREFS_CONFIG_KEY = "config"
 
-        fun with(context: Context): LoginViewModel {
-            return LoginViewModel(context)
+        const val EXTRA_ENDPOINT = "endpoint"
+        const val EXTRA_AUTH_TYPE = "authType"
+        const val EXTRA_AUTH_STATE = "authState"
+        const val EXTRA_AUTH_CONFIG = "authConfig"
+
+        fun with(context: Context, intent: Intent): LoginViewModel {
+            var config: AuthConfig? = null
+            var stateString: String? = null
+            var authType: AuthType? = null
+            var endpoint: String? = null
+
+            val extras = intent.extras
+            if (extras != null) {
+                config = try {
+                    AuthConfig.jsonDeserialize(extras.getString(EXTRA_AUTH_CONFIG)!!)
+                } catch (ex: Exception) { null }
+
+                stateString = extras.getString(EXTRA_AUTH_STATE)
+                endpoint = extras.getString(EXTRA_ENDPOINT)
+                authType = extras.getString(EXTRA_AUTH_TYPE)?.let { AuthType.fromValue(it) }
+            }
+
+            return LoginViewModel(context, authType, stateString, config, endpoint)
         }
     }
 

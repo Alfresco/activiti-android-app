@@ -44,7 +44,6 @@ import com.activiti.client.api.constant.ActivitiAPI;
 import com.activiti.client.api.model.idm.UserRepresentation;
 import com.activiti.client.api.model.runtime.AppVersionRepresentation;
 import com.afollestad.materialdialogs.MaterialDialog;
-import com.alfresco.client.AbstractClient.AuthType;
 import com.google.android.material.snackbar.Snackbar;
 import com.rengwuxian.materialedittext.MaterialAutoCompleteTextView;
 import com.rengwuxian.materialedittext.MaterialEditText;
@@ -294,7 +293,7 @@ public class SignInFragment extends AlfrescoFragment
         UIUtils.hideKeyboard(getActivity(), mEmailView);
 
         try {
-            session = new ActivitiSession.Builder().connect(endpoint.toString(), username, password, AuthType.BASIC).build();
+            session = new ActivitiSession.Builder().connect(endpoint.toString()).credentials(username, password).build();
             session.getServiceRegistry().getProfileService().getProfile(new Callback<UserRepresentation>() {
                 @Override
                 public void onResponse(Call<UserRepresentation> call, Response<UserRepresentation> response) {

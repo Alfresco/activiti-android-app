@@ -15,7 +15,6 @@ import androidx.appcompat.widget.Toolbar
 import androidx.core.view.ViewCompat
 import com.alfresco.android.aims.R
 import com.alfresco.auth.AuthConfig
-import com.alfresco.auth.AuthType
 import com.alfresco.auth.Credentials
 import com.alfresco.auth.fragments.*
 import com.alfresco.auth.ui.AuthenticationActivity
@@ -23,14 +22,15 @@ import com.alfresco.auth.ui.observe
 import com.alfresco.common.getViewModel
 import com.alfresco.ui.components.Snackbar
 
-
 abstract class LoginActivity : AuthenticationActivity<LoginViewModel>() {
 
     override val viewModel: LoginViewModel by lazy {
         getViewModel {
-            LoginViewModel.with(applicationContext)
+            LoginViewModel.with(applicationContext, intent)
         }
     }
+
+    protected var ignoreStepEventOnce = false
 
     private lateinit var progressView: RelativeLayout
 
@@ -38,6 +38,10 @@ abstract class LoginActivity : AuthenticationActivity<LoginViewModel>() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        if (savedInstanceState != null) {
+            ignoreStepEventOnce = true
+        }
 
         if (!resources.getBoolean(R.bool.isTablet)) {
             requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
@@ -50,18 +54,15 @@ abstract class LoginActivity : AuthenticationActivity<LoginViewModel>() {
         progressView = findViewById(R.id.rlProgress)
         ViewCompat.setElevation(progressView, 10f)
 
-        if (supportFragmentManager.findFragmentByTag(WelcomeFragment.TAG) == null) {
-            WelcomeFragment.with(this).replace()
-        }
-
         observe(viewModel.hasNavigation, ::onNavigation)
         observe(viewModel.isLoading, ::onLoading)
-
-        observe(viewModel.onAuthType, ::onAuthType)
-        observe(viewModel.startSSO, ::login)
+        observe(viewModel.step, ::onMoveToStep)
+        observe(viewModel.onSsoLogin, ::pkceLogin)
 
         observe(viewModel.onShowHelp, ::showHelp)
         observe(viewModel.onShowSettings, ::showSettings)
+
+        title = ""
     }
 
     private fun setupToolbar() {
@@ -93,6 +94,21 @@ abstract class LoginActivity : AuthenticationActivity<LoginViewModel>() {
         }
     }
 
+    private fun onMoveToStep(step: LoginViewModel.Step) {
+        if (ignoreStepEventOnce) {
+            ignoreStepEventOnce = false
+            return
+        }
+
+        when (step) {
+            LoginViewModel.Step.InputIdentityServer -> WelcomeFragment.with(this).display()
+            LoginViewModel.Step.InputAppServer -> SsoAuthFragment.with(this).display()
+            LoginViewModel.Step.EnterBasicCredentials -> BasicAuthFragment.with(this).display()
+            LoginViewModel.Step.EnterPkceCredentials -> viewModel.ssoLogin()
+            LoginViewModel.Step.Cancelled -> finish();
+        }
+    }
+
     abstract fun onCredentials(credentials: Credentials, endpoint: String, authConfig: AuthConfig)
 
     override fun onCredentials(credentials: Credentials) {
@@ -113,24 +129,6 @@ abstract class LoginActivity : AuthenticationActivity<LoginViewModel>() {
 
     protected fun onError(@StringRes messageResId: Int) {
         onError(resources.getString(messageResId))
-    }
-
-    override fun onAuthType(type: AuthType) {
-        viewModel.isLoading.value = false
-
-        when (type) {
-            AuthType.SSO -> {
-                SsoAuthFragment.with(this).display()
-            }
-
-            AuthType.BASIC -> {
-                BasicAuthFragment.with(this).display()
-            }
-
-            AuthType.UNKNOWN -> {
-                onError(R.string.auth_error_check_connect_url)
-            }
-        }
     }
 
     private fun showSettings(ignored: Int) {

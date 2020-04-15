@@ -194,9 +194,7 @@ dependencies {
 
     implementation 'com.android.support:multidex:1.0.3'
 
-    //Temporary hardcoded dependencies until release to Maven.
-    implementation fileTree(dir: 'libs', include: '*.jar')
-    //implementation 'org.alfresco.client:client-android-bpm:1.0.0-beta1'
+    implementation 'org.alfresco.client:activiti-android-client:1.2.1'
 
     implementation 'io.gsonfire:gson-fire:1.5.0'
 

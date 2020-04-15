@@ -70,9 +70,9 @@ import com.activiti.android.ui.holder.TwoLinesViewHolder;
 import com.activiti.android.ui.utils.DisplayUtils;
 import com.activiti.android.ui.utils.UIUtils;
 import com.afollestad.materialdialogs.MaterialDialog;
+import com.alfresco.auth.AuthType;
 import com.alfresco.auth.activity.LogoutActivity;
 import com.alfresco.auth.activity.LogoutViewModel;
-import com.alfresco.client.AbstractClient.AuthType;
 
 /**
  * Manage global application preferences.
@@ -274,9 +274,9 @@ public class AccountSettingsFragment extends AlfrescoFragment implements EditTex
 
     private void logout()
     {
-        if (account.getAuthType() == AuthType.TOKEN) {
+        if (account.getAuthType().equals(AuthType.PKCE.getValue())) {
             Intent i = new Intent(getContext(), LogoutActivity.class);
-            i.putExtra(LogoutViewModel.EXTRA_AUTH_CONFIG, account.getAuthConfigString());
+            i.putExtra(LogoutViewModel.EXTRA_AUTH_CONFIG, account.getAuthConfig());
             i.putExtra(LogoutViewModel.EXTRA_AUTH_STATE, account.getAuthState());
             startActivityForResult(i, REQUEST_CODE_LOGOUT);
         } else {

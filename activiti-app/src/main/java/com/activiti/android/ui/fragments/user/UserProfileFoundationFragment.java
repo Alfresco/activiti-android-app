@@ -53,7 +53,6 @@ import com.activiti.android.ui.holder.HolderUtils;
 import com.activiti.client.api.model.idm.GroupRepresentation;
 import com.activiti.client.api.model.idm.UserRepresentation;
 import com.activiti.client.api.model.idm.request.UpdateProfileRepresentation;
-import com.alfresco.client.AbstractClient.AuthType;
 import com.google.android.material.snackbar.Snackbar;
 
 /**
@@ -361,8 +360,8 @@ public class UserProfileFoundationFragment extends AlfrescoFragment implements E
                     case EDIT_EMAIL_ID:
                         if (TextUtils.isEmpty(userRepresentation.getExternalId()))
                         {
-                            ActivitiSession.getInstance().updateCredentials(userRepresentation.getEmail(),
-                                    getAccount().getPassword(), AuthType.BASIC);
+                            // TODO: requires header update on basic auth
+                            // ActivitiSession.getInstance().getAuthInterceptor().updateCredentials(...);
                             ActivitiAccountManager.getInstance(getActivity()).update(getAccount().getId(),
                                     ActivitiAccount.ACCOUNT_USERNAME, userRepresentation.getEmail());
                         }

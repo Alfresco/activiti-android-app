@@ -20,7 +20,6 @@
 
 package com.activiti.android.app.fragments.account;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -35,14 +34,13 @@ import androidx.fragment.app.DialogFragment;
 
 import com.activiti.android.app.R;
 import com.activiti.android.app.activity.MainActivity;
-import com.activiti.android.app.activity.ReloginSsoActivity;
 import com.activiti.android.app.activity.WelcomeSsoActivity;
 import com.activiti.android.platform.account.ActivitiAccount;
 import com.activiti.android.platform.account.ActivitiAccountManager;
 import com.activiti.android.ui.fragments.accounts.AccountAdapter;
 import com.activiti.android.ui.holder.HolderUtils;
 import com.activiti.android.ui.holder.TwoLinesViewHolder;
-import com.alfresco.auth.activity.ReloginViewModel;
+import com.alfresco.auth.activity.LoginViewModel;
 
 import java.util.List;
 
@@ -74,9 +72,11 @@ public class SignedOutDialogFragment extends DialogFragment
         Button signInButton = view.findViewById(R.id.sign_in_button);
         signInButton.setOnClickListener(v ->
         {
-            Intent i = new Intent(getActivity(), ReloginSsoActivity.class);
-            i.putExtra(ReloginViewModel.EXTRA_AUTH_CONFIG, currentAccount.getAuthConfigString());
-            i.putExtra(ReloginViewModel.EXTRA_AUTH_STATE, currentAccount.getAuthState());
+            Intent i = new Intent(getActivity(), WelcomeSsoActivity.class);
+            i.putExtra(LoginViewModel.EXTRA_ENDPOINT, currentAccount.getServerUrl());
+            i.putExtra(LoginViewModel.EXTRA_AUTH_TYPE, currentAccount.getAuthType());
+            i.putExtra(LoginViewModel.EXTRA_AUTH_CONFIG, currentAccount.getAuthConfig());
+            i.putExtra(LoginViewModel.EXTRA_AUTH_STATE, currentAccount.getAuthState());
             startActivity(i);
         });
 
