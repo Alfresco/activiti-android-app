@@ -20,7 +20,7 @@
         app:layout_constraintTop_toTopOf="@+id/guideline"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        android:src="@drawable/ic_alfresco_branding_mobile" />
+        android:src="@drawable/splash_alfresco_logo" />
 
     <include
         layout="@layout/view_copyright"

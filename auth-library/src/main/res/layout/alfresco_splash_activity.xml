@@ -14,7 +14,7 @@
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="220dp"
-        android:src="@drawable/ic_alfresco_branding_mobile" />
+        android:src="@drawable/splash_alfresco_logo" />
 
     <include
         layout="@layout/view_copyright"
