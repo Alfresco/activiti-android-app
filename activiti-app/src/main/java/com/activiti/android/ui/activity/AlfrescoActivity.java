@@ -46,6 +46,7 @@ import com.activiti.android.platform.integration.hockeyapp.HockeyAppManager;
 import com.activiti.android.sdk.ActivitiSession;
 import com.activiti.android.sdk.services.ServiceRegistry;
 import com.alfresco.auth.AuthInterceptor;
+import com.alfresco.client.AbstractClient;
 import com.mattprecious.telescope.EmailDeviceInfoLens;
 import com.mattprecious.telescope.TelescopeLayout;
 
@@ -61,6 +62,8 @@ import java.lang.ref.WeakReference;
 public abstract class AlfrescoActivity extends AppCompatActivity
 {
     protected ActivitiSession session;
+
+    protected AuthInterceptor authInterceptor;
 
     protected ActivitiAccount account;
 
@@ -119,11 +122,21 @@ public abstract class AlfrescoActivity extends AppCompatActivity
     protected void onDestroy()
     {
         super.onDestroy();
+
+        cleanupSession();
     }
 
     // ///////////////////////////////////////////////////////////////////////////
     // UTILS
     // ///////////////////////////////////////////////////////////////////////////
+    private void cleanupSession() {
+        if (authInterceptor != null) {
+            authInterceptor.finish();
+            authInterceptor = null;
+        }
+        session = null;
+    }
+
     public Fragment getFragment(String tag)
     {
         return getSupportFragmentManager().findFragmentByTag(tag);
@@ -154,15 +167,18 @@ public abstract class AlfrescoActivity extends AppCompatActivity
 
         if (account == null) { return; }
 
+        // Cleanup previous session
+        cleanupSession();
+
         Context context = getApplicationContext();
-        AuthInterceptor authInterceptor = new AuthInterceptor(context, String.valueOf(account.getId()), account.getAuthType(), account.getAuthState(), account.getAuthConfig());
+        authInterceptor = new AuthInterceptor(context, String.valueOf(account.getId()), account.getAuthType(), account.getAuthState(), account.getAuthConfig());
         authInterceptor.setListener(new AuthListener(this));
 
-        session = new ActivitiSession.Builder()
+        AbstractClient.Builder builder = new ActivitiSession.Builder()
                 .connect(account.getServerUrl())
                 .authInterceptor(authInterceptor)
-                .httpLogging(BuildConfig.DEBUG ? HttpLoggingInterceptor.Level.HEADERS : HttpLoggingInterceptor.Level.NONE)
-                .build();
+                .httpLogging(BuildConfig.DEBUG ? HttpLoggingInterceptor.Level.HEADERS : HttpLoggingInterceptor.Level.NONE);
+        session = ((ActivitiSession.Builder) builder).buildSharedInstance();
 
         // Analytics
         AnalyticsHelper.analyzeAccount(this, account);

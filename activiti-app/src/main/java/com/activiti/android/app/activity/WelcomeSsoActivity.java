@@ -22,6 +22,8 @@ package com.activiti.android.app.activity;
 
 import android.content.Intent;
 
+import androidx.annotation.StringRes;
+
 import com.activiti.android.app.R;
 import com.activiti.android.platform.EventBusManager;
 import com.activiti.android.platform.account.AccountsPreferences;
@@ -55,6 +57,7 @@ public class WelcomeSsoActivity extends LoginActivity
 
     private ActivitiAccount acc;
     private ActivitiSession activitiSession;
+    private AuthInterceptor authInterceptor;
     private String endpoint;
     private UserRepresentation user;
     private AppVersion version;
@@ -76,6 +79,21 @@ public class WelcomeSsoActivity extends LoginActivity
     {
         super.onStop();
         EventBusManager.getInstance().unregister(this);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+
+        cleanupSession();
+    }
+
+    private void cleanupSession() {
+        if (authInterceptor != null) {
+            authInterceptor.finish();
+            authInterceptor = null;
+        }
+        activitiSession = null;
     }
 
     @Override
@@ -101,7 +119,7 @@ public class WelcomeSsoActivity extends LoginActivity
 
     private void connect() {
         try {
-            AuthInterceptor authInterceptor = new AuthInterceptor(getApplicationContext(), "", authType , authState, authConfig.jsonSerialize());
+            authInterceptor = new AuthInterceptor(getApplicationContext(), "", authType , authState, authConfig.jsonSerialize());
             activitiSession = new ActivitiSession.Builder()
                     .connect(endpoint)
                     .authInterceptor(authInterceptor)
@@ -118,23 +136,30 @@ public class WelcomeSsoActivity extends LoginActivity
                     }
                     else if (response.code() == 401)
                     {
-                        onError(R.string.auth_error_wrong_credentials);
+                        onConnectError(R.string.auth_error_wrong_credentials);
                     }
                     else
                     {
-                        onError(R.string.auth_error_app_incorrect);
+                        onConnectError(R.string.auth_error_app_incorrect);
                     }
                 }
 
                 @Override
                 public void onFailure(Call<UserRepresentation> call, Throwable t)
                 {
-                    onError(R.string.auth_error_app_unreachable);
+                    onConnectError(R.string.auth_error_app_unreachable);
                 }
             });
         } catch(IllegalArgumentException illegalArgumentException) {
-            onError(R.string.auth_error_wrong_credentials);
+            onConnectError(R.string.auth_error_wrong_credentials);
         }
+    }
+
+    private void onConnectError(@StringRes  int messageResId) {
+        // On connect failure cleanup the session
+        cleanupSession();
+
+        onError(messageResId);
     }
 
     private void retrieveServerInfoIfNecessary()

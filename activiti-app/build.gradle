@@ -194,7 +194,7 @@ dependencies {
 
     implementation 'com.android.support:multidex:1.0.3'
 
-    implementation 'org.alfresco.client:activiti-android-client:1.2.1'
+    implementation 'org.alfresco.client:activiti-android-client:1.2.2'
 
     implementation 'io.gsonfire:gson-fire:1.5.0'
 
