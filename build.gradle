@@ -60,12 +60,5 @@ allprojects {
             url 'https://maven.google.com/'
             name 'Google'
         }
-        maven {
-            url "https://artifacts.alfresco.com/nexus/content/repositories/internal-snapshots/"
-            credentials {
-                username nexus_username
-                password nexus_password
-            }
-        }
     }
 }
