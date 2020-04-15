@@ -80,6 +80,8 @@ public class UserProfileFoundationFragment extends AlfrescoFragment implements E
 
     private int fieldId;
 
+    private Boolean isEditingEnabled = false;
+
     // ///////////////////////////////////////////////////////////////////////////
     // CONSTRUCTORS & HELPERS
     // ///////////////////////////////////////////////////////////////////////////
@@ -255,6 +257,14 @@ public class UserProfileFoundationFragment extends AlfrescoFragment implements E
             }
         });
 
+        if (!isEditingEnabled)
+        {
+            viewById(R.id.profile_firstname_container).setClickable(false);
+            viewById(R.id.profile_lastname_container).setClickable(false);
+            viewById(R.id.profile_email_container).setClickable(false);
+            viewById(R.id.profile_company_container).setClickable(false);
+        }
+
         // GROUPS
         if (memberOfGroups == null)
         {
@@ -360,7 +370,7 @@ public class UserProfileFoundationFragment extends AlfrescoFragment implements E
                     case EDIT_EMAIL_ID:
                         if (TextUtils.isEmpty(userRepresentation.getExternalId()))
                         {
-                            // TODO: requires header update on basic auth
+                            // TODO: requires header update on basic auth when isEditingEnabled
                             // ActivitiSession.getInstance().getAuthInterceptor().updateCredentials(...);
                             ActivitiAccountManager.getInstance(getActivity()).update(getAccount().getId(),
                                     ActivitiAccount.ACCOUNT_USERNAME, userRepresentation.getEmail());
