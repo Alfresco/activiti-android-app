@@ -23,9 +23,9 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:paddingStart="@dimen/aims_theme_default_padding"
-            android:paddingTop="@dimen/aims_theme_default_padding"
-            android:paddingEnd="@dimen/aims_theme_default_padding">
+            android:paddingStart="@dimen/auth_theme_default_padding"
+            android:paddingTop="@dimen/auth_theme_default_padding"
+            android:paddingEnd="@dimen/auth_theme_default_padding">
 
             <TextView
                 android:id="@+id/tvProtocolTitle"
@@ -38,7 +38,7 @@
                 android:id="@+id/tvProtocol"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
-                android:layout_marginTop="@dimen/aims_login_settings_header_spacing">
+                android:layout_marginTop="@dimen/auth_settings_header_spacing">
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -64,7 +64,7 @@
                 style="@style/Widget.Alfresco.TextField.Layout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/aims_login_settings_field_spacing"
+                android:layout_marginTop="@dimen/auth_settings_field_spacing"
                 android:hint="@string/auth_settings_transport_port">
 
                 <com.google.android.material.textfield.TextInputEditText
@@ -83,7 +83,7 @@
                 style="@style/Widget.Alfresco.SectionText"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/aims_login_settings_section_spacing"
+                android:layout_marginTop="@dimen/auth_settings_section_spacing"
                 android:text="@string/auth_settings_service_section" />
 
             <com.alfresco.ui.components.TextInputLayout
@@ -91,7 +91,7 @@
                 style="@style/Widget.Alfresco.TextField.Layout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/aims_login_settings_header_spacing"
+                android:layout_marginTop="@dimen/auth_settings_header_spacing"
                 android:hint="@string/auth_settings_service_document">
 
                 <com.google.android.material.textfield.TextInputEditText
@@ -109,7 +109,7 @@
                 style="@style/Widget.Alfresco.SectionText"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/aims_login_settings_section_spacing"
+                android:layout_marginTop="@dimen/auth_settings_section_spacing"
                 android:text="@string/auth_settings_auth_section" />
 
             <com.alfresco.ui.components.TextInputLayout
@@ -117,7 +117,7 @@
                 style="@style/Widget.Alfresco.TextField.Layout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/aims_login_settings_header_spacing"
+                android:layout_marginTop="@dimen/auth_settings_header_spacing"
                 android:hint="@string/auth_settings_auth_realm">
 
                 <com.google.android.material.textfield.TextInputEditText
@@ -135,7 +135,7 @@
                 style="@style/Widget.Alfresco.TextField.Layout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/aims_login_settings_field_spacing"
+                android:layout_marginTop="@dimen/auth_settings_field_spacing"
                 android:hint="@string/auth_settings_auth_client_id">
 
                 <com.google.android.material.textfield.TextInputEditText

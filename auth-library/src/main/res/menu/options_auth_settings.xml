@@ -2,7 +2,7 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
-        android:id="@+id/aims_save_settings"
+        android:id="@+id/auth_settings_save"
         app:actionLayout="@layout/view_auth_settings_save_action"
         app:showAsAction="always" />
 </menu>

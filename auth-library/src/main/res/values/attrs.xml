@@ -7,10 +7,10 @@
     <dimen name="auth_box_elevation">32dp</dimen>
 
     <!-- LOGIN SETTINGS -->
-    <dimen name="aims_theme_default_padding">34dp</dimen>
-    <dimen name="aims_login_settings_section_spacing">40dp</dimen>
-    <dimen name="aims_login_settings_field_spacing">11dp</dimen>
-    <dimen name="aims_login_settings_header_spacing">6dp</dimen>
+    <dimen name="auth_theme_default_padding">34dp</dimen>
+    <dimen name="auth_settings_section_spacing">40dp</dimen>
+    <dimen name="auth_settings_field_spacing">11dp</dimen>
+    <dimen name="auth_settings_header_spacing">6dp</dimen>
 
     <declare-styleable name="Widget.Alfresco.ActionBar">
         <attr name="actionBarPaddingLeft" format="dimension"/>

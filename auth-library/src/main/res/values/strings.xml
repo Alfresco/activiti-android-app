@@ -8,6 +8,7 @@
     <string name="auth_cloud_sign_in_button">Cloud Sign In</string>
     <string name="auth_help_button">Need Help</string>
     <string name="auth_settings_button">@string/auth_settings_title</string>
+    <string name="auth_progress_bar_message">Connecting</string>
 
     <string name="auth_help_overlay_title">Help</string>
     <string name="auth_help_identity_body">

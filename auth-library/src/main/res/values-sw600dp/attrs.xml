@@ -4,5 +4,5 @@
     <integer name="auth_visibility_phone_only">2</integer><!-- GONE -->
     <integer name="auth_visibility_tablet_only">0</integer><!-- VISIBLE -->
 
-    <dimen name="aims_theme_default_padding">74dp</dimen>
+    <dimen name="auth_theme_default_padding">74dp</dimen>
 </resources>

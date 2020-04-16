@@ -66,7 +66,7 @@
             android:layout_marginTop="16dp"
             android:fontFamily="@font/muli_light"
             android:gravity="center"
-            android:text="Connecting"
+            android:text="@string/auth_progress_bar_message"
             android:textColor="#919191"
             android:textSize="16sp" />
 

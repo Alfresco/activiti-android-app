@@ -20,8 +20,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:paddingStart="@dimen/aims_theme_default_padding"
-            android:paddingEnd="@dimen/aims_theme_default_padding">
+            android:paddingStart="@dimen/auth_theme_default_padding"
+            android:paddingEnd="@dimen/auth_theme_default_padding">
 
             <include
                 android:id="@+id/logo"
@@ -75,8 +75,7 @@
                 android:layout_marginTop="10dp"
                 android:hint="@string/auth_basic_user_hint"
                 app:endIconDrawable="@drawable/ic_person"
-                app:endIconMode="custom"
-                app:endIconTint="@color/text_input_icon_tint">
+                app:endIconMode="custom">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/etUsernameEmail"

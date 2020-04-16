@@ -23,9 +23,9 @@
     <style name="Theme.Alfresco" parent="Theme.MaterialComponents.Light.NoActionBar">
         <item name="colorPrimary">@color/alfresco_primary</item>
         <item name="colorPrimaryDark">@android:color/white</item>
-        <item name="colorAccent">@color/aims_accent</item>
-        <item name="android:textColorPrimary">@color/aims_primary_text</item>
-        <item name="android:textColorSecondary">@color/aims_secondary_text</item>
+        <item name="colorAccent">@color/alfresco_primary</item>
+        <item name="android:textColorPrimary">@color/alfresco_text_primary</item>
+        <item name="android:textColorSecondary">@color/alfresco_text_secondary</item>
         
         <!-- Action bar -->
         <item name="actionBarSize">44dp</item>

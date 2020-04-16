@@ -73,15 +73,6 @@ abstract class LoginActivity : AuthenticationActivity<LoginViewModel>() {
         setSupportActionBar(toolbar)
     }
 
-    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
-        when (item?.itemId) {
-
-            R.id.aims_save_settings -> return false
-
-            else -> return super.onOptionsItemSelected(item)
-        }
-    }
-
     private fun onLoading(isLoading: Boolean) {
         progressView.visibility = if (isLoading) View.VISIBLE else View.GONE
     }
