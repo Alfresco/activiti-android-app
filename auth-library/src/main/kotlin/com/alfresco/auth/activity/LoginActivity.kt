@@ -4,9 +4,9 @@ import android.content.Context
 import android.content.pm.ActivityInfo
 import android.graphics.Rect
 import android.os.Bundle
-import android.view.MenuItem
 import android.view.MotionEvent
 import android.view.View
+import android.view.ViewGroup
 import android.view.WindowManager
 import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
@@ -22,6 +22,8 @@ import com.alfresco.auth.ui.AuthenticationActivity
 import com.alfresco.auth.ui.observe
 import com.alfresco.common.getViewModel
 import com.alfresco.ui.components.Snackbar
+import com.alfresco.ui.components.TextInputLayout
+import java.util.ArrayDeque
 
 abstract class LoginActivity : AuthenticationActivity<LoginViewModel>() {
 
@@ -119,6 +121,11 @@ abstract class LoginActivity : AuthenticationActivity<LoginViewModel>() {
                 resources.getString(R.string.auth_error_title),
                 error,
                 Snackbar.LENGTH_LONG).show()
+
+        // Hacky way to set error state to match design
+        updateAll<TextInputLayout> {
+            it.setBoxStrokeColorStateList(resources.getColorStateList(R.color.alfresco_textinput_stroke_error))
+        }
     }
 
     protected fun onError(@StringRes messageResId: Int) {
@@ -148,5 +155,25 @@ abstract class LoginActivity : AuthenticationActivity<LoginViewModel>() {
             }
         }
         return super.dispatchTouchEvent(event)
+    }
+
+    private inline fun <reified T> updateAll(func: (T) -> Unit) {
+        val queue = ArrayDeque<ViewGroup>()
+        val rootView = (findViewById<ViewGroup>(android.R.id.content)).rootView as ViewGroup
+
+        var current: ViewGroup? = rootView
+        while (current != null) {
+            for (i in 0..current.childCount) {
+                val child = current.getChildAt(i);
+                if (child is ViewGroup) {
+                    queue.add(child)
+                }
+                if (child is T) {
+                    func(child)
+                }
+            }
+
+            current = queue.poll()
+        }
     }
 }
