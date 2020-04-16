@@ -235,6 +235,9 @@ public class ActivitiAccountManager extends Manager
         // Delete account from cache
         accountIndex.remove(accountId);
 
+        // Update no. of accounts
+        accountsSize--;
+
         // Delete Account from AccountManager
         AccountManager.get(context).removeAccount(getAndroidAccount(accountId), callback, null);
     }
