@@ -11,119 +11,127 @@
             type="com.alfresco.auth.activity.LoginViewModel" />
     </data>
 
-    <RelativeLayout
+    <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:paddingStart="@dimen/aims_theme_default_padding"
-        android:paddingEnd="@dimen/aims_theme_default_padding">
-
-        <include
-            android:id="@+id/logo"
-            layout="@layout/layout_auth_logo"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="60dp" />
-
-        <RelativeLayout
-            android:id="@+id/rlSSOAuthInfo"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/logo"
-            android:layout_marginTop="25dp">
-
-            <TextView
-                android:id="@+id/tvSigninTo"
-                style="@style/Widget.Alfresco.BodyText"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="start"
-                android:text="@string/auth_sso_connected_to"
-                android:textColor="#AFAFAF"
-                android:textSize="12sp" />
-
-            <TextView
-                android:id="@+id/tvConnectUrl"
-                style="@style/Widget.Alfresco.BodyText"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/tvSigninTo"
-                android:layout_marginTop="2dp"
-                android:gravity="start"
-                android:text="@{viewModel.identityUrl}"
-                android:textColor="#AFAFAF"
-                tools:text="Identity service URL" />
-
-        </RelativeLayout>
-
-        <RelativeLayout
-            android:id="@+id/rlConnectInfo"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/rlSSOAuthInfo"
-            android:layout_marginTop="16dp">
-
-            <TextView
-                android:id="@+id/tvConnectInfo"
-                style="@style/Widget.Alfresco.BodyText"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="start"
-                android:text="@string/auth_sso_info" />
-
-            <com.alfresco.ui.components.TextInputLayout
-                android:id="@+id/tilProcessUrl"
-                style="@style/Widget.Alfresco.TextField.Layout"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/tvConnectInfo"
-                android:layout_marginTop="10dp"
-                android:hint="@string/auth_sso_repo_hint">
-
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/etConnectUrl"
-                    style="@style/Widget.Alfresco.TextField.Edit"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="@={viewModel.applicationUrl}" />
-
-            </com.alfresco.ui.components.TextInputLayout>
-        </RelativeLayout>
-
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/btnSSOSignIn"
-            style="@style/Widget.Alfresco.Button.Primary"
-            android:layout_width="match_parent"
-            android:layout_below="@id/rlConnectInfo"
-            android:layout_marginTop="20dp"
-            android:onClick="@{() -> viewModel.ssoLogin()}"
-            android:enabled="@{viewModel.ssoLoginEnabled}"
-            android:text="@string/auth_sso_sign_in_button"
-            app:icon="@drawable/ic_sign_in"
-            app:iconGravity="end" />
+        android:fillViewport="true">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:gravity="center"
-            android:orientation="vertical">
-
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/btnHelp"
-                style="@style/Widget.Alfresco.Action.Secondary"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:onClick="@{() -> viewModel.showSsoHelp()}"
-                android:text="@string/auth_help_button" />
+            android:orientation="vertical"
+            android:paddingStart="@dimen/aims_theme_default_padding"
+            android:paddingEnd="@dimen/aims_theme_default_padding">
 
             <include
-                layout="@layout/view_copyright"
+                android:id="@+id/logo"
+                layout="@layout/layout_auth_logo"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="30dp"
-                android:layout_marginBottom="10dp"
-                android:visibility="@integer/auth_visibility_phone_only"/>
+                android:layout_marginTop="60dp" />
+
+            <RelativeLayout
+                android:id="@+id/rlSSOAuthInfo"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="25dp">
+
+                <TextView
+                    android:id="@+id/tvSigninTo"
+                    style="@style/Widget.Alfresco.BodyText"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="start"
+                    android:text="@string/auth_sso_connected_to"
+                    android:textColor="#AFAFAF"
+                    android:textSize="12sp" />
+
+                <TextView
+                    android:id="@+id/tvConnectUrl"
+                    style="@style/Widget.Alfresco.BodyText"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/tvSigninTo"
+                    android:layout_marginTop="2dp"
+                    android:gravity="start"
+                    android:text="@{viewModel.identityUrl}"
+                    android:textColor="#AFAFAF"
+                    tools:text="Identity service URL" />
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/rlConnectInfo"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp">
+
+                <TextView
+                    android:id="@+id/tvConnectInfo"
+                    style="@style/Widget.Alfresco.BodyText"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="start"
+                    android:text="@string/auth_sso_info" />
+
+                <com.alfresco.ui.components.TextInputLayout
+                    android:id="@+id/tilProcessUrl"
+                    style="@style/Widget.Alfresco.TextField.Layout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/tvConnectInfo"
+                    android:layout_marginTop="10dp"
+                    android:hint="@string/auth_sso_repo_hint">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/etConnectUrl"
+                        style="@style/Widget.Alfresco.TextField.Edit"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@={viewModel.applicationUrl}" />
+
+                </com.alfresco.ui.components.TextInputLayout>
+            </RelativeLayout>
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnSSOSignIn"
+                style="@style/Widget.Alfresco.Button.Primary"
+                android:layout_width="match_parent"
+                android:layout_marginTop="20dp"
+                android:enabled="@{viewModel.ssoLoginEnabled}"
+                android:onClick="@{() -> viewModel.ssoLogin()}"
+                android:text="@string/auth_sso_sign_in_button"
+                app:icon="@drawable/ic_sign_in"
+                app:iconGravity="end" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:orientation="vertical">
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btnHelp"
+                    style="@style/Widget.Alfresco.Action.Secondary"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:onClick="@{() -> viewModel.showSsoHelp()}"
+                    android:text="@string/auth_help_button" />
+
+                <include
+                    layout="@layout/view_copyright"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="30dp"
+                    android:layout_marginBottom="10dp"
+                    android:visibility="@integer/auth_visibility_phone_only" />
+            </LinearLayout>
         </LinearLayout>
-    </RelativeLayout>
+    </ScrollView>
 </layout>
