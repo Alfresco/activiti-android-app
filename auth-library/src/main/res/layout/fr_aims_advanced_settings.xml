@@ -99,7 +99,7 @@
                     style="@style/Widget.Alfresco.TextField.Edit"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:inputType="text"
+                    android:inputType="text|textNoSuggestions"
                     android:maxLines="1"
                     android:text="@={viewModel.authConfigEditor.serviceDocuments}" />
             </com.alfresco.ui.components.TextInputLayout>
@@ -125,7 +125,7 @@
                     style="@style/Widget.Alfresco.TextField.Edit"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:inputType="text"
+                    android:inputType="text|textNoSuggestions"
                     android:maxLines="1"
                     android:text="@={viewModel.authConfigEditor.realm}" />
             </com.alfresco.ui.components.TextInputLayout>
@@ -144,7 +144,7 @@
                     style="@style/Widget.Alfresco.TextField.Edit"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:inputType="text"
+                    android:inputType="text|textNoSuggestions"
                     android:maxLines="1"
                     android:text="@={viewModel.authConfigEditor.clientId}" />
             </com.alfresco.ui.components.TextInputLayout>
