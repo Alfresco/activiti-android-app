@@ -69,6 +69,8 @@ public abstract class AlfrescoFragment extends DialogFragment implements Analyti
     /** Flag to send screen event with analytics. */
     protected boolean reportAtCreation = true;
 
+    protected ActivitiSession session;
+
     // /////////////////////////////////////////////////////////////
     // LIFECYCLE
     // ////////////////////////////////////////////////////////////
@@ -164,9 +166,19 @@ public abstract class AlfrescoFragment extends DialogFragment implements Analyti
         getRootView().findViewById(id).setVisibility(View.VISIBLE);
     }
 
+    public ActivitiSession getSession()
+    {
+        if (session == null)
+        {
+            Long accountId = getAccount().getId();
+            session = ActivitiSession.with(String.valueOf(accountId));
+        }
+        return session;
+    }
+
     public ServiceRegistry getAPI()
     {
-        return ActivitiSession.getInstance().getServiceRegistry();
+        return getSession().getServiceRegistry();
     }
 
     public ActivitiAccount getAccount()

@@ -115,9 +115,14 @@ public class ContentTransferSyncAdapter extends AbstractThreadedSyncAdapter
     {
         Log.d("Activiti", "onPerformSync ContentTransfert for account[" + account.name + "]");
 
-        if (ActivitiSession.getInstance() != null)
+        // Retrieve ActivitiAccount
+        long accountId = Long.parseLong(mAccountManager.getUserData(account, ActivitiAccount.ACCOUNT_ID));
+
+        // Retrieve Applications from Server
+        ActivitiSession session = ActivitiSession.with(String.valueOf(accountId));
+        if (session != null)
         {
-            api = ActivitiSession.getInstance().getServiceRegistry();
+            api = session.getServiceRegistry();
         }
         else
         {
@@ -139,10 +144,6 @@ public class ContentTransferSyncAdapter extends AbstractThreadedSyncAdapter
                 mimetype = BundleUtils.getString(extras, ARGUMENT_MIMETYPE);
                 filePath = BundleUtils.getString(extras, ARGUMENT_FILE_PATH);
             }
-
-            // Retrieve ActivitiAccount
-            long accountId = Long
-                    .parseLong(AccountManager.get(getContext()).getUserData(account, ActivitiAccount.ACCOUNT_ID));
 
             switch (mode)
             {

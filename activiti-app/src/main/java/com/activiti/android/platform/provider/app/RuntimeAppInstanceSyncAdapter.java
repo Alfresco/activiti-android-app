@@ -77,9 +77,10 @@ public class RuntimeAppInstanceSyncAdapter extends AbstractThreadedSyncAdapter
             long accountId = Long.parseLong(AccountManager.get(getContext()).getUserData(account,
                     ActivitiAccount.ACCOUNT_ID));
 
-            if (ActivitiSession.getInstance() != null)
+            ActivitiSession session = ActivitiSession.with(String.valueOf(accountId));
+            if (session != null)
             {
-                api = ActivitiSession.getInstance().getServiceRegistry();
+                api = session.getServiceRegistry();
             }
             else
             {

@@ -46,7 +46,6 @@ import com.activiti.android.platform.integration.hockeyapp.HockeyAppManager;
 import com.activiti.android.sdk.ActivitiSession;
 import com.activiti.android.sdk.services.ServiceRegistry;
 import com.alfresco.auth.AuthInterceptor;
-import com.alfresco.client.AbstractClient;
 import com.mattprecious.telescope.EmailDeviceInfoLens;
 import com.mattprecious.telescope.TelescopeLayout;
 
@@ -174,11 +173,12 @@ public abstract class AlfrescoActivity extends AppCompatActivity
         authInterceptor = new AuthInterceptor(context, String.valueOf(account.getId()), account.getAuthType(), account.getAuthState(), account.getAuthConfig());
         authInterceptor.setListener(new AuthListener(this));
 
-        AbstractClient.Builder builder = new ActivitiSession.Builder()
+        session = new ActivitiSession.Builder()
                 .connect(account.getServerUrl())
                 .authInterceptor(authInterceptor)
-                .httpLogging(BuildConfig.DEBUG ? HttpLoggingInterceptor.Level.HEADERS : HttpLoggingInterceptor.Level.NONE);
-        session = ((ActivitiSession.Builder) builder).buildSharedInstance();
+                .httpLogging(BuildConfig.DEBUG ? HttpLoggingInterceptor.Level.HEADERS : HttpLoggingInterceptor.Level.NONE)
+                .build();
+        session.register(String.valueOf(account.getId()));
 
         // Analytics
         AnalyticsHelper.analyzeAccount(this, account);

@@ -78,9 +78,10 @@ public class IntegrationSyncAdapter extends AbstractThreadedSyncAdapter
                     .parseLong(AccountManager.get(getContext()).getUserData(account, ActivitiAccount.ACCOUNT_ID));
 
             // Retrieve Applications from Server
-            if (ActivitiSession.getInstance() != null)
+            ActivitiSession session = ActivitiSession.with(String.valueOf(accountId));
+            if (session != null)
             {
-                api = ActivitiSession.getInstance().getServiceRegistry();
+                api = session.getServiceRegistry();
             }
             else
             {

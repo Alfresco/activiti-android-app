@@ -234,6 +234,9 @@ public class WelcomeSsoActivity extends LoginActivity
                     (user.getTenantId() != null) ? Long.toString(user.getTenantId()) : null);
         }
 
+        // Cache current session
+        activitiSession.register(String.valueOf(acc.getId()));
+
         // Create My Tasks Applications
         RuntimeAppInstanceManager.getInstance(this).createAppInstance(acc.getId(), -1L, "My Tasks", "", "",
                 "Access your full task getProcessInstances and work on any tasks assigned to you from any process app",
@@ -256,6 +259,10 @@ public class WelcomeSsoActivity extends LoginActivity
         if (acc != null)
         {
             ActivitiAccountManager.getInstance(this).update(this, acc.getId(), username, authState);
+
+            // Update session cache
+            activitiSession.register(String.valueOf(acc.getId()));
+
             IntegrationManager.sync(this);
         }
         else

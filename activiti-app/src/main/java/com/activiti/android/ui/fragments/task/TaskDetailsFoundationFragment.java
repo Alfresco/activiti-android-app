@@ -157,7 +157,7 @@ public class TaskDetailsFoundationFragment extends AbstractDetailsFragment
     // LIFECYCLE
     // ///////////////////////////////////////////////////////////////////////////
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        rendition = new RenditionManager(getActivity(), ActivitiSession.getInstance());
+        rendition = new RenditionManager(getActivity(), getSession());
         setRootView(inflater.inflate(R.layout.fr_task_details, container, false));
         return getRootView();
     }
@@ -509,7 +509,7 @@ public class TaskDetailsFoundationFragment extends AbstractDetailsFragment
                     public void onClick(View v) {
                         // Special case activiti.alfresco.com & tenantid == null
                         // User must pick user via email only
-                        if (ActivitiSession.getInstance().isActivitiOnTheCloud() && getAccount().getTenantId() == null) {
+                        if (getSession().isActivitiOnTheCloud() && getAccount().getTenantId() == null) {
                             ActivitiUserPickerFragment.with(getActivity()).fragmentTag(getTag()).fieldId("assign")
                                     .displayAsDialog();
                         } else {
@@ -934,7 +934,7 @@ public class TaskDetailsFoundationFragment extends AbstractDetailsFragment
     // ACTIONS
     // ///////////////////////////////////////////////////////////////////////////
     private void startInvolveAction() {
-        if (ActivitiSession.getInstance().isActivitiOnTheCloud() && getAccount().getTenantId() == null) {
+        if (getSession().isActivitiOnTheCloud() && getAccount().getTenantId() == null) {
             ActivitiUserPickerFragment.with(getActivity()).fragmentTag(getTag()).fieldId("involve").displayAsDialog();
         } else {
             UserPickerFragment.with(getActivity()).fragmentTag(getTag()).fieldId("involve")
@@ -1012,7 +1012,7 @@ public class TaskDetailsFoundationFragment extends AbstractDetailsFragment
     }
 
     private void assign(LightUserRepresentation user) {
-        AssignTaskRepresentation body = (ActivitiSession.getInstance().isActivitiOnTheCloud())
+        AssignTaskRepresentation body = (getSession().isActivitiOnTheCloud())
                 ? new AssignTaskRepresentation(user.getEmail()) : new AssignTaskRepresentation(user.getId());
 
         getAPI().getTaskService().assign(taskId, body, new Callback<TaskRepresentation>() {
