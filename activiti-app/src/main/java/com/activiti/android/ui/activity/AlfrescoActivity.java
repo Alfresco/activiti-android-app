@@ -194,8 +194,14 @@ public abstract class AlfrescoActivity extends AppCompatActivity
     private void showSignedOutPrompt() {
         FragmentManager fm = getSupportFragmentManager();
         String tag = SignedOutDialogFragment.TAG;
-        if (!fm.isDestroyed() && fm.findFragmentByTag(tag) == null) {
-            new SignedOutDialogFragment().show(fm, tag);
+
+        if (!fm.isDestroyed())
+        {
+            fm.executePendingTransactions();
+            if (fm.findFragmentByTag(tag) == null)
+            {
+                new SignedOutDialogFragment().show(fm, tag);
+            }
         }
     }
 
