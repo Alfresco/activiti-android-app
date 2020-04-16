@@ -7,6 +7,7 @@ import android.os.Bundle
 import android.view.MenuItem
 import android.view.MotionEvent
 import android.view.View
+import android.view.WindowManager
 import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
 import android.widget.RelativeLayout
@@ -43,7 +44,9 @@ abstract class LoginActivity : AuthenticationActivity<LoginViewModel>() {
             ignoreStepEventOnce = true
         }
 
-        if (!resources.getBoolean(R.bool.isTablet)) {
+        if (resources.getBoolean(R.bool.isTablet)) {
+            window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN)
+        } else {
             requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
         }
 
