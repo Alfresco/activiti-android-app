@@ -179,7 +179,7 @@
                     android:onClick="@{() -> viewModel.showSettingsHelp()}"/>
 
                 <include
-                    layout="@layout/view_copyright"
+                    layout="@layout/view_alfresco_copyright"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="30dp"

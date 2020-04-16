@@ -50,7 +50,7 @@ abstract class LoginActivity : AuthenticationActivity<LoginViewModel>() {
             requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
         }
 
-        setContentView(R.layout.aims_activity_welcome)
+        setContentView(R.layout.activity_auth_welcome)
 
         setupToolbar()
 

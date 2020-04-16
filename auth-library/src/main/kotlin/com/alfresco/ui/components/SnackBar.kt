@@ -255,7 +255,7 @@ class Snackbar private constructor(
                     ?: throw IllegalArgumentException(
                             "No suitable parent found from the given view. Please provide a valid view.")
             val inflater = LayoutInflater.from(parent.context)
-            val content = inflater.inflate(com.alfresco.android.aims.R.layout.alfresco_snackbar, parent, false) as SnackbarContentLayout
+            val content = inflater.inflate(com.alfresco.android.aims.R.layout.view_alfresco_snackbar, parent, false) as SnackbarContentLayout
             val snackbar = Snackbar(parent, content, content)
             snackbar.setText(title)
             snackbar.setMessage(message)

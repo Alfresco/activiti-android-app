@@ -47,7 +47,7 @@ class AdvancedSettingsFragment : DialogFragment() {
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        inflater.inflate(R.menu.aims_advanced_settings, menu)
+        inflater.inflate(R.menu.options_auth_settings, menu)
 
         val item = menu.findItem(R.id.aims_save_settings)
         val action = item.actionView.findViewById<TextView>(R.id.tvSaveSettingsAction)

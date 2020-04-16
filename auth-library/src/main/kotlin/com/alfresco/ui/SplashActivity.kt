@@ -16,7 +16,7 @@ abstract class SplashActivity: AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        setContentView(R.layout.alfresco_splash_activity)
+        setContentView(R.layout.activity_alfresco_splash)
 
         logoImageView = findViewById(R.id.ivLogo)
     }

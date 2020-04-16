@@ -3,6 +3,6 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
         android:id="@+id/aims_save_settings"
-        app:actionLayout="@layout/aims_save_settings_action"
+        app:actionLayout="@layout/view_auth_settings_save_action"
         app:showAsAction="always" />
 </menu>
