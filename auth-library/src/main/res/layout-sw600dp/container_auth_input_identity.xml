@@ -19,7 +19,7 @@
             android:layout_centerInParent="true">
 
             <include
-                layout="@layout/fr_aims_sso_auth"
+                layout="@layout/fragment_auth_input_identity"
                 bind:viewModel="@{viewModel}" />
         </FrameLayout>
 

@@ -9,7 +9,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.fragment.app.activityViewModels
 import com.alfresco.android.aims.R
-import com.alfresco.android.aims.databinding.FrAimsAdvancedSettingsBinding
+import com.alfresco.android.aims.databinding.FragmentAuthSettingsBinding
 import com.alfresco.auth.activity.LoginViewModel
 import com.alfresco.auth.ui.observe
 import com.alfresco.common.FragmentBuilder
@@ -28,7 +28,7 @@ class AdvancedSettingsFragment : DialogFragment() {
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        val binding = DataBindingUtil.inflate<FrAimsAdvancedSettingsBinding>(inflater, R.layout.fr_aims_advanced_settings, container, false)
+        val binding = DataBindingUtil.inflate<FragmentAuthSettingsBinding>(inflater, R.layout.fragment_auth_settings, container, false)
         binding.viewModel = viewModel
         binding.lifecycleOwner = this
         viewModel.startEditing()

@@ -15,7 +15,7 @@
         android:paddingTop="?attr/actionBarSize">
 
         <include
-            layout="@layout/fr_aims_basic_auth"
+            layout="@layout/fragment_auth_basic"
             bind:viewModel="@{viewModel}" />
 
     </FrameLayout>

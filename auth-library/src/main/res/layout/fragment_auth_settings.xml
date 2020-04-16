@@ -135,7 +135,6 @@
                 style="@style/Widget.Alfresco.TextField.Layout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/tilRealm"
                 android:layout_marginTop="@dimen/aims_login_settings_field_spacing"
                 android:hint="@string/auth_settings_auth_client_id">
 

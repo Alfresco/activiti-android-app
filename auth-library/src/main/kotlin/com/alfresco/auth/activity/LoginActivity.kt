@@ -104,8 +104,8 @@ abstract class LoginActivity : AuthenticationActivity<LoginViewModel>() {
         }
 
         when (step) {
-            LoginViewModel.Step.InputIdentityServer -> WelcomeFragment.with(this).display()
-            LoginViewModel.Step.InputAppServer -> SsoAuthFragment.with(this).display()
+            LoginViewModel.Step.InputIdentityServer -> InputIdentityFragment.with(this).display()
+            LoginViewModel.Step.InputAppServer -> InputServerFragment.with(this).display()
             LoginViewModel.Step.EnterBasicCredentials -> BasicAuthFragment.with(this).display()
             LoginViewModel.Step.EnterPkceCredentials -> viewModel.ssoLogin()
             LoginViewModel.Step.Cancelled -> finish();

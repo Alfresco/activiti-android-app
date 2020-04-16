@@ -20,7 +20,7 @@ import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 class HelpFragment : BottomSheetDialogFragment() {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.fr_aims_help, container, false)
+        return inflater.inflate(R.layout.fragment_auth_help, container, false)
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {

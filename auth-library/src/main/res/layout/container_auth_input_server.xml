@@ -15,7 +15,7 @@ xmlns:bind="http://schemas.android.com/apk/res-auto">
     android:paddingTop="?attr/actionBarSize">
 
     <include
-        layout="@layout/fr_aims_sso_auth"
+        layout="@layout/fragment_auth_input_server"
         bind:viewModel="@{viewModel}" />
 
 </RelativeLayout>
