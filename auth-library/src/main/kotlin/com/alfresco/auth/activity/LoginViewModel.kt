@@ -45,6 +45,12 @@ class LoginViewModel(private val applicationContext: Context, authType: AuthType
     private val previousAppEndpoint: String? = endpoint
     private val previousAuthState: String? = authState
 
+    val canonicalApplicationUrl: String
+        get()  {
+            return previousAppEndpoint
+                    ?: discoveryService.serviceDocumentsEndpoint(applicationUrl.value!!).toString()
+        }
+
     init {
         if (previousAuthState != null) {
             isReLogin = true
@@ -66,11 +72,6 @@ class LoginViewModel(private val applicationContext: Context, authType: AuthType
 
         connectEnabled = Transformations.map(identityUrl) { it.isNotBlankNorEmpty() }
         ssoLoginEnabled = Transformations.map(applicationUrl) { it.isNotBlankNorEmpty() }
-    }
-
-    fun getApplicationServiceUrl(): String {
-        return previousAppEndpoint
-                ?: discoveryService.serviceDocumentsEndpoint(applicationUrl.value!!).toString()
     }
 
     fun setHasNavigation(enableNavigation: Boolean) {

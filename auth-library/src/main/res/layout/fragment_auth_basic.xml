@@ -54,7 +54,7 @@
                     android:layout_below="@id/tvSigninTo"
                     android:layout_marginTop="2dp"
                     android:gravity="start"
-                    android:text="@{viewModel.identityUrl}"
+                    android:text="@{viewModel.canonicalApplicationUrl}"
                     android:textColor="#AFAFAF"
                     tools:text="Identity service URL" />
 

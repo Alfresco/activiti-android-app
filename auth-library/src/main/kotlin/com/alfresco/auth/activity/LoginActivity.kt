@@ -108,7 +108,7 @@ abstract class LoginActivity : AuthenticationActivity<LoginViewModel>() {
     abstract fun onCredentials(credentials: Credentials, endpoint: String, authConfig: AuthConfig)
 
     override fun onCredentials(credentials: Credentials) {
-        onCredentials(credentials, viewModel.getApplicationServiceUrl(), viewModel.authConfig)
+        onCredentials(credentials, viewModel.canonicalApplicationUrl, viewModel.authConfig)
     }
 
     override fun onError(error: String) {
