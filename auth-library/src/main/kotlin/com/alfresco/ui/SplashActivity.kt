@@ -21,10 +21,10 @@ abstract class SplashActivity: AppCompatActivity() {
         logoImageView = findViewById(R.id.ivLogo)
     }
 
-    override fun onDestroy() {
-        super.onDestroy()
+    override fun onPause() {
+        super.onPause()
 
-        // On configuration change cancel previous handler
+        // On configuration change and on background cancel previous handler
         handler.removeCallbacksAndMessages(null)
     }
 
