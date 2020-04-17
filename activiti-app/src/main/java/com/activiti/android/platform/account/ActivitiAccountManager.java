@@ -377,11 +377,14 @@ public class ActivitiAccountManager extends Manager
         return activitiAccount;
     }
 
-    public ActivitiAccount update(Context context, long accountId, String username, String authState) {
+    public ActivitiAccount update(Context context, long accountId, String username, String authState, String userId, String fullname, String tenantId) {
         Account acc = getAndroidAccount(accountId);
         AccountManager manager = AccountManager.get(context);
         manager.setUserData(acc, ActivitiAccount.ACCOUNT_USERNAME, username);
         manager.setUserData(acc, ActivitiAccount.ACCOUNT_AUTH_STATE, authState);
+        manager.setUserData(acc, ActivitiAccount.ACCOUNT_USER_ID, userId);
+        manager.setUserData(acc, ActivitiAccount.ACCOUNT_USER_FULLNAME, fullname);
+        manager.setUserData(acc, ActivitiAccount.ACCOUNT_TENANT_ID, tenantId);
 
         ActivitiAccount activitiAccount = getByAccountId(accountId);
         accountIndex.put(accountId, activitiAccount);

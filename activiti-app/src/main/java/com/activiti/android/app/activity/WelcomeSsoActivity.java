@@ -38,6 +38,7 @@ import com.activiti.android.platform.provider.integration.IntegrationSyncEvent;
 import com.activiti.android.platform.provider.processdefinition.ProcessDefinitionModelManager;
 import com.activiti.android.sdk.ActivitiSession;
 import com.activiti.android.sdk.model.runtime.AppVersion;
+import com.activiti.client.Version;
 import com.activiti.client.api.model.idm.UserRepresentation;
 import com.activiti.client.api.model.runtime.AppVersionRepresentation;
 import com.alfresco.auth.AuthConfig;
@@ -221,18 +222,19 @@ public class WelcomeSsoActivity extends LoginActivity
         // If no version info it means Activiti pre 1.2
         if (version == null)
         {
-            acc = ActivitiAccountManager.getInstance(this).create(username, authState, authType, authConfig, endpoint,
-                    "Activiti Server", "bpmSuite", "Alfresco Activiti Enterprise BPM Suite", "1.1.0",
-                    Long.toString(user.getId()), user.getFullname(),
-                    (user.getTenantId() != null) ? Long.toString(user.getTenantId()) : null);
+            AppVersionRepresentation v = new AppVersionRepresentation();
+            v.setType("bpmSuite");
+            v.setEdition("Alfresco Activiti Enterprise BPM Suite");
+            v.setMajorVersion("1");
+            v.setMinorVersion("1");
+            v.setRevisionVersion("0");
+            version = new AppVersion(v);
         }
-        else
-        {
-            acc = ActivitiAccountManager.getInstance(this).create(username, authState, authType, authConfig, endpoint,
-                    "Activiti Server", version.type, version.edition, version.getFullVersion(),
-                    Long.toString(user.getId()), user.getFullname(),
-                    (user.getTenantId() != null) ? Long.toString(user.getTenantId()) : null);
-        }
+
+
+        acc = ActivitiAccountManager.getInstance(this).create(username, authState, authType, authConfig, endpoint,
+                "Activiti Server", version.type, version.edition, version.getFullVersion(),
+                userId, fullName, tenantId);
 
         // Cache current session
         activitiSession.register(String.valueOf(acc.getId()));
@@ -258,7 +260,12 @@ public class WelcomeSsoActivity extends LoginActivity
         acc = ActivitiAccountManager.getInstance(this).getCurrentAccount();
         if (acc != null)
         {
-            ActivitiAccountManager.getInstance(this).update(this, acc.getId(), username, authState);
+            // Update the account
+            String userId = user.getId().toString();
+            String fullName = user.getFullname();
+            String tenantId = (user.getTenantId() != null) ? user.getTenantId().toString() : null;
+
+            ActivitiAccountManager.getInstance(this).update(this, acc.getId(), username, authState, userId, fullName, tenantId);
 
             // Update session cache
             activitiSession.register(String.valueOf(acc.getId()));
