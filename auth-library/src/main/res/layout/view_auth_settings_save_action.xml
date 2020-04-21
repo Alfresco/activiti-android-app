@@ -7,5 +7,5 @@
     android:fontFamily="@font/muli_regular"
     android:text="@string/auth_settings_save"
     android:textAllCaps="true"
-    android:textColor="@drawable/alfresco_primary_action_color"
+    android:textColor="@color/selector_alfresco_action_primary"
     android:textSize="17sp" />

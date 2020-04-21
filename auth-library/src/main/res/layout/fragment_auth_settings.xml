@@ -41,10 +41,12 @@
                 android:layout_marginTop="@dimen/auth_settings_header_spacing">
 
                 <TextView
-                    android:layout_width="wrap_content"
+                    style="@style/Widget.Alfresco.SectionText"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_toStartOf="@id/tvProtocolSwitch"
+                    android:layout_marginEnd="10dp"
                     android:layout_centerVertical="true"
-                    android:fontFamily="@font/muli_regular"
                     android:text="@string/auth_settings_transport_https"
                     android:textSize="17sp"
                     android:enabled="@{viewModel.authConfigEditor.https}" />
