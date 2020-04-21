@@ -360,12 +360,14 @@
 
     <string name="settings_userinfo">Account</string>
     <string name="settings_userinfo_account">Details</string>
-    <string name="settings_userinfo_account_summary">Edit user and server informations</string>
+    <string name="settings_userinfo_account_summary">User and server information</string>
     <string name="settings_userinfo_account_name">Name</string>
     <string name="settings_userinfo_account_name_summary">Edit account name</string>
 
     <string name="settings_account">Account Settings</string>
     <string name="settings_account_integration">Alfresco Content Services Integration</string>
+
+    <string name="settings_account_details">Account Details</string>
 
     <string name="settings_account_integration_alfresco_action_remove">Remove Link</string>
     <string name="settings_account_integration_alfresco_action_mobile">Link to Alfresco Content Services Mobile</string>

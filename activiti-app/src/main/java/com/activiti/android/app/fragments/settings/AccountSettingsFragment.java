@@ -47,7 +47,7 @@ import androidx.fragment.app.FragmentActivity;
 import com.activiti.android.app.R;
 import com.activiti.android.app.activity.MainActivity;
 import com.activiti.android.app.activity.WelcomeSsoActivity;
-import com.activiti.android.app.fragments.account.AccountEditFragment;
+import com.activiti.android.app.fragments.account.AccountDetailsFragment;
 import com.activiti.android.app.fragments.integration.alfresco.AlfrescoIntegrationFragment;
 import com.activiti.android.platform.account.AccountsPreferences;
 import com.activiti.android.platform.account.ActivitiAccount;
@@ -139,7 +139,7 @@ public class AccountSettingsFragment extends AlfrescoFragment implements EditTex
             @Override
             public void onClick(View v)
             {
-                AccountEditFragment.with(getActivity()).accountId(accountId).back(true).display();
+                AccountDetailsFragment.with(getActivity()).accountId(accountId).back(true).display();
             }
         });
 

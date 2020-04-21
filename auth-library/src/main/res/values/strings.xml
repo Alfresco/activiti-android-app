@@ -71,9 +71,17 @@
     <string name="auth_basic_user_hint">Username or Email</string>
     <string name="auth_basic_password_hint">Password</string>
 
-    <!-- Sso -->
+    <!-- Enter Server Url -->
     <string name="auth_sso_connected_to">Connected to</string>
     <string name="auth_sso_info">To allow successful single sign on access, please provide the location of your Process Services environment.</string>
     <string name="auth_sso_repo_hint">Process repository location</string>
     <string name="auth_sso_sign_in_button">Sign In With SSO</string>
+
+    <string name="auth_account_details_identity">Connected to URL</string>
+    <string name="auth_account_details_server">%1$s URL</string>
+    <string name="auth_account_details_protocol">Protocol</string>
+    <string name="auth_account_details_port">@string/auth_settings_transport_port</string>
+    <string name="auth_account_details_service_docs">@string/auth_settings_service_document</string>
+    <string name="auth_account_details_client_id">@string/auth_settings_auth_client_id</string>
+    <string name="auth_account_details_realm">@string/auth_settings_auth_realm</string>
 </resources>
