@@ -7,12 +7,15 @@ import androidx.concurrent.futures.CallbackToFutureAdapter;
 import androidx.work.ListenableWorker;
 import androidx.work.WorkerParameters;
 
+import com.activiti.android.platform.account.ActivitiAccount;
+import com.activiti.android.platform.account.ActivitiAccountManager;
 import com.activiti.android.platform.integration.analytics.AnalyticsHelper;
 import com.activiti.android.platform.integration.analytics.AnalyticsManager;
 import com.activiti.android.sdk.ActivitiSession;
 import com.activiti.android.sdk.services.TaskService;
 import com.activiti.android.ui.utils.WorkerManagerUtils;
 import com.activiti.client.api.model.runtime.SaveFormRepresentation;
+import com.alfresco.auth.AuthInterceptor;
 import com.google.common.util.concurrent.ListenableFuture;
 import com.google.gson.Gson;
 
@@ -27,6 +30,10 @@ import retrofit2.Response;
  */
 public class SaveFormWorker extends ListenableWorker {
 
+    private ActivitiSession session;
+
+    private AuthInterceptor authInterceptor;
+
     public SaveFormWorker(@NonNull Context context, @NonNull WorkerParameters workerParams) {
         super(context, workerParams);
     }
@@ -40,10 +47,28 @@ public class SaveFormWorker extends ListenableWorker {
                         getInputData().getString(WorkerManagerUtils.FORM_SAVE_REP),
                         SaveFormRepresentation.class);
 
-        ActivitiSession session = new ActivitiSession.Builder()
-                .connect(getInputData().getString(WorkerManagerUtils.FORM_SAVE_ENDPOINT))
-                .credentials(getInputData().getString(WorkerManagerUtils.FORM_SAVE_USERNAME),
-                        getInputData().getString(WorkerManagerUtils.FORM_SAVE_PASSWORD))
+        long accountId = getInputData().getLong(WorkerManagerUtils.FORM_SAVE_ACCOUNT_ID, -1);
+        String username = getInputData().getString(WorkerManagerUtils.FORM_SAVE_USERNAME);
+        ActivitiAccount account = ActivitiAccountManager.getInstance(getApplicationContext()).getByAccountId(accountId);
+
+        // If the account is missing or has changed than drop the changes.
+        if (account == null || !account.getUsername().equals(username)) {
+            return CallbackToFutureAdapter.getFuture(completer -> {
+                completer.set(Result.failure());
+                return completer;
+            });
+        }
+
+        authInterceptor = new AuthInterceptor(
+                getApplicationContext(),
+                String.valueOf(account.getId()),
+                account.getAuthType(),
+                account.getAuthState(),
+                account.getAuthConfig());
+
+        session = new ActivitiSession.Builder()
+                .connect(account.getServerUrl())
+                .authInterceptor(authInterceptor)
                 .build();
 
         TaskService taskService = session.getServiceRegistry().getTaskService();
@@ -61,14 +86,30 @@ public class SaveFormWorker extends ListenableWorker {
                     } else {
                         completer.set(Result.success());
                     }
+                    cleanupSession();
                 }
 
                 @Override
                 public void onFailure(Call<Void> call, Throwable error) {
                     completer.set(Result.retry());
+                    cleanupSession();
                 }
             });
             return completer;
         });
+    }
+
+    @Override
+    public void onStopped() {
+        super.onStopped();
+        cleanupSession();
+    }
+
+    private void cleanupSession() {
+        if (authInterceptor != null) {
+            authInterceptor.finish();
+            authInterceptor = null;
+        }
+        session = null;
     }
 }

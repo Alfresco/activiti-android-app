@@ -20,9 +20,8 @@ import java.util.concurrent.TimeUnit;
 public class WorkerManagerUtils {
 
     public static final String FORM_SAVE_TASK_ID = "taskId";
-    public static final String FORM_SAVE_ENDPOINT = "endpoint";
+    public static final String FORM_SAVE_ACCOUNT_ID = "accountId";
     public static final String FORM_SAVE_USERNAME = "username";
-    public static final String FORM_SAVE_PASSWORD = "password";
     public static final String FORM_SAVE_REP = "rep";
     private static final long FORM_INITIAL_RETRY_DELAY = 1000L;
 
@@ -32,18 +31,13 @@ public class WorkerManagerUtils {
      * has a network connection the worker will then attempt to make an API call to save the values.
      *
      * @param taskId   The id of the task that contains the form
-     * @param endpoint The url on which the API call should be made. Used for creating a session
-     *                 object in order to get the rest client.
-     * @param username The username of the current account making the API call. Used for creating a session
-     *                 object in order to get the rest client.
-     * @param password The password of the current account making the API call. Used for creating a session
-     *                 object in order to get the rest client.
+     * @param accountId The internal account id used for getting the associated account.
+     * @param username The username of the current account making the API call.
      * @param saveFormRepresentation The form values representation object
      */
     public static void startFormSaverWorker(String taskId,
-                                            String endpoint,
+                                            Long accountId,
                                             String username,
-                                            String password,
                                             SaveFormRepresentation saveFormRepresentation) {
 
         Constraints constraints = new Constraints.Builder()
@@ -52,9 +46,8 @@ public class WorkerManagerUtils {
 
         Data dataInput = new Data.Builder()
                 .putString(FORM_SAVE_TASK_ID, taskId)
-                .putString(FORM_SAVE_ENDPOINT, endpoint)
+                .putLong(FORM_SAVE_ACCOUNT_ID, accountId)
                 .putString(FORM_SAVE_USERNAME, username)
-                .putString(FORM_SAVE_PASSWORD, password)
                 .putString(FORM_SAVE_REP, new Gson().toJson(saveFormRepresentation))
                 .build();
 

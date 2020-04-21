@@ -249,9 +249,8 @@ public class TaskFormFoundationFragment extends AlfrescoFragment implements Date
                 } else {
                     WorkerManagerUtils.startFormSaverWorker(
                             task.id,
-                            getAccount().getServerUrl(),
+                            getAccount().getId(),
                             getAccount().getUsername(),
-                            getAccount().getPassword(),
                             saveFormRepresentation);
 
                     new MaterialDialog.Builder(getActivity())
