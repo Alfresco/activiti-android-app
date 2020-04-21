@@ -85,6 +85,10 @@ class LoginViewModel(private val applicationContext: Context, authType: AuthType
             }
 
             AuthType.BASIC -> {
+                // Assume application url is the same as identity for basic auth
+                applicationUrl.value = identityUrl.value
+
+                // Move to next step
                 moveToStep(Step.EnterBasicCredentials)
             }
 
@@ -208,9 +212,6 @@ class LoginViewModel(private val applicationContext: Context, authType: AuthType
 
         fun login() {
             isLoading.value = true
-
-            // Assume application url is the same as identity for basic auth
-            applicationUrl.value = identityUrl.value
 
             val username = email.value ?: ""
             val state = AuthInterceptor.basicState(username, password.value ?: "")
