@@ -21,6 +21,7 @@ package com.activiti.android.app.fragments.account;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
@@ -58,6 +59,7 @@ public class AccountDetailsFragment extends AlfrescoFragment {
     public AccountDetailsFragment()
     {
         super();
+        setHasOptionsMenu(true);
     }
 
     public static AccountDetailsFragment newInstanceByTemplate(Bundle b)
@@ -130,6 +132,21 @@ public class AccountDetailsFragment extends AlfrescoFragment {
             getToolbar().setSubtitle(null);
             getToolbar().getMenu().clear();
         }
+    }
+
+    // ///////////////////////////////////////////////////////////////////////////
+    // MENU
+    // ///////////////////////////////////////////////////////////////////////////
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item)
+    {
+        switch (item.getItemId())
+        {
+            case android.R.id.home:
+                getActivity().getSupportFragmentManager().popBackStackImmediate();
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     // ///////////////////////////////////////////////////////////////////////////
