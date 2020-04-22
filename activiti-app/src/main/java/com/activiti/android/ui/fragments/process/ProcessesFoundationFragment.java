@@ -34,6 +34,7 @@ import android.widget.BaseAdapter;
 
 import com.activiti.android.app.R;
 import com.activiti.android.app.activity.MainActivity;
+import com.activiti.android.platform.provider.app.RuntimeAppInstance;
 import com.activiti.android.platform.provider.app.RuntimeAppInstanceManager;
 import com.activiti.android.platform.utils.BundleUtils;
 import com.activiti.android.ui.fragments.base.BasePagingGridFragment;
@@ -99,8 +100,12 @@ public class ProcessesFoundationFragment extends BasePagingGridFragment implemen
     protected void onRetrieveParameters(Bundle bundle)
     {
         appId = (getActivity() instanceof MainActivity) ? ((MainActivity) getActivity()).getAppId() : null;
-        appName = (appId != null) ? RuntimeAppInstanceManager.getInstance(getActivity())
-                .getById(appId, getAccount().getId()).getName() : null;
+        if (appId != null) {
+            RuntimeAppInstance appInstance = RuntimeAppInstanceManager
+                    .getInstance(getActivity())
+                    .getById(appId, getAccount().getId());
+            appName = (appInstance != null) ? appInstance.getName() : null;
+        }
         state = BundleUtils.getString(bundle, ARGUMENT_STATE);
         if (TextUtils.isEmpty(state))
         {
