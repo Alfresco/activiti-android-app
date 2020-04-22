@@ -177,6 +177,11 @@ public class IntegrationSyncAdapter extends AbstractThreadedSyncAdapter
 
     public static Account retrieveAlfrescoAccount(Context context, String accountUsername, String repoUrl)
     {
+        if (accountUsername == null)
+        {
+            return null;
+        }
+
         // Let's find if Alfresco account
         Account selectedAccount = null;
         Account[] accounts = AccountManager.get(context).getAccountsByType(AlfrescoIntegrator.ALFRESCO_ACCOUNT_TYPE);
