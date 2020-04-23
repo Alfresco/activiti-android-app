@@ -12,6 +12,8 @@
     <dimen name="auth_settings_field_spacing">11dp</dimen>
     <dimen name="auth_settings_header_spacing">6dp</dimen>
 
+    <dimen name="auth_dialog_max_width">420dp</dimen>
+
     <declare-styleable name="Widget.Alfresco.ActionBar">
         <attr name="actionBarPaddingLeft" format="dimension"/>
         <attr name="actionBarPaddingRight" format="dimension"/>

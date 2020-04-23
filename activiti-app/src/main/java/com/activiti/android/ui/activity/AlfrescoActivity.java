@@ -35,7 +35,7 @@ import androidx.fragment.app.FragmentManager;
 
 import com.activiti.android.app.BuildConfig;
 import com.activiti.android.app.R;
-import com.activiti.android.app.fragments.account.SignedOutDialogFragment;
+import com.activiti.android.app.fragments.account.SignedOutAdapter;
 import com.activiti.android.app.fragments.app.AppInstancesFragment;
 import com.activiti.android.platform.EventBusManager;
 import com.activiti.android.platform.account.AccountsPreferences;
@@ -46,6 +46,7 @@ import com.activiti.android.platform.integration.hockeyapp.HockeyAppManager;
 import com.activiti.android.sdk.ActivitiSession;
 import com.activiti.android.sdk.services.ServiceRegistry;
 import com.alfresco.auth.AuthInterceptor;
+import com.alfresco.auth.fragments.SignedOutFragment;
 import com.mattprecious.telescope.EmailDeviceInfoLens;
 import com.mattprecious.telescope.TelescopeLayout;
 
@@ -193,14 +194,14 @@ public abstract class AlfrescoActivity extends AppCompatActivity
 
     private void showSignedOutPrompt() {
         FragmentManager fm = getSupportFragmentManager();
-        String tag = SignedOutDialogFragment.TAG;
+        String tag = SignedOutFragment.getTAG();
 
         if (!fm.isDestroyed())
         {
             fm.executePendingTransactions();
             if (fm.findFragmentByTag(tag) == null)
             {
-                new SignedOutDialogFragment().show(fm, tag);
+                SignedOutFragment.with(this, new SignedOutAdapter(this)).show(fm, tag);
             }
         }
     }

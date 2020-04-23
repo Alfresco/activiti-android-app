@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ripple xmlns:android="http://schemas.android.com/apk/res/android"
+    android:color="#1f000000"> <!-- ripple_material_light -->
+    <item android:drawable="@drawable/alfresco_button_borderless_mtrl_shape" />
+</ripple>

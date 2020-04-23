@@ -84,4 +84,10 @@
     <string name="auth_account_details_service_docs">@string/auth_settings_service_document</string>
     <string name="auth_account_details_client_id">@string/auth_settings_auth_client_id</string>
     <string name="auth_account_details_realm">@string/auth_settings_auth_realm</string>
+
+    <!-- Signed out dialog -->
+    <string name="auth_signed_out_title">Session Expired.</string>
+    <string name="auth_signed_out_subtitle">You are no longer authenticated. Please Sign In again to continue.</string>
+    <string name="auth_signed_out_other_account">Try another account</string>
+    <string name="auth_signed_out_add_account">Add account</string>
 </resources>
