@@ -51,14 +51,15 @@
                     android:textSize="17sp"
                     android:enabled="@{viewModel.authConfigEditor.https}" />
 
-                <Switch
+                <com.alfresco.ui.components.Switch
                     android:id="@+id/tvProtocolSwitch"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentEnd="true"
                     android:layout_centerVertical="true"
                     android:checked="@={viewModel.authConfigEditor.https}"
-                    android:onClick="@{(v) -> viewModel.authConfigEditor.onHttpsToggle()}" />
+                    android:onClick="@{(v) -> viewModel.authConfigEditor.onHttpsToggle()}"
+                    android:onTouchEvent="@{(v, e) -> viewModel.authConfigEditor.onHttpsToggle()}" />
             </RelativeLayout>
 
             <com.alfresco.ui.components.TextInputLayout
