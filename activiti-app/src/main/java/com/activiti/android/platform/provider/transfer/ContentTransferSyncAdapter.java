@@ -148,6 +148,7 @@ public class ContentTransferSyncAdapter extends AbstractThreadedSyncAdapter
             switch (mode)
             {
                 case MODE_SAVE_AS:
+                {
                     Response<ResponseBody> dlResponse = api.getContentService().download(contentId);
 
                     ParcelFileDescriptor pfd = getContext().getContentResolver()
@@ -165,7 +166,9 @@ public class ContentTransferSyncAdapter extends AbstractThreadedSyncAdapter
                             .post(new DownloadTransferUriEvent("-1", mode, Uri.parse(contentUri), mimetype));
 
                     break;
+                }
                 case MODE_SHARE:
+                {
                     File lFile = new File(filePath);
 
                     Response<ResponseBody> response = api.getContentService().download(contentId);
@@ -182,7 +185,9 @@ public class ContentTransferSyncAdapter extends AbstractThreadedSyncAdapter
                     // SHARE IT
                     EventBusManager.getInstance().post(new DownloadTransferEvent("-1", mode, lFile, mimetype));
                     break;
+                }
                 case MODE_OPEN_IN:
+                {
                     File dlFile = new File(storageManager.getTempFolder(accountId), filePath);
 
                     Response<ResponseBody> resp = api.getContentService().download(contentId);
@@ -195,7 +200,9 @@ public class ContentTransferSyncAdapter extends AbstractThreadedSyncAdapter
                     // OPEN IT
                     EventBusManager.getInstance().post(new DownloadTransferEvent("-1", mode, dlFile, mimetype));
                     break;
+                }
                 case MODE_SAF_UPLOAD:
+                {
                     File tempFile = new File(storageManager.getTempFolder(accountId), filePath);
 
                     InputStream inputStream = null;
@@ -218,29 +225,46 @@ public class ContentTransferSyncAdapter extends AbstractThreadedSyncAdapter
                         RequestBody requestBody = RequestBody.create(MediaType.parse(mimetype), tempFile);
                         MultipartBody.Builder multipartBuilder = new MultipartBody.Builder();
                         multipartBuilder.addFormDataPart("file", tempFile.getName(), requestBody);
-                        content = api.getContentService().createRelatedContentOnTask(taskId, multipartBuilder.build());
+                        Response<RelatedContentRepresentation> response =
+                                api.getContentService().createRelatedContentOnTask(taskId, multipartBuilder.build());
+
+                        if (response.isSuccessful())
+                        {
+                            content = response.body();
+                            EventBusManager.getInstance().post(new ContentTransferEvent("-1", mode, content));
+                        }
+                        else
+                        {
+                            EventBusManager.getInstance().post(new ContentTransferEvent("-1", contentUri, new Exception(response.message())));
+                        }
 
                         // Analytics
                         AnalyticsHelper.reportOperationEvent(getContext(),
                                 AnalyticsManager.CATEGORY_DOCUMENT_MANAGEMENT, AnalyticsManager.ACTION_ADD_CONTENT,
                                 content != null ? content.getMimeType() : "", 1, content == null);
-
-                        EventBusManager.getInstance().post(new ContentTransferEvent("-1", mode, content));
                     }
                     else if (!TextUtils.isEmpty(processId))
                     {
                         RequestBody requestBody = RequestBody.create(MediaType.parse(mimetype), tempFile);
                         MultipartBody.Builder multipartBuilder = new MultipartBody.Builder();
                         multipartBuilder.addFormDataPart("file", tempFile.getName(), requestBody);
-                        content = api.getContentService().createRelatedContentOnProcessInstance(processId,
-                                multipartBuilder.build());
+                        Response<RelatedContentRepresentation> response =
+                                api.getContentService().createRelatedContentOnProcessInstance(processId, multipartBuilder.build());
+
+                        if (response.isSuccessful())
+                        {
+                            content = response.body();
+                            EventBusManager.getInstance().post(new ContentTransferEvent("-1", mode, content));
+                        }
+                        else
+                        {
+                            EventBusManager.getInstance().post(new ContentTransferEvent("-1", contentUri, new Exception(response.message())));
+                        }
 
                         // Analytics
                         AnalyticsHelper.reportOperationEvent(getContext(),
                                 AnalyticsManager.CATEGORY_DOCUMENT_MANAGEMENT, AnalyticsManager.ACTION_ADD_CONTENT,
                                 content != null ? content.getMimeType() : "", 1, content == null);
-
-                        EventBusManager.getInstance().post(new ContentTransferEvent("-1", mode, content));
                     }
                     else if (!TextUtils.isEmpty(profileId))
                     {
@@ -255,10 +279,20 @@ public class ContentTransferSyncAdapter extends AbstractThreadedSyncAdapter
                         RequestBody requestBody = RequestBody.create(MediaType.parse(mimetype), tempFile);
                         MultipartBody.Builder multipartBuilder = new MultipartBody.Builder();
                         multipartBuilder.addFormDataPart("file", tempFile.getName(), requestBody);
-                        content = api.getContentService().createTemporaryRawRelatedContent(multipartBuilder.build());
-                        EventBusManager.getInstance().post(new ContentTransferEvent("-1", mode, content));
+                        Response<RelatedContentRepresentation> response =
+                                api.getContentService().createTemporaryRawRelatedContent(multipartBuilder.build());
+                        if (response.isSuccessful())
+                        {
+                            content = response.body();
+                            EventBusManager.getInstance().post(new ContentTransferEvent("-1", mode, content));
+                        }
+                        else
+                        {
+                            EventBusManager.getInstance().post(new ContentTransferEvent("-1", contentUri, new Exception(response.message())));
+                        }
                     }
                     break;
+                }
             }
         }
         catch (Exception e)

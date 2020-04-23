@@ -27,6 +27,8 @@ public class ContentTransferEvent extends AbstractOperationEvent<RelatedContentR
 {
     public final int mode;
 
+    public final String identifier;
+
     public final RelatedContentRepresentation response;
 
     // ///////////////////////////////////////////////////////////////////////////
@@ -35,13 +37,23 @@ public class ContentTransferEvent extends AbstractOperationEvent<RelatedContentR
     public ContentTransferEvent(String requestId, int mode, RelatedContentRepresentation response)
     {
         super(requestId, response);
+        this.identifier = null;
         this.mode = mode;
         this.response = response;
+    }
+
+    public ContentTransferEvent(String requestId, String identifier, Exception exception)
+    {
+        super(requestId, exception);
+        this.identifier = identifier;
+        this.mode = -1;
+        this.response = null;
     }
 
     public ContentTransferEvent(String requestId, Exception exception)
     {
         super(requestId, exception);
+        this.identifier = null;
         this.mode = -1;
         this.response = null;
     }

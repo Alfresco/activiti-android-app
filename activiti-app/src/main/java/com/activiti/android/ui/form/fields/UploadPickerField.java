@@ -552,6 +552,23 @@ public class UploadPickerField extends BaseField implements MultiValueField
         if (tv == null) { return; }
         if (transferEvent.hasException)
         {
+            Object found = null;
+            for (Object item : (List) editionValue)
+            {
+                RelatedContentRepresentation content = (RelatedContentRepresentation) item;
+                if (transferEvent.identifier != null && transferEvent.identifier.equals(content.getLinkUrl()))
+                {
+                    found = item;
+                    break;
+                }
+            }
+
+            if (found != null)
+            {
+                ((List) editionValue).remove(found);
+                updateEditionView();
+            }
+
             tv.setError("Error: " + transferEvent.exception.getMessage());
         }
         else
