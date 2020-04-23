@@ -85,10 +85,6 @@ class LoginViewModel(private val applicationContext: Context, authType: AuthType
             }
 
             AuthType.BASIC -> {
-                // Assume application url is the same as identity for basic auth
-                applicationUrl.value = identityUrl.value
-
-                // Move to next step
                 moveToStep(Step.EnterBasicCredentials)
             }
 
@@ -96,11 +92,6 @@ class LoginViewModel(private val applicationContext: Context, authType: AuthType
                 _onError.value = context.getString(R.string.auth_error_check_connect_url)
             }
         }
-    }
-
-    private fun moveToStep(state: Step) {
-        this.isLoading.value = false
-        _step.value = state
     }
 
     fun startEditing() {
@@ -183,6 +174,25 @@ class LoginViewModel(private val applicationContext: Context, authType: AuthType
 
         // Reset the editor (will update changed state)
         authConfigEditor.reset(config)
+    }
+
+    private fun moveToStep(step: Step) {
+        this.isLoading.value = false
+
+        when (step) {
+            Step.InputIdentityServer -> { }
+            Step.InputAppServer -> {
+                applicationUrl.value = ""
+            }
+            Step.EnterBasicCredentials -> {
+                // Assume application url is the same as identity for basic auth
+                applicationUrl.value = identityUrl.value
+            }
+            Step.EnterPkceCredentials -> { }
+            Step.Cancelled -> { }
+        }
+
+        _step.value = step
     }
 
     enum class Step {
