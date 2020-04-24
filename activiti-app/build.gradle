@@ -44,8 +44,7 @@ android {
 
         versionName VERSION_NAME
 
-        manifestPlaceholders = [PROVIDER_AUTHORITY: PROVIDER_AUTHORITY,
-                                'appAuthRedirectScheme': 'iosapsapp://aims/auth']
+        manifestPlaceholders = [PROVIDER_AUTHORITY : PROVIDER_AUTHORITY]
         resValue "string", "account_name", ACCOUNT_ID
         resValue "string", "sync_adapter_app", SYNC_ADAPTER_APPS
         resValue "string", "sync_adapter_processModel", SYNC_ADAPTER_PROCESSDEF_MODEL
