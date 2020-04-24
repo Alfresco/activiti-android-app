@@ -26,7 +26,6 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 import android.content.Context;
-import android.os.Bundle;
 import android.util.Log;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -42,7 +41,6 @@ import com.activiti.android.platform.account.AccountsPreferences;
 import com.activiti.android.platform.account.ActivitiAccount;
 import com.activiti.android.platform.account.ActivitiAccountManager;
 import com.activiti.android.platform.integration.analytics.AnalyticsHelper;
-import com.activiti.android.platform.integration.hockeyapp.HockeyAppManager;
 import com.activiti.android.sdk.ActivitiSession;
 import com.activiti.android.sdk.services.ServiceRegistry;
 import com.alfresco.auth.AuthInterceptor;
@@ -72,35 +70,12 @@ public abstract class AlfrescoActivity extends AppCompatActivity
     // ///////////////////////////////////////////////////////////////////////////
     // LIFECYCLE
     // ///////////////////////////////////////////////////////////////////////////
-    public void onCreate(Bundle savedInstanceState)
-    {
-        super.onCreate(savedInstanceState);
-
-        // HockeyApp
-        if (HockeyAppManager.getInstance(this) != null)
-        {
-            HockeyAppManager.getInstance(this).checkForUpdates(this);
-        }
-    }
-
     @Override
     protected void onStart()
     {
         EventBusManager.getInstance().register(this);
         initBugReport();
         super.onStart();
-    }
-
-    @Override
-    protected void onResume()
-    {
-        super.onResume();
-
-        // HockeyApp
-        if (HockeyAppManager.getInstance(this) != null)
-        {
-            HockeyAppManager.getInstance(this).checkForCrashes(this);
-        }
     }
 
     @Override

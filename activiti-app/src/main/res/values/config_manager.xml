@@ -19,10 +19,6 @@
 
 <resources xmlns:tools="http://schemas.android.com/tools" tools:ignore="all">
 
-    <!-- HockeyApp Manager Extension -->
-    <bool name="manager_isEnable_HockeyAppManager">false</bool>
-    <string name="manager_HockeyAppManager">com.activiti.android.platform.integration.hockeyapp.HockeyAppManagerImpl</string>
-
     <!-- Analytics Manager -->
     <bool name="manager_isEnable_AnalyticsManager">true</bool>
     <string name="manager_AnalyticsManager">com.activiti.android.platform.integration.analytics.GAnalyticsManagerImpl</string>
