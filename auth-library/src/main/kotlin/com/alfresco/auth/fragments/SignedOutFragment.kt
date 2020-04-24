@@ -1,6 +1,8 @@
 package com.alfresco.auth.fragments
 
+import android.annotation.SuppressLint
 import android.content.Context
+import android.content.pm.ActivityInfo
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -57,6 +59,7 @@ interface SignedOutAdapter {
 class SignedOutBottomSheet() : BottomSheetDialogFragment() {
     private var adapter: SignedOutAdapter? = null
     private val viewModel: SignedOutFragmentViewModel by viewModels()
+    private var activityOrientation: Int = ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED
 
     constructor(adapter: SignedOutAdapter) : this() {
         this.adapter = adapter
@@ -76,6 +79,22 @@ class SignedOutBottomSheet() : BottomSheetDialogFragment() {
         }
 
         onViewCreated(this, view, viewModel.adapter)
+    }
+
+    @SuppressLint("SourceLockedOrientationActivity")
+    override fun onResume() {
+        super.onResume()
+
+        activity?.let {
+            activityOrientation = it.requestedOrientation
+            it.requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
+        }
+    }
+
+    override fun onPause() {
+        super.onPause()
+
+        activity?.requestedOrientation = activityOrientation
     }
 
     fun with(adapter: SignedOutAdapter) : SignedOutBottomSheet {
