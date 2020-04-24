@@ -21,21 +21,15 @@
 buildscript {
     repositories {
         mavenLocal()
+        google()
         jcenter()
         mavenCentral()
-        maven {
-            url 'https://maven.google.com/'
-            name 'Google'
-        }
     }
     dependencies {
         classpath 'com.android.tools.build:gradle:3.6.2'
         classpath 'com.google.gms:google-services:4.2.0'
     }
 }
-
-def nexus_username = System.getenv('NEXUS_USERNAME') ?: NEXUS_USERNAME
-def nexus_password = System.getenv('NEXUS_PASSWORD') ?: NEXUS_PASSWORD
 
 allprojects {
     repositories {
