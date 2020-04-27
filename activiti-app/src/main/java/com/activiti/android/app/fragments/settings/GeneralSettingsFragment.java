@@ -22,6 +22,7 @@ package com.activiti.android.app.fragments.settings;
 import java.util.List;
 import java.util.Map;
 
+import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -30,6 +31,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 
+import androidx.core.content.pm.PackageInfoCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 
@@ -121,9 +123,9 @@ public class GeneralSettingsFragment extends AlfrescoFragment
         String versionNumber;
         try
         {
-            StringBuilder sb = new StringBuilder().append(
-                    getActivity().getPackageManager().getPackageInfo(getActivity().getPackageName(), 0).versionName)
-                    .append(".").append(getText(R.string.bamboo_buildnumber));
+            PackageInfo pkg = getActivity().getPackageManager().getPackageInfo(getActivity().getPackageName(), 0);
+            StringBuilder sb = new StringBuilder().append(pkg.versionName)
+                    .append("-").append(PackageInfoCompat.getLongVersionCode(pkg));
             versionNumber = sb.toString();
         }
         catch (PackageManager.NameNotFoundException e)

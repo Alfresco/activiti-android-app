@@ -58,8 +58,6 @@ android {
         buildConfigField "String", "PROVIDER_AUTHORITY", "\"" + PROVIDER_AUTHORITY + "\""
         buildConfigField "String", "ACCOUNT_ID", "\"" + ACCOUNT_ID + "\""
 
-        resValue "string", "bamboo_buildnumber", BUILDNUMBER
-
         //ALFRESCO Integration
         buildConfigField "String", "ALFRESCO_APPLICATION_ID", "\"" + ALFRESCO_APPLICATION_ID + "\""
         buildConfigField "String", "ALFRESCO_ACCOUNT_ID", "\"" + ALFRESCO_ACCOUNT_ID + "\""
