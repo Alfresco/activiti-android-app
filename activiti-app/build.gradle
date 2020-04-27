@@ -19,6 +19,8 @@
 
 
 apply plugin: 'com.android.application'
+apply plugin: 'com.google.gms.google-services'
+apply plugin: 'com.google.firebase.crashlytics'
 
 def version_code      = System.getenv('VERSION_CODE')      ?: VERSION_CODE
 def nexus_username    = System.getenv('NEXUS_USERNAME')    ?: NEXUS_USERNAME
@@ -61,8 +63,6 @@ android {
         buildConfigField "String", "ALFRESCO_APPLICATION_ID", "\"" + ALFRESCO_APPLICATION_ID + "\""
         buildConfigField "String", "ALFRESCO_ACCOUNT_ID", "\"" + ALFRESCO_ACCOUNT_ID + "\""
         buildConfigField "String", "ALFRESCO_PROVIDER_AUTHORITY", "\"" + ALFRESCO_PROVIDER_AUTHORITY + "\""
-
-        resValue "string", "ga_trackingId", ACTIVITI_TRACKER_ID
     }
 
     lintOptions {
@@ -105,8 +105,6 @@ android {
 
             buildConfigField "String", "ACCOUNT_ID", "\"" + ACCOUNT_ID_DEBUG + "\""
             buildConfigField "String", "PROVIDER_AUTHORITY", "\"" + PROVIDER_AUTHORITY_DEBUG + "\""
-
-            resValue "string", "ga_trackingId", ACTIVITI_TRACKER_ID_DEBUG
 
             //ALFRESCO Integration
             buildConfigField "String", "ALFRESCO_APPLICATION_ID", "\"" + ALFRESCO_APPLICATION_ID_DEBUG + "\""
@@ -184,6 +182,19 @@ android {
     }
 }
 
+project.afterEvaluate {
+    if (file("$GOOGLE_SERVICES_FILE").exists()) {
+        println "Copying $GOOGLE_SERVICES_FILE into $projectDir/google-services.json"
+        copy {
+            from file("$GOOGLE_SERVICES_FILE")
+            into file("$projectDir")
+            rename '(.*)', 'google-services.json'
+        }
+    } else {
+        println "Using dummy $projectDir/google-services.json"
+    }
+}
+
 dependencies {
     //Alfresco SDK embedded
     //compile project(":activiti-sdk")
@@ -213,6 +224,9 @@ dependencies {
     implementation 'com.jakewharton.picasso:picasso2-okhttp3-downloader:1.0.2'
     implementation 'com.squareup.okio:okio:1.6.0'
 
+    // Firebase
+    implementation 'com.google.firebase:firebase-analytics:17.4.0'
+    releaseImplementation 'com.google.firebase:firebase-crashlytics:17.0.0'
 
     //3rd Party Lib
     implementation 'com.cocosw:bottomsheet:1.1.1@aar'
@@ -227,8 +241,6 @@ dependencies {
     implementation "com.daimajia.swipelayout:library:1.2.0@aar"
     implementation 'it.sephiroth.android.library.imagezoom:imagezoom:1.0.5'
     implementation "com.mikepenz:aboutlibraries:6.0.8"
-
-    implementation 'com.google.android.gms:play-services-analytics:8.3.0'
 
     implementation "android.arch.work:work-runtime:1.0.1"
     implementation "androidx.concurrent:concurrent-futures:1.0.0-alpha03"

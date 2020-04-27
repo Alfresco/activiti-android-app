@@ -21,7 +21,7 @@
 
     <!-- Analytics Manager -->
     <bool name="manager_isEnable_AnalyticsManager">true</bool>
-    <string name="manager_AnalyticsManager">com.activiti.android.platform.integration.analytics.GAnalyticsManagerImpl</string>
+    <string name="manager_AnalyticsManager">com.activiti.android.platform.integration.analytics.FirebaseAnalyticsManagerImpl</string>
 
 
 </resources>

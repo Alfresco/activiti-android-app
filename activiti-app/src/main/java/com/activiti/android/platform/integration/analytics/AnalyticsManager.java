@@ -21,10 +21,11 @@ package com.activiti.android.platform.integration.analytics;
 
 import android.app.Activity;
 import android.content.Context;
-import android.util.SparseArray;
 
 import com.activiti.android.platform.Manager;
 import com.activiti.android.platform.account.ActivitiAccount;
+
+import java.util.HashMap;
 
 public abstract class AnalyticsManager extends Manager
 {
@@ -63,9 +64,9 @@ public abstract class AnalyticsManager extends Manager
 
     public static final String ACTION_OPEN = "Open";
 
-    public static final String ACTION_OPEN_BROWSER = "Open Browser";
+    public static final String ACTION_OPEN_BROWSER = "OpenBrowser";
 
-    public static final String ACTION_OPEN_APP = "Open App";
+    public static final String ACTION_OPEN_APP = "OpenApp";
 
     public static final String ACTION_DOWNLOAD = "Download";
 
@@ -91,15 +92,15 @@ public abstract class AnalyticsManager extends Manager
 
     public static final String ACTION_REMOVE = "Remove";
 
-    public static final String ACTION_USER_INVOLVED = "User Involved";
+    public static final String ACTION_USER_INVOLVED = "UserInvolved";
 
     public static final String ACTION_CLAIM = "Claim";
 
-    public static final String ACTION_ADD_CONTENT = "Add Content";
+    public static final String ACTION_ADD_CONTENT = "AddContent";
 
-    public static final String ACTION_LINK_CONTENT = "Link Content";
+    public static final String ACTION_LINK_CONTENT = "LinkContent";
 
-    public static final String ACTION_ALFRESCO_INTEGRATION = "Alfresco Integration";
+    public static final String ACTION_ALFRESCO_INTEGRATION = "AlfrescoIntegration";
 
     ///////////////////////////////////////////////////////////
     // EVENTS : LABELS
@@ -142,25 +143,22 @@ public abstract class AnalyticsManager extends Manager
     // CUSTOM DIMENSIONS
     ///////////////////////////////////////////////////////////
     // Beware to have the same index as defined in GAnalytics
-    public static final int INDEX_SERVER_TYPE = 1;
+    static final String SERVER_TYPE = "ServerType";
 
-    public static final int INDEX_SERVER_VERSION = 2;
+    static final String SERVER_VERSION = "ServerVersion";
 
-    public static final int INDEX_SERVER_EDITION = 3;
+    static final String SERVER_EDITION = "ServerEdition";
 
     ///////////////////////////////////////////////////////////
     // CUSTOM METRICS
     ///////////////////////////////////////////////////////////
-    // Beware to have the same index as defined in GAnalytics
-    public static final int INDEX_ACCOUNT_NUMBER = 1;
+    static final String ACCOUNT_NUMBER = "Accounts";
 
-    public static final int INDEX_SESSION_CREATION = 2;
+    static final String ALFRESCO_ACCOUNTS_NUMBER = "AlfrescoAccounts";
 
-    public static final int INDEX_ALFRESCO_NUMBER = 3;
+    static final String APPS_NUMBER = "Apps";
 
-    public static final int INDEX_APPS_NUMBER = 4;
-
-    public static final int INDEX_PROCESS_DEFINITION_NUMBER = 5;
+    static final String PROCESS_DEFINITION_NUMBER = "ProcessDefinition";
 
     ///////////////////////////////////////////////////////////
     // SCREEN NAME
@@ -232,17 +230,11 @@ public abstract class AnalyticsManager extends Manager
     // ///////////////////////////////////////////////////////////////////////////
     public abstract void startReport(Activity activity);
 
-    public abstract void reportScreen(String name);
+    public abstract void reportScreen(Activity activity, String name);
 
     public abstract void reportEvent(String category, String action, String label, int value);
 
-    public abstract void reportEvent(String category, String action, String label, int value, int customMetricId,
-            Long customMetricValue);
-
-    public abstract void reportEvent(String category, String action, String label, int eventValue,
-            SparseArray<String> dimensions, SparseArray<Long> metrics);
-
-    public abstract void reportInfo(String label, SparseArray<String> dimensions, SparseArray<Long> metrics);
+    public abstract void reportInfo(String label, HashMap<String, String> dimensions, HashMap<String, Long> metrics);
 
     public abstract void reportError(boolean isFatal, String description);
 

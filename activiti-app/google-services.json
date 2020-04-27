@@ -1,0 +1,37 @@
+{
+  "project_info": {
+    "project_number": "0000000",
+    "firebase_url": "https://aps-mobile-apps.firebaseio.com",
+    "project_id": "aps-mobile-apps",
+    "storage_bucket": "aps-mobile-apps.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "0000000",
+        "android_client_info": {
+          "package_name": "com.activiti.android.app"
+        }
+      },
+      "api_key": [
+        {
+          "current_key": "0000000"
+        }
+      ]
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "0000000",
+        "android_client_info": {
+          "package_name": "com.activiti.android.app.debug"
+        }
+      },
+      "api_key": [
+        {
+          "current_key": "0000000"
+        }
+      ]
+    }
+  ],
+  "configuration_version": "1"
+}

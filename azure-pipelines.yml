@@ -17,6 +17,10 @@ steps:
     name: keystore
     inputs:
       secureFile: alfresco-android-mobile-keystore
+  - task: DownloadSecureFile@1
+    name: google_services
+    inputs:
+      secureFile: google-services-aps.json
   - task: Gradle@2
     inputs:
       workingDirectory: ''
@@ -32,6 +36,7 @@ steps:
       KEYSTORE_PASSWORD: $(keystore_password)
       KEY_ALIAS: $(key_alias)
       KEY_PASSWORD: $(key_password)
+      GOOGLE_SERVICES_FILE: $(google_services.secureFilePath)
   - task: CopyFiles@2
     inputs:
       contents: '**/*.apk'

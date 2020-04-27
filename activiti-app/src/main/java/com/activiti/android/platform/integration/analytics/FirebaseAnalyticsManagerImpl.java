@@ -19,30 +19,25 @@
  */
 package com.activiti.android.platform.integration.analytics;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.util.SparseArray;
 
-import com.activiti.android.app.R;
 import com.activiti.android.platform.account.ActivitiAccount;
 import com.activiti.android.platform.account.ActivitiAccountManager;
-import com.google.android.gms.analytics.GoogleAnalytics;
-import com.google.android.gms.analytics.HitBuilders;
-import com.google.android.gms.analytics.Tracker;
+import com.google.firebase.analytics.FirebaseAnalytics;
 
-public class GAnalyticsManagerImpl extends AnalyticsManager
+public class FirebaseAnalyticsManagerImpl extends AnalyticsManager
 {
-    private Tracker mTracker;
-
-    private GoogleAnalytics analytics;
+    private FirebaseAnalytics analytics;
 
     private boolean hasOptOut = false;
-
-    private boolean dispatchManually = false;
 
     protected SharedPreferences.Editor editor;
 
@@ -51,31 +46,23 @@ public class GAnalyticsManagerImpl extends AnalyticsManager
     // ///////////////////////////////////////////////////////////////////////////
     // CONSTRUCTOR
     // ///////////////////////////////////////////////////////////////////////////
-    public static GAnalyticsManagerImpl getInstance(Context context)
+    public static FirebaseAnalyticsManagerImpl getInstance(Context context)
     {
         synchronized (LOCK)
         {
             if (mInstance == null)
             {
-                mInstance = new GAnalyticsManagerImpl(context);
+                mInstance = new FirebaseAnalyticsManagerImpl(context);
             }
 
-            return (GAnalyticsManagerImpl) mInstance;
+            return (FirebaseAnalyticsManagerImpl) mInstance;
         }
     }
 
-    protected GAnalyticsManagerImpl(Context context)
+    protected FirebaseAnalyticsManagerImpl(Context context)
     {
         super(context);
-        analytics = GoogleAnalytics.getInstance(context);
-        // Set it via resource to support override mechanism
-        mTracker = analytics.newTracker(context.getString(R.string.ga_trackingId));
-        mTracker.setSampleRate(Double.parseDouble(context.getResources().getString(R.string.ga_sampleFrequency)));
-        mTracker.enableAutoActivityTracking(context.getResources().getBoolean(R.bool.ga_autoActivityTracking));
-        mTracker.enableExceptionReporting(context.getResources().getBoolean(R.bool.ga_reportUncaughtExceptions));
-        mTracker.setSessionTimeout(context.getResources().getInteger(R.integer.ga_sessionTimeout));
-
-        dispatchManually = context.getResources().getBoolean(R.bool.ga_manualDispatch);
+        analytics = FirebaseAnalytics.getInstance(context);
     }
 
     // ///////////////////////////////////////////////////////////////////////////
@@ -190,96 +177,42 @@ public class GAnalyticsManagerImpl extends AnalyticsManager
     @Override
     public void startReport(Activity activity)
     {
-        analytics.enableAutoActivityReports(activity.getApplication());
-        mTracker.send(new HitBuilders.ScreenViewBuilder().setNewSession().build());
     }
 
     @Override
-    public void reportScreen(String name)
+    public void reportScreen(Activity activity, String name)
     {
-        mTracker.setScreenName(name);
-        mTracker.send(new HitBuilders.ScreenViewBuilder().build());
-        if (dispatchManually)
-        {
-            analytics.dispatchLocalHits();
-        }
+        analytics.setCurrentScreen(activity, name, null);
     }
 
     @Override
     public void reportEvent(String category, String action, String label, int value)
     {
-        mTracker.send(new HitBuilders.EventBuilder().setCategory(category).setAction(action).setLabel(label)
-                .setValue(value).build());
-        if (dispatchManually)
-        {
-            analytics.dispatchLocalHits();
-        }
+        Bundle bundle = new Bundle();
+        bundle.putString("Category", category);
+        bundle.putString("Label", label);
+        analytics.logEvent(action, bundle);
     }
 
     @Override
-    public void reportEvent(String category, String action, String label, int value, int customMetricId,
-            Long customMetricValue)
-    {
-        mTracker.send(new HitBuilders.EventBuilder().setCategory(category).setAction(action).setLabel(label)
-                .setValue(value).setCustomMetric(customMetricId, customMetricValue).build());
-        if (dispatchManually)
-        {
-            analytics.dispatchLocalHits();
-        }
-    }
-
-    @Override
-    public void reportInfo(String label, SparseArray<String> dimensions, SparseArray<Long> metrics)
-    {
-        reportEvent(CATEGORY_SESSION, ACTION_INFO, label, 1, dimensions, metrics);
-    }
-
-    @Override
-    public void reportEvent(String category, String action, String label, int eventValue,
-            SparseArray<String> dimensions, SparseArray<Long> metrics)
-    {
-        HitBuilders.EventBuilder builder = new HitBuilders.EventBuilder().setCategory(category).setAction(action)
-                .setLabel(label).setValue(eventValue);
-
-        if (dimensions != null)
-        {
-            for (int i = 0; i < dimensions.size(); i++)
-            {
-                int dimensionId = dimensions.keyAt(i);
-                String value = dimensions.get(dimensionId);
-                builder.setCustomDimension(dimensionId, value);
-            }
+    public void reportInfo(String label, HashMap<String, String> dimensions, HashMap<String, Long> metrics) {
+        for (Map.Entry<String, String> entry : dimensions.entrySet()) {
+            analytics.setUserProperty(entry.getKey(), entry.getValue());
         }
 
-        if (metrics != null)
-        {
-            for (int i = 0; i < metrics.size(); i++)
-            {
-                int dimensionId = metrics.keyAt(i);
-                Long value = metrics.get(dimensionId);
-                builder.setCustomMetric(dimensionId, value);
-            }
+        Bundle bundle = new Bundle();
+        for (Map.Entry<String, Long> entry : metrics.entrySet()) {
+            bundle.putLong(entry.getKey(), entry.getValue());
         }
-
-        mTracker.send(builder.build());
-        if (dispatchManually)
-        {
-            analytics.dispatchLocalHits();
-        }
+        analytics.logEvent("Info", bundle);
     }
 
     @Override
     public void reportError(boolean isFatal, String description)
     {
-        mTracker.send(new HitBuilders.ExceptionBuilder().setFatal(isFatal).setDescription(description).build());
-        if (dispatchManually)
-        {
-            analytics.dispatchLocalHits();
-        }
-    }
-
-    public void enableManualDispatch(boolean enable)
-    {
-        dispatchManually = enable;
+        Bundle bundle = new Bundle();
+        bundle.putBoolean("IsFatal", isFatal);
+        bundle.putString("Description", description);
+        analytics.logEvent("Error", bundle);
     }
 }

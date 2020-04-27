@@ -19,13 +19,13 @@
  */
 package com.activiti.android.platform.integration.analytics;
 
+import java.util.HashMap;
 import java.util.List;
 
 import android.app.Activity;
 import android.content.Context;
 import android.database.Cursor;
 import android.util.Log;
-import android.util.SparseArray;
 
 import com.activiti.android.platform.account.ActivitiAccount;
 import com.activiti.android.platform.account.ActivitiAccountManager;
@@ -42,11 +42,11 @@ import com.activiti.android.platform.provider.processdefinition.ProcessDefinitio
  */
 public class AnalyticsHelper
 {
-    public static void reportScreen(Context context, String screenName)
+    public static void reportScreen(Activity activity, String screenName)
     {
-        if (AnalyticsManager.getInstance(context) == null
-                || !AnalyticsManager.getInstance(context).isEnable()) { return; }
-        AnalyticsManager.getInstance(context).reportScreen(screenName);
+        if (AnalyticsManager.getInstance(activity) == null
+                || !AnalyticsManager.getInstance(activity).isEnable()) { return; }
+        AnalyticsManager.getInstance(activity).reportScreen(activity, screenName);
     }
 
     public static void reportOperationEvent(Context context, String category, String action, String label, int value,
@@ -56,15 +56,6 @@ public class AnalyticsHelper
                 || !AnalyticsManager.getInstance(context).isEnable()) { return; }
         AnalyticsManager.getInstance(context).reportEvent(category, action,
                 (hasException) ? AnalyticsManager.LABEL_FAILED : label, value);
-    }
-
-    public static void reportOperationEvent(Context context, String category, String action, String label, int value,
-            boolean hasException, int customMetricId, Long customMetricValue)
-    {
-        if (AnalyticsManager.getInstance(context) == null
-                || !AnalyticsManager.getInstance(context).isEnable()) { return; }
-        AnalyticsManager.getInstance(context).reportEvent(category, action,
-                (hasException) ? AnalyticsManager.LABEL_FAILED : label, value, customMetricId, customMetricValue);
     }
 
     public static void optIn(Activity activity, ActivitiAccount account)
@@ -97,22 +88,22 @@ public class AnalyticsHelper
         AnalyticsManager.getInstance(activity).cleanOptInfo(activity, account);
     }
 
-    protected static SparseArray<String> retrieveAccountInfo(ActivitiAccount account)
+    protected static HashMap<String, String> retrieveAccountInfo(ActivitiAccount account)
     {
-        SparseArray<String> customDimensions = new SparseArray<>();
+        HashMap<String, String> customDimensions = new HashMap<>();
 
         if (account != null)
         {
             if (account.getServerUrl() != null && account.getServerUrl().startsWith("https://activiti.alfresco.com/"))
             {
-                customDimensions.append(AnalyticsManager.INDEX_SERVER_TYPE, "Cloud");
+                customDimensions.put(AnalyticsManager.SERVER_TYPE, "Cloud");
             }
             else
             {
-                customDimensions.append(AnalyticsManager.INDEX_SERVER_TYPE, account.getServerType());
+                customDimensions.put(AnalyticsManager.SERVER_TYPE, account.getServerType());
             }
-            customDimensions.append(AnalyticsManager.INDEX_SERVER_VERSION, account.getServerVersion());
-            customDimensions.append(AnalyticsManager.INDEX_SERVER_EDITION, account.getServerEdition());
+            customDimensions.put(AnalyticsManager.SERVER_VERSION, account.getServerVersion());
+            customDimensions.put(AnalyticsManager.SERVER_EDITION, account.getServerEdition().substring(0, 36));
         }
         return customDimensions;
     }
@@ -124,26 +115,18 @@ public class AnalyticsHelper
                 || !AnalyticsManager.getInstance(context).isEnable()) { return; }
         try
         {
-            SparseArray<String> customDimensions = new SparseArray<>();
-            SparseArray<Long> customMetrics = new SparseArray<>();
+            HashMap<String, String> customDimensions = new HashMap<>();
+            HashMap<String, Long> customMetrics = new HashMap<>();
 
             // Accounts Info
             List<ActivitiAccount> accounts = ActivitiAccountManager.retrieveAccounts(context);
-            customMetrics.append(AnalyticsManager.INDEX_ACCOUNT_NUMBER, (long) accounts.size());
-            customMetrics.append(AnalyticsManager.INDEX_APPS_NUMBER, (long) getNumberOfApps(context, account));
-            customMetrics.append(AnalyticsManager.INDEX_PROCESS_DEFINITION_NUMBER,
-                    (long) getNumberOfProcessDefinition(context, account));
-            customMetrics.append(AnalyticsManager.INDEX_ALFRESCO_NUMBER,
-                    (long) getNumberOfAlfrescoAccount(context, account));
+            customMetrics.put(AnalyticsManager.ACCOUNT_NUMBER, (long) accounts.size());
+            customMetrics.put(AnalyticsManager.APPS_NUMBER, (long) getNumberOfApps(context, account));
+            customMetrics.put(AnalyticsManager.PROCESS_DEFINITION_NUMBER, (long) getNumberOfProcessDefinition(context, account));
+            customMetrics.put(AnalyticsManager.ALFRESCO_ACCOUNTS_NUMBER, (long) getNumberOfAlfrescoAccount(context, account));
 
             // Server Info
-            customMetrics.append(AnalyticsManager.INDEX_SESSION_CREATION, 1L);
-            SparseArray<String> customInfo = retrieveAccountInfo(account);
-            for (int i = 0; i < customInfo.size(); i++)
-            {
-                int key = customInfo.keyAt(i);
-                customDimensions.append(key, customInfo.get(key));
-            }
+            customDimensions = retrieveAccountInfo(account);
             AnalyticsManager.getInstance(context).reportInfo(AnalyticsManager.ACTION_INFO, customDimensions,
                     customMetrics);
         }
