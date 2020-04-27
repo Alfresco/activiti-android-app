@@ -11,7 +11,7 @@ buildscript {
 
 android {
     compileSdkVersion 29
-    buildToolsVersion "29.0.2"
+    buildToolsVersion "29.0.3"
 
 
     defaultConfig {
@@ -56,12 +56,12 @@ dependencies {
     implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.2.0'
 
     implementation "androidx.activity:activity-ktx:1.1.0"
-    implementation "androidx.fragment:fragment-ktx:1.2.0"
+    implementation "androidx.fragment:fragment-ktx:1.2.4"
 
     // Alfresco DBP SDK
     api 'com.alfresco.dbp.android:auth:0.4-SNAPSHOT'
     api 'com.alfresco.dbp.android:core:0.1-SNAPSHOT'
 
     // Material Components
-    implementation 'com.google.android.material:material:1.2.0-alpha04'
+    implementation 'com.google.android.material:material:1.2.0-alpha06'
 }
