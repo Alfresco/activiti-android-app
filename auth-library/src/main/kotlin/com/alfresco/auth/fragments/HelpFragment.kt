@@ -9,6 +9,7 @@ import android.view.ViewTreeObserver
 import android.widget.Button
 import android.widget.TextView
 import androidx.annotation.StringRes
+import androidx.core.text.HtmlCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import com.alfresco.android.aims.R
@@ -31,7 +32,7 @@ class HelpFragment : BottomSheetDialogFragment() {
             val messageResId = it.getInt(ARG_MESSAGE_RES_ID, -1)
             val bodyTv: TextView = view.findViewById(R.id.bodyTxt)
             val value = resources.getString(messageResId)
-            bodyTv.setText(Html.fromHtml(value, Html.FROM_HTML_MODE_LEGACY), TextView.BufferType.SPANNABLE)
+            bodyTv.setText(HtmlCompat.fromHtml(value, HtmlCompat.FROM_HTML_MODE_LEGACY), TextView.BufferType.SPANNABLE)
         }
 
         val closeBtn: Button = view.findViewById(R.id.btnClose)
