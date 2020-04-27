@@ -29,6 +29,7 @@ def keystore_file     = System.getenv('KEYSTORE_FILE')     ?: RELEASE_STORE_FILE
 def keystore_password = System.getenv('KEYSTORE_PASSWORD') ?: RELEASE_STORE_PASSWORD
 def key_alias         = System.getenv('KEY_ALIAS')         ?: RELEASE_KEY_ALIAS
 def key_password      = System.getenv('KEY_PASSWORD')      ?: RELEASE_KEY_PASSWORD
+def gservices_cfg     = System.getenv('GOOGLE_SERVICES_FILE') ?: GOOGLE_SERVICES_FILE
 
 android {
     compileSdkVersion 28
@@ -183,15 +184,15 @@ android {
 }
 
 project.afterEvaluate {
-    if (file("$GOOGLE_SERVICES_FILE").exists()) {
-        println "Copying $GOOGLE_SERVICES_FILE into $projectDir/google-services.json"
+    if (file("${gservices_cfg}").exists()) {
+        println "Copying ${gservices_cfg} into ${projectDir}/google-services.json"
         copy {
-            from file("$GOOGLE_SERVICES_FILE")
-            into file("$projectDir")
+            from file("${gservices_cfg}")
+            into file("${projectDir}")
             rename '(.*)', 'google-services.json'
         }
     } else {
-        println "Using dummy $projectDir/google-services.json"
+        println "Using dummy ${projectDir}/google-services.json"
     }
 }
 
