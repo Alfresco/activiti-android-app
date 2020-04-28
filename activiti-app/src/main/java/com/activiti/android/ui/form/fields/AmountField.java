@@ -101,7 +101,7 @@ public class AmountField extends BaseField
             {
                 return null;
             }
-            else if ("-".equals(value))
+            else if ("-".equals(value) || ".".equals(value))
             {
                 return null;
             }
