@@ -34,8 +34,8 @@ public abstract class Manager
         return ManagerFactory.getManager(context, classSimpleName);
     }
 
-    protected Manager(Context applicationContext)
+    protected Manager(Context context)
     {
-        this.appContext = applicationContext;
+        this.appContext = context.getApplicationContext();
     }
 }
