@@ -31,6 +31,7 @@ import android.util.Log;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 
 import com.activiti.android.app.BuildConfig;
 import com.activiti.android.app.R;
@@ -176,7 +177,11 @@ public abstract class AlfrescoActivity extends AppCompatActivity
             fm.executePendingTransactions();
             if (fm.findFragmentByTag(tag) == null)
             {
-                SignedOutFragment.with(this, new SignedOutAdapter(this)).show(fm, tag);
+                // It's ok to commit with state loss
+                // as this is just a dialog that will be recreated if needed.
+                FragmentTransaction ft = fm.beginTransaction();
+                ft.add(SignedOutFragment.with(this, new SignedOutAdapter(this)), tag);
+                ft.commitAllowingStateLoss();
             }
         }
     }
