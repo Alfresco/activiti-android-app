@@ -19,12 +19,9 @@ class AccountDetailsHelper {
             val type = AuthType.fromValue(authType)
             val result = ArrayList<Item>()
 
-            val appName = context.getString(R.string.auth_app_name)
-            result.add(Item(context.getString(R.string.auth_account_details_server, appName), serverUrl))
-
             when (type) {
-                AuthType.BASIC -> result.addAll(basicInformation(context, authConfig))
-                AuthType.PKCE -> result.addAll(pkceInformation(context, authState, authConfig))
+                AuthType.BASIC -> result.addAll(basicInformation(context, authConfig, serverUrl))
+                AuthType.PKCE -> result.addAll(pkceInformation(context, authState, authConfig, serverUrl))
                 AuthType.UNKNOWN -> return emptyList()
             }
 
@@ -41,8 +38,10 @@ class AccountDetailsHelper {
             return list
         }
 
-        private fun basicInformation(context: Context, authConfig: String) : List<Item> {
+        private fun basicInformation(context: Context, authConfig: String, serverUrl: String) : List<Item> {
             val list = ArrayList<Item>()
+
+            list.add(applicationServerItem(context, serverUrl))
 
             AuthConfig.jsonDeserialize(authConfig)?.let {
                 list.addAll(commonInformation(context, it))
@@ -51,20 +50,27 @@ class AccountDetailsHelper {
             return list
         }
 
-        private fun pkceInformation(context: Context, authState: String, authConfig: String) : List<Item> {
+        private fun pkceInformation(context: Context, authState: String, authConfig: String, serverUrl: String) : List<Item> {
             val list = ArrayList<Item>()
 
             AuthState.jsonDeserialize(authState)?.let {
                 list.add(Item(context.getString(R.string.auth_account_details_identity), it.authorizationServiceConfiguration?.authorizationEndpoint.toString()))
             }
 
+            list.add(applicationServerItem(context, serverUrl))
+
             AuthConfig.jsonDeserialize(authConfig)?.let {
                 list.addAll(commonInformation(context, it))
-                list.add(Item(context.getString(R.string.auth_account_details_client_id), it.clientId))
                 list.add(Item(context.getString(R.string.auth_account_details_realm), it.realm))
+                list.add(Item(context.getString(R.string.auth_account_details_client_id), it.clientId))
             }
 
             return list
+        }
+
+        private fun applicationServerItem(context: Context, serverUrl: String): Item {
+            val appName = context.getString(R.string.auth_app_name)
+            return Item(context.getString(R.string.auth_account_details_server, appName), serverUrl)
         }
     }
 }

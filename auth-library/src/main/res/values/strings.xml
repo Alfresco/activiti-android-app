@@ -77,7 +77,7 @@
     <string name="auth_sso_repo_hint">Process repository location</string>
     <string name="auth_sso_sign_in_button">Sign In With SSO</string>
 
-    <string name="auth_account_details_identity">Connected to URL</string>
+    <string name="auth_account_details_identity">Connect to URL</string>
     <string name="auth_account_details_server">%1$s URL</string>
     <string name="auth_account_details_protocol">Protocol</string>
     <string name="auth_account_details_port">@string/auth_settings_transport_port</string>
