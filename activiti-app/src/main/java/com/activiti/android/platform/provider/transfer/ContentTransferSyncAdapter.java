@@ -216,7 +216,7 @@ public class ContentTransferSyncAdapter extends AbstractThreadedSyncAdapter
                     }
 
                     // Retrieve content data
-                    IOUtils.saveBytesToFile(IOUtils.getBytesFromStream(inputStream), tempFile.getPath());
+                    IOUtils.copyFile(inputStream, tempFile);
 
                     // Upload it
                     RelatedContentRepresentation content = null;
