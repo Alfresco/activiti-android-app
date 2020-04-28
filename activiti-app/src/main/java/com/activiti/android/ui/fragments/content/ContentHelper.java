@@ -48,8 +48,10 @@ public class ContentHelper
         {
             mime = MimeTypeManager.getInstance(context).getMimetype(item.getName());
         }
-        vh.icon.setVisibility(View.VISIBLE);
-        vh.icon.setImageResource(mime.getSmallIconId(context));
+        if (mime != null) {
+            vh.icon.setVisibility(View.VISIBLE);
+            vh.icon.setImageResource(mime.getSmallIconId(context));
+        }
 
         // Overflow menu
         if (!setupOverflowMenu) { return; }
