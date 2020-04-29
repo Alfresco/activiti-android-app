@@ -15,16 +15,10 @@
         <![CDATA[<h1>How to connect to Alfresco</h5>
         <h6>Alfresco Process Services URL<h6>
         <p>You can enter the URL of your Alfresco Process Services instance. This will require you to enter your username &amp; password to authenticate.</p>
+        <h6>Sign in with SSO</h6>
+        <p>You can enter the URL of your Alfresco Identity Management Service in order to authenticate with your organisations identity provider.</p>
         <p>*You will have to provide the URL of your Alfresco Process Services instance afterwards</p>
         <p>Talk to your Alfresco administrator if you require help.</p>]]>
-    </string>
-
-    <string name="auth_help_identity_with_sso_body">
-        <![CDATA[<h1>How to connect to Alfresco</h5>
-        <h6>Alfresco Process Services URL<h6>
-        <p>You can enter the URL of your Alfresco Process Services instance. This will require you to enter your username &amp; password to authenticate.</p>
-        <h6>Sign in with SSO</h6>
-        <p>You can enter the URL of your Alfresco Identity Management Service in order to authenticate with your organisations identity provider.</p><p>*You will have to provide the URL of your Alfresco Process Services instance afterwards</p><p>Talk to your Alfresco administrator if you require help.</p>]]>
     </string>
 
     <string name="auth_help_sso_body">
@@ -42,7 +36,7 @@
 
     <!-- Errors -->
     <string name="auth_error_title">Error</string>
-    <string name="auth_error_check_connect_url">Check your Connect to URL.</string>
+    <string name="auth_error_check_connect_url">No authentication service can be found at the provided Alfresco URL.</string>
     <string name="auth_error_wrong_credentials">Wrong username or password provided.</string>
     <string name="auth_error_app_unreachable">Authentication service is currently unreachable.</string>
     <string name="auth_error_app_incorrect">Service incorrectly configured.</string>
@@ -65,16 +59,16 @@
     <string name="auth_settings_save">Save</string>
 
     <!-- Basic Auth -->
-    <string name="auth_basic_connected_to">@string/auth_sso_connected_to</string>
+    <string name="auth_basic_connected_to">Connected to:</string>
     <string name="auth_basic_sign_in_button">Sign In</string>
     <string name="auth_basic_info_cloud">Helpful introduction and information text about Process Services Cloud.</string>
     <string name="auth_basic_user_hint">Username or Email</string>
     <string name="auth_basic_password_hint">Password</string>
 
     <!-- Enter Server Url -->
-    <string name="auth_sso_connected_to">Connected to</string>
-    <string name="auth_sso_info">To allow successful single sign on access, please provide the location of your Process Services environment.</string>
-    <string name="auth_sso_repo_hint">Process repository location</string>
+    <string name="auth_sso_connected_to">Signing in to:</string>
+    <string name="auth_sso_info">Please provide the URL of your Process Services environment.</string>
+    <string name="auth_sso_repo_hint">Process Services URL</string>
     <string name="auth_sso_sign_in_button">Sign In With SSO</string>
 
     <string name="auth_account_details_identity">Connect to URL</string>

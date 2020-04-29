@@ -2,6 +2,7 @@ package com.alfresco.auth.activity
 
 import android.content.Context
 import android.content.Intent
+import android.net.Uri
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
@@ -49,6 +50,12 @@ class LoginViewModel(private val applicationContext: Context, authType: AuthType
         get()  {
             return previousAppEndpoint
                     ?: discoveryService.serviceDocumentsEndpoint(applicationUrl.value!!).toString()
+        }
+
+    // Used for display purposes
+    val applicationUrlHost: String
+        get() {
+            return Uri.parse(canonicalApplicationUrl).host ?: ""
         }
 
     init {
