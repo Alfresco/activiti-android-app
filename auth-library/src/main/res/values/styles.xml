@@ -89,7 +89,7 @@
         <item name="android:fontFamily">@font/muli_light</item>
         <item name="android:textColor">#222222</item> <!-- 87% black -->
         <item name="android:textSize">24sp</item>
-        <item name="android:letterSpacing">-0.08</item>
+        <item name="android:letterSpacing">-0.04</item>
     </style>
 
     <style name="Widget.Alfresco.BodyText">
@@ -102,7 +102,7 @@
         <item name="android:textColor">@color/selector_alfresco_text_primary</item>
         <item name="android:textSize">16sp</item>
         <item name="android:fontFamily">@font/muli_regular</item>
-        <item name="android:letterSpacing">-0.04</item>
+        <item name="android:letterSpacing">-0.02</item>
     </style>
 
     <style name="Widget.Alfresco.FooterText">
@@ -140,6 +140,7 @@
     <style name="Theme.Alfresco.ActionBar">
         <item name="android:tint">@color/alfresco_primary_dark</item>
         <item name="android:fontFamily">@font/muli_semibold</item>
+        <item name="android:letterSpacing">-0.02</item>
     </style>
 
     <style name="Widget.Alfresco.ActionBar" parent="Widget.MaterialComponents.ActionBar.Surface">
