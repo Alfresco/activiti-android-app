@@ -81,7 +81,7 @@
 
     <!-- Signed out dialog -->
     <string name="auth_signed_out_title">Session Expired.</string>
-    <string name="auth_signed_out_subtitle">You are no longer authenticated. Please Sign In again to continue.</string>
+    <string name="auth_signed_out_subtitle">You are no longer signed in. Please Sign In again to continue.</string>
     <string name="auth_signed_out_other_account">Try another account</string>
     <string name="auth_signed_out_add_account">Add account</string>
 </resources>
