@@ -4,8 +4,8 @@ import com.alfresco.auth.AuthConfig
 
 val AuthConfig.Companion.defaultConfig: AuthConfig
     get() = AuthConfig(
-            https = false,
-            port = "80",
+            https = true,
+            port = "443",
             clientId = "alfresco-android-aps-app",
             realm = "alfresco",
             redirectUrl = "androidapsapp://aims/auth",
