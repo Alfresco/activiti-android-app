@@ -8,6 +8,7 @@ pool:
 
 variables:
   - group: nexus-credentials
+  - group: source-clear-credentials
   - group: android-signing
   - name: version_code
     value: $[counter('versionCode', 14)]
@@ -37,6 +38,11 @@ steps:
       KEY_ALIAS: $(key_alias)
       KEY_PASSWORD: $(key_password)
       GOOGLE_SERVICES_FILE: $(google_services.secureFilePath)
+  - bash: |
+      curl -sSL https://download.sourceclear.com/ci.sh | sh
+    displayName: 'SourceClearCheck'
+    env:
+      SRCCLR_API_TOKEN: $(source_clear_token)
   - task: CopyFiles@2
     inputs:
       contents: '**/*.apk'
